@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:layout_weight="0.5"
+    android:id="@+id/header"
+    android:visibility="visible">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/header_text"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorLoginGroup"
+        android:textSize="20dp"/>
+    <ImageView
+        android:id="@+id/home_image"
+        android:layout_marginTop="@dimen/activity_login_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/logo_image"
+        android:paddingLeft="48dp"
+        android:scaleType="fitStart"/>
+</RelativeLayout>

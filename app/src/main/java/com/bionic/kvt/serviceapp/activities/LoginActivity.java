@@ -1,11 +1,14 @@
-package com.bionic.kvt.serviceapp;
+package com.bionic.kvt.serviceapp.activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -19,6 +22,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,12 +34,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
+import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 import static android.Manifest.permission.READ_CONTACTS;
-import static com.bionic.kvt.serviceapp.R.string.activity_login;
 
 /**
  * A login screen that offers login via email/password.
@@ -45,7 +55,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
 
+    private final String TAG = this.getClass().getName();
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -65,21 +77,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
     private ImageView mImageView;
     private ImageView mImageLogoView;
+    private View mLoginLayout;
     private TextView mHeaderTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
-        mImageView = (ImageView) findViewById(R.id.home_image);
-        mImageView.setImageResource(R.drawable.header2015);
 
-        mImageLogoView = (ImageView) findViewById(R.id.logo_image);
-        mImageLogoView.setImageResource(R.drawable.logo);
-
-        mHeaderTextView = (TextView) findViewById(R.id.header_text);
-        //mHeaderTextView.setText(activity_login);
+        //Setting header for the app;
+        HeaderHelper headerHelper = new HeaderHelper(this);
+        headerHelper.setHeader();
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -106,6 +114,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+        //Forget Password Button
+        Button mForgetPassword = (Button) findViewById(R.id.forget_password_button);
+        mForgetPassword.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    requestNetworkStatePermission();
+                } else {
+                    NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
+                    if (!networkHelper.isNetworkConnected()) {
+                        Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    } else {
+                        Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
     }
 
     private void populateAutoComplete() {
@@ -138,6 +169,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return false;
     }
 
+    //Requests network permissions, if needed
+    private boolean requestNetworkStatePermission() {
+        Log.i(TAG,"Entering Network Check State");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+        if (checkSelfPermission(ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+        if (shouldShowRequestPermissionRationale(ACCESS_NETWORK_STATE)) {
+            Snackbar.make(mLoginLayout, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{ACCESS_NETWORK_STATE}, REQUEST_ACCESS_NETWORK_STATE);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, REQUEST_ACCESS_NETWORK_STATE);
+        }
+        return false;
+    }
+
     /**
      * Callback received when a permissions request has been completed.
      */
@@ -147,6 +202,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (requestCode == REQUEST_READ_CONTACTS) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 populateAutoComplete();
+            }
+        }
+        if (requestCode == REQUEST_ACCESS_NETWORK_STATE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Stub for network check
             }
         }
     }
