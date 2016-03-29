@@ -19,7 +19,6 @@
     <string name="activity_forget">Forgot Password</string>
     <string name="no_connection">No connection detected</string>
 
-<<<<<<< refs/heads/master
     <string name="service_engenieer">Service engineer:</string>
     <string name="orders">Orders</string>
     <string name="order_number">Order number</string>
@@ -54,11 +53,13 @@
     <string name="register_dangerous_situation">Register dangerous situation</string>
     <string name="next">Next</string>
     <string name="search_hint">Search order number</string>
-=======
+
     <!-- String related to LMRA -->
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
     <string name="lmra_text_sample">Text Sample</string>
 
->>>>>>> HEAD~6
+    <!-- Test strings -->
+    <string name="test_long_string">dsfdssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</string>
+
 </resources>
