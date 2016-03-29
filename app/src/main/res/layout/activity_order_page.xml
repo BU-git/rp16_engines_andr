@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.OrderPageActivity">
+
+    <LinearLayout
+        android:id="@+id/order_page_engineer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrderPageHeader"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/service_engenieer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/service_engenieer"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/service_engenieer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:text="Engineer name"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/order_page_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_orders_space"
+        android:layout_below="@id/order_page_engineer_name"
+        android:background="@color/colorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/order_page_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_page_space"
+        android:background="@color/colorOrderPageHeader"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/orders_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            android:text="@string/orders"
+            android:textAppearance="?android:textAppearanceMedium"/>
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_orders_space"
+            android:layout_marginTop="@dimen/activity_orders_space"
+            android:layout_weight="0.5"
+            android:background="@color/colorTextField"
+            android:inputType="text"
+            android:maxLines="1"
+            android:orientation="horizontal"
+            android:singleLine="true"
+            android:textAppearance="?android:textAppearanceSmall"/>
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/order_page_space2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_orders_space"
+        android:layout_below="@id/order_page_search"
+        android:background="@color/colorPrimary" />
+
+    <LinearLayout
+        android:id="@+id/order_page_list_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/order_page_space2"
+        android:background="@color/colorOrderListHeader"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/order_number_header"
+            android:layout_width="110dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:text="@string/order_number"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_service_date_header"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/date"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_device_type_header"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/device_type"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_task_header"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/task"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_address_header"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/address"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_status_header"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/status"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/order_make_pdf_header"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            android:text="@string/pdf"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+    </LinearLayout>
+
+user    <Space
+        android:id="@+id/order_page_space3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_orders_space"
+        android:layout_below="@id/order_page_list_header"
+        android:background="@color/colorPrimary" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/orders_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/order_page_space3"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>

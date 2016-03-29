@@ -5,5 +5,8 @@
     <color name="colorAccent">#E6E6E6</color>
     <color name="colorMainBackground">#E6E6E6</color>
     <color name="colorLoginGroup">#666666</color>
+    <color name="colorOrderPageHeader">#303F9F</color>
+    <color name="colorOrderListHeader">#5a5a5a</color>
+    <color name="colorOrderList">#898989</color>
     <color name="colorTextField">#FFFFFF</color>
 </resources>

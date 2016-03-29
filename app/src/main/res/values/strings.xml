@@ -17,4 +17,14 @@
     <string name="activity_login">Log in</string>
     <string name="activity_forget">Forgot Password</string>
     <string name="no_connection">No connection detected</string>
+
+    <string name="service_engenieer">Service engineer:</string>
+    <string name="orders">Orders</string>
+    <string name="order_number">Order number</string>
+    <string name="date">Date</string>
+    <string name="device_type">Device type</string>
+    <string name="task">Task</string>
+    <string name="address">Address</string>
+    <string name="status">Status</string>
+    <string name="pdf">PDF</string>
 </resources>
