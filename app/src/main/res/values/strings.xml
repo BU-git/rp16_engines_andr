@@ -27,10 +27,4 @@
     <string name="address">Address</string>
     <string name="status">Status</string>
     <string name="pdf">PDF</string>
-    <string name="text_service_engineer">Service engineer</string>
-    <string name="text_client">Client</string>
-    <string name="button_insert">Insert</string>
-    <string name="button_send">Send</string>
-
-
 </resources>
