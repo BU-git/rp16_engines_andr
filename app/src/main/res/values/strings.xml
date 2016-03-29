@@ -62,4 +62,7 @@
     <!-- Test strings -->
     <string name="test_long_string">dsfdssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</string>
 
+
+    <!--Titles -->
+    <string name="lmra_title">LMRA</string>
 </resources>

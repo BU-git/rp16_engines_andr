@@ -49,12 +49,12 @@
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
             <TextView
+                android:id="@+id/description_lmra"
                 android:layout_alignParentLeft="true"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:textStyle="italic"
-                android:text="@string/test_long_string"
                 android:textColor="@android:color/black"
                 style="?android:textAppearanceLarge"
                 android:layout_weight=".7"/>
