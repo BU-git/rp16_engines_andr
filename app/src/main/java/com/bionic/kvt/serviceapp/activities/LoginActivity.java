@@ -131,8 +131,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         toast.setGravity(Gravity.CENTER, 0, 0);
                         toast.show();
                     } else {
-                        Intent intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
-                        startActivity(intent);
+                        //Start login activity
+                        startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
+                        //Disable animation
+                        overridePendingTransition(0,0);
                     }
                 }
             }
