@@ -13,7 +13,7 @@
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorLoginGroup"
-        android:textSize="20dp"/>
+        android:textSize="20sp"/>
     <ImageView
         android:id="@+id/home_image"
         android:layout_marginTop="@dimen/activity_login_padding"
