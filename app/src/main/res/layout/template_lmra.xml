@@ -12,13 +12,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/button_delete"
-                android:layout_alignParentLeft="true"/>
 
             <Button
+                android:id="@+id/button_lmra_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/button_delete"
@@ -26,6 +22,7 @@
                 android:background="@color/colorLoginGroup"/>
 
             <TextView
+                android:id="@+id/title_lmra"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -37,6 +34,7 @@
                 android:textColor="@color/colorLoginGroup"/>
 
             <Button
+                android:id="@+id/button_lmra_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/button_save"
@@ -48,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_gravity="bottom"
-            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
             <TextView
                 android:layout_alignParentLeft="true"
@@ -56,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:textStyle="italic"
-                android:text="Some Text"
+                android:text="@string/test_long_string"
                 android:textColor="@android:color/black"
                 style="?android:textAppearanceLarge"
                 android:layout_weight=".7"/>

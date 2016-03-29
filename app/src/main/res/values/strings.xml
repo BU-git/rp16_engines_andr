@@ -23,4 +23,7 @@
     <string name="button_save">Save</string>
     <string name="lmra_text_sample">Text Sample</string>
 
+    <!-- Test strings -->
+    <string name="test_long_string">dsfdssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</string>
+
 </resources>
