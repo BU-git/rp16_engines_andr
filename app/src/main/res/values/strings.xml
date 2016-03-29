@@ -17,4 +17,10 @@
     <string name="activity_login">Log in</string>
     <string name="activity_forget">Forgot Password</string>
     <string name="no_connection">No connection detected</string>
+
+    <!-- String related to LMRA -->
+    <string name="button_delete">Delete</string>
+    <string name="button_save">Save</string>
+    <string name="lmra_text_sample">Text Sample</string>
+
 </resources>
