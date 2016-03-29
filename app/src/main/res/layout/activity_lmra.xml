@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,10 +8,18 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/colorMainBackground"
+    android:orientation="vertical"
     tools:context="com.bionic.kvt.serviceapp.activities.LMRAActivity">
     <ListView
+        android:id="@+id/lmra_list"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        tools:listitem="@android:layout/activity_list_item">
+        android:layout_height="wrap_content"
+        tools:listitem="@android:layout/activity_list_item"
+        android:dividerHeight="@dimen/activity_vertical_margin"
+        android:divider="@color/colorMainBackground">
     </ListView>
-</RelativeLayout>
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/button_lmra_new"/>
+</LinearLayout>
