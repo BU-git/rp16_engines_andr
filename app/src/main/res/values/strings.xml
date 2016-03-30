@@ -21,10 +21,25 @@
     <string name="service_engenieer">Service engineer:</string>
     <string name="orders">Orders</string>
     <string name="order_number">Order number</string>
+
     <string name="date">Date</string>
     <string name="device_type">Device type</string>
     <string name="task">Task</string>
     <string name="address">Address</string>
     <string name="status">Status</string>
     <string name="pdf">PDF</string>
+    <string name="order_data">Order data</string>
+    <string name="order_date">Order date</string>
+    <string name="relation">Relation</string>
+    <string name="reference">Reference</string>
+    <string name="place">Place</string>
+    <string name="telephone_number">Telephone number</string>
+    <string name="place_2">Place 2</string>
+    <string name="employee">Employee</string>
+    <string name="working_hours">Working hours</string>
+    <string name="instructions">Instructions</string>
+    <string name="accept">Accept</string>
+    <string name="start">Start</string>
+
+    <string name="back">Back</string>
 </resources>

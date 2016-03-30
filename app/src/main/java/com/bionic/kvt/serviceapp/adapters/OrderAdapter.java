@@ -9,8 +9,8 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 
 
-public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
-    private String[][] testOrderList = {
+public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
+    public  String[][] testOrderList = {
             {"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "In progress"},
             {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
             {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
@@ -30,40 +30,65 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
             {"358395563", "02-11-2016", "Generator", "Check", "Odessa", "Not started"}
     };
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public View orderView;
+    //    private ordersDataSet;
+    OnOrderLineClickListener onOrderLineClickListener;
 
-        public ViewHolder(View v) {
-            super(v);
-            orderView = v;
+//    public  OrderAdapter( ordersDataSet){
+//        this.ordersDataSet = ordersDataSet;
+//    }
+
+    public interface OnOrderLineClickListener {
+        void OnOrderLineClicked(View view, int position);
+    }
+
+    public void setOnOrderLineClickListener(OnOrderLineClickListener onOrderLineClickListener) {
+        this.onOrderLineClickListener = onOrderLineClickListener;
+    }
+
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
+        View orderView;
+        TextView orderNumber;
+        TextView orderServiceDate;
+        TextView orderDeviceType;
+        TextView orderTask;
+        TextView orderAddress;
+        TextView orderStatus;
+
+        public UserViewHolder(View itemView) {
+            super(itemView);
+            orderView = itemView;
+            orderNumber = (TextView) itemView.findViewById(R.id.order_number);
+            orderServiceDate = (TextView) itemView.findViewById(R.id.order_service_date);
+            orderDeviceType = (TextView) itemView.findViewById(R.id.order_device_type);
+            orderTask = (TextView) itemView.findViewById(R.id.order_task);
+            orderAddress = (TextView) itemView.findViewById(R.id.order_address);
+            orderStatus = (TextView) itemView.findViewById(R.id.order_status);
         }
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
-    public OrderAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // create a new view
+    public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_order, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new UserViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        ((TextView) holder.orderView.findViewById(R.id.order_number)).setText(testOrderList[position][0]);
-        ((TextView) holder.orderView.findViewById(R.id.order_service_date)).setText(testOrderList[position][1]);
-        ((TextView) holder.orderView.findViewById(R.id.order_device_type)).setText(testOrderList[position][2]);
-        ((TextView) holder.orderView.findViewById(R.id.order_task)).setText(testOrderList[position][3]);
-        ((TextView) holder.orderView.findViewById(R.id.order_address)).setText(testOrderList[position][4]);
-        ((TextView) holder.orderView.findViewById(R.id.order_status)).setText(testOrderList[position][5]);
+    public void onBindViewHolder(UserViewHolder holder, final int position) {
+        holder.orderNumber.setText(testOrderList[position][0]);
+        holder.orderServiceDate.setText(testOrderList[position][1]);
+        holder.orderDeviceType.setText(testOrderList[position][2]);
+        holder.orderTask.setText(testOrderList[position][3]);
+        holder.orderAddress.setText(testOrderList[position][4]);
+        holder.orderStatus.setText(testOrderList[position][5]);
+
+        holder.orderView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onOrderLineClickListener.OnOrderLineClicked(v, position);
+            }
+        });
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return testOrderList.length;

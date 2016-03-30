@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ProcessOrderPage1Activity">
+
+    <LinearLayout
+        android:id="@+id/process_order_page1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrderPageHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/order_data"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/order_data"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/service_engenieer_back_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/back"
+            android:textColor="@color/colorOrderListHeader" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/process_order_page1_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/process_order_page1"
+        android:divider="@color/colorPrimary"
+        android:dividerPadding="@dimen/activity_orders_space"
+
+        android:showDividers="middle">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_table_horizontal_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_table_horizontal_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight=".5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_order_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/order_number"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_order_number_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="123456789" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_order_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/order_date"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_order_date_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="23-05-2016" />
+            </TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_table_horizontal_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_table_horizontal_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_relation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/relation"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_relation_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="xxxxxxxxxx" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_reference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/reference"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_reference_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="xxxxxxxxxx" />
+
+            </TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_table_horizontal_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_table_horizontal_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/place"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_place_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="Kiev" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_device_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/device_type"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_device_type_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="Motor" />
+
+            </TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_table_horizontal_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_table_horizontal_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_telephone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/telephone_number"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_telephone_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="078698954" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_place_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/place_2"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_device_palce_2_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="xxxxxxx" />
+
+            </TableRow>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_table_horizontal_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_table_horizontal_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_employee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/employee"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_employee_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="Bob van Holland" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/process_order_page1_working_hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/working_hours"
+                    android:textColor="@color/colorTableTextField"
+                    android:textStyle="bold" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="3"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/process_order_page1_device_working_hours_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorTableTextField"
+                    tools:text="1213" />
+
+            </TableRow>
+
+
+        </TableRow>
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/process_order_page1_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/process_order_page1_table"
+        android:background="@color/colorOrderPageHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/instructions"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/process_order_page1_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/process_order_page1_2"
+        android:background="@color/colorOrderList"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/instructions_test"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:text="Instructions!!!!!!"
+            android:textColor="@color/colorTableTextField"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/service_engenieer_accept_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/accept"
+            android:textColor="@color/colorOrderListHeader" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/process_order_page1_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/process_order_page1_3"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/service_engenieer_start_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="@string/start"
+            android:textColor="@color/colorOrderListHeader" />
+
+    </LinearLayout>
+
+</RelativeLayout>
+

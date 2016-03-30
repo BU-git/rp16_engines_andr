@@ -9,4 +9,5 @@
     <color name="colorOrderListHeader">#5a5a5a</color>
     <color name="colorOrderList">#898989</color>
     <color name="colorTextField">#FFFFFF</color>
+    <color name="colorTableTextField">#000000</color>
 </resources>

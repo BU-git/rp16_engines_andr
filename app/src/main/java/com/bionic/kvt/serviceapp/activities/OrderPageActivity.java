@@ -1,16 +1,18 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 
-public class OrderPageActivity extends AppCompatActivity {
+public class OrderPageActivity extends AppCompatActivity implements OrderAdapter.OnOrderLineClickListener {
     private RecyclerView ordersRecyclerView;
-    private RecyclerView.Adapter ordersAdapter;
+    private OrderAdapter ordersAdapter;
     private RecyclerView.LayoutManager ordersLayoutManager;
 
     @Override
@@ -20,16 +22,18 @@ public class OrderPageActivity extends AppCompatActivity {
 
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-//        ordersRecyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
         ordersLayoutManager = new LinearLayoutManager(this);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
-        // specify an adapter (see also next example)
         ordersAdapter = new OrderAdapter();
         ordersRecyclerView.setAdapter(ordersAdapter);
+        ordersAdapter.setOnOrderLineClickListener(this);
+    }
+
+    @Override
+    public void OnOrderLineClicked(View view, int position) {
+        Intent intent = new Intent(getApplicationContext(), ProcessOrderPage1Activity.class);
+        intent.putExtra("order_number", ordersAdapter.testOrderList[position][0]);
+        startActivity(intent);
     }
 }
