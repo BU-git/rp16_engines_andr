@@ -24,11 +24,11 @@
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
+            tools:text="Engineer name"
             android:id="@+id/service_engenieer_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="8dp"
-            android:text="Engineer name"
             android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
@@ -164,7 +164,7 @@
 
     </LinearLayout>
 
-user    <Space
+    <Space
         android:id="@+id/order_page_space3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_orders_space"
