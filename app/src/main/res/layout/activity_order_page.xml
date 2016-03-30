@@ -10,27 +10,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorOrderPageHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
             android:id="@+id/service_engenieer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/service_engenieer"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:gravity="center_vertical"
+            android:text="@string/service_engenieer" />
 
         <TextView
-            tools:text="Engineer name"
             android:id="@+id/service_engenieer_name"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
             android:paddingLeft="8dp"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="Engineer name" />
+
+        <Button
+            android:id="@+id/service_engenieer_logout_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log out"
+            android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>
 
     <Space
@@ -48,7 +57,8 @@
         android:background="@color/colorOrderPageHeader"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
             android:id="@+id/orders_search"
@@ -56,13 +66,12 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center_vertical"
-            android:text="@string/orders"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:text="@string/orders" />
 
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="?listPreferredItemHeightSmall"
             android:layout_marginBottom="@dimen/activity_orders_space"
             android:layout_marginTop="@dimen/activity_orders_space"
             android:layout_weight="0.5"
@@ -70,8 +79,7 @@
             android:inputType="text"
             android:maxLines="1"
             android:orientation="horizontal"
-            android:singleLine="true"
-            android:textAppearance="?android:textAppearanceSmall"/>
+            android:singleLine="true" />
 
     </LinearLayout>
 
@@ -88,19 +96,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/order_page_space2"
         android:background="@color/colorOrderListHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:textAppearance="?android:textAppearanceSmall">
 
         <TextView
             android:id="@+id/order_number_header"
-            android:layout_width="110dp"
+            android:layout_width="96dp"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:gravity="center"
-            android:text="@string/order_number"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/order_number" />
 
         <TextView
             android:id="@+id/order_service_date_header"
@@ -109,8 +118,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
             android:gravity="center"
-            android:text="@string/date"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/date" />
 
         <TextView
             android:id="@+id/order_device_type_header"
@@ -119,8 +127,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
             android:gravity="center"
-            android:text="@string/device_type"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/device_type" />
 
         <TextView
             android:id="@+id/order_task_header"
@@ -129,8 +136,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
             android:gravity="center"
-            android:text="@string/task"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/task" />
 
         <TextView
             android:id="@+id/order_address_header"
@@ -139,8 +145,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
             android:gravity="center"
-            android:text="@string/address"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/address" />
 
         <TextView
             android:id="@+id/order_status_header"
@@ -149,8 +154,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
             android:gravity="center"
-            android:text="@string/status"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:text="@string/status" />
 
         <TextView
             android:id="@+id/order_make_pdf_header"
@@ -158,9 +162,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-            android:gravity="center"
-            android:text="@string/pdf"
-            android:textAppearance="?android:textAppearanceMedium" />
+            android:gravity="center" />
 
     </LinearLayout>
 

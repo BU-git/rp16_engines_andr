@@ -3,79 +3,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorOrderList"
-    android:minHeight="?listPreferredItemHeight"
-    tools:context=".activities.OrderPageActivity">
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/order_number"
-        android:layout_width="110dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="252555252"
-        android:textAppearance="?android:textAppearanceMedium" />
+    <LinearLayout
+        android:id="@+id/order_page_list_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrderList"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:textAppearance="?android:textAppearanceSmall"
+        tools:context=".activities.OrderPageActivity">
 
-    <TextView
-        android:id="@+id/order_service_date"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="22-03-2016"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_number"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="252555252" />
 
-    <TextView
-        android:id="@+id/order_device_type"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="Generator"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_service_date"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="22-03-2016" />
 
-    <TextView
-        android:id="@+id/order_task"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="Repair"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_device_type"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="Generator" />
 
-    <TextView
-        android:id="@+id/order_address"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="Kiev"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_task"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="Repair" />
 
-    <TextView
-        android:id="@+id/order_status"
-        android:layout_width="96dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="In progress"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_address"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="Kiev" />
 
-    <TextView
-        android:id="@+id/order_make_pdf"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-        android:layout_marginRight="@dimen/orders_list_horizontal_margin"
-        android:gravity="center"
-        android:text="PDF"
-        android:textAppearance="?android:textAppearanceMedium" />
+        <TextView
+            android:id="@+id/order_status"
+            android:layout_width="96dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:gravity="center"
+            tools:text="In progress" />
+
+
+        <Button
+            android:id="@+id/order_make_pdf_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:text="@string/pdf"
+            android:textColor="@color/colorOrderListHeader"
+            />
+
+
+    </LinearLayout>
+
+    <Space
+        android:id="@+id/order_page_list_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_orders_space"
+        android:layout_below="@id/order_page_list_line"
+        android:background="@color/colorPrimary" />
 
 </LinearLayout>

@@ -13,7 +13,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     private String[][] testOrderList = {
             {"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "In progress"},
             {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"358395563", "02-11-2016", "Motor", "Check", "Odessa", "Not started"}
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "In progress"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Very looooong adresss ", "Completed"},
+            {"354535789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "In progress"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"516665789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Not starte"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Completed"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
+            {"358395563", "02-11-2016", "Generator", "Check", "Odessa", "Not started"}
     };
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
