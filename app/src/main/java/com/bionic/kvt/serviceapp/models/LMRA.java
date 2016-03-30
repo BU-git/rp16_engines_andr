@@ -27,4 +27,24 @@ public class LMRA {
     public void setLmraDescription(String lmraDescription) {
         this.lmraDescription = lmraDescription;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LMRA lmra = (LMRA) o;
+
+        if (lmraName != null ? !lmraName.equals(lmra.lmraName) : lmra.lmraName != null)
+            return false;
+        return !(lmraDescription != null ? !lmraDescription.equals(lmra.lmraDescription) : lmra.lmraDescription != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = lmraName != null ? lmraName.hashCode() : 0;
+        result = 31 * result + (lmraDescription != null ? lmraDescription.hashCode() : 0);
+        return result;
+    }
 }
