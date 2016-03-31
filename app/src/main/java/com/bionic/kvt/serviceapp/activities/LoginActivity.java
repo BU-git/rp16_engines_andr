@@ -139,6 +139,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
         });
+
+        Button insertSignaturesButon = (Button) findViewById(R.id.insert_signatures_button);
+        insertSignaturesButon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, InsertSignaturesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void populateAutoComplete() {

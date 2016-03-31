@@ -61,6 +61,6 @@
         android:id="@+id/button_send"
         android:layout_below="@id/buton_client_signature"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="30dp"/>
 
 </RelativeLayout>
