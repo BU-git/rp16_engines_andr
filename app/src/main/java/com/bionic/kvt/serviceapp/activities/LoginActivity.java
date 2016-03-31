@@ -55,10 +55,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
+
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
 
     private final String TAG = this.getClass().getName();
@@ -84,8 +81,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginLayout;
     private TextView mHeaderTextView;
     private SharedPreferences sharedPreferences;
-    //private static final String PREF_NAME = "userPreferences";
-    private Boolean savedPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
