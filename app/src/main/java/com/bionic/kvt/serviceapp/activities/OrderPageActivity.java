@@ -32,7 +32,7 @@ public class OrderPageActivity extends AppCompatActivity implements OrderAdapter
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
-        Intent intent = new Intent(getApplicationContext(), ProcessOrderPage1Activity.class);
+        Intent intent = new Intent(getApplicationContext(), OrderPageDatailActivity.class);
         intent.putExtra("order_number", ordersAdapter.testOrderList[position][0]);
         startActivity(intent);
     }

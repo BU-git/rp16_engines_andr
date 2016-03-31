@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProcessOrderPage1Activity">
+    tools:context=".activities.OrderPageDatailActivity">
 
     <LinearLayout
         android:id="@+id/process_order_page1"

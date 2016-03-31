@@ -6,12 +6,12 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 
-public class ProcessOrderPage1Activity extends AppCompatActivity {
+public class OrderPageDatailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_process_order_page1);
+        setContentView(R.layout.activity_order_page_detail);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

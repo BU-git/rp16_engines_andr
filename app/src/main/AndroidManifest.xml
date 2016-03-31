@@ -29,7 +29,7 @@
             android:parentActivityName=".activities.LoginActivity" />
         <activity android:name=".activities.OrderPageActivity" />
         <activity
-            android:name=".activities.ProcessOrderPage1Activity"
+            android:name=".activities.OrderPageDatailActivity"
             android:parentActivityName=".activities.OrderPageActivity" />
     </application>
 
