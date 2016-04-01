@@ -9,10 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
+import com.bionic.kvt.serviceapp.Session;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -27,6 +29,8 @@ public class OrderPageActivity extends AppCompatActivity
     private OrderAdapter ordersAdapter;
     private RecyclerView.LayoutManager ordersLayoutManager;
 
+    private final String TAG = this.getClass().getName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +44,9 @@ public class OrderPageActivity extends AppCompatActivity
         ordersAdapter = new OrderAdapter();
         ordersRecyclerView.setAdapter(ordersAdapter);
         ordersAdapter.setOnOrderLineClickListener(this, this);
+
+        Log.d(TAG,Session.getInstance().getmUser());
+
     }
 
     @Override

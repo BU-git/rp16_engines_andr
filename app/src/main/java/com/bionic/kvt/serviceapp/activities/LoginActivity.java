@@ -42,13 +42,13 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
+import com.bionic.kvt.serviceapp.Session;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private ImageView mImageLogoView;
     private View mLoginLayout;
     private TextView mHeaderTextView;
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences userSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +100,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus){
-                    sharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
-                    if (sharedPreferences.getBoolean("isPasswordSaved", false)) {
-                        mPasswordView.setText(sharedPreferences.getString("password",""));
+                    userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
+                    if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
+                        mPasswordView.setText(userSharedPreferences.getString("password",""));
                     }
                 }
             }
@@ -345,7 +345,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Toast.makeText(getApplicationContext(), "name:" + all, Toast.LENGTH_SHORT).show();
     }
 
-
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -403,10 +402,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
+
+                //Put session user to Singleton
+                Session.getInstance().setmUser(mEmail);
                 if (mCheckBox.isChecked()){
                     //Get shared preferences
-                    sharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor userEditor = sharedPreferences.edit();
+                    userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor userEditor = userSharedPreferences.edit();
 
                     //Put data to shared preferences
                     userEditor.putString("user", mEmail);
@@ -428,6 +430,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
     }
+
 }
 
