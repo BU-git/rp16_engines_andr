@@ -3,11 +3,16 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 /**
- Implements session handling
+ * Implements session handling
  */
-public class Session extends Application{
+public class Session extends Application {
     private String engineerName;
     private String engineerId;
+
+    public void clearSession() {
+        engineerName = null;
+        engineerId = null;
+    }
 
     public String getEngineerName() {
         return engineerName;

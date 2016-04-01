@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/service_engenieer_id"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
@@ -38,7 +38,7 @@
             style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log out"
+            android:text="@string/activity_logout"
             android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>
 

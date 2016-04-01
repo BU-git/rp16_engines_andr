@@ -9,8 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
@@ -41,6 +41,16 @@ public class OrderPageActivity extends AppCompatActivity
         TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
         engenieerId.setText(session.getEngineerId());
 
+        Button logOut = (Button) findViewById(R.id.service_engenieer_logout_button);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                ((Session) getApplication()).clearSession();
+                startActivity(intent);
+            }
+        });
+
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
 
         ordersLayoutManager = new LinearLayoutManager(this);
@@ -50,6 +60,8 @@ public class OrderPageActivity extends AppCompatActivity
         ordersRecyclerView.setAdapter(ordersAdapter);
         ordersAdapter.setOnOrderLineClickListener(this, this);
     }
+
+
 
     @Override
     public void OnOrderLineClicked(View view, int position) {

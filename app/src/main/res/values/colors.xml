@@ -10,4 +10,5 @@
     <color name="colorOrderList">#898989</color>
     <color name="colorTextField">#FFFFFF</color>
     <color name="colorTableTextField">#000000</color>
+    <color name="colorPDFText">#000000</color>
 </resources>

@@ -1,18 +1,11 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.Manifest;
-
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.pdf.PdfDocument;
-import android.os.Build;
 import android.os.Environment;
 import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -80,8 +73,9 @@ public class PDFReportActivity extends AppCompatActivity {
             PdfDocument.Page page = pdfDocument.startPage(pageInfo);
 
             // repaint the user's text into the page
-            View content = findViewById(R.id.pdf_report);
+            View content = findViewById(R.id.pdf_text);
             content.draw(page.getCanvas());
+
 
             // do final processing of the page
             pdfDocument.finishPage(page);
