@@ -1,20 +1,13 @@
 package com.bionic.kvt.serviceapp;
 
+import android.app.Application;
+
 /**
- Implements session handling as a field of a singleton class
+ Implements session handling
  */
-public class Session {
+public class Session extends Application{
     private static Session instance = null;
     private String mUser;
-
-    private Session(){}
-
-    public static synchronized Session getInstance() {
-        if (instance == null) {
-            instance = new Session();
-        }
-        return instance;
-    }
 
     public String getmUser() {
         return mUser;

@@ -45,7 +45,9 @@ public class OrderPageActivity extends AppCompatActivity
         ordersRecyclerView.setAdapter(ordersAdapter);
         ordersAdapter.setOnOrderLineClickListener(this, this);
 
-        Log.d(TAG,Session.getInstance().getmUser());
+        Session s = (Session) getApplication();
+
+        Log.d(TAG,s.getmUser());
 
     }
 
