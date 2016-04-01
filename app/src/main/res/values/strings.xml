@@ -42,4 +42,6 @@
     <string name="start">Start</string>
 
     <string name="back">Back</string>
+    <string name="pdf_report">PDF Report</string>
+    <string name="send_pdf">Send PDF</string>
 </resources>

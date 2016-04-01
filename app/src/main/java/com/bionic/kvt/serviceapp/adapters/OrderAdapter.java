@@ -1,12 +1,16 @@
 package com.bionic.kvt.serviceapp.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.activities.OrderPageDatailActivity;
+import com.bionic.kvt.serviceapp.activities.PDFReportActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
@@ -32,6 +36,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     //    private ordersDataSet;
     OnOrderLineClickListener onOrderLineClickListener;
+    OnPDFButtonClickListener onPDFButtonClickListener;
 
 //    public  OrderAdapter( ordersDataSet){
 //        this.ordersDataSet = ordersDataSet;
@@ -41,8 +46,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         void OnOrderLineClicked(View view, int position);
     }
 
-    public void setOnOrderLineClickListener(OnOrderLineClickListener onOrderLineClickListener) {
+    public interface OnPDFButtonClickListener {
+        void OnPDFButtonClicked(View view, int position);
+    }
+    public void setOnOrderLineClickListener(OnOrderLineClickListener onOrderLineClickListener,
+                                            OnPDFButtonClickListener onPDFButtonClickListener) {
         this.onOrderLineClickListener = onOrderLineClickListener;
+        this.onPDFButtonClickListener = onPDFButtonClickListener;
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +63,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         TextView orderTask;
         TextView orderAddress;
         TextView orderStatus;
+        Button pdfButton;
 
         public UserViewHolder(View itemView) {
             super(itemView);
@@ -63,6 +74,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             orderTask = (TextView) itemView.findViewById(R.id.order_task);
             orderAddress = (TextView) itemView.findViewById(R.id.order_address);
             orderStatus = (TextView) itemView.findViewById(R.id.order_status);
+            pdfButton = (Button) itemView.findViewById(R.id.order_make_pdf_button);
         }
     }
 
@@ -85,6 +97,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             @Override
             public void onClick(View v) {
                 onOrderLineClickListener.OnOrderLineClicked(v, position);
+            }
+        });
+
+        holder.pdfButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onPDFButtonClickListener.OnPDFButtonClicked(v, position);
             }
         });
     }

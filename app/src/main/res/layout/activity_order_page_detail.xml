@@ -6,7 +6,7 @@
     tools:context=".activities.OrderPageDatailActivity">
 
     <LinearLayout
-        android:id="@+id/process_order_page1"
+        android:id="@+id/process_order_page_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorOrderPageHeader"
@@ -35,11 +35,11 @@
     </LinearLayout>
 
     <TableLayout
-        android:id="@+id/process_order_page1_table"
+        android:id="@+id/process_order_page_detail_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/process_order_page1"
+        android:layout_below="@+id/process_order_page_detail"
         android:divider="@color/colorPrimary"
         android:dividerPadding="@dimen/activity_orders_space"
 
@@ -60,7 +60,7 @@
                 android:layout_weight=".5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_order_number"
+                    android:id="@+id/process_order_page_detail_order_number"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -76,7 +76,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_order_number_data"
+                    android:id="@+id/process_order_page_detail_order_number_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -91,7 +91,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_order_date"
+                    android:id="@+id/process_order_page_detail_order_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -107,7 +107,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_order_date_data"
+                    android:id="@+id/process_order_page_detail_order_date_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -132,7 +132,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_relation"
+                    android:id="@+id/process_order_page_detail_relation"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -149,7 +149,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_relation_data"
+                    android:id="@+id/process_order_page_datail_relation_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -165,7 +165,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_reference"
+                    android:id="@+id/process_order_page_detail_reference"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -182,7 +182,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_reference_data"
+                    android:id="@+id/process_order_page_detail_reference_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -208,7 +208,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_place"
+                    android:id="@+id/process_order_page_detail_place"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -225,7 +225,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_place_data"
+                    android:id="@+id/process_order_page_detail_place_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -241,7 +241,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_device_type"
+                    android:id="@+id/process_order_page_detail_device_type"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -258,7 +258,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_device_type_data"
+                    android:id="@+id/process_order_page_detail_device_type_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -284,7 +284,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_telephone"
+                    android:id="@+id/process_order_page_detail_telephone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -301,7 +301,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_telephone_data"
+                    android:id="@+id/process_order_page_detail_telephone_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -317,7 +317,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_place_2"
+                    android:id="@+id/process_order_page_detail_place_2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -362,7 +362,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_employee"
+                    android:id="@+id/process_order_page_detail_employee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -379,7 +379,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_employee_data"
+                    android:id="@+id/process_order_page_detail_employee_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -395,7 +395,7 @@
                 android:layout_weight="0.5">
 
                 <TextView
-                    android:id="@+id/process_order_page1_working_hours"
+                    android:id="@+id/process_order_page_detail_working_hours"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -412,7 +412,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_device_working_hours_data"
+                    android:id="@+id/process_order_page_detail_device_working_hours_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -427,10 +427,10 @@
     </TableLayout>
 
     <LinearLayout
-        android:id="@+id/process_order_page1_2"
+        android:id="@+id/process_order_page_detail_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/process_order_page1_table"
+        android:layout_below="@id/process_order_page_detail_table"
         android:background="@color/colorOrderPageHeader"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
@@ -451,10 +451,10 @@
 
 
     <LinearLayout
-        android:id="@+id/process_order_page1_3"
+        android:id="@+id/process_order_page_detail_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/process_order_page1_2"
+        android:layout_below="@id/process_order_page_detail_2"
         android:background="@color/colorOrderList"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="vertical"
@@ -486,10 +486,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/process_order_page1_4"
+        android:id="@+id/process_order_page_detail_4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/process_order_page1_3"
+        android:layout_below="@id/process_order_page_detail_3"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
