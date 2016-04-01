@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.adapters;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.activities.OrderPageDatailActivity;
-import com.bionic.kvt.serviceapp.activities.PDFReportActivity;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
@@ -80,7 +77,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_order, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_order_page_adapter, parent, false);
         return new UserViewHolder(v);
     }
 
