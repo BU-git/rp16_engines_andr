@@ -24,7 +24,7 @@
             android:text="@string/service_engenieer" />
 
         <TextView
-            android:id="@+id/service_engenieer_name"
+            android:id="@+id/service_engenieer_id"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"

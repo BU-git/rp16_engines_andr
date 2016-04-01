@@ -404,8 +404,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
                 //Put session user to Singleton
-                Session s = (Session) getApplication();
-                s.setmUser(mEmail);
+                Session session = (Session) getApplication();
+                session.setEngineerId(mEmail);
+
                 if (mCheckBox.isChecked()){
                     //Get shared preferences
                     userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);

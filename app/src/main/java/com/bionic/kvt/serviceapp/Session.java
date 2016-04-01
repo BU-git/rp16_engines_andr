@@ -6,14 +6,22 @@ import android.app.Application;
  Implements session handling
  */
 public class Session extends Application{
-    private static Session instance = null;
-    private String mUser;
+    private String engineerName;
+    private String engineerId;
 
-    public String getmUser() {
-        return mUser;
+    public String getEngineerName() {
+        return engineerName;
     }
 
-    public void setmUser(String mUser) {
-        this.mUser = mUser;
+    public void setEngineerName(String engineerName) {
+        this.engineerName = engineerName;
+    }
+
+    public String getEngineerId() {
+        return engineerId;
+    }
+
+    public void setEngineerId(String engineerId) {
+        this.engineerId = engineerId;
     }
 }

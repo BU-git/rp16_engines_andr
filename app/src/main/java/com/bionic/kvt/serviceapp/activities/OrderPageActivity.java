@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
@@ -36,6 +37,10 @@ public class OrderPageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
 
+        Session session = (Session) getApplication();
+        TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
+        engenieerId.setText(session.getEngineerId());
+
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
 
         ordersLayoutManager = new LinearLayoutManager(this);
@@ -44,11 +49,6 @@ public class OrderPageActivity extends AppCompatActivity
         ordersAdapter = new OrderAdapter();
         ordersRecyclerView.setAdapter(ordersAdapter);
         ordersAdapter.setOnOrderLineClickListener(this, this);
-
-        Session s = (Session) getApplication();
-
-        Log.d(TAG,s.getmUser());
-
     }
 
     @Override
