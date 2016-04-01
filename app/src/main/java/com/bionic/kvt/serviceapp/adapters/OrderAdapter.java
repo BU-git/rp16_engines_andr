@@ -6,29 +6,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
-    public  String[][] testOrderList = {
-            {"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "In progress"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "In progress"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Very looooong adresss ", "Completed"},
-            {"354535789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "In progress"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"516665789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Not starte"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Completed"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed"},
-            {"358395563", "02-11-2016", "Generator", "Check", "Odessa", "Not started"}
+    public static final int COLUMN_NUMBER = 7;
+    public String[][] testOrderList = {
+            {"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "In progress", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "In progress", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Very looooong adresss ", "Completed", "PDF"},
+            {"354535789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "In progress", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"516665789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte", "PDF"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Not starte", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Completed", "PDF"},
+            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
+            {"358395563", "02-11-2016", "Generator", "Check", "Odessa", "Not started", "PDF"}
     };
 
     //    private ordersDataSet;
@@ -46,58 +48,54 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
     public interface OnPDFButtonClickListener {
         void OnPDFButtonClicked(View view, int position);
     }
+
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
+        View oneCellView;
+
+        public UserViewHolder(View itemView) {
+            super(itemView);
+            oneCellView = itemView.findViewById(R.id.one_cell);
+        }
+    }
+
     public void setOnOrderLineClickListener(OnOrderLineClickListener onOrderLineClickListener,
                                             OnPDFButtonClickListener onPDFButtonClickListener) {
         this.onOrderLineClickListener = onOrderLineClickListener;
         this.onPDFButtonClickListener = onPDFButtonClickListener;
     }
 
-    public static class UserViewHolder extends RecyclerView.ViewHolder {
-        View orderView;
-        TextView orderNumber;
-        TextView orderServiceDate;
-        TextView orderDeviceType;
-        TextView orderTask;
-        TextView orderAddress;
-        TextView orderStatus;
-        Button pdfButton;
-
-        public UserViewHolder(View itemView) {
-            super(itemView);
-            orderView = itemView;
-            orderNumber = (TextView) itemView.findViewById(R.id.order_number);
-            orderServiceDate = (TextView) itemView.findViewById(R.id.order_service_date);
-            orderDeviceType = (TextView) itemView.findViewById(R.id.order_device_type);
-            orderTask = (TextView) itemView.findViewById(R.id.order_task);
-            orderAddress = (TextView) itemView.findViewById(R.id.order_address);
-            orderStatus = (TextView) itemView.findViewById(R.id.order_status);
-            pdfButton = (Button) itemView.findViewById(R.id.order_make_pdf_button);
-        }
-    }
 
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_order_page_adapter, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_order_page_one_cell, parent, false);
         return new UserViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, final int position) {
-        holder.orderNumber.setText(testOrderList[position][0]);
-        holder.orderServiceDate.setText(testOrderList[position][1]);
-        holder.orderDeviceType.setText(testOrderList[position][2]);
-        holder.orderTask.setText(testOrderList[position][3]);
-        holder.orderAddress.setText(testOrderList[position][4]);
-        holder.orderStatus.setText(testOrderList[position][5]);
+        int row = position / COLUMN_NUMBER;
+        int cell = position - row * COLUMN_NUMBER;
 
-        holder.orderView.setOnClickListener(new View.OnClickListener() {
+        TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
+        Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
+
+        if (cell == COLUMN_NUMBER - 1) {
+            textCell.setVisibility(View.GONE);
+            buttonCell.setVisibility(View.VISIBLE);
+        } else {
+            textCell.setVisibility(View.VISIBLE);
+            buttonCell.setVisibility(View.GONE);
+            textCell.setText(testOrderList[row][cell]);
+        }
+
+        textCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onOrderLineClickListener.OnOrderLineClicked(v, position);
             }
         });
 
-        holder.pdfButton.setOnClickListener(new View.OnClickListener() {
+        buttonCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPDFButtonClickListener.OnPDFButtonClicked(v, position);
@@ -107,6 +105,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public int getItemCount() {
-        return testOrderList.length;
+        return testOrderList.length * COLUMN_NUMBER;
     }
 }

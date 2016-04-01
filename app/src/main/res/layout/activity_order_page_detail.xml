@@ -24,14 +24,6 @@
             android:gravity="center_vertical"
             android:text="@string/order_data"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/service_engenieer_back_button"
-            style="?android:attr/imageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back"
-            android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>
 
     <TableLayout
@@ -137,7 +129,6 @@
                     android:text="@string/relation"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -153,7 +144,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="xxxxxxxxxx" />
-
             </TableRow>
 
             <TableRow
@@ -170,7 +160,6 @@
                     android:text="@string/reference"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -187,7 +176,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="xxxxxxxxxx" />
-
             </TableRow>
         </TableRow>
 
@@ -213,7 +201,6 @@
                     android:text="@string/place"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -229,7 +216,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="Kiev" />
-
             </TableRow>
 
             <TableRow
@@ -246,7 +232,6 @@
                     android:text="@string/device_type"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -263,7 +248,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="Motor" />
-
             </TableRow>
         </TableRow>
 
@@ -289,7 +273,6 @@
                     android:text="@string/telephone_number"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -305,7 +288,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="078698954" />
-
             </TableRow>
 
             <TableRow
@@ -322,7 +304,6 @@
                     android:text="@string/place_2"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -339,10 +320,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="xxxxxxx" />
-
             </TableRow>
-
-
         </TableRow>
 
         <TableRow
@@ -367,7 +345,6 @@
                     android:text="@string/employee"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -383,7 +360,6 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="Bob van Holland" />
-
             </TableRow>
 
             <TableRow
@@ -400,7 +376,6 @@
                     android:text="@string/working_hours"
                     android:textColor="@color/colorTableTextField"
                     android:textStyle="bold" />
-
             </TableRow>
 
             <TableRow
@@ -417,10 +392,7 @@
                     android:gravity="center_vertical"
                     android:textColor="@color/colorTableTextField"
                     tools:text="1213" />
-
             </TableRow>
-
-
         </TableRow>
     </TableLayout>
 
@@ -444,9 +416,7 @@
             android:gravity="center_vertical"
             android:text="@string/instructions"
             android:textStyle="bold" />
-
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/process_order_page_detail_3"
@@ -496,7 +466,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/service_engenieer_start_button"

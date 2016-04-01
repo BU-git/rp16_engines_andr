@@ -7,7 +7,7 @@ import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -51,28 +51,29 @@ public class OrderPageActivity extends AppCompatActivity
             }
         });
 
-        ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
+        ordersLayoutManager = new GridLayoutManager(this, OrderAdapter.COLUMN_NUMBER);
 
-        ordersLayoutManager = new LinearLayoutManager(this);
+        ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
+        ordersRecyclerView.setHasFixedSize(true);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         ordersAdapter = new OrderAdapter();
         ordersRecyclerView.setAdapter(ordersAdapter);
         ordersAdapter.setOnOrderLineClickListener(this, this);
-    }
 
+    }
 
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
         Intent intent = new Intent(getApplicationContext(), OrderPageDatailActivity.class);
-        intent.putExtra("order_number", ordersAdapter.testOrderList[position][0]);
+        intent.putExtra("order_number", ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0]);
         startActivity(intent);
     }
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
-        orderNumber = ordersAdapter.testOrderList[position][0];
+        orderNumber = ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0];
 
         hasWritePermission = isStoragePermissionGranted();
         if (!hasWritePermission) {

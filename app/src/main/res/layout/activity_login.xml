@@ -57,7 +57,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="user@kvt.nl"/>
+                        />
 
                 </android.support.design.widget.TextInputLayout>
                 <TextView
@@ -80,7 +80,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="12345"/>
+                        />
 
                 </android.support.design.widget.TextInputLayout>
 

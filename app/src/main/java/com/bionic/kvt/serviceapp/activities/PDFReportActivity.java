@@ -24,7 +24,7 @@ public class PDFReportActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pdfreport);
+        setContentView(R.layout.activity_pdf_report);
 
         if (!isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();

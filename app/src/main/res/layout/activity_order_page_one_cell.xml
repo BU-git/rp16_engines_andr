@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/one_cell"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorOrderList"
+    android:minHeight="?listPreferredItemHeightSmall"
+    android:orientation="vertical"
+    android:textAppearance="?android:textAppearanceSmall">
+
+    <TextView
+        android:id="@+id/one_cell_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/orders_list_margin"
+        android:layout_marginTop="@dimen/orders_list_margin"
+        android:gravity="center"
+        android:paddingBottom="@dimen/orders_list_padding"
+        android:paddingTop="@dimen/orders_list_padding"
+        tools:text="252555252" />
+
+    <Button
+        android:id="@+id/order_make_pdf_button"
+        style="?android:attr/imageButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/orders_list_margin"
+        android:layout_marginTop="@dimen/orders_list_margin"
+        android:paddingBottom="@dimen/orders_list_padding"
+        android:paddingTop="@dimen/orders_list_padding"
+        android:text="@string/pdf"
+        android:textColor="@color/colorOrderListHeader" />
+</LinearLayout>

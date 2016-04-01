@@ -6,7 +6,8 @@
     <dimen name="activity_no_margin">0dp</dimen>
     <dimen name="activity_login_padding">32dp</dimen>
     <dimen name="activity_orders_space">2dp</dimen>
-    <dimen name="orders_list_horizontal_margin">16dp</dimen>
+    <dimen name="orders_list_padding">8dp</dimen>
+    <dimen name="orders_list_margin">2dp</dimen>
     <dimen name="orders_table_horizontal_margin">8dp</dimen>
     <dimen name="orders_table_vertical_margin">16dp</dimen>
 </resources>

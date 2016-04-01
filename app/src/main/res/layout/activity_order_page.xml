@@ -46,8 +46,7 @@
         android:id="@+id/order_page_space"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_engineer_name"
-        android:background="@color/colorPrimary" />
+        android:layout_below="@id/order_page_engineer_name" />
 
     <LinearLayout
         android:id="@+id/order_page_search"
@@ -87,8 +86,7 @@
         android:id="@+id/order_page_space2"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_search"
-        android:background="@color/colorPrimary" />
+        android:layout_below="@id/order_page_search" />
 
     <LinearLayout
         android:id="@+id/order_page_list_header"
@@ -99,84 +97,62 @@
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:textAppearance="?android:textAppearanceSmall">
 
         <TextView
             android:id="@+id/order_number_header"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
             android:layout_weight="1"
             android:gravity="center"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
             android:text="@string/order_number" />
 
         <TextView
             android:id="@+id/order_service_date_header"
-            android:layout_weight="1"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/date" />
 
         <TextView
             android:id="@+id/order_device_type_header"
-            android:layout_weight="1"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/device_type" />
 
         <TextView
             android:id="@+id/order_task_header"
-            android:layout_weight="1"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/task" />
 
         <TextView
             android:id="@+id/order_address_header"
-            android:layout_weight="1"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/address" />
 
         <TextView
             android:id="@+id/order_status_header"
-            android:layout_weight="1"
-            android:minWidth="96dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="@string/status" />
 
         <TextView
             android:id="@+id/order_make_pdf_header"
-            android:minWidth="64dp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/orders_list_horizontal_margin"
-            android:layout_marginRight="@dimen/orders_list_horizontal_margin"
+            android:layout_weight="1"
             android:gravity="center" />
 
     </LinearLayout>
@@ -185,8 +161,7 @@
         android:id="@+id/order_page_space3"
         android:layout_width="match_parent"
         android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_list_header"
-        android:background="@color/colorPrimary" />
+        android:layout_below="@id/order_page_list_header" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/orders_recycler_view"
