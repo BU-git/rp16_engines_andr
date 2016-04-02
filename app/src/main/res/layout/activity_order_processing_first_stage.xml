@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.OrderProcessingFirstStageActivity">
+
+    <LinearLayout
+        android:id="@+id/order_processing_first_stage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrderPageHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/order_processing_first_stage_job_description_header"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/job_description"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_processing_first_stage_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/order_processing_first_stage_job_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="This job description will be transported from SAP to the application."
+            android:textColor="@color/colorDefaultTextField" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_processing_first_stage_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrderPageHeader"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:id="@+id/order_processing_first_stage_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Some Text"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/order_processing_first_stage_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerPadding="@dimen/activity_orders_space">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <Button
+                    android:id="@+id/order_processing_first_stage_open_quotation_button"
+                    style="?android:attr/imageButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open_quotation"
+                    android:textColor="@color/colorOrderListHeader" />
+            </TableRow>
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/order_processing_first_stage_instructions_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/instructions_followed"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/order_processing_first_stage_instructions_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"></TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:id="@+id/order_processing_first_stage_lmra_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/lmra_executed"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/order_processing_first_stage_lmra_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:checked="false" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/order_processing_first_stage_lmra_button"
+                    style="?android:attr/imageButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/register_dangerous_situation"
+                    android:textColor="@color/colorOrderListHeader" />
+            </TableRow>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <Button
+                android:id="@+id/order_processing_first_stage_next_button"
+                style="?android:attr/imageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:text="@string/next"
+                android:textColor="@color/colorOrderListHeader" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+

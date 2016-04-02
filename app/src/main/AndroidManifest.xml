@@ -11,12 +11,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".Session"
         android:allowBackup="true"
         android:icon="@mipmap/kvt_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name="com.bionic.kvt.serviceapp.Session">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name"
@@ -32,10 +32,13 @@
             android:parentActivityName=".activities.LoginActivity" />
         <activity android:name=".activities.OrderPageActivity" />
         <activity
-            android:name=".activities.OrderPageDatailActivity"
+            android:name=".activities.OrderPageDetailActivity"
             android:parentActivityName=".activities.OrderPageActivity" />
         <activity android:name=".activities.PDFReportActivity" />
-    </application>
+        <activity
+            android:name=".activities.OrderProcessingFirstStageActivity"
+            android:parentActivityName=".activities.OrderPageDetailActivity" />
 
+    </application>
 
 </manifest>

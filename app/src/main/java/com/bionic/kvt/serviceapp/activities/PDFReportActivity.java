@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,10 +39,8 @@ public class PDFReportActivity extends AppCompatActivity {
             return;
         }
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            orderNumber = extras.getString("order_number");
-        }
+        final Session SESSION = (Session) getApplication();
+        orderNumber = SESSION.getOrderNumber();
 
         if (orderNumber == null) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();

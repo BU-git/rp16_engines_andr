@@ -45,4 +45,11 @@
     <string name="back">Back</string>
     <string name="pdf_report">PDF Report</string>
     <string name="send_pdf">Send PDF</string>
+    <string name="accept_instructions">Please, accept instructions to start</string>
+    <string name="job_description">Job description</string>
+    <string name="open_quotation">Open Quotation</string>
+    <string name="instructions_followed">Instructions followed</string>
+    <string name="lmra_executed">LMRA executed</string>
+    <string name="register_dangerous_situation">Register dangerous situation</string>
+    <string name="next">Next</string>
 </resources>

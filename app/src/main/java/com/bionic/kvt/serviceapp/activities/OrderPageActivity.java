@@ -23,6 +23,8 @@ public class OrderPageActivity extends AppCompatActivity
         implements OrderAdapter.OnOrderLineClickListener, OrderAdapter.OnPDFButtonClickListener {
 
     private static final int REQUEST_WRITE_CODE = 1;
+
+
     private boolean hasWritePermission = false;
     private String orderNumber;
 
@@ -36,10 +38,10 @@ public class OrderPageActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
+        final Session SESSION = (Session) getApplication();
 
-        Session session = (Session) getApplication();
         TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
-        engenieerId.setText(session.getEngineerId());
+        engenieerId.setText(SESSION.getEngineerId());
 
         Button logOut = (Button) findViewById(R.id.service_engenieer_logout_button);
         logOut.setOnClickListener(new View.OnClickListener() {
@@ -66,13 +68,16 @@ public class OrderPageActivity extends AppCompatActivity
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
-        Intent intent = new Intent(getApplicationContext(), OrderPageDatailActivity.class);
-        intent.putExtra("order_number", ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0]);
+        Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
+        final Session SESSION = (Session) getApplication();
+        SESSION.setOrderNumber(ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0]);
         startActivity(intent);
     }
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
+        final Session SESSION = (Session) getApplication();
+        SESSION.clearOrderNumber();
         orderNumber = ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0];
 
         hasWritePermission = isStoragePermissionGranted();
@@ -83,7 +88,7 @@ public class OrderPageActivity extends AppCompatActivity
         }
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-        intent.putExtra("order_number", orderNumber);
+        SESSION.setOrderNumber(orderNumber);
         startActivity(intent);
     }
 

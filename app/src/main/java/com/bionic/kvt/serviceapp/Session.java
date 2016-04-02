@@ -8,10 +8,24 @@ import android.app.Application;
 public class Session extends Application {
     private String engineerName;
     private String engineerId;
+    private String orderNumber;
 
     public void clearSession() {
         engineerName = null;
         engineerId = null;
+        orderNumber = null;
+    }
+
+    public void clearOrderNumber() {
+        orderNumber = null;
+    }
+
+    public String getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(String orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public String getEngineerName() {

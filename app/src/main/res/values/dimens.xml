@@ -8,6 +8,6 @@
     <dimen name="activity_orders_space">2dp</dimen>
     <dimen name="orders_list_padding">8dp</dimen>
     <dimen name="orders_list_margin">2dp</dimen>
-    <dimen name="orders_table_horizontal_margin">8dp</dimen>
+    <dimen name="orders_processing_vertical_margin">8dp</dimen>
     <dimen name="orders_table_vertical_margin">16dp</dimen>
 </resources>
