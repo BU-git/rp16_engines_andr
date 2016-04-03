@@ -9,11 +9,8 @@
     <color name="colorOrderListHeader">#5a5a5a</color>
     <color name="colorOrderList">#898989</color>
     <color name="colorTextField">#FFFFFF</color>
-<<<<<<< refs/heads/master
     <color name="colorDefaultTextField">#000000</color>
     <color name="colorPDFText">#000000</color>
-=======
     <!-- LMRA Colors -->
     <color name="colorLMRASection">#C0C0C0</color>
->>>>>>> HEAD~6
 </resources>
