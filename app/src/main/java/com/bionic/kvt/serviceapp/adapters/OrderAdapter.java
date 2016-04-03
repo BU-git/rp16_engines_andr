@@ -6,40 +6,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 
+import java.util.List;
+
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
-    public static final int COLUMN_NUMBER = 7;
-    public String[][] testOrderList = {
-            {"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "In progress", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "In progress", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Very looooong adresss ", "Completed", "PDF"},
-            {"354535789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "In progress", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"516665789", "19-03-2016", "Motor", "Check", "Lviv", "Not starte", "PDF"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Not starte", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Generator", "Check", "Lviv", "Completed", "PDF"},
-            {"354363789", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"},
-            {"358395563", "02-11-2016", "Generator", "Check", "Odessa", "Not started", "PDF"}
-    };
+    private List<String[]> ordersDataSet;
+    private int ordersDataSetColNumber;
 
-    //    private ordersDataSet;
     OnOrderLineClickListener onOrderLineClickListener;
     OnPDFButtonClickListener onPDFButtonClickListener;
 
-//    public  OrderAdapter( ordersDataSet){
-//        this.ordersDataSet = ordersDataSet;
-//    }
+    public OrderAdapter(List<String[]> ordersDataSet) {
+        this.ordersDataSet = ordersDataSet;
+        if (ordersDataSet.size() > 0)
+            ordersDataSetColNumber = ordersDataSet.get(0).length;
+    }
+
+    public void setOrdersDataSet(List<String[]> ordersDataSet) {
+        this.ordersDataSet = ordersDataSet;
+        if (ordersDataSet.size() > 0)
+            ordersDataSetColNumber = ordersDataSet.get(0).length;
+        else ordersDataSetColNumber = 0;
+    }
+
+    public String getOrderNumber(int rowNumber) {
+        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return "";
+        return ordersDataSet.get(rowNumber)[0];
+    }
 
     public interface OnOrderLineClickListener {
         void OnOrderLineClicked(View view, int position);
@@ -73,19 +69,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, final int position) {
-        int row = position / COLUMN_NUMBER;
-        int cell = position - row * COLUMN_NUMBER;
+        int row = position / ordersDataSetColNumber;
+        int cell = position - row * ordersDataSetColNumber;
 
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
 
-        if (cell == COLUMN_NUMBER - 1) {
+        if (cell == ordersDataSetColNumber - 1) {
             textCell.setVisibility(View.GONE);
             buttonCell.setVisibility(View.VISIBLE);
         } else {
             textCell.setVisibility(View.VISIBLE);
             buttonCell.setVisibility(View.GONE);
-            textCell.setText(testOrderList[row][cell]);
+            textCell.setText(ordersDataSet.get(row)[cell]);
         }
 
         textCell.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +101,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public int getItemCount() {
-        return testOrderList.length * COLUMN_NUMBER;
+        return ordersDataSet.size() * ordersDataSetColNumber;
     }
 }

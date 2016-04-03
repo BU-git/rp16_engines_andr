@@ -63,17 +63,17 @@
             android:id="@+id/orders_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="2"
             android:gravity="center_vertical"
             android:text="@string/orders" />
 
         <SearchView
-            android:id="@+id/searchView"
+            android:id="@+id/order_page_search_view"
             android:layout_width="0dp"
             android:layout_height="?listPreferredItemHeightSmall"
             android:layout_marginBottom="@dimen/activity_orders_space"
             android:layout_marginTop="@dimen/activity_orders_space"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:background="@color/colorTextField"
             android:inputType="text"
             android:maxLines="1"

@@ -1,6 +1,8 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.Manifest;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,13 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.Session;
+
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
@@ -24,13 +33,8 @@ public class OrderPageActivity extends AppCompatActivity
 
     private static final int REQUEST_WRITE_CODE = 1;
 
-
-    private boolean hasWritePermission = false;
-    private String orderNumber;
-
-    private RecyclerView ordersRecyclerView;
     private OrderAdapter ordersAdapter;
-    private RecyclerView.LayoutManager ordersLayoutManager;
+    private RecyclerView ordersRecyclerView;
 
     private final String TAG = this.getClass().getName();
 
@@ -38,8 +42,18 @@ public class OrderPageActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
-        final Session SESSION = (Session) getApplication();
 
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
+
+        AutoCompleteTextView search_text = (AutoCompleteTextView) searchView.findViewById(
+                searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
+        search_text.setTextSize(14);
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        final Session SESSION = (Session) getApplication();
         TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
         engenieerId.setText(SESSION.getEngineerId());
 
@@ -53,54 +67,74 @@ public class OrderPageActivity extends AppCompatActivity
             }
         });
 
-        ordersLayoutManager = new GridLayoutManager(this, OrderAdapter.COLUMN_NUMBER);
 
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager ordersLayoutManager = new GridLayoutManager(this, Session.ordersDataSetColNumber);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
-        ordersAdapter = new OrderAdapter();
-        ordersRecyclerView.setAdapter(ordersAdapter);
-        ordersAdapter.setOnOrderLineClickListener(this, this);
-
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doOrdersSearch(query);
+        } else {
+            ordersAdapter = new OrderAdapter(Session.ordersDataSet);
+            ordersAdapter.setOnOrderLineClickListener(this, this);
+            ordersRecyclerView.setAdapter(ordersAdapter);
+        }
     }
 
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
-        Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         final Session SESSION = (Session) getApplication();
-        SESSION.setOrderNumber(ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0]);
+        SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+
+        Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
         final Session SESSION = (Session) getApplication();
-        SESSION.clearOrderNumber();
-        orderNumber = ordersAdapter.testOrderList[position / OrderAdapter.COLUMN_NUMBER][0];
+        SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
 
-        hasWritePermission = isStoragePermissionGranted();
-        if (!hasWritePermission) {
+        if (!isStoragePermissionGranted()) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_CODE);
             return;
         }
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-        SESSION.setOrderNumber(orderNumber);
         startActivity(intent);
+    }
+
+
+    private void doOrdersSearch(String query) {
+        if ("".equals(query)) {
+            ordersAdapter = new OrderAdapter(Session.ordersDataSet);
+        } else {
+            List<String[]> searchOrdersDataSet = new LinkedList<>();
+            for (String[] oneOrder : Session.ordersDataSet) {
+                if (oneOrder[0].contains(query)) {
+                    searchOrdersDataSet.add(oneOrder);
+                }
+            }
+            ordersAdapter = new OrderAdapter(searchOrdersDataSet);
+        }
+
+        ordersAdapter.setOnOrderLineClickListener(this, this);
+        ordersRecyclerView.setAdapter(ordersAdapter);
     }
 
     public boolean isStoragePermissionGranted() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
-
         if (checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
-
         return false;
     }
 
@@ -110,9 +144,7 @@ public class OrderPageActivity extends AppCompatActivity
         if (requestCode == REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //resume tasks needing this permission
-
                 Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-                intent.putExtra("order_number", orderNumber);
                 startActivity(intent);
             }
         }
