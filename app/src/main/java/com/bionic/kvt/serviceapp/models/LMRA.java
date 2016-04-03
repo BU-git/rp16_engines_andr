@@ -1,9 +1,14 @@
 package com.bionic.kvt.serviceapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /*
 LMRA Model Class
  */
-public class LMRA {
+public class LMRA implements Parcelable, Serializable{
     private String lmraName;
     private String lmraDescription;
 
@@ -11,6 +16,23 @@ public class LMRA {
         this.lmraName = lmraName;
         this.lmraDescription = lmraDescription;
     }
+
+    protected LMRA(Parcel in) {
+        lmraName = in.readString();
+        lmraDescription = in.readString();
+    }
+
+    public static final Creator<LMRA> CREATOR = new Creator<LMRA>() {
+        @Override
+        public LMRA createFromParcel(Parcel in) {
+            return new LMRA(in);
+        }
+
+        @Override
+        public LMRA[] newArray(int size) {
+            return new LMRA[size];
+        }
+    };
 
     public String getLmraName() {
         return lmraName;
@@ -28,23 +50,15 @@ public class LMRA {
         this.lmraDescription = lmraDescription;
     }
 
+    //Parcelazied implmentation.
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        LMRA lmra = (LMRA) o;
-
-        if (lmraName != null ? !lmraName.equals(lmra.lmraName) : lmra.lmraName != null)
-            return false;
-        return !(lmraDescription != null ? !lmraDescription.equals(lmra.lmraDescription) : lmra.lmraDescription != null);
-
+    public int describeContents() {
+        return 0;
     }
 
     @Override
-    public int hashCode() {
-        int result = lmraName != null ? lmraName.hashCode() : 0;
-        result = 31 * result + (lmraDescription != null ? lmraDescription.hashCode() : 0);
-        return result;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this);
     }
 }
