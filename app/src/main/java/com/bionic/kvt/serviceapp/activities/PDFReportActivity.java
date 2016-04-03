@@ -39,18 +39,14 @@ public class PDFReportActivity extends AppCompatActivity {
             return;
         }
 
-        final Session SESSION = (Session) getApplication();
-        orderNumber = SESSION.getOrderNumber();
+        orderNumber = ((Session) getApplication()).getOrderNumber();
 
         if (orderNumber == null) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-//        File pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
-
         new Thread(new GeneratePDFReportFile()).start();
-
     }
 
 

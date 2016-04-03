@@ -1,8 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.Manifest;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -11,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,7 +18,6 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.Session;
-
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,27 +32,41 @@ public class OrderPageActivity extends AppCompatActivity
     private OrderAdapter ordersAdapter;
     private RecyclerView ordersRecyclerView;
 
-    private final String TAG = this.getClass().getName();
+//    private final String TAG = this.getClass().getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                doOrdersSearch(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                doOrdersSearch("");
+                return false;
+            }
+        });
 
         AutoCompleteTextView search_text = (AutoCompleteTextView) searchView.findViewById(
                 searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
         search_text.setTextSize(14);
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
-        final Session SESSION = (Session) getApplication();
-        TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
-        engenieerId.setText(SESSION.getEngineerId());
-
+        // Configuring Log out button
         Button logOut = (Button) findViewById(R.id.service_engenieer_logout_button);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,27 +77,23 @@ public class OrderPageActivity extends AppCompatActivity
             }
         });
 
+        // Configuring Engenieer Id
+        TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
+        engenieerId.setText(((Session) getApplication()).getEngineerId());
 
+        // Configuring Recycler View
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
-
         RecyclerView.LayoutManager ordersLayoutManager = new GridLayoutManager(this, Session.ordersDataSetColNumber);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            doOrdersSearch(query);
-        } else {
-            ordersAdapter = new OrderAdapter(Session.ordersDataSet);
-            ordersAdapter.setOnOrderLineClickListener(this, this);
-            ordersRecyclerView.setAdapter(ordersAdapter);
-        }
+        // Showing all orders
+        doOrdersSearch("");
     }
-
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
+        // Setting selected Order number to current session
         final Session SESSION = (Session) getApplication();
         SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
 
@@ -97,6 +103,7 @@ public class OrderPageActivity extends AppCompatActivity
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
+        // Setting selected Order number to current session
         final Session SESSION = (Session) getApplication();
         SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
 
@@ -110,6 +117,17 @@ public class OrderPageActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_CODE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //resume tasks needing this permission
+                Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
 
     private void doOrdersSearch(String query) {
         if ("".equals(query)) {
@@ -136,17 +154,5 @@ public class OrderPageActivity extends AppCompatActivity
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_WRITE_CODE) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //resume tasks needing this permission
-                Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-                startActivity(intent);
-            }
-        }
     }
 }

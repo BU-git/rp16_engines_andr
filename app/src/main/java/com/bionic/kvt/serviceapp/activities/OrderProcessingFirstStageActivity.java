@@ -14,7 +14,6 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_processing_first_stage);
 
-        final Session SESSION = (Session) getApplication();
-        orderNumber = SESSION.getOrderNumber();
+        orderNumber = ((Session) getApplication()).getOrderNumber();
     }
 }

@@ -17,8 +17,7 @@ public class OrderPageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
 
-        final Session SESSION = (Session) getApplication();
-        orderNumber = SESSION.getOrderNumber();
+        orderNumber = ((Session) getApplication()).getOrderNumber();
 
         if (orderNumber != null) {
             ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber);
@@ -42,12 +41,5 @@ public class OrderPageDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
-
     }
-
-
-
-
 }
