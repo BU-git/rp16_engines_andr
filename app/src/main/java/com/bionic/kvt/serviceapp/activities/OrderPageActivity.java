@@ -41,6 +41,7 @@ public class OrderPageActivity extends AppCompatActivity
 
         //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -66,6 +67,7 @@ public class OrderPageActivity extends AppCompatActivity
                 searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
         search_text.setTextSize(14);
 
+
         // Configuring Log out button
         Button logOut = (Button) findViewById(R.id.service_engenieer_logout_button);
         logOut.setOnClickListener(new View.OnClickListener() {
@@ -88,8 +90,11 @@ public class OrderPageActivity extends AppCompatActivity
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         // Showing all orders
-        doOrdersSearch("");
+        ordersAdapter = new OrderAdapter(Session.ordersDataSet);
+        ordersAdapter.setOnOrderLineClickListener(this, this);
+        ordersRecyclerView.setAdapter(ordersAdapter);
     }
+
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
@@ -131,7 +136,7 @@ public class OrderPageActivity extends AppCompatActivity
 
     private void doOrdersSearch(String query) {
         if ("".equals(query)) {
-            ordersAdapter = new OrderAdapter(Session.ordersDataSet);
+            ordersAdapter.setOrdersDataSet(Session.ordersDataSet);
         } else {
             List<String[]> searchOrdersDataSet = new LinkedList<>();
             for (String[] oneOrder : Session.ordersDataSet) {
@@ -139,11 +144,10 @@ public class OrderPageActivity extends AppCompatActivity
                     searchOrdersDataSet.add(oneOrder);
                 }
             }
-            ordersAdapter = new OrderAdapter(searchOrdersDataSet);
+            ordersAdapter.setOrdersDataSet(searchOrdersDataSet);
         }
 
-        ordersAdapter.setOnOrderLineClickListener(this, this);
-        ordersRecyclerView.setAdapter(ordersAdapter);
+        ordersRecyclerView.swapAdapter(ordersAdapter,false);
     }
 
     public boolean isStoragePermissionGranted() {
