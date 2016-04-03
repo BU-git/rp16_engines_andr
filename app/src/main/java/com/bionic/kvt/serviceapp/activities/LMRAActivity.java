@@ -69,26 +69,7 @@ public class LMRAActivity extends AppCompatActivity {
         if (savedInstanceState != null){
             lmraList = savedInstanceState.getParcelableArrayList(LMRALISTNAME);
         } else {
-
-            //Dummy data
-            LMRA newLMRA = new LMRA("Test1", "test description");
-            LMRA newLMRA2 = new LMRA("Test2", "test description");
-            LMRA newLMRA3 = new LMRA("Test3", "test description");
-            LMRA newLMRA4 = new LMRA("Test4", "test description");
-            LMRA newLMRA5 = new LMRA("Test5", "test description");
-            LMRA newLMRA6 = new LMRA("Test6", "test description");
-            LMRA newLMRA7 = new LMRA("Test7", "test description");
-            LMRA newLMRA8 = new LMRA("Test8", "test description");
-
-            lmraList.add(newLMRA);
-            lmraList.add(newLMRA2);
-            lmraList.add(newLMRA3);
-            lmraList.add(newLMRA4);
-            lmraList.add(newLMRA5);
-            lmraList.add(newLMRA6);
-            lmraList.add(newLMRA7);
-            lmraList.add(newLMRA8);
-
+            //Prepopulate data from DB, if needed
         }
 
         final LMRAAdapter lmraAdapter = new LMRAAdapter(this,lmraList);
