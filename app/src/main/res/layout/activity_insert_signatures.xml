@@ -5,62 +5,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_service_engineer"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:id="@+id/text_engineer" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_engineer"
-        android:id="@+id/image_engineer_signature"
-        android:src="@drawable/engineer_signature_stub"
-        android:background="@android:color/darker_gray"/>
-
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_insert"
-        android:layout_below="@id/image_engineer_signature"
-        android:id="@+id/button_engineer_signature"
-        android:layout_alignParentRight="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/text_client"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:layout_below="@id/button_engineer_signature"
-        android:id="@+id/text_client" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/text_client"
-        android:id="@+id/image_client_signature"
-        android:src="@drawable/client_signature_stub"
-        android:background="@android:color/darker_gray"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_insert"
-        android:layout_below="@id/image_client_signature"
-        android:id="@+id/buton_client_signature"
-        android:layout_alignParentRight="true"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="@string/button_send"
         android:id="@+id/button_send"
-        android:layout_below="@id/buton_client_signature"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="30dp"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/button_send">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_service_engineer"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:id="@+id/text_engineer"
+            android:layout_marginTop="20dp"/>
+
+        <com.bionic.kvt.serviceapp.views.DrawingView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:id="@+id/draw_engineer_signature"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_client"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:id="@+id/text_client"
+            android:layout_marginTop="20dp"/>
+
+        <com.bionic.kvt.serviceapp.views.DrawingView
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:id="@+id/draw_client_signature"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
