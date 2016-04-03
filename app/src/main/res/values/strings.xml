@@ -21,7 +21,13 @@
     <!-- String related to LMRA -->
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
+    <string name="lmra_button_add">Add Item</string>
     <string name="lmra_text_sample">Text Sample</string>
+    <string name="lmra_hint_title">Name</string>
+    <string name="lmra_hint_description">Description of the dangerous situation</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_lmra_name">LMRA name is required</string>
 
     <!-- Test strings -->
     <string name="test_long_string">dsfdssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</string>
@@ -29,4 +35,6 @@
 
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
+    <string name="new_lmra_template">New Dangerous Situation</string>
+
 </resources>
