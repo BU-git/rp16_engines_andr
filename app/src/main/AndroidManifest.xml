@@ -27,14 +27,11 @@
         </activity>
         <activity
             android:name=".activities.ForgetPasswordActivity"
-            android:parentActivityName=".activities.LoginActivity"></activity>
-        <activity android:name=".activities.OrderPageActivity"></activity>
+            android:parentActivityName=".activities.LoginActivity" />
+        <activity android:name=".activities.OrderPageActivity" />
 
-        <activity android:name=".activities.InsertSignaturesActivity"/>
+        <activity android:name=".activities.InsertSignaturesActivity" />
 
-        <activity
-            android:name=".activities.DrawSignatureActivity"
-            android:parentActivityName=".activities.InsertSignaturesActivity"/>
     </application>
 
 </manifest>
