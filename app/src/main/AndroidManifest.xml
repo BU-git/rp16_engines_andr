@@ -23,14 +23,14 @@
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activities.ForgetPasswordActivity"
             android:parentActivityName=".activities.LoginActivity" />
-        <activity android:name=".activities.OrderPageActivity"/>
-
+        <activity android:name=".activities.OrderPageActivity" />
         <activity
             android:name=".activities.OrderPageDetailActivity"
             android:parentActivityName=".activities.OrderPageActivity" />
@@ -38,9 +38,18 @@
         <activity
             android:name=".activities.OrderProcessingFirstStageActivity"
             android:parentActivityName=".activities.OrderPageDetailActivity" />
-
-        <activity android:name=".activities.LMRAActivity"/>
-
+        <activity
+            android:name=".activities.LMRAActivity"
+            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
+        <activity
+            android:name=".activities.ComponentDefectsActivity"
+            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
+        <activity
+            android:name=".activities.MeasurementsActivity"
+            android:parentActivityName=".activities.ComponentDefectsActivity" />
+        <activity
+            android:name=".activities.NSAActivity"
+            android:parentActivityName=".activities.MeasurementsActivity" />
     </application>
 
 </manifest>

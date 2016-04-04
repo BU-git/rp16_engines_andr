@@ -72,5 +72,9 @@
     <string name="lmra_title">LMRA</string>
     <string name="new_lmra_template">New Dangerous Situation</string>
     <string name="generating_pdf_document">Generating PDF Document…</string>
+    <string name="component_defects">Component defects</string>
+    <string name="measurements">Measurements</string>
+    <string name="job_rules">Job rules</string>
+    <string name="save">Save</string>
 
 </resources>
