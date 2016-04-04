@@ -79,15 +79,8 @@
 
     <string name="text_service_engineer">Service engineer</string>
     <string name="text_client">Client</string>
-    <string name="button_insert">Insert</string>
-    <string name="button_send">Send</string>
-
-    <string name="start_new">New</string>
-    <string name="brush">Brush</string>
-    <string name="erase">Erase</string>
-    <string name="save">Save</string>
-    <string name="paint">Paint</string>
-    <string name="sml">Small</string>
-    <string name="med">Medium</string>
-    <string name="lrg">Large</string>
+    <string name="signature">Signature</string>
+    <string name="confirm">Confirm</string>
+    <string name="order_complete">Order complete</string>
+    <string name="done">Done</string>
 </resources>

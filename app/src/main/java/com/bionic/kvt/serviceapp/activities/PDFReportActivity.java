@@ -13,6 +13,7 @@ import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +64,16 @@ public class PDFReportActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Button doneButton =  (Button) findViewById(R.id.pdf_button_done);
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 

@@ -50,7 +50,9 @@
         <activity
             android:name=".activities.NSAActivity"
             android:parentActivityName=".activities.MeasurementsActivity" />
-        <activity android:name=".activities.InsertSignaturesActivity" />
+        <activity
+            android:name=".activities.InsertSignaturesActivity"
+            android:parentActivityName=".activities.NSAActivity" />
     </application>
 
 </manifest>
