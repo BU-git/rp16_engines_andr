@@ -42,9 +42,8 @@
     <string name="accept">Accept</string>
     <string name="start">Start</string>
 
-    <string name="back">Back</string>
-    <string name="pdf_report">PDF Report</string>
-    <string name="send_pdf">Send PDF</string>
+    <string name="pdf_report">PDF Report #</string>
+    <string name="send_pdf">Send in e-mail</string>
     <string name="accept_instructions">Please, accept instructions to start</string>
     <string name="job_description">Job description</string>
     <string name="open_quotation">Open Quotation</string>
@@ -72,5 +71,6 @@
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
     <string name="new_lmra_template">New Dangerous Situation</string>
+    <string name="generating_pdf_document">Generating PDF Document…</string>
 
 </resources>

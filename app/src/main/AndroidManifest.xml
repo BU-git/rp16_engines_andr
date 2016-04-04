@@ -39,7 +39,7 @@
             android:name=".activities.OrderProcessingFirstStageActivity"
             android:parentActivityName=".activities.OrderPageDetailActivity" />
 
-        <activity android:name=".activities.LMRAActivity"></activity>
+        <activity android:name=".activities.LMRAActivity"/>
 
     </application>
 

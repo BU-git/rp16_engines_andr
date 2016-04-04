@@ -17,6 +17,7 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
+            android:id="@+id/pdf_report_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -29,15 +30,8 @@
             style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="@string/send_pdf"
-            android:textColor="@color/colorOrderListHeader" />
-
-        <Button
-            android:id="@+id/pdf_report_back_button"
-            style="?android:attr/imageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back"
             android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>
 
@@ -46,18 +40,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorMainBackground"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/pdf_text"
+            android:id="@+id/pdf_text_log"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/generating_pdf_document"
+            android:textColor="@color/colorPDFText"
+            android:background="@color/colorTextField"/>
+
+        <ImageView
+            android:id="@+id/pdf_bitmap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/colorPDFText"
-            android:textStyle="bold" />
-
+            android:layout_gravity="center_vertical"
+            android:visibility="gone" />
 
     </LinearLayout>
 
