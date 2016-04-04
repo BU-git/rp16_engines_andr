@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KVT Service Application</string>
+    <string name="app_name">KVT Service Applicatie</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -77,4 +77,17 @@
     <string name="job_rules">Job rules</string>
     <string name="save">Save</string>
 
+    <string name="text_service_engineer">Service engineer</string>
+    <string name="text_client">Client</string>
+    <string name="button_insert">Insert</string>
+    <string name="button_send">Send</string>
+
+    <string name="start_new">New</string>
+    <string name="brush">Brush</string>
+    <string name="erase">Erase</string>
+    <string name="save">Save</string>
+    <string name="paint">Paint</string>
+    <string name="sml">Small</string>
+    <string name="med">Medium</string>
+    <string name="lrg">Large</string>
 </resources>
