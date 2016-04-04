@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.PDFReportActivity">
 
     <LinearLayout
-        android:id="@+id/pdf_report_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorOrderPageHeader"
@@ -17,7 +17,6 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
-            android:id="@+id/pdf_report"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -45,8 +44,7 @@
     <LinearLayout
         android:id="@+id/pdf_report_body"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pdf_report_head"
+        android:layout_height="match_parent"
         android:background="@color/colorMainBackground"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -54,7 +52,7 @@
 
         <TextView
             android:id="@+id/pdf_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:textColor="@color/colorPDFText"
@@ -63,4 +61,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

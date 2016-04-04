@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorLMRASection">
+    android:background="@color/colorLMRASection"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/activity_vertical_margin"
         android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <Button
                 android:id="@+id/button_lmra_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_delete"
                 android:layout_alignParentLeft="true"
-                android:background="@color/colorLoginGroup"/>
+                android:background="@color/colorLoginGroup"
+                android:text="@string/button_delete" />
 
             <TextView
                 android:id="@+id/title_lmra"
+                style="?android:textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:text="@string/lmra_text_sample"
-                style="?android:textAppearanceLarge"
-                android:textStyle="bold"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:textColor="@color/colorLoginGroup"/>
+                android:text="@string/lmra_text_sample"
+                android:textColor="@color/colorLoginGroup"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button_lmra_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_save"
                 android:layout_alignParentRight="true"
-                android:background="@color/colorLoginGroup"/>
+                android:background="@color/colorLoginGroup"
+                android:text="@string/button_save" />
         </RelativeLayout>
 
         <LinearLayout
@@ -48,21 +51,23 @@
             android:layout_gravity="bottom"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/description_lmra"
-                android:layout_alignParentLeft="true"
+                style="?android:textAppearanceLarge"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:textStyle="italic"
+                android:layout_weight=".7"
                 android:textColor="@android:color/black"
-                style="?android:textAppearanceLarge"
-                android:layout_weight=".7"/>
+                android:textStyle="italic" />
+
             <ImageSwitcher
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".3"
-                android:background="@android:drawable/ic_menu_camera"/>
+                android:background="@android:drawable/ic_menu_camera" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

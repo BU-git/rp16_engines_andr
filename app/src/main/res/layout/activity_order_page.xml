@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activities.OrderPageActivity">
 
     <LinearLayout
-        android:id="@+id/order_page_engineer_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorOrderPageHeader"
@@ -17,7 +17,6 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
-            android:id="@+id/service_engenieer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
@@ -43,16 +42,12 @@
     </LinearLayout>
 
     <Space
-        android:id="@+id/order_page_space"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_engineer_name" />
+        android:layout_height="@dimen/activity_orders_space" />
 
     <LinearLayout
-        android:id="@+id/order_page_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/order_page_space"
         android:background="@color/colorOrderPageHeader"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -60,7 +55,6 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
-            android:id="@+id/orders_search"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -79,20 +73,15 @@
             android:maxLines="1"
             android:orientation="horizontal"
             android:singleLine="true" />
-
     </LinearLayout>
 
     <Space
-        android:id="@+id/order_page_space2"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_search" />
+        android:layout_height="@dimen/activity_orders_space" />
 
     <LinearLayout
-        android:id="@+id/order_page_list_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/order_page_space2"
         android:background="@color/colorOrderListHeader"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
@@ -101,7 +90,6 @@
         android:textAppearance="?android:textAppearanceSmall">
 
         <TextView
-            android:id="@+id/order_number_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -109,7 +97,6 @@
             android:text="@string/order_number" />
 
         <TextView
-            android:id="@+id/order_service_date_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -117,7 +104,6 @@
             android:text="@string/date" />
 
         <TextView
-            android:id="@+id/order_device_type_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -125,7 +111,6 @@
             android:text="@string/device_type" />
 
         <TextView
-            android:id="@+id/order_task_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -133,7 +118,6 @@
             android:text="@string/task" />
 
         <TextView
-            android:id="@+id/order_address_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -141,7 +125,6 @@
             android:text="@string/address" />
 
         <TextView
-            android:id="@+id/order_status_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -149,25 +132,20 @@
             android:text="@string/status" />
 
         <TextView
-            android:id="@+id/order_make_pdf_header"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center" />
-
     </LinearLayout>
 
     <Space
-        android:id="@+id/order_page_space3"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/activity_orders_space"
-        android:layout_below="@id/order_page_list_header" />
+        android:layout_height="@dimen/activity_orders_space" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/orders_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/order_page_space3"
         android:scrollbars="vertical" />
 
-</RelativeLayout>
+</LinearLayout>
