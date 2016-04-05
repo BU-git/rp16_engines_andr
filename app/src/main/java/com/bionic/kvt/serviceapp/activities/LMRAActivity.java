@@ -62,9 +62,6 @@ public class LMRAActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lmra);
 
-        this.setTitle(R.string.lmra_title);
-
-
         //Saving session for the screen orientation
         if (savedInstanceState != null){
             lmraList = savedInstanceState.getParcelableArrayList(LMRALISTNAME);
