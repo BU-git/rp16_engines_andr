@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/lmra_title"
+            android:textAppearance="?android:textAppearanceMedium"
             android:textStyle="bold" />
     </LinearLayout>
     <ListView

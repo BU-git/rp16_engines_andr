@@ -22,17 +22,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:background="@color/colorLoginGroup"
-                android:text="@string/button_delete" />
+                android:text="@string/button_delete"
+                android:textAppearance="?android:textAppearanceButton" />
 
             <TextView
                 android:id="@+id/title_lmra"
-                style="?android:textAppearanceLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:text="@string/lmra_text_sample"
+                android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/colorLoginGroup"
                 android:textStyle="bold" />
 
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="@color/colorLoginGroup"
-                android:text="@string/button_save" />
+                android:text="@string/button_save"
+                android:textAppearance="?android:textAppearanceButton" />
         </RelativeLayout>
 
         <LinearLayout
@@ -60,6 +62,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:layout_weight=".7"
+                android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@android:color/black"
                 android:textStyle="italic" />
 
