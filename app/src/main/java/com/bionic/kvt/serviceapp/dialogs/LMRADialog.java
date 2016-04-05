@@ -6,6 +6,8 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.StringDef;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,7 @@ import com.bionic.kvt.serviceapp.models.LMRA;
 /*
 LMRA Dialog to show by clicking the plus
 */
-public class LMRADialog extends DialogFragment {
+public class LMRADialog extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

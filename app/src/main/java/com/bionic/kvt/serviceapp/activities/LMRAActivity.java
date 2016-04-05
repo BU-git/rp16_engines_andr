@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,8 +51,8 @@ public class LMRAActivity extends AppCompatActivity {
         final int id = item.getItemId();
         switch (id){
             case R.id.menu_lmra_add:
-                DialogFragment d = new LMRADialog();
-                d.show(getFragmentManager(),"new Lmra");
+                AppCompatDialogFragment d = new LMRADialog();
+                d.show(getSupportFragmentManager(),"new Lmra");
             default:
                 return super.onOptionsItemSelected(item);
         }
