@@ -24,15 +24,6 @@
             android:gravity="center_vertical"
             android:text="@string/pdf_report"
             android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/pdf_report_send_button"
-            style="?android:attr/imageButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/send_pdf"
-            android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>
 
     <LinearLayout
@@ -54,8 +45,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TextView
@@ -66,6 +57,15 @@
             android:padding="@dimen/activity_horizontal_margin"
             android:text="@string/generating_pdf_document"
             android:textColor="@color/colorPDFText" />
+
+        <Button
+            android:id="@+id/pdf_report_send_button"
+            style="?android:attr/imageButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/send_pdf"
+            android:textColor="@color/colorOrderListHeader" />
 
         <Button
             android:id="@+id/pdf_button_done"

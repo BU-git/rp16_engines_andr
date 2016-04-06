@@ -34,7 +34,6 @@ import java.io.IOException;
 public class PDFReportActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
     File pdfFile;
     Button sendButton;
-    TextView pdfTextLog;
 
     public boolean isExternalStorageWritable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
@@ -76,6 +75,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -85,7 +85,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
         ((TextView) findViewById(R.id.pdf_report_header)).setText(pdfReportHeader);
 
-        pdfTextLog = ((TextView) findViewById(R.id.pdf_text_status));
+        TextView pdfTextLog = ((TextView) findViewById(R.id.pdf_text_status));
         String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
                 + " Report_" + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFullPath);
@@ -180,10 +180,6 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
     }
 
     private void showPDFReport(File pdfReport) {
-        String statusText = pdfTextLog.getText().toString() + "\n" +
-                getResources().getString(R.string.open_file_for_preview);
-        pdfTextLog.setText(statusText);
-
         ParcelFileDescriptor mFileDescriptor = null;
         try {
             mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);

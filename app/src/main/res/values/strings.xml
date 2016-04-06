@@ -71,7 +71,7 @@
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
     <string name="new_lmra_template">New Dangerous Situation</string>
-    <string name="generating_pdf_document">Generating PDF Document:</string>
+    <string name="generating_pdf_document">PDF Document:</string>
     <string name="open_file_for_preview">Open file for preview.</string>
     <string name="component_defects">Component defects</string>
     <string name="measurements">Measurements</string>
