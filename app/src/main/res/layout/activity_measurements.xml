@@ -25,6 +25,1978 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:background="#000000">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin"
+                android:layout_marginTop="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Part"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Element"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Aspect"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Measurement"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="bold" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Unit"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="bold" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin"
+                android:layout_marginTop="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Motor"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Compression test"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Pressure"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="5.11"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="bar"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Motor oil"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Pressure"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="6.67"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="bar"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Temperature"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="36.6"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="\u00B0C"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Type"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Cool"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Manufactory"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Motor Sich"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Coolant"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Temperature"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="3.89"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="\u00B0C"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Acidity"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="12.0"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="pH"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Frost protection"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="2.0"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="\u00B0C"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Installation"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Eenvironment"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Temperature"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="45.7"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="\u00B0C"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Test run charge"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Voltage generator"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="233.8"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Volt"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere Phase 1"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="5.6"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere Phase 2"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="5.8"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere Phase 3"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="5.4"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ampere"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Power during test"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="14.67"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="kW"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Frequency charge"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="51.3"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="HZ"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Test run without load"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Frequency charge"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="55.7"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="HZ"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Exhaust"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Exhaust gases"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Temperature"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="76.3"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="\u00B0C"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/measurements_table_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="0"
+                    android:layout_marginLeft="@dimen/measurements_table_margin"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="1"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="3"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="2"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="6"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Pressure"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="3"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="6.7"
+                        android:textColor="@color/colorDefaultTextField"
+                        android:textStyle="italic" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_column="4"
+                    android:layout_marginRight="@dimen/measurements_table_margin"
+                    android:layout_weight="2"
+                    android:background="@color/colorMainBackground"
+                    android:padding="@dimen/measurements_table_cell_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Mbar"
+                        android:textColor="@color/colorDefaultTextField" />
+                </TableRow>
+            </TableRow>
+
+        </TableLayout>
+
+    </ScrollView>
 
 
     <LinearLayout
@@ -33,9 +2005,7 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin"
-        android:textAppearance="?android:textAppearanceMedium">
-
-    </LinearLayout>
+        android:textAppearance="?android:textAppearanceMedium"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
