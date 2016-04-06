@@ -1,20 +1,22 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
-import android.net.Uri;
+import android.graphics.pdf.PdfRenderer;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -65,7 +68,7 @@ public class PDFReportActivity extends AppCompatActivity {
             return;
         }
 
-        Button doneButton =  (Button) findViewById(R.id.pdf_button_done);
+        Button doneButton = (Button) findViewById(R.id.pdf_button_done);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +84,8 @@ public class PDFReportActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.pdf_report_header)).setText(pdfReportHeader);
 
         pdfTextLog = ((TextView) findViewById(R.id.pdf_text_log));
-        String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document) +
-                "\n" + pdfFile.toString();
+        String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
+                + " Report_" + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFullPath);
 
         sendButton = (Button) findViewById(R.id.pdf_report_send_button);
@@ -114,7 +117,6 @@ public class PDFReportActivity extends AppCompatActivity {
             drawPDFPage(page);
             orderPdfDocument.finishPage(page);
 
-
             try {
                 orderPdfDocument.writeTo(new FileOutputStream(pdfFile));
             } catch (IOException e) {
@@ -129,8 +131,6 @@ public class PDFReportActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
             sendButton.setEnabled(true);
-            String logText = pdfTextLog.getText().toString() + "\nDone!";
-            pdfTextLog.setText(logText);
             showPDFReport(pdfFile);
         }
 
@@ -146,7 +146,7 @@ public class PDFReportActivity extends AppCompatActivity {
             canvas.drawText("Test Print Document Page " + pdfPageCount, leftMargin, titleBaseLine, paint);
 
             paint.setTextSize(14);
-            canvas.drawText("Demm PDF document!", leftMargin, titleBaseLine + 35, paint);
+            canvas.drawText("PDF document!", leftMargin, titleBaseLine + 35, paint);
 
             paint.setColor(Color.RED);
             PdfDocument.PageInfo pageInfo = page.getInfo();
@@ -155,52 +155,38 @@ public class PDFReportActivity extends AppCompatActivity {
     }
 
     private void showPDFReport(File pdfReport) {
-        String logText = pdfTextLog.getText().toString() + "\nOpen file for preview.";
+        String logText = pdfTextLog.getText().toString() + "\n" +
+                getResources().getString(R.string.open_file_for_preview);
         pdfTextLog.setText(logText);
 
-        if (pdfReport.exists()) {
-            Intent target = new Intent(Intent.ACTION_VIEW);
-            target.setDataAndType(Uri.fromFile(pdfReport), "application/pdf");
-            target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        ParcelFileDescriptor mFileDescriptor = null;
+        try {
+            mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        PdfRenderer mPdfRenderer = null;
+        try {
+            mPdfRenderer = new PdfRenderer(mFileDescriptor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            Intent intent = Intent.createChooser(target, "Open PDF Report file");
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                //No app found
-            }
-        } else
-            Toast.makeText(getApplicationContext(), "File path is incorrect.", Toast.LENGTH_LONG).show();
+        PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
+        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth(), mCurrentPage.getHeight(), Bitmap.Config.ARGB_8888);
 
+        mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
-//        ParcelFileDescriptor mFileDescriptor = null;
-//        try {
-//            mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        PdfRenderer mPdfRenderer = null;
-//        try {
-//            mPdfRenderer = new PdfRenderer(mFileDescriptor);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(1);
-//        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth(), mCurrentPage.getHeight(), Bitmap.Config.ARGB_8888);
-//
-//        mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-//
-//        ImageView pdfView = (ImageView) findViewById(R.id.pdf_bitmap);
-//        pdfView.setImageBitmap(bitmap);
-//
-//        mCurrentPage.close();
-//        mPdfRenderer.close();
-//        try {
-//            mFileDescriptor.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        ImageView pdfView = (ImageView) findViewById(R.id.pdf_bitmap);
+        pdfView.setImageBitmap(bitmap);
+
+        mCurrentPage.close();
+        mPdfRenderer.close();
+        try {
+            mFileDescriptor.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

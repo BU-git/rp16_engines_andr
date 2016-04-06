@@ -43,36 +43,36 @@
         android:background="@color/colorMainBackground"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/pdf_text_log"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/activity_horizontal_margin"
-            android:text="@string/generating_pdf_document"
-            android:textColor="@color/colorPDFText"
-            android:background="@color/colorTextField"/>
-
         <ImageView
             android:id="@+id/pdf_bitmap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:visibility="gone" />
-
+            android:background="@color/colorPDFBackground" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:gravity="center_vertical"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/pdf_text_log"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/generating_pdf_document"
+            android:textColor="@color/colorPDFText" />
 
         <Button
             android:id="@+id/pdf_button_done"
             style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="@string/done"
             android:textColor="@color/colorOrderListHeader" />
     </LinearLayout>

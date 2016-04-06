@@ -9,6 +9,7 @@
     <color name="colorOrderListHeader">#5a5a5a</color>
     <color name="colorOrderList">#898989</color>
     <color name="colorTextField">#FFFFFF</color>
+    <color name="colorPDFBackground">#FFFFFF</color>
     <color name="colorDefaultTextField">#000000</color>
     <color name="colorPDFText">#000000</color>
     <!-- LMRA Colors -->
