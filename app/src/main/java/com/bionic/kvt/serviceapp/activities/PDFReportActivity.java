@@ -1,5 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,12 +8,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PDFReportActivity extends AppCompatActivity {
+public class PDFReportActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
     File pdfFile;
     Button sendButton;
     TextView pdfTextLog;
@@ -77,27 +80,50 @@ public class PDFReportActivity extends AppCompatActivity {
             }
         });
 
-
         pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
         ((TextView) findViewById(R.id.pdf_report_header)).setText(pdfReportHeader);
 
-        pdfTextLog = ((TextView) findViewById(R.id.pdf_text_log));
+        pdfTextLog = ((TextView) findViewById(R.id.pdf_text_status));
         String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
                 + " Report_" + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFullPath);
 
         sendButton = (Button) findViewById(R.id.pdf_report_send_button);
 
-        new GeneratePDFReportFile().execute();
+        getSupportLoaderManager().initLoader(1, null, this);
     }
 
-    private class GeneratePDFReportFile extends AsyncTask<Void, Void, Void> {
+    @Override
+    public Loader<Void> onCreateLoader(int id, Bundle args) {
+        return new GeneratePDFReportFile(this, pdfFile);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Void> loader, Void data) {
+        sendButton.setEnabled(true);
+        showPDFReport(pdfFile);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Void> loader) {
+
+    }
+
+    public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {
         private int pdfPageCount = 1;
+        private File pdfFile;
+        private Context context;
+
+        public GeneratePDFReportFile(Context context, File pdfFile) {
+            super(context);
+            this.context = context;
+            this.pdfFile = pdfFile;
+        }
 
         @Override
-        protected Void doInBackground(Void... urls) {
+        public Void loadInBackground() {
             PrintAttributes printAttrs = new PrintAttributes.Builder().
                     setColorMode(PrintAttributes.COLOR_MODE_COLOR).
                     setMediaSize(PrintAttributes.MediaSize.ISO_A4).
@@ -105,7 +131,7 @@ public class PDFReportActivity extends AppCompatActivity {
                     setMinMargins(PrintAttributes.Margins.NO_MARGINS).
                     build();
 
-            PdfDocument orderPdfDocument = new PrintedPdfDocument(getApplicationContext(), printAttrs);
+            PdfDocument orderPdfDocument = new PrintedPdfDocument(context, printAttrs);
 
             int pageHeight = printAttrs.getMediaSize().getHeightMils() / 1000 * 72;
             int pageWidth = printAttrs.getMediaSize().getWidthMils() / 1000 * 72;
@@ -124,14 +150,7 @@ public class PDFReportActivity extends AppCompatActivity {
             } finally {
                 orderPdfDocument.close();
             }
-            this.publishProgress();
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            sendButton.setEnabled(true);
-            showPDFReport(pdfFile);
         }
 
         private void drawPDFPage(PdfDocument.Page page) {
@@ -155,9 +174,9 @@ public class PDFReportActivity extends AppCompatActivity {
     }
 
     private void showPDFReport(File pdfReport) {
-        String logText = pdfTextLog.getText().toString() + "\n" +
+        String statusText = pdfTextLog.getText().toString() + "\n" +
                 getResources().getString(R.string.open_file_for_preview);
-        pdfTextLog.setText(logText);
+        pdfTextLog.setText(statusText);
 
         ParcelFileDescriptor mFileDescriptor = null;
         try {
@@ -186,6 +205,7 @@ public class PDFReportActivity extends AppCompatActivity {
             mFileDescriptor.close();
         } catch (IOException e) {
             e.printStackTrace();
+            mFileDescriptor = null;
         }
     }
 
