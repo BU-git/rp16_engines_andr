@@ -123,6 +123,12 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
         }
 
         @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+            forceLoad();
+        }
+
+        @Override
         public Void loadInBackground() {
             PrintAttributes printAttrs = new PrintAttributes.Builder().
                     setColorMode(PrintAttributes.COLOR_MODE_COLOR).
