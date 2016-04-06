@@ -25,15 +25,320 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/orders_table_vertical_margin"
+        android:dividerPadding="@dimen/activity_orders_space">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/fuel_added"
+                    android:textColor="@color/colorDefaultTextField" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/msa_fuel_added_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"></TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/water_separators_drained"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/nsa_water_separators_drained_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:checked="false"
+                    android:gravity="center_vertical" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"></TableRow>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/leave_installation"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <CheckBox
+                    android:id="@+id/nsa_leave_installation_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:checked="false" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+
+            </TableRow>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/customer_material"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <Switch
+                    android:id="@+id/nsa_customer_material_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:showText="true"
+                    android:textColor="@color/colorDefaultTextField"
+                    android:textOff="No"
+                    android:textOn="Yes"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+
+            </TableRow>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/material_from_bus"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <Switch
+                    android:id="@+id/nsa_material_from_bus_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:showText="true"
+                    android:textColor="@color/colorDefaultTextField"
+                    android:textOff="No"
+                    android:textOn="Yes"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+
+            </TableRow>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="0"
+                android:layout_weight="0.5">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/repair_advice"
+                    android:textColor="@color/colorDefaultTextField" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical">
+
+                <Switch
+                    android:id="@+id/nsa_repair_advice_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorTextField"
+                    android:showText="true"
+                    android:textColor="@color/colorDefaultTextField"
+                    android:textOff="No"
+                    android:textOn="Yes"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="2"
+                android:layout_weight="1"
+                android:gravity="center_vertical">
+
+
+            </TableRow>
+
+        </TableRow>
+    </TableLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
         android:padding="@dimen/activity_horizontal_margin"
-        android:textAppearance="?android:textAppearanceMedium">
-
-    </LinearLayout>
+        android:textAppearance="?android:textAppearanceMedium"></LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -84,4 +84,10 @@
     <string name="confirm">Confirm</string>
     <string name="order_complete">Order complete</string>
     <string name="done">Done</string>
+    <string name="fuel_added">Fuel added</string>
+    <string name="water_separators_drained">Water separators drained</string>
+    <string name="leave_installation">Leave installation stand-by/operational</string>
+    <string name="customer_material">Used customer material</string>
+    <string name="material_from_bus">Used material from bus</string>
+    <string name="repair_advice">Repair / Replacement advice</string>
 </resources>
