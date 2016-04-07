@@ -60,11 +60,20 @@
             android:paddingRight="@dimen/activity_horizontal_margin">
 
             <Button
+                android:id="@+id/button_clear_engineer"
+                style="?android:attr/imageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:textColor="@color/colorOrderListHeader" />
+
+            <ToggleButton
                 android:id="@+id/button_confirm_engineer"
                 style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm"
+                android:textOff="@string/confirm"
+                android:textOn="@string/saved"
                 android:textColor="@color/colorOrderListHeader" />
         </LinearLayout>
     </LinearLayout>
@@ -104,11 +113,20 @@
             android:paddingRight="@dimen/activity_horizontal_margin">
 
             <Button
+                android:id="@+id/button_clear_client"
+                style="?android:attr/imageButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
+                android:textColor="@color/colorOrderListHeader" />
+
+            <ToggleButton
                 android:id="@+id/button_confirm_client"
                 style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/confirm"
+                android:textOff="@string/confirm"
+                android:textOn="@string/saved"
                 android:textColor="@color/colorOrderListHeader" />
         </LinearLayout>
 
@@ -127,6 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/order_complete"
-            android:textColor="@color/colorOrderListHeader" />
+            android:textColor="@color/colorOrderListHeader"
+            android:enabled="false"/>
     </LinearLayout>
 </LinearLayout>

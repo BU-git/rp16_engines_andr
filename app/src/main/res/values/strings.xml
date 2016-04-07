@@ -83,6 +83,7 @@
     <string name="text_client">Client</string>
     <string name="signature">Signature</string>
     <string name="confirm">Confirm</string>
+    <string name="saved">Saved</string>
     <string name="order_complete">Order complete</string>
     <string name="done">Done</string>
     <string name="fuel_added">Fuel added</string>
@@ -91,4 +92,5 @@
     <string name="customer_material">Used customer material</string>
     <string name="material_from_bus">Used material from bus</string>
     <string name="repair_advice">Repair / Replacement advice</string>
+    <string name="clear">Clear</string>
 </resources>
