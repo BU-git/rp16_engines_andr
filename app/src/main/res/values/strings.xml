@@ -97,6 +97,8 @@
     <string name="problem_action">Action</string>
     <string name="problem_resolved">Resolved</string>
     <string name="problem_condition">Condition</string>
+    <string name="title_component_list">Components</string>
+    <string name="title_component_detail">Component Detail</string>
 
     <string name="clear">Clear</string>
 

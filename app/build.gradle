@@ -19,7 +19,7 @@ android {
 
         buildConfigField('boolean', 'IS_LOGGING_ON', 'true')
         versionName "1.0"
-        buildConfigField("String","COMPONENTS_JSON","components.json")
+        buildConfigField 'String', 'COMPONENTS_JSON', '"components.json"'
     }
     buildTypes {
         release {

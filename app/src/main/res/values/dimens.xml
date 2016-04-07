@@ -13,6 +13,10 @@
     <dimen name="signature_margin">64dp</dimen>
     <dimen name="measurements_table_margin">1dp</dimen>
     <dimen name="measurements_table_cell_padding">6dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="item_width">200dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
     <dimen name="nsa_padding">8dp</dimen>
 
 </resources>
