@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.Problem;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 public class ComponentDefectsActivity extends BaseActivity {
 
     private List<Problem> problemList;
-    private String COMPONENTFILE = getString(R.string.components_json);
+    private String COMPONENTFILE = BuildConfig.COMPONENTS_JSON;
 
     private String TAG = ComponentDefectsActivity.class.getName();
 

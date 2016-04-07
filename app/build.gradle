@@ -10,7 +10,6 @@ android {
         minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
-        versionName "0.2"
 
         buildConfigField('String', 'EMAIL_FROM', '"kvttest2016@gmail.com"')
         buildConfigField('String', 'EMAIL_PASSWORD', '"Bionic2016"')
@@ -19,6 +18,8 @@ android {
         buildConfigField('String', 'ORDERS_FOLDER', '"Orders"')
 
         buildConfigField('boolean', 'IS_LOGGING_ON', 'true')
+        versionName "1.0"
+        buildConfigField("String","COMPONENTS_JSON","components.json")
     }
     buildTypes {
         release {
