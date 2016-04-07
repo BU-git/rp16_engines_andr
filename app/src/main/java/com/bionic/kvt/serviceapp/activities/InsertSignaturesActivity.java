@@ -1,8 +1,11 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -11,6 +14,7 @@ import android.widget.ToggleButton;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.views.DrawingView;
 
+import java.io.File;
 import java.util.UUID;
 
 import static android.provider.MediaStore.Images.Media.insertImage;
@@ -23,11 +27,35 @@ public class InsertSignaturesActivity extends AppCompatActivity {
     private ToggleButton buttonConfirmEngineer;
     private ToggleButton buttonConfirmClient;
 
+    public boolean isExternalStorageWritable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    public File getPrivateDocumentsStorageDir(Context context, String folder) {
+        File storageDir = new File(context.getExternalFilesDir(
+                Environment.DIRECTORY_PICTURES), folder);
+        if (!storageDir.mkdirs()) {
+            Log.e(getLocalClassName(), "Directory not created: " + storageDir.toString());
+        }
+        return storageDir;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_insert_signatures);
+
+        if (!isExternalStorageWritable()) {
+            Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        File publicDocumentsStorageDir = getPrivateDocumentsStorageDir(getApplicationContext(), "KVTImages");
+        if (!publicDocumentsStorageDir.exists()) {
+            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         engineerDrawingView = (DrawingView) findViewById(R.id.draw_engineer_signature);
         clientDrawingView = (DrawingView) findViewById(R.id.draw_client_signature);
