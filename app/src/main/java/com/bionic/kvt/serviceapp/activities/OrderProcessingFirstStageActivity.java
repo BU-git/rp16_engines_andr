@@ -1,14 +1,13 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.Session;
 
 public class OrderProcessingFirstStageActivity extends AppCompatActivity {
     CheckBox checkBoxInstructions;
@@ -44,19 +43,27 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
 
         checkBoxInstructions = (CheckBox) findViewById(R.id.order_processing_first_stage_instructions_checkbox);
         checkBoxLMRA = (CheckBox) findViewById(R.id.order_processing_first_stage_lmra_checkbox);
-
         checkBoxInstructions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextButton.setEnabled(checkBoxInstructions.isChecked() && checkBoxLMRA.isChecked());
+                nextButtonEnable();
             }
         });
-
         checkBoxLMRA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextButton.setEnabled(checkBoxInstructions.isChecked() && checkBoxLMRA.isChecked());
+                nextButtonEnable();
             }
         });
+    }
+
+    private void nextButtonEnable() {
+        nextButton.setEnabled(checkBoxInstructions.isChecked() && checkBoxLMRA.isChecked());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        nextButtonEnable();
     }
 }

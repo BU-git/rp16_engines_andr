@@ -40,6 +40,7 @@
     <string name="working_hours">Working hours</string>
     <string name="instructions">Instructions</string>
     <string name="accept">Accept</string>
+    <string name="accepted">Accepted</string>
     <string name="start">Start</string>
 
     <string name="pdf_report">PDF Report #</string>

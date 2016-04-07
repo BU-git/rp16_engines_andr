@@ -440,14 +440,15 @@
             android:textStyle="bold" />
 
 
-        <Button
-            android:id="@+id/service_engenieer_accept_button"
+        <ToggleButton
+            android:id="@+id/service_engenieer_accept_toggleButton"
             style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="@string/accept"
-            android:textColor="@color/colorOrderListHeader" />
+            android:textOff="@string/accept"
+            android:textOn="@string/accepted"
+            android:textColor="@color/colorOrderListHeader"/>
 
     </LinearLayout>
 
@@ -468,7 +469,7 @@
             android:paddingBottom="@dimen/activity_horizontal_margin">
 
             <TextView
-                android:id="@+id/process_order_page_detail_instructions"
+                android:id="@+id/process_order_page_accept_instructions"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"

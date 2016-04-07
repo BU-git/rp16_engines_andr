@@ -75,6 +75,7 @@ public class OrderPageActivity extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 ((Session) getApplication()).clearSession();
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
