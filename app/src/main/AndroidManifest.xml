@@ -12,7 +12,7 @@
 
     <application
         android:name=".Session"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/kvt_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"

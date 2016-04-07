@@ -64,7 +64,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             return;
         }
 
-        String orderNumber = ((Session) getApplication()).getOrderNumber();
+        Long orderNumber = ((Session) getApplication()).getOrderNumber();
         if (orderNumber == null) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
@@ -171,7 +171,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             canvas.drawText("Test Print Document Page " + pdfPageCount, leftMargin, titleBaseLine, paint);
 
             paint.setTextSize(14);
-            canvas.drawText("PDF document!", leftMargin, titleBaseLine + 35, paint);
+            canvas.drawText("We need PDF template from Customer!", leftMargin, titleBaseLine + 35, paint);
 
             paint.setColor(Color.RED);
             PdfDocument.PageInfo pageInfo = page.getInfo();

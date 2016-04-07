@@ -4,9 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,8 +16,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -102,6 +102,7 @@ public class OrderPageActivity extends AppCompatActivity
         // Setting selected Order number to current session
         final Session SESSION = (Session) getApplication();
         SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+        SESSION.setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -148,7 +149,7 @@ public class OrderPageActivity extends AppCompatActivity
             ordersAdapter.setOrdersDataSet(searchOrdersDataSet);
         }
 
-        ordersRecyclerView.swapAdapter(ordersAdapter,false);
+        ordersRecyclerView.swapAdapter(ordersAdapter, false);
     }
 
     public boolean isStoragePermissionGranted() {

@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.adapters;
 
+import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 
 import java.util.List;
 
@@ -32,9 +35,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         else ordersDataSetColNumber = 0;
     }
 
-    public String getOrderNumber(int rowNumber) {
-        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return "";
-        return ordersDataSet.get(rowNumber)[0];
+    public Long getOrderNumber(int rowNumber) {
+        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return (long) 0;
+        return Long.valueOf(ordersDataSet.get(rowNumber)[0]);
+    }
+
+    @Nullable
+    public String OrderStatus(int rowNumber) {
+        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return null;
+        return ordersDataSet.get(rowNumber)[Session.ordersDataSetColNumber-2];
     }
 
     public interface OnOrderLineClickListener {
@@ -75,6 +84,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
 
+        // PDF Button
         if (cell == ordersDataSetColNumber - 1) {
             textCell.setVisibility(View.GONE);
             buttonCell.setVisibility(View.VISIBLE);
@@ -82,6 +92,19 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             textCell.setVisibility(View.VISIBLE);
             buttonCell.setVisibility(View.GONE);
             textCell.setText(ordersDataSet.get(row)[cell]);
+        }
+
+        //Order Status
+        String orderStatus;
+        if (cell == ordersDataSetColNumber - 2) {
+            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
+            if("Completed".equals(orderStatus)){
+                textCell.setTextColor(Color.parseColor("#FF76FF03"));
+            } else if("In progress".equals(orderStatus)) {
+                textCell.setTextColor(Color.parseColor("#FFFFEA00"));
+            } else {
+                textCell.setTextColor(Color.parseColor("#FFFF5252"));
+            }
         }
 
         textCell.setOnClickListener(new View.OnClickListener() {

@@ -21,13 +21,19 @@ public class OrderPageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
 
-        final String orderNumber = ((Session) getApplication()).getOrderNumber();
+        final Long orderNumber = ((Session) getApplication()).getOrderNumber();
         acceptButton = (ToggleButton) findViewById(R.id.service_engenieer_accept_toggleButton);
         startButton = (Button) findViewById(R.id.service_engenieer_start_button);
         orderAcceptInstructions = findViewById(R.id.process_order_page_accept_instructions);
 
+        if ("Completed".equals(((Session) getApplication()).getOrderStatus())) {
+            acceptButton.setVisibility(View.GONE);
+            startButton.setVisibility(View.GONE);
+            orderAcceptInstructions.setVisibility(View.GONE);
+        }
+
         if (orderNumber != null) {
-            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber);
+            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber.toString());
 
 
             findViewById(R.id.service_engenieer_start_button).setOnClickListener(new View.OnClickListener() {
@@ -43,8 +49,12 @@ public class OrderPageDetailActivity extends AppCompatActivity {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startButton.setEnabled(true);
-                orderAcceptInstructions.setVisibility(View.INVISIBLE);
+                startButton.setEnabled(acceptButton.isChecked());
+                if (acceptButton.isChecked()) {
+                    orderAcceptInstructions.setVisibility(View.INVISIBLE);
+                } else {
+                    orderAcceptInstructions.setVisibility(View.VISIBLE);
+                }
             }
         });
 
