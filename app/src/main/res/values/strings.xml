@@ -93,4 +93,8 @@
     <string name="material_from_bus">Used material from bus</string>
     <string name="repair_advice">Repair / Replacement advice</string>
     <string name="clear">Clear</string>
+
+    <!-- EMail fields -->
+    <string name="forget_password_subject">Password Retrieval Email</string>
+    <string name="forget_password_body">Your password is:</string>
 </resources>
