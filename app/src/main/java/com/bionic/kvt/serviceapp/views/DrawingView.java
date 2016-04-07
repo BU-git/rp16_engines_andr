@@ -7,18 +7,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawingView extends View {
-
+    private Long lastTime = SystemClock.uptimeMillis();
     private Path drawPath;
-
     private Paint drawPaint, canvasPaint;
-
     private Canvas drawCanvas;
-
     private Bitmap canvasBitmap;
 
     public DrawingView(Context context, AttributeSet attrs) {
@@ -26,7 +24,7 @@ public class DrawingView extends View {
         setupDrawing();
     }
 
-    public void clearCanvas(){
+    public void clearCanvas() {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         invalidate();
     }
@@ -74,7 +72,11 @@ public class DrawingView extends View {
             default:
                 return false;
         }
-        invalidate();
+
+        if (SystemClock.uptimeMillis() - lastTime >= 100) {
+            invalidate();
+            lastTime = SystemClock.uptimeMillis();
+        }
         return true;
     }
 }
