@@ -13,6 +13,12 @@ public class Session extends Application {
     public static final List<String[]> ordersDataSet = new LinkedList<>();
     public static int ordersDataSetColNumber;
 
+    private static Session ourInstance = new Session();
+
+    public static Session getInstance() {
+        return ourInstance;
+    }
+
     static {
         ordersDataSet.add(new String[]{"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "Not started", "PDF"});
         ordersDataSet.add(new String[]{"354323678", "19-03-2016", "Motor", "Check", "Lviv", "Not started", "PDF"});
