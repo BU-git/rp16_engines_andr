@@ -87,6 +87,17 @@
     <string name="customer_material">Used customer material</string>
     <string name="material_from_bus">Used material from bus</string>
     <string name="repair_advice">Repair / Replacement advice</string>
+
+    <!-- Defects -->
+    <string name="problem_part">Part</string>
+    <string name="problem_element">Element</string>
+    <string name="problem_name">Problem</string>
+    <string name="problem_scope">Scope</string>
+    <string name="problem_intensity">Intensity</string>
+    <string name="problem_action">Action</string>
+    <string name="problem_resolved">Resolved</string>
+    <string name="problem_condition">Condition</string>
+
     <string name="clear">Clear</string>
 
     <!-- EMail fields -->
