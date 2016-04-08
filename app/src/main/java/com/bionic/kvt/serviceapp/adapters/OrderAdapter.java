@@ -2,7 +2,6 @@ package com.bionic.kvt.serviceapp.adapters;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,10 +84,16 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
 
+        String orderStatus;
+
         // PDF Button
         if (cell == ordersDataSetColNumber - 1) {
             textCell.setVisibility(View.GONE);
             buttonCell.setVisibility(View.VISIBLE);
+            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
+            if (!("Completed".equals(orderStatus))) {
+                buttonCell.setEnabled(false);
+            }
         } else {
             textCell.setVisibility(View.VISIBLE);
             buttonCell.setVisibility(View.GONE);
@@ -96,7 +101,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         }
 
         //Order Status
-        String orderStatus;
 //        ContextCompat.getColor(context, R.color.colorOK);
         if (cell == ordersDataSetColNumber - 2) {
             orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
