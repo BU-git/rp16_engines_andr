@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,30 +36,17 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
     File pdfFile;
     Button sendButton;
 
-    public boolean isExternalStorageWritable() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-    }
-
-    public File getPublicDocumentsStorageDir(String pdfFolder) {
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DOCUMENTS), pdfFolder);
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-        return storageDir;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
 
-        if (!isExternalStorageWritable()) {
+        if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        File publicDocumentsStorageDir = getPublicDocumentsStorageDir("KVTReports");
+        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
         if (!publicDocumentsStorageDir.exists()) {
             Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
             return;

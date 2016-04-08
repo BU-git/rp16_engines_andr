@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- DO NOT EDIT -->
+    <!-- DO NOT EDIT! DO NOT ADD NEW COLORS! -->
     <color name="colorPrimary">#02499B</color>
     <color name="colorPrimaryDark">#062C62</color>
     <color name="colorAccent">#CC0234</color>
@@ -13,4 +13,5 @@
     <color name="colorTextField">#FFFFFF</color>
     <!--OrderPageActivity-->
     <color name="colorOrderListHeader">#434343</color>
+    <!-- DO NOT EDIT! DO NOT ADD NEW COLORS! -->
 </resources>

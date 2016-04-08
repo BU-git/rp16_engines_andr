@@ -1,17 +1,17 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.DrawingView;
 
 import java.io.File;
@@ -20,42 +20,20 @@ import java.util.UUID;
 import static android.provider.MediaStore.Images.Media.insertImage;
 
 public class InsertSignaturesActivity extends AppCompatActivity {
-
     private DrawingView engineerDrawingView;
     private DrawingView clientDrawingView;
     private Button buttonComplete;
     private ToggleButton buttonConfirmEngineer;
     private ToggleButton buttonConfirmClient;
 
-    public boolean isExternalStorageWritable() {
-        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
-    }
-
-    public File getPrivateDocumentsStorageDir(Context context, String folder) {
-        File storageDir = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES), folder);
-        if (!storageDir.mkdirs()) {
-            Log.e(getLocalClassName(), "Directory not created: " + storageDir.toString());
-        }
-        return storageDir;
-    }
+    private final int ENGINEER_BUTTON = 1;
+    private final int CLIENT_BUTTON = 2;
+    private int currentButtonClicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_insert_signatures);
-
-        if (!isExternalStorageWritable()) {
-            Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        File publicDocumentsStorageDir = getPrivateDocumentsStorageDir(getApplicationContext(), "KVTImages");
-        if (!publicDocumentsStorageDir.exists()) {
-            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         engineerDrawingView = (DrawingView) findViewById(R.id.draw_engineer_signature);
         clientDrawingView = (DrawingView) findViewById(R.id.draw_client_signature);
@@ -65,6 +43,8 @@ public class InsertSignaturesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 engineerDrawingView.clearCanvas();
+                buttonConfirmEngineer.setChecked(false);
+                buttonComplete.setEnabled(false);
             }
         });
 
@@ -73,6 +53,8 @@ public class InsertSignaturesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 clientDrawingView.clearCanvas();
+                buttonConfirmClient.setChecked(false);
+                buttonComplete.setEnabled(false);
             }
         });
 
@@ -86,50 +68,88 @@ public class InsertSignaturesActivity extends AppCompatActivity {
         });
 
         buttonConfirmEngineer = (ToggleButton) findViewById(R.id.button_confirm_engineer);
-        buttonConfirmClient = (ToggleButton) findViewById(R.id.button_confirm_client);
-
         buttonConfirmEngineer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                engineerDrawingView.setDrawingCacheEnabled(true);
-                String engineerSignature = insertImage(
-                        getContentResolver(),
-                        engineerDrawingView.getDrawingCache(),
-                        UUID.randomUUID().toString() + ".png",
-                        "Engineer's signature"
-                );
-                if (engineerSignature == null) {
-                    Toast unsavedToast = Toast.makeText(getApplicationContext(),
-                            "Signatures could not be saved", Toast.LENGTH_SHORT);
-                    unsavedToast.show();
-                    buttonConfirmEngineer.setChecked(false);
-                }
-                engineerDrawingView.destroyDrawingCache();
-                buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() & buttonConfirmClient.isChecked());
+                currentButtonClicked = ENGINEER_BUTTON;
+                onConfirmClicked();
             }
         });
 
-
+        buttonConfirmClient = (ToggleButton) findViewById(R.id.button_confirm_client);
         buttonConfirmClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clientDrawingView.setDrawingCacheEnabled(true);
-                String clientSignature = insertImage(
-                        getContentResolver(),
-                        clientDrawingView.getDrawingCache(),
-                        UUID.randomUUID().toString() + ".png",
-                        "Client's signature"
-                );
-                if (clientSignature == null) {
-                    Toast unsavedToast = Toast.makeText(getApplicationContext(),
-                            "Signature could not be saved", Toast.LENGTH_SHORT);
-                    unsavedToast.show();
-                    buttonConfirmClient.setChecked(false);
-                }
-                clientDrawingView.destroyDrawingCache();
-                buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() & buttonConfirmClient.isChecked());
+                currentButtonClicked = CLIENT_BUTTON;
+                onConfirmClicked();
             }
         });
     }
 
+    private void onConfirmClicked() {
+        if (Utils.needRequestWritePermission(getApplicationContext(), this)) {
+            buttonConfirmEngineer.setChecked(false);
+            buttonConfirmClient.setChecked(false);
+            buttonComplete.setEnabled(false);
+            return;
+        }
+
+        if (!Utils.isExternalStorageWritable()) {
+            Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_PICTURES, "KVTPictures");
+        if (!publicDocumentsStorageDir.exists()) {
+            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DrawingView currentDrawingView;
+        String description;
+        ToggleButton currentToggleButton;
+        switch (currentButtonClicked) {
+            case ENGINEER_BUTTON:
+                currentDrawingView = engineerDrawingView;
+                description = "Engineer's signature";
+                currentToggleButton = buttonConfirmEngineer;
+                break;
+            default: // CLIENT_BUTTON:
+                currentDrawingView = clientDrawingView;
+                description = "Client's signature";
+                currentToggleButton = buttonConfirmClient;
+                break;
+        }
+
+        currentDrawingView.setDrawingCacheEnabled(true);
+        String signature = insertImage(
+                getContentResolver(),
+                currentDrawingView.getDrawingCache(),
+                UUID.randomUUID().toString() + ".png",
+                description
+        );
+
+        if (signature == null) {
+            Toast unsavedToast = Toast.makeText(getApplicationContext(),
+                    "Signatures could not be saved", Toast.LENGTH_SHORT);
+            unsavedToast.show();
+            currentToggleButton.setChecked(false);
+        }
+
+        currentToggleButton.setChecked(true);
+        currentDrawingView.destroyDrawingCache();
+        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() & buttonConfirmClient.isChecked());
+        currentButtonClicked = 0;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Utils.REQUEST_WRITE_CODE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //resume tasks needing this permission
+                onConfirmClicked();
+            }
+        }
+    }
 }
