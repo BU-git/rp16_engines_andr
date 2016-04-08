@@ -96,5 +96,6 @@
 
     <!-- EMail fields -->
     <string name="forget_password_subject">Password Retrieval Email</string>
-    <string name="forget_password_body">Your password is:</string>
+    <string name="forget_password_body">Your password is: $password</string>
+    <string name="success_email_toast">The message was sent</string>
 </resources>
