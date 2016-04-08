@@ -46,12 +46,16 @@ public class Session extends Application {
     private String engineerId;
     private Long orderNumber;
     private String orderStatus;
+    private boolean checkBoxInstructions;
+    private boolean checkBoxLMRA;
 
     public void clearSession() {
         engineerName = null;
         engineerId = null;
         orderNumber = null;
         orderStatus = null;
+        checkBoxInstructions = false;
+        checkBoxLMRA = false;
     }
 
     public String getOrderStatus() {
@@ -71,6 +75,8 @@ public class Session extends Application {
     }
 
     public void setOrderNumber(Long orderNumber) {
+        checkBoxInstructions = false;
+        checkBoxLMRA = false;
         this.orderNumber = orderNumber;
     }
 
@@ -88,5 +94,21 @@ public class Session extends Application {
 
     public void setEngineerId(String engineerId) {
         this.engineerId = engineerId;
+    }
+
+    public boolean isCheckBoxInstructions() {
+        return checkBoxInstructions;
+    }
+
+    public void setCheckBoxInstructions(boolean checkBoxInstructions) {
+        this.checkBoxInstructions = checkBoxInstructions;
+    }
+
+    public boolean isCheckBoxLMRA() {
+        return checkBoxLMRA;
+    }
+
+    public void setCheckBoxLMRA(boolean checkBoxLMRA) {
+        this.checkBoxLMRA = checkBoxLMRA;
     }
 }

@@ -9,19 +9,21 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 
 public class OrderProcessingFirstStageActivity extends AppCompatActivity {
     CheckBox checkBoxInstructions;
     CheckBox checkBoxLMRA;
     Button nextButton;
     TextView nextButtonHint;
+    private Session SESSION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_processing_first_stage);
 
-//        ((Session) getApplication()).getOrderNumber();
+        SESSION = (Session) getApplication();
 
         //Navigation to LMRA
         Button registerDangerous = (Button) findViewById(R.id.order_processing_first_stage_lmra_button);
@@ -66,11 +68,17 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
         if (nextButton.isEnabled()) {
             nextButtonHint.setVisibility(View.INVISIBLE);
         } else nextButtonHint.setVisibility(View.VISIBLE);
+
+        SESSION.setCheckBoxInstructions(checkBoxInstructions.isChecked());
+        SESSION.setCheckBoxLMRA(checkBoxLMRA.isChecked());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        checkBoxInstructions.setChecked(SESSION.isCheckBoxInstructions());
+        checkBoxLMRA.setChecked(SESSION.isCheckBoxLMRA());
         nextButtonEnableHintDisable();
+
     }
 }
