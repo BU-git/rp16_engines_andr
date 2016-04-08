@@ -3,29 +3,20 @@ package com.bionic.kvt.serviceapp.helpers;
 /**
 
  */
-import android.os.AsyncTask;
+
 import android.util.Log;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 
-import java.util.Date;
 import java.util.Properties;
-import javax.activation.CommandMap;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.activation.MailcapCommandMap;
-import javax.mail.BodyPart;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 
 public class MailHelper extends javax.mail.Authenticator {
@@ -73,11 +64,11 @@ public class MailHelper extends javax.mail.Authenticator {
     }
 
 
-    public void send(){
+    public void send() {
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(BuildConfig.EMAIL_FROM,BuildConfig.EMAIL_PASSWORD);
+                        return new PasswordAuthentication(BuildConfig.EMAIL_FROM, BuildConfig.EMAIL_PASSWORD);
                     }
                 });
 
@@ -92,7 +83,7 @@ public class MailHelper extends javax.mail.Authenticator {
 
             Transport.send(message);
 
-            Log.d(TAG,"The message was sent successfully to " + recepient);
+            Log.d(TAG, "The message was sent successfully to " + recepient);
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);

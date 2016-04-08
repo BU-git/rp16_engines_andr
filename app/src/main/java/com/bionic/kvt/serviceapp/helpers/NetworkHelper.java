@@ -3,14 +3,11 @@ package com.bionic.kvt.serviceapp.helpers;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class NetworkHelper {
     Context mContext;
-    public NetworkHelper(Context mContext){
+
+    public NetworkHelper(Context mContext) {
         this.mContext = mContext;
     }
 

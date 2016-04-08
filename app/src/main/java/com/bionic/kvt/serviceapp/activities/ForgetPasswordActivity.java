@@ -1,15 +1,14 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
@@ -65,10 +64,10 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                         mailHelper.setSubject(getText(R.string.forget_password_subject).toString());
 
                         new SendMail().execute();
-                        if (sentStatus){
+                        if (sentStatus) {
                             Toast.makeText(ForgetPasswordActivity.this, getText(R.string.success_email_toast), Toast.LENGTH_SHORT);
                         } else {
-                            Toast.makeText(ForgetPasswordActivity.this, getText(R.string.no_connection),Toast.LENGTH_SHORT);
+                            Toast.makeText(ForgetPasswordActivity.this, getText(R.string.no_connection), Toast.LENGTH_SHORT);
                         }
 
                     }
@@ -82,7 +81,7 @@ public class ForgetPasswordActivity extends AppCompatActivity {
         return email.contains("@");
     }
 
-    private class SendMail extends AsyncTask<Void, Void, Void>{
+    private class SendMail extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {

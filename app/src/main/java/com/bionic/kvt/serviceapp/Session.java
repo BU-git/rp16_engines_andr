@@ -10,18 +10,23 @@ import java.util.List;
  */
 public class Session extends Application {
 
+    private static Session currentUserSession;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        currentUserSession = this;
+    }
+
+    public static Session getSession() {
+        return currentUserSession;
+    }
+
     public static final List<String[]> ordersDataSet = new LinkedList<>();
     public static int ordersDataSetColNumber;
 
-//    private static Session ourInstance = new Session();
-
-//    public static Session getInstance() {
-//        return ourInstance;
-//    }
-
-
     static {
-        ordersDataSet.add(new String[]{"123456789", "29-06-2016", "Generator", "Repair", "Kiev", "Not started", "PDF"});
+        ordersDataSet.add(new String[]{"826547892", "29-06-2016", "Generator", "Repair", "Kiev", "Not started", "PDF"});
         ordersDataSet.add(new String[]{"354323678", "19-03-2016", "Motor", "Check", "Lviv", "Not started", "PDF"});
         ordersDataSet.add(new String[]{"308197851", "19-03-2016", "Motor", "Check", "Donetsk", "Not started", "PDF"});
         ordersDataSet.add(new String[]{"354363467", "19-03-2016", "Motor", "Check", "Lviv", "In progress", "PDF"});

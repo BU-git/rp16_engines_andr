@@ -66,7 +66,7 @@ public class OrderPageActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                ((Session) getApplication()).clearSession();
+                Session.getSession().clearSession();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -92,9 +92,8 @@ public class OrderPageActivity extends AppCompatActivity
     @Override
     public void OnOrderLineClicked(View view, int position) {
         // Setting selected Order number to current session
-        final Session SESSION = (Session) getApplication();
-        SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
-        SESSION.setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
+        Session.getSession().setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+        Session.getSession().setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -103,8 +102,7 @@ public class OrderPageActivity extends AppCompatActivity
     @Override
     public void OnPDFButtonClicked(View view, int position) {
         // Setting selected Order number to current session
-        final Session SESSION = (Session) getApplication();
-        SESSION.setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+        Session.getSession().setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
 

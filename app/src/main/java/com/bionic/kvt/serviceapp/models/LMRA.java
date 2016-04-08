@@ -8,11 +8,11 @@ import java.io.Serializable;
 /*
 LMRA Model Class
  */
-public class LMRA implements Parcelable, Serializable{
+public class LMRA implements Parcelable, Serializable {
     private String lmraName;
     private String lmraDescription;
 
-    public LMRA (String lmraName, String lmraDescription){
+    public LMRA(String lmraName, String lmraDescription) {
         this.lmraName = lmraName;
         this.lmraDescription = lmraDescription;
     }

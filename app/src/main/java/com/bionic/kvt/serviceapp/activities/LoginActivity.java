@@ -4,25 +4,23 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,9 +38,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
-import com.bionic.kvt.serviceapp.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,14 +93,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView = (EditText) findViewById(R.id.password);
 
         //Restore saved password, if any
-        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
                     userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
                     if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
-                        mPasswordView.setText(userSharedPreferences.getString("password",""));
+                        mPasswordView.setText(userSharedPreferences.getString("password", ""));
                     }
                 }
             }
@@ -151,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         //Start login activity
                         startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
                         //Disable animation
-                        overridePendingTransition(0,0);
+                        overridePendingTransition(0, 0);
                     }
                 }
             }
@@ -162,7 +160,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //Requests network permissions, if needed
     private boolean requestNetworkStatePermission() {
-        Log.i(TAG,"Entering Network Check State");
+        Log.i(TAG, "Entering Network Check State");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
@@ -201,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onResume() {
         super.onResume();
-        ((Session) getApplication()).clearSession();
+        Session.getSession().clearSession();
     }
 
     /**
@@ -406,15 +404,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
 //                finish();
-
-
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
                 //Put session user to Singleton
-                Session session = (Session) getApplication();
-                session.setEngineerId(mEmail);
+                Session.getSession().setEngineerId(mEmail);
 
-                if (mCheckBox.isChecked()){
+                if (mCheckBox.isChecked()) {
                     //Get shared preferences
                     userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
                     SharedPreferences.Editor userEditor = userSharedPreferences.edit();

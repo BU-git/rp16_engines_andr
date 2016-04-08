@@ -1,19 +1,11 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.LMRAAdapter;
@@ -49,10 +41,10 @@ public class LMRAActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.menu_lmra_add:
                 AppCompatDialogFragment d = new LMRADialog();
-                d.show(getSupportFragmentManager(),"new Lmra");
+                d.show(getSupportFragmentManager(), "new Lmra");
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -64,13 +56,13 @@ public class LMRAActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lmra);
 
         //Saving session for the screen orientation
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             lmraList = savedInstanceState.getParcelableArrayList(LMRALISTNAME);
         } else {
             //Prepopulate data from DB, if needed
         }
 
-        final LMRAAdapter lmraAdapter = new LMRAAdapter(this,lmraList);
+        final LMRAAdapter lmraAdapter = new LMRAAdapter(this, lmraList);
         final ListView listView = (ListView) findViewById(R.id.lmra_list);
         listView.setAdapter(lmraAdapter);
 

@@ -21,12 +21,12 @@ public class OrderPageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
 
-        final Long orderNumber = ((Session) getApplication()).getOrderNumber();
+        final Long orderNumber = Session.getSession().getOrderNumber();
         acceptButton = (ToggleButton) findViewById(R.id.service_engenieer_accept_toggleButton);
         startButton = (Button) findViewById(R.id.service_engenieer_start_button);
         orderAcceptInstructions = findViewById(R.id.process_order_page_accept_instructions);
 
-        if ("Completed".equals(((Session) getApplication()).getOrderStatus())) {
+        if ("Completed".equals(Session.getSession().getOrderStatus())) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);

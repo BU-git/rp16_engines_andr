@@ -16,14 +16,11 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
     CheckBox checkBoxLMRA;
     Button nextButton;
     TextView nextButtonHint;
-    private Session SESSION;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_processing_first_stage);
-
-        SESSION = (Session) getApplication();
 
         //Navigation to LMRA
         Button registerDangerous = (Button) findViewById(R.id.order_processing_first_stage_lmra_button);
@@ -69,15 +66,15 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
             nextButtonHint.setVisibility(View.INVISIBLE);
         } else nextButtonHint.setVisibility(View.VISIBLE);
 
-        SESSION.setCheckBoxInstructions(checkBoxInstructions.isChecked());
-        SESSION.setCheckBoxLMRA(checkBoxLMRA.isChecked());
+        Session.getSession().setCheckBoxInstructions(checkBoxInstructions.isChecked());
+        Session.getSession().setCheckBoxLMRA(checkBoxLMRA.isChecked());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkBoxInstructions.setChecked(SESSION.isCheckBoxInstructions());
-        checkBoxLMRA.setChecked(SESSION.isCheckBoxLMRA());
+        checkBoxInstructions.setChecked(Session.getSession().isCheckBoxInstructions());
+        checkBoxLMRA.setChecked(Session.getSession().isCheckBoxLMRA());
         nextButtonEnableHintDisable();
 
     }
