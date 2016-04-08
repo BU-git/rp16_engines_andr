@@ -99,4 +99,5 @@
     <string name="forget_password_body">Your password is: $password</string>
     <string name="success_email_toast">The message was sent</string>
     <string name="this_order_is_complete">This order is complete.</string>
+    <string name="process_order_page_hint">Please, follow instructions and execute LMRA</string>
 </resources>

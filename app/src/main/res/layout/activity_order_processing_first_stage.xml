@@ -207,6 +207,15 @@
             android:orientation="horizontal"
             android:padding="@dimen/activity_horizontal_margin">
 
+            <TextView
+                android:id="@+id/process_order_page_hint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center|right"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="@string/process_order_page_hint" />
+
             <Button
                 android:id="@+id/order_processing_first_stage_next_button"
                 android:layout_width="wrap_content"

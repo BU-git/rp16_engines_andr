@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 
@@ -13,6 +14,7 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
     CheckBox checkBoxInstructions;
     CheckBox checkBoxLMRA;
     Button nextButton;
+    TextView nextButtonHint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
             }
         });
 
+        nextButtonHint = (TextView) findViewById(R.id.process_order_page_hint);
+
         nextButton = (Button) findViewById(R.id.order_processing_first_stage_next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,24 +50,27 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
         checkBoxInstructions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextButtonEnable();
+                nextButtonEnableHintDisable();
             }
         });
         checkBoxLMRA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextButtonEnable();
+                nextButtonEnableHintDisable();
             }
         });
     }
 
-    private void nextButtonEnable() {
+    private void nextButtonEnableHintDisable() {
         nextButton.setEnabled(checkBoxInstructions.isChecked() && checkBoxLMRA.isChecked());
+        if (nextButton.isEnabled()) {
+            nextButtonHint.setVisibility(View.INVISIBLE);
+        } else nextButtonHint.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        nextButtonEnable();
+        nextButtonEnableHintDisable();
     }
 }
