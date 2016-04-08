@@ -202,7 +202,6 @@
                     android:id="@+id/nsa_customer_material_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
                     android:showText="false" />
 
                 <TextView
