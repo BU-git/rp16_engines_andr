@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -21,7 +21,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/job_description"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/colorSecondaryText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -40,13 +41,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="This job description will be transported from SAP to the application."
-            android:textColor="@color/colorDefaultTextField" />
+            android:textColor="@color/colorMainText" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
@@ -57,8 +58,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Some Text"
-            android:textStyle="bold" />
+            android:text="Some Text?????"
+            android:textStyle="bold"
+            android:textColor="@color/colorSecondaryText"/>
     </LinearLayout>
 
     <TableLayout
@@ -82,11 +84,10 @@
 
                 <Button
                     android:id="@+id/order_processing_first_stage_open_quotation_button"
-                    style="?android:attr/imageButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/open_quotation"
-                    android:textColor="@color/colorOrderListHeader" />
+                    android:textColor="@color/colorMainText" />
             </TableRow>
 
 
@@ -111,7 +112,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/instructions_followed"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:textColor="@color/colorMainText" />
             </TableRow>
 
             <TableRow
@@ -125,7 +126,6 @@
                     android:id="@+id/order_processing_first_stage_instructions_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:checked="false"
                     android:gravity="center_vertical" />
             </TableRow>
@@ -156,7 +156,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/lmra_executed"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:textColor="@color/colorMainText" />
             </TableRow>
 
             <TableRow
@@ -170,7 +170,6 @@
                     android:id="@+id/order_processing_first_stage_lmra_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:checked="false" />
             </TableRow>
 
@@ -183,12 +182,11 @@
 
                 <Button
                     android:id="@+id/order_processing_first_stage_lmra_button"
-                    style="?android:attr/imageButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/register_dangerous_situation"
-                    android:textColor="@color/colorOrderListHeader" />
+                    android:textColor="@color/colorMainText" />
             </TableRow>
 
         </TableRow>
@@ -211,12 +209,11 @@
 
             <Button
                 android:id="@+id/order_processing_first_stage_next_button"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/next"
-                android:textColor="@color/colorOrderListHeader" />
+                android:textColor="@color/colorMainText" />
         </LinearLayout>
     </LinearLayout>
 

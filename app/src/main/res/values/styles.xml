@@ -2,12 +2,12 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <!-- DO NOT EDIT -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/colorMainBackground</item>
-        <item name="android:textColor">@color/colorTextField</item>
+        <item name="android:textColor">@color/colorMainText</item>
     </style>
 
     <style name="MeasurementsCell">
@@ -22,6 +22,5 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:textColor">@color/colorDefaultTextField</item>
     </style>
 </resources>

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/order_data"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -48,7 +49,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/order_number"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -58,14 +58,13 @@
                 android:layout_column="1"
                 android:layout_marginRight="@dimen/orders_table_vertical_margin"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_order_number_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="123456789" />
             </TableRow>
 
@@ -80,7 +79,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/order_date"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -89,7 +87,7 @@
                 android:layout_height="match_parent"
                 android:layout_column="3"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_order_date_data"
@@ -98,7 +96,6 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:text="23-05-2016"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="23-05-2016" />
             </TableRow>
         </TableRow>
@@ -122,7 +119,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/relation"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -132,14 +128,13 @@
                 android:layout_column="1"
                 android:layout_marginRight="@dimen/orders_table_vertical_margin"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_datail_relation_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="xxxxxxxxxx" />
             </TableRow>
 
@@ -154,7 +149,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/reference"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -163,7 +157,7 @@
                 android:layout_height="match_parent"
                 android:layout_column="3"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_reference_data"
@@ -171,7 +165,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="xxxxxxxxxx" />
             </TableRow>
         </TableRow>
@@ -195,7 +188,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/place"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -205,14 +197,13 @@
                 android:layout_column="1"
                 android:layout_marginRight="@dimen/orders_table_vertical_margin"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_place_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="Kiev" />
             </TableRow>
 
@@ -227,7 +218,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/device_type"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -236,7 +226,7 @@
                 android:layout_height="match_parent"
                 android:layout_column="3"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_device_type_data"
@@ -244,7 +234,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="Motor" />
             </TableRow>
         </TableRow>
@@ -268,7 +257,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/telephone_number"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -278,14 +266,13 @@
                 android:layout_column="1"
                 android:layout_marginRight="@dimen/orders_table_vertical_margin"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_telephone_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="078698954" />
             </TableRow>
 
@@ -300,7 +287,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/place_2"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -315,9 +301,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/colorTextField"
+                    android:background="@color/colorSecondaryBackground"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="xxxxxxx" />
             </TableRow>
         </TableRow>
@@ -341,7 +326,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/employee"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -351,14 +335,13 @@
                 android:layout_column="1"
                 android:layout_marginRight="@dimen/orders_table_vertical_margin"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_employee_data"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="Bob van Holland" />
             </TableRow>
 
@@ -373,7 +356,6 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="@string/working_hours"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -382,7 +364,7 @@
                 android:layout_height="match_parent"
                 android:layout_column="3"
                 android:layout_weight="1"
-                android:background="@color/colorTextField">
+                android:background="@color/colorSecondaryBackground">
 
                 <TextView
                     android:id="@+id/process_order_page_detail_device_working_hours_data"
@@ -390,7 +372,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:textColor="@color/colorDefaultTextField"
                     tools:text="1213" />
             </TableRow>
         </TableRow>
@@ -400,7 +381,7 @@
         android:id="@+id/process_order_page_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -414,13 +395,13 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/instructions"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderList"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -436,19 +417,16 @@
             android:paddingBottom="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_horizontal_margin"
             android:text="Instructions!!!!!!"
-            android:textColor="@color/colorDefaultTextField"
             android:textStyle="bold" />
 
 
         <ToggleButton
             android:id="@+id/service_engenieer_accept_toggleButton"
-            style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:textOff="@string/accept"
-            android:textOn="@string/accepted"
-            android:textColor="@color/colorOrderListHeader"/>
+            android:textOn="@string/accepted" />
 
     </LinearLayout>
 
@@ -476,17 +454,14 @@
                 android:layout_weight="1"
                 android:gravity="center|right"
                 android:paddingRight="@dimen/activity_horizontal_margin"
-                android:text="@string/accept_instructions"
-                android:textColor="@color/colorDefaultTextField" />
+                android:text="@string/accept_instructions" />
 
             <Button
                 android:id="@+id/service_engenieer_start_button"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="@string/start"
-                android:textColor="@color/colorOrderListHeader" />
+                android:text="@string/start" />
         </LinearLayout>
     </LinearLayout>
 

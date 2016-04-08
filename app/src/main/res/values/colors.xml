@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#E6E6E6</color>
-    <color name="colorMainBackground">#E6E6E6</color>
-    <color name="colorLoginGroup">#666666</color>
-    <color name="colorOrderPageHeader">#303F9F</color>
-    <color name="colorOrderListHeader">#5a5a5a</color>
-    <color name="colorOrderList">#898989</color>
+    <!-- DO NOT EDIT -->
+    <color name="colorPrimary">#02499B</color>
+    <color name="colorPrimaryDark">#062C62</color>
+    <color name="colorAccent">#CC0234</color>
+    <color name="colorMainBackground">#EFEFEF</color>
+    <color name="colorSecondaryBackground">#FFFFFF</color>
+    <color name="colorMainText">#424242</color>
+    <color name="colorSecondaryText">#FFFFFF</color>
+    <color name="colorTextFieldBlack">#000000</color>
+    <!-- Login -->
     <color name="colorTextField">#FFFFFF</color>
-    <color name="colorPDFBackground">#FFFFFF</color>
-    <color name="colorDefaultTextField">#000000</color>
-    <color name="colorPDFText">#000000</color>
-    <!-- LMRA Colors -->
-    <color name="colorLMRASection">#C0C0C0</color>
+    <!--OrderPageActivity-->
+    <color name="colorOrderListHeader">#434343</color>
 </resources>

@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/signature"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/colorSecondaryText"/>
     </LinearLayout>
 
     <LinearLayout
@@ -41,8 +42,7 @@
             android:gravity="center_vertical"
             android:minHeight="?listPreferredItemHeightSmall"
             android:text="@string/text_service_engineer"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField" />
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <com.bionic.kvt.serviceapp.views.DrawingView
             android:id="@+id/draw_engineer_signature"
@@ -61,20 +61,16 @@
 
             <Button
                 android:id="@+id/button_clear_engineer"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear"
-                android:textColor="@color/colorOrderListHeader" />
+                android:text="Clear" />
 
             <ToggleButton
                 android:id="@+id/button_confirm_engineer"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textOff="@string/confirm"
-                android:textOn="@string/saved"
-                android:textColor="@color/colorOrderListHeader" />
+                android:textOn="@string/saved" />
         </LinearLayout>
     </LinearLayout>
 
@@ -94,8 +90,7 @@
             android:gravity="center_vertical"
             android:minHeight="?listPreferredItemHeightSmall"
             android:text="@string/text_client"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField" />
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <com.bionic.kvt.serviceapp.views.DrawingView
             android:id="@+id/draw_client_signature"
@@ -114,20 +109,16 @@
 
             <Button
                 android:id="@+id/button_clear_client"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clear"
-                android:textColor="@color/colorOrderListHeader" />
+                android:text="@string/clear" />
 
             <ToggleButton
                 android:id="@+id/button_confirm_client"
-                style="?android:attr/imageButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textOff="@string/confirm"
-                android:textOn="@string/saved"
-                android:textColor="@color/colorOrderListHeader" />
+                android:textOn="@string/saved" />
         </LinearLayout>
 
     </LinearLayout>
@@ -141,11 +132,9 @@
 
         <Button
             android:id="@+id/button_complete"
-            style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/order_complete"
-            android:textColor="@color/colorOrderListHeader"
-            android:enabled="false"/>
+            android:enabled="false"
+            android:text="@string/order_complete" />
     </LinearLayout>
 </LinearLayout>

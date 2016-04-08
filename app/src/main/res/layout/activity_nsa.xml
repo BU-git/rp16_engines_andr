@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -22,6 +22,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/job_rules"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -29,8 +30,8 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/orders_table_vertical_margin"
-        android:dividerPadding="@dimen/activity_orders_space">
+        android:dividerPadding="@dimen/activity_orders_space"
+        android:padding="@dimen/orders_table_vertical_margin">
 
         <TableRow
             android:layout_width="match_parent"
@@ -50,9 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/fuel_added"
-                    android:textColor="@color/colorDefaultTextField" />
-
+                    android:text="@string/fuel_added" />
             </TableRow>
 
             <TableRow
@@ -66,7 +65,7 @@
                     android:id="@+id/msa_fuel_added_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
+
                     android:checked="false"
                     android:gravity="center_vertical" />
             </TableRow>
@@ -96,8 +95,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/water_separators_drained"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:text="@string/water_separators_drained" />
             </TableRow>
 
             <TableRow
@@ -111,7 +109,6 @@
                     android:id="@+id/nsa_water_separators_drained_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:checked="false"
                     android:gravity="center_vertical" />
             </TableRow>
@@ -141,8 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/leave_installation"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:text="@string/leave_installation" />
             </TableRow>
 
             <TableRow
@@ -156,7 +152,6 @@
                     android:id="@+id/nsa_leave_installation_checkbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:checked="false" />
             </TableRow>
 
@@ -166,8 +161,6 @@
                 android:layout_column="2"
                 android:layout_weight="1"
                 android:gravity="center_vertical">
-
-
             </TableRow>
 
         </TableRow>
@@ -190,8 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/customer_material"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:text="@string/customer_material" />
             </TableRow>
 
             <TableRow
@@ -205,9 +197,7 @@
                     android:id="@+id/nsa_customer_material_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:showText="true"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textOff="No"
                     android:textOn="Yes"
                     android:textStyle="bold" />
@@ -219,8 +209,6 @@
                 android:layout_column="2"
                 android:layout_weight="1"
                 android:gravity="center_vertical">
-
-
             </TableRow>
 
         </TableRow>
@@ -243,8 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/material_from_bus"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:text="@string/material_from_bus" />
             </TableRow>
 
             <TableRow
@@ -258,9 +245,7 @@
                     android:id="@+id/nsa_material_from_bus_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:showText="true"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textOff="No"
                     android:textOn="Yes"
                     android:textStyle="bold" />
@@ -272,8 +257,6 @@
                 android:layout_column="2"
                 android:layout_weight="1"
                 android:gravity="center_vertical">
-
-
             </TableRow>
 
         </TableRow>
@@ -296,8 +279,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/repair_advice"
-                    android:textColor="@color/colorDefaultTextField" />
+                    android:text="@string/repair_advice" />
             </TableRow>
 
             <TableRow
@@ -311,9 +293,7 @@
                     android:id="@+id/nsa_repair_advice_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/colorTextField"
                     android:showText="true"
-                    android:textColor="@color/colorDefaultTextField"
                     android:textOff="No"
                     android:textOn="Yes"
                     android:textStyle="bold" />
@@ -325,8 +305,6 @@
                 android:layout_column="2"
                 android:layout_weight="1"
                 android:gravity="center_vertical">
-
-
             </TableRow>
 
         </TableRow>
@@ -352,8 +330,7 @@
             style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:textColor="@color/colorOrderListHeader" />
+            android:text="@string/save" />
     </LinearLayout>
 
 </LinearLayout>

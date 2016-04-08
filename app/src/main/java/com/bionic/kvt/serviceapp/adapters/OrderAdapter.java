@@ -95,17 +95,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         }
 
         //Order Status
-        String orderStatus;
-        if (cell == ordersDataSetColNumber - 2) {
-            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
-            if("Completed".equals(orderStatus)){
-                textCell.setTextColor(Color.parseColor("#FF76FF03"));
-            } else if("In progress".equals(orderStatus)) {
-                textCell.setTextColor(Color.parseColor("#FFFFEA00"));
-            } else {
-                textCell.setTextColor(Color.parseColor("#FFFF5252"));
-            }
-        }
+//        String orderStatus;
+//        if (cell == ordersDataSetColNumber - 2) {
+//            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
+//            if("Completed".equals(orderStatus)){
+//                textCell.setTextColor(Color.parseColor("#FF76FF03"));
+//            } else if("In progress".equals(orderStatus)) {
+//                textCell.setTextColor(Color.parseColor("#FFFFEA00"));
+//            } else {
+//                textCell.setTextColor(Color.parseColor("#FFFF5252"));
+//            }
+//        }
 
         textCell.setOnClickListener(new View.OnClickListener() {
             @Override

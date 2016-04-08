@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorOrderPageHeader"
+        android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -23,6 +23,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/pdf_report"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -31,7 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/colorMainBackground"
         android:orientation="vertical">
 
         <ImageView
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:background="@color/colorPDFBackground" />
+            android:background="@android:color/white" />
     </LinearLayout>
 
     <LinearLayout
@@ -55,25 +55,20 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="@dimen/activity_horizontal_margin"
-            android:text="@string/generating_pdf_document"
-            android:textColor="@color/colorPDFText" />
+            android:text="@string/generating_pdf_document" />
 
         <Button
             android:id="@+id/pdf_report_send_button"
-            style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/send_pdf"
-            android:textColor="@color/colorOrderListHeader" />
+            android:text="@string/send_pdf" />
 
         <Button
             android:id="@+id/pdf_button_done"
-            style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/done"
-            android:textColor="@color/colorOrderListHeader" />
+            android:text="@string/done" />
     </LinearLayout>
 </LinearLayout>
