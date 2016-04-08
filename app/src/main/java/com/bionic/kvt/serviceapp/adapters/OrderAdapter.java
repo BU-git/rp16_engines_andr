@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.adapters;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
     @Nullable
     public String OrderStatus(int rowNumber) {
         if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return null;
-        return ordersDataSet.get(rowNumber)[Session.ordersDataSetColNumber-2];
+        return ordersDataSet.get(rowNumber)[Session.ordersDataSetColNumber - 2];
     }
 
     public interface OnOrderLineClickListener {
@@ -95,17 +96,20 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         }
 
         //Order Status
-//        String orderStatus;
-//        if (cell == ordersDataSetColNumber - 2) {
-//            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
-//            if("Completed".equals(orderStatus)){
-//                textCell.setTextColor(Color.parseColor("#FF76FF03"));
-//            } else if("In progress".equals(orderStatus)) {
-//                textCell.setTextColor(Color.parseColor("#FFFFEA00"));
-//            } else {
-//                textCell.setTextColor(Color.parseColor("#FFFF5252"));
-//            }
-//        }
+        String orderStatus;
+//        ContextCompat.getColor(context, R.color.colorOK);
+        if (cell == ordersDataSetColNumber - 2) {
+            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
+            if ("Completed".equals(orderStatus)) {
+                textCell.setTextColor(Color.parseColor("#388E3C"));
+            } else if ("In progress".equals(orderStatus)) {
+                textCell.setTextColor(Color.parseColor("#FFA000"));
+            } else {
+                textCell.setTextColor(Color.parseColor("#CC0234"));
+            }
+        } else {
+            textCell.setTextColor(Color.parseColor("#424242"));
+        }
 
         textCell.setOnClickListener(new View.OnClickListener() {
             @Override

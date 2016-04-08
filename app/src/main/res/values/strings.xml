@@ -45,7 +45,7 @@
 
     <string name="pdf_report">PDF Report #</string>
     <string name="send_pdf">Send in e-mail</string>
-    <string name="accept_instructions">Please, accept instructions to start</string>
+    <string name="accept_instructions">Please, accept instructions to start.</string>
     <string name="job_description">Job description</string>
     <string name="open_quotation">Open Quotation</string>
     <string name="instructions_followed">Instructions followed</string>
@@ -98,4 +98,5 @@
     <string name="forget_password_subject">Password Retrieval Email</string>
     <string name="forget_password_body">Your password is: $password</string>
     <string name="success_email_toast">The message was sent</string>
+    <string name="this_order_is_complete">This order is complete.</string>
 </resources>

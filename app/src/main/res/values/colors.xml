@@ -13,7 +13,9 @@
     <color name="colorTextField">#FFFFFF</color>
     <!--OrderPageActivity-->
     <color name="colorOrderListHeader">#434343</color>
+    <!-- Status colors -->
+    <color name="colorError">#CC0234</color>
+    <color name="colorWarring">#FFA000</color>
+    <color name="colorOK">#388E3C</color>
     <!-- DO NOT EDIT! DO NOT ADD NEW COLORS! -->
-    <!--<color name="colorAccent">#CC0234</color>-->
-    <!--<color name="colorAccent">#FFCC02</color>-->
 </resources>

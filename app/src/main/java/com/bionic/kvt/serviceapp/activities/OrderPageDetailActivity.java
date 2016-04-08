@@ -30,6 +30,7 @@ public class OrderPageDetailActivity extends AppCompatActivity {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);
+            findViewById(R.id.process_order_page_order_complete).setVisibility(View.VISIBLE);
         }
 
         if (orderNumber != null) {

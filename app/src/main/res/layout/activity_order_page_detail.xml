@@ -434,26 +434,36 @@
         android:id="@+id/process_order_page_detail_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom"
         android:orientation="vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:textAppearance="?android:textAppearanceMedium">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/process_order_page_order_complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/activity_horizontal_margin"
+            android:text="@string/this_order_is_complete"
+            android:visibility="gone"
+            android:textColor="@color/colorOK"/>
+
+        <LinearLayout
+            android:gravity="bottom"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:id="@+id/process_order_page_accept_instructions"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center|right"
-                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:padding="@dimen/activity_horizontal_margin"
                 android:text="@string/accept_instructions" />
 
             <Button
