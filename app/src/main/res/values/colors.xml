@@ -3,7 +3,7 @@
     <!-- DO NOT EDIT! DO NOT ADD NEW COLORS! -->
     <color name="colorPrimary">#02499B</color>
     <color name="colorPrimaryDark">#062C62</color>
-    <color name="colorAccent">#CC0234</color>
+    <color name="colorAccent">#89B4DC</color>
     <color name="colorMainBackground">#EFEFEF</color>
     <color name="colorSecondaryBackground">#FFFFFF</color>
     <color name="colorMainText">#424242</color>
@@ -14,4 +14,6 @@
     <!--OrderPageActivity-->
     <color name="colorOrderListHeader">#434343</color>
     <!-- DO NOT EDIT! DO NOT ADD NEW COLORS! -->
+    <!--<color name="colorAccent">#CC0234</color>-->
+    <!--<color name="colorAccent">#FFCC02</color>-->
 </resources>
