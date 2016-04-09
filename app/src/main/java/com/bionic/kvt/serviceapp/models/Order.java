@@ -6,15 +6,15 @@ import java.util.List;
 public class Order {
 
     private class Relation {
-        private Integer number; //nummer
+        private int number; //nummer
         private String name; //Naam
-        private String location; //Plaats
+        private String town; //Plaats
         private String contactPerson; //ContactPersoon
         private String telephone; //Telefoon
     }
 
     private class Employee {
-        private Integer number; //nummer
+        private int number; //nummer
         private String name; //Naam
         private String email; //Email
         private String kenteken; //Kenteken ?? NO ON SCHEMA!
@@ -24,48 +24,49 @@ public class Order {
         private String name; //Naam
         private String address; //Adres
         private String postCode; //PostCode
-        private String location; //Plaats
+        private String town; //Plaats
     }
 
     private class Task { //Taak
-        private Byte VORNR; //VORNR
-        private String LTXA1; //LTXA1
-        private String STEUS; //STEUS
-        private String KTSCH; //KTSCH
+        private Byte vornr; //VORNR
+        private String ltxa1; //LTXA1
+        private String steus; //STEUS
+        private String ktsch; //KTSCH
     }
 
     private class Component { //Component
-        private String EQART; //EQART
-        private Integer EQUNR; //EQUNR
-        private String HERST; //HERST
-        private String TYPBZ; //TYPBZ
-        private String SERNR; //SERNR
+        private String eqart; //EQART
+        private Integer equnr; //EQUNR
+        private String herst; //HERST
+        private String typbz; //TYPBZ
+        private String sernr; //SERNR
     }
 
     private class Part { //Onderdeel
-        private Byte BDMNG; //BDMNG
-        private String MATNR; //MATNR
-        private String MATTX; //MATTX
+        private Byte bdmng; //BDMNG
+        private String matnr; //MATNR
+        private String mattx; //MATTX
     }
 
     private class Info { //Info
-        private String soortRegel; //SoortRegel
+        private String kindOfLine; //SoortRegel
         private String prePost; //PrePost
-        private String sleutel; //Sleutel
-        private Byte regel; //Regel
-        private String omschrijving; //Omschrijving
+        private String key; //Sleutel
+        private Byte line; //Regel
+        private String description; //Omschrijving
     }
 
-    private Integer orderNumber; //nummer
+    private int number; //nummer
     private String orderType; //OrderType
-    private Relation relation; //Relatie
-    private Employee employee; //Medewerker
     private Date date; //Datum
     private String reference; //Referentie
+    private String note; //Notitie
+
+    private Relation relation; //Relatie
+    private Employee employee; //Medewerker
     private Installation installation; //Installatie
     private List<Task> tasks; //Taken
     private List<Component> components; //Componenten
     private List<Part> parts; //Onderdelen
-    private String note; //Notitie
     private List<Info> extraInfo; //ExtraInfo
 }
