@@ -45,7 +45,6 @@ public class LMRADialog extends AppCompatDialogFragment {
                         LMRADialog.this.getDialog().cancel();
                     }
                 });
-        ;
 
         return builder.create();
     }

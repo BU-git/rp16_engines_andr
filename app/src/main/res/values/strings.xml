@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KVT Service Applicatie</string>
+    <string name="app_name">KVT Service Application</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -11,11 +11,9 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_remember_password">Remember password</string>
-    <string name="activity_login">Log in</string>
     <string name="activity_logout">Log out</string>
     <string name="activity_forget">Forgot Password</string>
     <string name="no_connection">No connection detected</string>
-
     <string name="service_engenieer">Service engineer:</string>
     <string name="orders">Orders</string>
     <string name="order_number">Order number</string>

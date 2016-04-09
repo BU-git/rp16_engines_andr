@@ -14,7 +14,7 @@
     <application
         android:name=".Session"
         android:allowBackup="false"
-        android:icon="@mipmap/kvt_logo"
+        android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -24,7 +24,6 @@
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,9 +51,9 @@
             android:name=".activities.NSAActivity"
             android:parentActivityName=".activities.MeasurementsActivity" />
         <activity
-            android:screenOrientation="sensorPortrait"
             android:name=".activities.InsertSignaturesActivity"
-            android:parentActivityName=".activities.NSAActivity" />
+            android:parentActivityName=".activities.NSAActivity"
+            android:screenOrientation="sensorPortrait" />
     </application>
 
 </manifest>
