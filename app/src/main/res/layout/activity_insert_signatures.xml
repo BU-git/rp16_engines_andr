@@ -26,109 +26,100 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:layout_weight="1">
+        android:layout_marginLeft="@dimen/signature_margin"
+        android:layout_marginRight="@dimen/signature_margin"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?listPreferredItemHeightSmall"
+            android:text="@string/text_service_engineer"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <com.bionic.kvt.serviceapp.views.DrawingView
+            android:id="@+id/draw_engineer_signature"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/signature_margin"
-            android:layout_marginRight="@dimen/signature_margin"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_horizontal_margin">
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/button_clear_engineer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="?listPreferredItemHeightSmall"
-                android:text="@string/text_service_engineer"
-                android:textAppearance="?android:textAppearanceMedium" />
+                android:text="Clear" />
 
-            <com.bionic.kvt.serviceapp.views.DrawingView
-                android:id="@+id/draw_engineer_signature"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:minHeight="250dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ToggleButton
+                android:id="@+id/button_confirm_engineer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
-
-                <Button
-                    android:id="@+id/button_clear_engineer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Clear" />
-
-                <ToggleButton
-                    android:id="@+id/button_confirm_engineer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textOff="@string/confirm"
-                    android:textOn="@string/saved" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:minHeight="?listPreferredItemHeightSmall"
-                android:text="@string/text_client"
-                android:textAppearance="?android:textAppearanceMedium" />
-
-            <com.bionic.kvt.serviceapp.views.DrawingView
-                android:id="@+id/draw_client_signature"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:minHeight="250dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
-
-                <Button
-                    android:id="@+id/button_clear_client"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/clear" />
-
-                <ToggleButton
-                    android:id="@+id/button_confirm_client"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textOff="@string/confirm"
-                    android:textOn="@string/saved" />
-            </LinearLayout>
-
-
+                android:textOff="@string/confirm"
+                android:textOn="@string/saved" />
         </LinearLayout>
-    </ScrollView>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?listPreferredItemHeightSmall"
+            android:text="@string/text_client"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <com.bionic.kvt.serviceapp.views.DrawingView
+            android:id="@+id/draw_client_signature"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@android:color/white" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <Button
+                android:id="@+id/button_clear_client"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear" />
+
+            <ToggleButton
+                android:id="@+id/button_confirm_client"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/confirm"
+                android:textOn="@string/saved" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <Button
             android:id="@+id/button_complete"
@@ -137,4 +128,6 @@
             android:enabled="false"
             android:text="@string/order_complete" />
     </LinearLayout>
+
+
 </LinearLayout>
