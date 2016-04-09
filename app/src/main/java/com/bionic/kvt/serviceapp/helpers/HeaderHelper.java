@@ -20,7 +20,7 @@ public class HeaderHelper {
     public void setHeader() {
         if (mContext instanceof Activity) {
             mImageView = (ImageView) ((Activity) mContext).findViewById(R.id.home_image);
-            mImageView.setImageResource(R.drawable.header2015);
+            mImageView.setImageResource(R.drawable.header);
 
             mImageLogoView = (ImageView) ((Activity) mContext).findViewById(R.id.logo_image);
             mImageLogoView.setImageResource(R.drawable.logo);

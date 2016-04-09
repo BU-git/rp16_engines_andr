@@ -3,9 +3,11 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,6 +36,7 @@ public class OrderPageActivity extends AppCompatActivity
         //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
