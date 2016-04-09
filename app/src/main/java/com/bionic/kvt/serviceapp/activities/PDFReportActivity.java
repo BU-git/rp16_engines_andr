@@ -159,7 +159,8 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             canvas.drawText("Test Print Document Page " + pdfPageCount, leftMargin, titleBaseLine, paint);
 
             paint.setTextSize(14);
-            canvas.drawText("We need PDF template from Customer!", leftMargin, titleBaseLine + 35, paint);
+            canvas.drawText("" + PrintAttributes.MediaSize.ISO_A4.getWidthMils() / 1000 * 72 * 2 + "/"
+                    + PrintAttributes.MediaSize.ISO_A4.getHeightMils() / 1000 * 72 * 2, leftMargin, titleBaseLine + 35, paint);
 
             paint.setColor(Color.RED);
             PdfDocument.PageInfo pageInfo = page.getInfo();
@@ -182,7 +183,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
         }
 
         PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
-        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth(), mCurrentPage.getHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth() * 2, mCurrentPage.getHeight() * 2, Bitmap.Config.ARGB_8888);
 
         mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
