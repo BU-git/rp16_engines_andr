@@ -2,28 +2,44 @@ package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
 
+import com.bionic.kvt.serviceapp.api.OrderServiceApi;
+
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Implements session handling
- */
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Session extends Application {
 
     private static Session currentUserSession;
+    private OrderServiceApi orderServiceApi;
 
     @Override
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.BACK_OFFICE_HOST)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        orderServiceApi = retrofit.create(OrderServiceApi.class);
+    }
+
+    public static OrderServiceApi orderServiceApi() {
+        return currentUserSession.orderServiceApi;
     }
 
     public static Session getSession() {
         return currentUserSession;
     }
 
+    //ALL DOWN IS FOR TEST
     public static final List<String[]> ordersDataSet = new LinkedList<>();
     public static int ordersDataSetColNumber;
+
 
     static {
         ordersDataSet.add(new String[]{"826547892", "29-06-2016", "Generator", "Repair", "Kiev", "Not started", "PDF"});

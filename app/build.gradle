@@ -11,8 +11,9 @@ android {
         versionCode 1
         versionName "0.2"
 
-        buildConfigField('String','EMAIL_FROM','"kvttest2016@gmail.com"')
-        buildConfigField('String','EMAIL_PASSWORD','"Bionic2016"')
+        buildConfigField('String', 'EMAIL_FROM', '"kvttest2016@gmail.com"')
+        buildConfigField('String', 'EMAIL_PASSWORD', '"Bionic2016"')
+        buildConfigField('String', 'BACK_OFFICE_HOST', '"http://128.0.169.5:9990"')
     }
     buildTypes {
         release {
@@ -27,4 +28,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
 }

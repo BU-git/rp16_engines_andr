@@ -1,32 +1,14 @@
 package com.bionic.kvt.serviceapp.models;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
-public class Order {
-    // Fields from XML
+public class OrderBrief {
 
     /**
      * Order number [nummer in XML}
      * NotNull
      */
     private long number;
-
-    private String orderType; //OrderType
-    private Date date; //Datum
-    private String reference; //Referentie
-    private String note; //Notitie
-
-    private Relation relation; //Relatie
-    private Employee employee; //Medewerker
-    private Installation installation; //Installatie
-    private List<Task> tasks; //Taken
-    private List<Component> components; //Componenten
-    private List<Part> parts; //Onderdelen
-    private List<Info> extraInfo; //ExtraInfo
-
-    // Service fields
 
     /**
      * This is time when this order was imported to BO Server.
