@@ -64,7 +64,7 @@ public class OrderPageActivity extends AppCompatActivity
 
 
         // Configuring Log out button
-        Button logOut = (Button) findViewById(R.id.service_engenieer_logout_button);
+        Button logOut = (Button) findViewById(R.id.service_engineer_logout_button);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,9 +75,20 @@ public class OrderPageActivity extends AppCompatActivity
             }
         });
 
-        // Configuring Engenieer Id
-        TextView engenieerId = (TextView) findViewById(R.id.service_engenieer_id);
-        engenieerId.setText(((Session) getApplication()).getEngineerId());
+        // Configuring connection button
+        Button connectionStatus = (Button) findViewById(R.id.service_engineer_connection_button);
+        connectionStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        // Configuring engineer Id
+        TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
+        engineerId.setText(((Session) getApplication()).getEngineerId());
 
         // Configuring Recycler View
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);

@@ -20,11 +20,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/service_engenieer"
+            android:text="@string/service_engineer"
             android:textColor="@color/colorSecondaryText" />
 
         <TextView
-            android:id="@+id/service_engenieer_id"
+            android:id="@+id/service_engineer_id"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -35,7 +35,13 @@
             android:textColor="@color/colorSecondaryText"/>
 
         <Button
-            android:id="@+id/service_engenieer_logout_button"
+            android:id="@+id/service_engineer_connection_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connection" />
+
+        <Button
+            android:id="@+id/service_engineer_logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_logout" />

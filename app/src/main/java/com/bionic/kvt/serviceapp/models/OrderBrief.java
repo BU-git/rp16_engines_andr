@@ -72,4 +72,15 @@ public class OrderBrief {
     public void setNumber(long number) {
         this.number = number;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("OrderBrief{");
+        sb.append("number=").append(number);
+        sb.append(", importTimestamp=").append(importTimestamp);
+        sb.append(", lastServerChangeTimestamp=").append(lastServerChangeTimestamp);
+        sb.append(", lastAndroidChangeTimestamp=").append(lastAndroidChangeTimestamp);
+        sb.append('}');
+        return sb.toString();
+    }
 }

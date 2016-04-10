@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.ConnectionActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Synchronisation status"
+            android:textColor="@color/colorSecondaryText"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/connection_get_users"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get users" />
+
+        <Button
+            android:id="@+id/connection_get_orders_brief"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get order list" />
+
+        <EditText
+            android:id="@+id/connection_order_id"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorSecondaryBackground"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/connection_get_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get order by id" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?listPreferredItemHeightSmall"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:textAppearance="?android:textAppearanceMedium">
+
+            <TextView
+                android:id="@+id/synchronisation_log"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

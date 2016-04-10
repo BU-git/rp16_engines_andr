@@ -28,7 +28,7 @@ public class Session extends Application {
         orderServiceApi = retrofit.create(OrderServiceApi.class);
     }
 
-    public static OrderServiceApi orderServiceApi() {
+    public static OrderServiceApi getOrderServiceApi() {
         return currentUserSession.orderServiceApi;
     }
 

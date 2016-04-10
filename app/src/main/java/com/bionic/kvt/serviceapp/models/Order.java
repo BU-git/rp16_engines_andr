@@ -177,4 +177,26 @@ public class Order {
     public void setLastAndroidChangeTimestamp(Timestamp lastAndroidChangeTimestamp) {
         this.lastAndroidChangeTimestamp = lastAndroidChangeTimestamp;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Order{");
+        sb.append("number=").append(number);
+        sb.append(", orderType='").append(orderType).append('\'');
+        sb.append(", date=").append(date);
+        sb.append(", reference='").append(reference).append('\'');
+        sb.append(", note='").append(note).append('\'');
+        sb.append(", relation=").append(relation);
+        sb.append(", employee=").append(employee);
+        sb.append(", installation=").append(installation);
+        sb.append(", tasks=").append(tasks);
+        sb.append(", components=").append(components);
+        sb.append(", parts=").append(parts);
+        sb.append(", extraInfo=").append(extraInfo);
+        sb.append(", importTimestamp=").append(importTimestamp);
+        sb.append(", lastServerChangeTimestamp=").append(lastServerChangeTimestamp);
+        sb.append(", lastAndroidChangeTimestamp=").append(lastAndroidChangeTimestamp);
+        sb.append('}');
+        return sb.toString();
+    }
 }
