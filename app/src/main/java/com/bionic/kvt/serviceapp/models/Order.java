@@ -38,7 +38,8 @@ public class Order {
     /**
      * This is time when this order was changed in BO Server.
      * If order changed in BO this field has to be updated.
-     * This field will be used by Android App to check if order has to updated from server.
+     * This field will be used by Android App to check if order has to be updated from server.
+     * When order is imported to BO Server this time is set the same value as lastServerChangeTimestamp
      * This field will NOT changed in Android App.
      * NotNull
      */
@@ -49,8 +50,131 @@ public class Order {
      * If order changed in Android App this field has to be updated.
      * This field will be used by Android App to check if order need to be updated to server.
      * This field will NOT changed in BO Server.
-     * When order is imported to BO Server this time is set the same as lastServerChangeTimestamp
+     * When order is imported to BO Server this time is set the same value as lastServerChangeTimestamp
      * NotNull
      */
     private Timestamp lastAndroidChangeTimestamp;
+
+    public Order() {
+    }
+
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Relation getRelation() {
+        return relation;
+    }
+
+    public void setRelation(Relation relation) {
+        this.relation = relation;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public Installation getInstallation() {
+        return installation;
+    }
+
+    public void setInstallation(Installation installation) {
+        this.installation = installation;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public List<Component> getComponents() {
+        return components;
+    }
+
+    public void setComponents(List<Component> components) {
+        this.components = components;
+    }
+
+    public List<Part> getParts() {
+        return parts;
+    }
+
+    public void setParts(List<Part> parts) {
+        this.parts = parts;
+    }
+
+    public List<Info> getExtraInfo() {
+        return extraInfo;
+    }
+
+    public void setExtraInfo(List<Info> extraInfo) {
+        this.extraInfo = extraInfo;
+    }
+
+    public Timestamp getImportTimestamp() {
+        return importTimestamp;
+    }
+
+    public void setImportTimestamp(Timestamp importTimestamp) {
+        this.importTimestamp = importTimestamp;
+    }
+
+    public Timestamp getLastServerChangeTimestamp() {
+        return lastServerChangeTimestamp;
+    }
+
+    public void setLastServerChangeTimestamp(Timestamp lastServerChangeTimestamp) {
+        this.lastServerChangeTimestamp = lastServerChangeTimestamp;
+    }
+
+    public Timestamp getLastAndroidChangeTimestamp() {
+        return lastAndroidChangeTimestamp;
+    }
+
+    public void setLastAndroidChangeTimestamp(Timestamp lastAndroidChangeTimestamp) {
+        this.lastAndroidChangeTimestamp = lastAndroidChangeTimestamp;
+    }
 }
