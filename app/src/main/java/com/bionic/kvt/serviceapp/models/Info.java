@@ -4,7 +4,7 @@ public class Info { //Info
     private String kindOfLine; //SoortRegel
     private String prePost; //PrePost
     private String key; //Sleutel
-    private Byte line; //Regel
+    private String line; //Regel
     private String description; //Omschrijving
 
     public Info() {
@@ -34,11 +34,11 @@ public class Info { //Info
         this.key = key;
     }
 
-    public Byte getLine() {
+    public String getLine() {
         return line;
     }
 
-    public void setLine(Byte line) {
+    public void setLine(String line) {
         this.line = line;
     }
 

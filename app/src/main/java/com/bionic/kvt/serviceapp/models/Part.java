@@ -2,18 +2,18 @@ package com.bionic.kvt.serviceapp.models;
 
 
 public class Part { //Onderdeel
-    private Byte bdmng; //BDMNG
+    private String bdmng; //BDMNG
     private String matnr; //MATNR
     private String mattx; //MATTX
 
     public Part() {
     }
 
-    public Byte getBdmng() {
+    public String getBdmng() {
         return bdmng;
     }
 
-    public void setBdmng(Byte bdmng) {
+    public void setBdmng(String bdmng) {
         this.bdmng = bdmng;
     }
 

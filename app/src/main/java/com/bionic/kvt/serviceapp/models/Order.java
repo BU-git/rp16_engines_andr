@@ -11,7 +11,7 @@ public class Order {
      * Order number [nummer in XML}
      * NotNull
      */
-    private long number;
+    private int number;
 
     private String orderType; //OrderType
     private Date date; //Datum
@@ -62,7 +62,7 @@ public class Order {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
