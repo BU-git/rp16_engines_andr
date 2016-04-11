@@ -58,6 +58,9 @@
         <activity
             android:name=".activities.ConnectionActivity"
             android:parentActivityName=".activities.OrderPageActivity" />
+
+        <service android:name=".db.LocalService" />
     </application>
+
 
 </manifest>
