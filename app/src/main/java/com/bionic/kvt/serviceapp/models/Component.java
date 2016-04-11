@@ -3,7 +3,7 @@ package com.bionic.kvt.serviceapp.models;
 
 public class Component { //Component
     private String eqart; //EQART
-    private Integer equnr; //EQUNR
+    private int equnr; //EQUNR
     private String herst; //HERST
     private String typbz; //TYPBZ
     private String sernr; //SERNR
@@ -19,11 +19,11 @@ public class Component { //Component
         this.eqart = eqart;
     }
 
-    public Integer getEqunr() {
+    public int getEqunr() {
         return equnr;
     }
 
-    public void setEqunr(Integer equnr) {
+    public void setEqunr(int equnr) {
         this.equnr = equnr;
     }
 

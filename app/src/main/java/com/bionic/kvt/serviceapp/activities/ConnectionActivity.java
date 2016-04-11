@@ -59,11 +59,11 @@ public class ConnectionActivity extends AppCompatActivity {
         getOrdersById.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final int orderId;
+                final long orderId;
                 if ("".equals(orderIdInput.getText().toString())) {
                     orderId = 0;
                 } else {
-                    orderId = Integer.valueOf(orderIdInput.getText().toString());
+                    orderId = Long.valueOf(orderIdInput.getText().toString());
                 }
                 getOrderById(orderId);
             }
@@ -128,7 +128,7 @@ public class ConnectionActivity extends AppCompatActivity {
         });
     }
 
-    private void getOrderById(int id) {
+    private void getOrderById(long id) {
         final String currentUser = Session.getSession().getEngineerId();
 
         final Call<Order> orderRequest = Session.getOrderServiceApi().getOrder(id, currentUser);

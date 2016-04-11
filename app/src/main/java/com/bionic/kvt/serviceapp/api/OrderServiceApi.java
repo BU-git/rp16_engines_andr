@@ -32,7 +32,7 @@ public interface OrderServiceApi {
     // URL format /orders/{number}?user={email}
     // Expecting JSON
     @GET("orders/{number}")
-    Call<Order> getOrder(@Path("number") int number, @Query("user") String email);
+    Call<Order> getOrder(@Path("number") long number, @Query("user") String email);
 
 
 }
