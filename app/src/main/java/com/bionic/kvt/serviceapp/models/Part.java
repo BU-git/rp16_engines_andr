@@ -15,6 +15,10 @@ public class Part implements Parcelable, Serializable {
     private List<Element> elementList;
     private Integer score;
 
+    public Part(){
+        this.score = 0;
+    }
+
     protected Part(Parcel in) {
         partName = in.readString();
         elementList = in.createTypedArrayList(Element.CREATOR);
