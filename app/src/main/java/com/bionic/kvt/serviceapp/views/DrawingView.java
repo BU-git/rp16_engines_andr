@@ -7,13 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.os.SystemClock;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawingView extends View {
-    private Long lastTime = SystemClock.uptimeMillis();
+    private Long lastTime = 0L;
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private Canvas drawCanvas;
@@ -44,7 +45,12 @@ public class DrawingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        if (canvasBitmap == null) {
+            canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        } else {
+            canvasBitmap = Bitmap.createScaledBitmap(canvasBitmap, w, h, true);
+        }
+
         drawCanvas = new Canvas(canvasBitmap);
     }
 
@@ -58,6 +64,7 @@ public class DrawingView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         float touchX = event.getX();
         float touchY = event.getY();
+        long eventTime = event.getEventTime();
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 drawPath.moveTo(touchX, touchY);
@@ -74,10 +81,29 @@ public class DrawingView extends View {
                 return false;
         }
 
-        if (SystemClock.uptimeMillis() - lastTime >= 100) {
+        if (eventTime - lastTime >= 100) {
             invalidate();
-            lastTime = SystemClock.uptimeMillis();
+            lastTime = eventTime;
         }
         return true;
     }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("superState", super.onSaveInstanceState());
+        bundle.putParcelable("canvasBitmap", canvasBitmap);
+        return bundle;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
+            canvasBitmap = bundle.getParcelable("canvasBitmap");
+            state = bundle.getParcelable("superState");
+        }
+        super.onRestoreInstanceState(state);
+    }
+
 }

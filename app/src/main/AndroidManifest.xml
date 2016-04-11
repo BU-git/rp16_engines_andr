@@ -52,8 +52,7 @@
             android:parentActivityName=".activities.MeasurementsActivity" />
         <activity
             android:name=".activities.InsertSignaturesActivity"
-            android:parentActivityName=".activities.NSAActivity"
-            android:screenOrientation="sensorPortrait" />
+            android:parentActivityName=".activities.NSAActivity" />
     </application>
 
 </manifest>
