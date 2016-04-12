@@ -5,10 +5,12 @@ import com.bionic.kvt.serviceapp.Session;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DbUtils {
 
+    // Completely erase User table and add Demo user
     public static void resetUserTable() {
         final Realm realm = Realm.getDefaultInstance();
 
@@ -19,6 +21,54 @@ public class DbUtils {
         user.setEmail("demo@kvt.nl");
         user.setPassword("demo");
         user.setOnServer(true);
+        realm.commitTransaction();
+
+        realm.close();
+    }
+
+    // Completely erase Order Table and all sub tables and add Demo orders
+    public static void resetOrderTableWithSubTables() {
+        final Realm realm = Realm.getDefaultInstance();
+
+        realm.beginTransaction();
+        realm.clear(Order.class);
+        realm.clear(Component.class);
+        realm.clear(Employee.class);
+        realm.clear(Info.class);
+        realm.clear(Installation.class);
+        realm.clear(Part.class);
+        realm.clear(Relation.class);
+        realm.clear(Task.class);
+        realm.commitTransaction();
+
+        realm.beginTransaction();
+        Order order = realm.createObject(Order.class);
+
+        Relation relation = realm.createObject(Relation.class);
+        order.setRelation(relation);
+
+        Employee employee = realm.createObject(Employee.class);
+        order.setEmployee(employee);
+
+        Installation installation = realm.createObject(Installation.class);
+        order.setInstallation(installation);
+
+        Task task = realm.createObject(Task.class);
+        RealmList<Task> taskRealmList = new RealmList<>(task);
+        order.setTasks(taskRealmList);
+
+        Component component = realm.createObject(Component.class);
+        RealmList<Component> componentRealmList = new RealmList<>(component);
+        order.setComponents(componentRealmList);
+
+        Part part = realm.createObject(Part.class);
+        RealmList<Part> partRealmList = new RealmList<>(part);
+        order.setParts(partRealmList);
+
+        Info info = realm.createObject(Info.class);
+        RealmList<Info> infoRealmList = new RealmList<>(info);
+        order.setExtraInfo(infoRealmList);
+
         realm.commitTransaction();
 
         realm.close();

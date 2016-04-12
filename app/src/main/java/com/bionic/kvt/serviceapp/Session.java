@@ -9,6 +9,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -16,6 +17,10 @@ public class Session extends Application {
 
     private static Session currentUserSession;
     private OrderServiceApi orderServiceApi;
+
+    public static final int ORDER_STATUS_NOT_STARTED = 0;
+    public static final int ORDER_STATUS_IN_PROGRESS = 1;
+    public static final int ORDER_STATUS_COMPLETE = 2;
 
     @Override
     public void onCreate() {
@@ -31,6 +36,8 @@ public class Session extends Application {
 
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .name(BuildConfig.DB_NAME)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
     }
@@ -142,4 +149,5 @@ public class Session extends Application {
     public void setCheckBoxLMRA(boolean checkBoxLMRA) {
         this.checkBoxLMRA = checkBoxLMRA;
     }
+
 }

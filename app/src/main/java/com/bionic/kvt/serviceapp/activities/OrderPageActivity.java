@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.LinkedList;
@@ -28,7 +29,6 @@ public class OrderPageActivity extends AppCompatActivity
 
     private OrderAdapter ordersAdapter;
     private RecyclerView ordersRecyclerView;
-    private Realm realm;
 
 
     @Override
@@ -36,7 +36,8 @@ public class OrderPageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
 
-        realm = Realm.getDefaultInstance();
+        DbUtils.resetOrderTableWithSubTables();
+
 
         //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
@@ -105,12 +106,6 @@ public class OrderPageActivity extends AppCompatActivity
         ordersAdapter = new OrderAdapter(Session.ordersDataSet);
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        realm.close();
     }
 
     @Override
