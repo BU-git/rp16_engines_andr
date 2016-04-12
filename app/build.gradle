@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 23
@@ -14,6 +15,7 @@ android {
         buildConfigField('String', 'EMAIL_FROM', '"kvttest2016@gmail.com"')
         buildConfigField('String', 'EMAIL_PASSWORD', '"Bionic2016"')
         buildConfigField('String', 'BACK_OFFICE_HOST', '"http://128.0.169.5:9990/"')
+        buildConfigField('String', 'DB_NAME', '"kvt.realm"')
     }
     buildTypes {
         release {

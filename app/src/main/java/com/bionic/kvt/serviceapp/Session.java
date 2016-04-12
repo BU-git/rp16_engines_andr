@@ -7,6 +7,8 @@ import com.bionic.kvt.serviceapp.api.OrderServiceApi;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -26,6 +28,11 @@ public class Session extends Application {
                 .build();
 
         orderServiceApi = retrofit.create(OrderServiceApi.class);
+
+        RealmConfiguration config = new RealmConfiguration.Builder(this)
+                .name(BuildConfig.DB_NAME)
+                .build();
+        Realm.setDefaultConfiguration(config);
     }
 
     public static OrderServiceApi getOrderServiceApi() {

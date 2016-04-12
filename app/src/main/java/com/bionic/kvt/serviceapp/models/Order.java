@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.models;
 
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -33,27 +32,27 @@ public class Order {
      * After import it never changed.
      * NotNull
      */
-    private Timestamp importTimestamp;
+    private Date importDate;
 
     /**
      * This is time when this order was changed in BO Server.
      * If order changed in BO this field has to be updated.
      * This field will be used by Android App to check if order has to be updated from server.
-     * When order is imported to BO Server this time is set the same value as lastServerChangeTimestamp
+     * When order is imported to BO Server this time is set the same value as lastServerChangeDate
      * This field will NOT changed in Android App.
      * NotNull
      */
-    private Timestamp lastServerChangeTimestamp;
+    private Date lastServerChangeDate;
 
     /**
      * This is time when this order was changed in Android.
      * If order changed in Android App this field has to be updated.
      * This field will be used by Android App to check if order need to be updated to server.
      * This field will NOT changed in BO Server.
-     * When order is imported to BO Server this time is set the same value as lastServerChangeTimestamp
+     * When order is imported to BO Server this time is set the same value as lastServerChangeDate
      * NotNull
      */
-    private Timestamp lastAndroidChangeTimestamp;
+    private Date lastAndroidChangeDate;
 
     public Order() {
     }
@@ -154,28 +153,28 @@ public class Order {
         this.extraInfo = extraInfo;
     }
 
-    public Timestamp getImportTimestamp() {
-        return importTimestamp;
+    public Date getImportDate() {
+        return importDate;
     }
 
-    public void setImportTimestamp(Timestamp importTimestamp) {
-        this.importTimestamp = importTimestamp;
+    public void setImportDate(Date importDate) {
+        this.importDate = importDate;
     }
 
-    public Timestamp getLastServerChangeTimestamp() {
-        return lastServerChangeTimestamp;
+    public Date getLastServerChangeDate() {
+        return lastServerChangeDate;
     }
 
-    public void setLastServerChangeTimestamp(Timestamp lastServerChangeTimestamp) {
-        this.lastServerChangeTimestamp = lastServerChangeTimestamp;
+    public void setLastServerChangeDate(Date lastServerChangeDate) {
+        this.lastServerChangeDate = lastServerChangeDate;
     }
 
-    public Timestamp getLastAndroidChangeTimestamp() {
-        return lastAndroidChangeTimestamp;
+    public Date getLastAndroidChangeDate() {
+        return lastAndroidChangeDate;
     }
 
-    public void setLastAndroidChangeTimestamp(Timestamp lastAndroidChangeTimestamp) {
-        this.lastAndroidChangeTimestamp = lastAndroidChangeTimestamp;
+    public void setLastAndroidChangeDate(Date lastAndroidChangeDate) {
+        this.lastAndroidChangeDate = lastAndroidChangeDate;
     }
 
     @Override
@@ -193,9 +192,9 @@ public class Order {
         sb.append(", components=").append(components);
         sb.append(", parts=").append(parts);
         sb.append(", extraInfo=").append(extraInfo);
-        sb.append(", importTimestamp=").append(importTimestamp);
-        sb.append(", lastServerChangeTimestamp=").append(lastServerChangeTimestamp);
-        sb.append(", lastAndroidChangeTimestamp=").append(lastAndroidChangeTimestamp);
+        sb.append(", importDate=").append(importDate);
+        sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
+        sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
         sb.append('}');
         return sb.toString();
     }

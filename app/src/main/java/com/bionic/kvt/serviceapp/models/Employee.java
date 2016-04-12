@@ -4,7 +4,6 @@ public class Employee {
     private int number; //nummer
     private String name; //Naam
     private String email; //Email
-    private String kenteken; //Kenteken ?? NO ON SCHEMA!
 
     public Employee() {
     }
@@ -33,11 +32,4 @@ public class Employee {
         this.email = email;
     }
 
-    public String getKenteken() {
-        return kenteken;
-    }
-
-    public void setKenteken(String kenteken) {
-        this.kenteken = kenteken;
-    }
 }

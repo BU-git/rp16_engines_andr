@@ -3,7 +3,6 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,16 +21,22 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.realm.Realm;
+
 public class OrderPageActivity extends AppCompatActivity
         implements OrderAdapter.OnOrderLineClickListener, OrderAdapter.OnPDFButtonClickListener {
 
     private OrderAdapter ordersAdapter;
     private RecyclerView ordersRecyclerView;
+    private Realm realm;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
+
+        realm = Realm.getDefaultInstance();
 
         //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
@@ -88,7 +93,7 @@ public class OrderPageActivity extends AppCompatActivity
 
         // Configuring engineer Id
         TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
-        engineerId.setText(((Session) getApplication()).getEngineerId());
+        engineerId.setText(Session.getSession().getEngineerId());
 
         // Configuring Recycler View
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
@@ -102,6 +107,11 @@ public class OrderPageActivity extends AppCompatActivity
         ordersRecyclerView.setAdapter(ordersAdapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
