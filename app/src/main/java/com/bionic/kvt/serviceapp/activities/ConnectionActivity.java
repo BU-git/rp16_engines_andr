@@ -153,7 +153,7 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void getOrdersBriefList() {
-        final String currentUser = Session.getSession().getEngineerId();
+        final String currentUser = Session.getSession().getEngineerEmail();
 
         final Call<List<OrderBrief>> userListRequest = Session.getOrderServiceApi().getOrdersBrief(currentUser);
 
@@ -182,7 +182,7 @@ public class ConnectionActivity extends AppCompatActivity {
     }
 
     private void getOrderById(long id) {
-        final String currentUser = Session.getSession().getEngineerId();
+        final String currentUser = Session.getSession().getEngineerEmail();
 
         final Call<Order> orderRequest = Session.getOrderServiceApi().getOrder(id, currentUser);
 

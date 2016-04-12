@@ -93,7 +93,7 @@ public class OrderPageActivity extends AppCompatActivity
 
         // Configuring engineer Id
         TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
-        engineerId.setText(Session.getSession().getEngineerId());
+        engineerId.setText(Session.getSession().getEngineerName() + " (" + Session.getSession().getEngineerEmail() + ")");
 
         // Configuring Recycler View
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);

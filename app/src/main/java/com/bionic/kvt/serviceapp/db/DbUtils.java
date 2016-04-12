@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.db;
 
+import com.bionic.kvt.serviceapp.Session;
+
 import java.util.List;
 
 import io.realm.Realm;
@@ -89,5 +91,17 @@ public class DbUtils {
         return res;
     }
 
+    public static void setUserSession(String email) {
+        Session.getSession().clearSession();
 
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmResults<User> result = realm.where(User.class).equalTo("email", email).findAll();
+
+        if (result.size() == 1) {
+            Session.getSession().setEngineerEmail(email);
+            Session.getSession().setEngineerName(result.get(0).getName());
+        }
+
+        realm.close();
+    }
 }

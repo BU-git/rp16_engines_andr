@@ -385,26 +385,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             return DbUtils.isUserLoginValid(mEmail, mPassword);
-
-//            // TODO: attempt authentication against a network service.
-//
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-//
-//            for (String credential : DUMMY_CREDENTIALS) {
-//                String[] pieces = credential.split(":");
-//                if (pieces[0].equals(mEmail)) {
-//                    // Account exists, return true if the password matches.
-//                    return pieces[1].equals(mPassword);
-//                }
-//            }
-//
-//            // TODO: register the new account here.
-//            return true;
         }
 
         @Override
@@ -417,7 +397,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
                 //Put session user to Singleton
-                Session.getSession().setEngineerId(mEmail);
+
+                DbUtils.setUserSession(mEmail);
 
                 if (mCheckBox.isChecked()) {
                     //Get shared preferences
@@ -461,7 +442,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
 
                     int updateUsers = DbUtils.updateUserTableFromServer(response.body());
-                    showConnectionMessage(CONNECTION_SUCCESSFUL, "Updated " + updateUsers + " users.");
+                    if (updateUsers == 0) {
+                        showConnectionMessage(CONNECTION_SUCCESSFUL, "Nothing to update.");
+                    } else {
+                        showConnectionMessage(CONNECTION_SUCCESSFUL, "Updated " + updateUsers + " users.");
+                    }
 
                 } else {
                     showConnectionMessage(CONNECTION_ERROR, "" + response.code());
@@ -470,7 +455,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onFailure(final Call<List<User>> call, final Throwable t) {
-                showConnectionMessage(CONNECTION_FAIL, t.toString());
+                showConnectionMessage(CONNECTION_FAIL, "Device is offline."); //t.toString()
             }
         });
     }
@@ -488,8 +473,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
                 break;
             case CONNECTION_FAIL:
-                text = "Fail to connect to server: " + message;
-                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
+                text = "Fail to connect to server. " + message;
+                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
                 break;
         }
         mConnectionStatusText.setTextColor(textColor);
