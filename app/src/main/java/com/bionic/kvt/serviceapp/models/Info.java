@@ -3,7 +3,7 @@ package com.bionic.kvt.serviceapp.models;
 public class Info { //Info
     private String kindOfLine; //SoortRegel
     private String prePost; //PrePost
-    private String key; //Sleutel
+    private String sleutel; //Sleutel
     private String line; //Regel
     private String description; //Omschrijving
 
@@ -26,12 +26,12 @@ public class Info { //Info
         this.prePost = prePost;
     }
 
-    public String getKey() {
-        return key;
+    public String getSleutel() {
+        return sleutel;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setSleutel(String sleutel) {
+        this.sleutel = sleutel;
     }
 
     public String getLine() {

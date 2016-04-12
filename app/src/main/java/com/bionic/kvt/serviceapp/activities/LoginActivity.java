@@ -20,6 +20,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,18 +34,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
+import com.bionic.kvt.serviceapp.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 
@@ -53,17 +59,14 @@ import static android.Manifest.permission.ACCESS_NETWORK_STATE;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
-
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
+    private static final int CONNECTION_SUCCESSFUL = 0;
+    private static final int CONNECTION_ERROR = 1;
+    private static final int CONNECTION_FAIL = 2;
+
 
     private final String TAG = this.getClass().getName();
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user@kvt.nl:12345", "bar@example.com:world", "sasha.mylnikov@gmail.com:12345"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -74,16 +77,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private ImageView mImageView;
-    private ImageView mImageLogoView;
+    //    private ImageView mImageView;
+//    private ImageView mImageLogoView;
     private View mLoginLayout;
-    private TextView mHeaderTextView;
+    //    private TextView mHeaderTextView;
     private SharedPreferences userSharedPreferences;
+    private TextView mConnectionStatusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        DbUtils.createTableIfNotExist(com.bionic.kvt.serviceapp.db.User.class);
+
+        mConnectionStatusText = (TextView) findViewById(R.id.connection_status);
 
         //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
@@ -200,6 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onResume() {
         super.onResume();
         Session.getSession().clearSession();
+        updateUserList();
     }
 
     /**
@@ -254,7 +263,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
         return email.contains("@");
@@ -262,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
     /**
@@ -376,25 +384,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            return DbUtils.isUserLoginValid(mEmail, mPassword);
 
-            try {
-                // Simulate network access.
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
+//            // TODO: attempt authentication against a network service.
+//
+//            try {
+//                // Simulate network access.
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                return false;
+//            }
+//
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(mEmail)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
+//
+//            // TODO: register the new account here.
+//            return true;
         }
 
         @Override
@@ -437,5 +447,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-}
+    private void updateUserList() {
+        final Call<List<User>> userListRequest = Session.getOrderServiceApi().getAllUsers();
+        userListRequest.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
+                if (response.isSuccessful()) {
 
+                    if (response.body() == null || response.body().size() == 0) {
+                        showConnectionMessage(CONNECTION_SUCCESSFUL, "No users on server found.");
+                        DbUtils.resetUserTable();
+                        return;
+                    }
+
+                    int updateUsers = DbUtils.updateUserTableFromServer(response.body());
+                    showConnectionMessage(CONNECTION_SUCCESSFUL, "Updated " + updateUsers + " users.");
+
+                } else {
+                    showConnectionMessage(CONNECTION_ERROR, "" + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(final Call<List<User>> call, final Throwable t) {
+                showConnectionMessage(CONNECTION_FAIL, t.toString());
+            }
+        });
+    }
+
+    private void showConnectionMessage(final int status, final String message) {
+        String text = "";
+        int textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
+        switch (status) {
+            case CONNECTION_SUCCESSFUL:
+                text = "Connection successful. " + message;
+                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorOK);
+                break;
+            case CONNECTION_ERROR:
+                text = "Error while connecting to server: " + message;
+                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
+                break;
+            case CONNECTION_FAIL:
+                text = "Fail to connect to server: " + message;
+                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorError);
+                break;
+        }
+        mConnectionStatusText.setTextColor(textColor);
+        mConnectionStatusText.setText(text);
+    }
+}
