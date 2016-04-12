@@ -42,6 +42,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +65,8 @@ public class ComponentListActivity extends AppCompatActivity {
     private String TAG = ComponentDefectsActivity.class.getName();
 
     private List<Element> elementList;
+    public static Map<String, Map<String, JsonObject>> partMap = new HashMap<>();
+    public Map<String, JsonObject> elementMap = new HashMap<>();
 
     private String COMPONENTFILE = BuildConfig.COMPONENTS_JSON;
 
@@ -102,15 +106,15 @@ public class ComponentListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(DummyContent.ITEMS));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(partMap));
     }
 
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final List<DummyContent.DummyItem> mValues;
+        private final Map<String, Map<String, JsonObject>> mValues;
 
-        public SimpleItemRecyclerViewAdapter(List<DummyContent.DummyItem> items) {
+        public SimpleItemRecyclerViewAdapter(Map<String, Map<String, JsonObject>> items) {
             mValues = items;
         }
 
@@ -129,16 +133,18 @@ public class ComponentListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mItem = mValues.get(position);
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mItem = Arrays.asList(mValues.keySet().toArray()).get(position).toString();
+            Log.d(TAG, "Item: " + holder.mItem);
+            //final String id = mValues.get(position).keySet().toArray()[position].toString();
+            holder.mIdView.setText(mValues.keySet().toArray()[position].toString());
+            //holder.mContentView.setText("Test2");
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        arguments.putString(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem);
                         ComponentDetailFragment fragment = new ComponentDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -147,7 +153,7 @@ public class ComponentListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, ComponentDetailActivity.class);
-                        intent.putExtra(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem.id);
+                        intent.putExtra(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem);
 
                         context.startActivity(intent);
                     }
@@ -164,7 +170,7 @@ public class ComponentListActivity extends AppCompatActivity {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public DummyContent.DummyItem mItem;
+            public String mItem;
 
             public ViewHolder(View view) {
                 super(view);
@@ -202,13 +208,29 @@ public class ComponentListActivity extends AppCompatActivity {
                         Set<Map.Entry<String,JsonElement>> entrySet = secondObject.entrySet();
                         for (Map.Entry<String,JsonElement> entry : entrySet){
                             JsonArray secondArray = entry.getValue().getAsJsonArray();
+
                             Log.d(TAG,"Part: " + entry.getKey());
+                            JsonArray thirdArray = entry.getValue().getAsJsonArray();
+
+                            for (int j = 0; j < thirdArray.size(); j++) {
+                                JsonObject thirdObject =  thirdArray.get(j).getAsJsonObject();
+                                Set<Map.Entry<String,JsonElement>> entrySetSecond = thirdObject.entrySet();
+                                for (Map.Entry<String,JsonElement> entrySecond : entrySetSecond){
+                                    elementMap.put(entrySecond.getKey(),entrySecond.getValue().getAsJsonObject());
+                                    //Log.d(TAG,"Element: " + entrySecond.getKey());
+                                    //Log.d(TAG, "Problem: " + entrySecond.getValue());
+
+                                }
+                            }
+                            partMap.put(entry.getKey(),elementMap);
                         }
-                        Log.d(TAG,secondObject.entrySet().toString());
+
+                        //Log.d(TAG,secondObject.entrySet().toString());
 
                     }
+                    Log.d(TAG,partMap.toString());
 
-                    Log.d(TAG,"First part: " + parentArray.get(0));
+                    //Log.d(TAG,"First part: " + parentArray.get(0));
 
                     //Log.d(TAG,"Part name: " + part.getPartName());
 
