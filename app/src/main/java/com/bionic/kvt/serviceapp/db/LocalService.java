@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 public class LocalService extends Service {
 
+    private boolean isSyncing;
     private final IBinder mBinder = new LocalBinder();
 
     public class LocalBinder extends Binder {

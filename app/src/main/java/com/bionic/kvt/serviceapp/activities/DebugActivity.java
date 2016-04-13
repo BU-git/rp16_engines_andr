@@ -1,19 +1,14 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.ComponentName;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.db.LocalService;
 import com.bionic.kvt.serviceapp.models.Order;
 import com.bionic.kvt.serviceapp.models.OrderBrief;
 import com.bionic.kvt.serviceapp.models.User;
@@ -32,27 +27,6 @@ public class DebugActivity extends AppCompatActivity {
 
     private EditText orderIdInput;
     private TextView synchronisationLog;
-
-    private LocalService connectionService;
-    private boolean serviceBound = false;
-
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
-            connectionService = binder.getService();
-            serviceBound = true;
-            Toast.makeText(getApplicationContext(), "Service started!", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            DebugActivity.this.connectionService = null;
-            serviceBound = false;
-        }
-    };
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -75,13 +49,6 @@ public class DebugActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getUserList();
-
-//                if (serviceBound) {
-//                    // Call a method from the LocalService.
-//                    // However, if this call were something that might hang, then this request should
-//                    // occur in a separate thread to avoid slowing down the activity performance.
-//                    connectionService.getRandomNumber();
-//                }
             }
         });
 
@@ -110,34 +77,7 @@ public class DebugActivity extends AppCompatActivity {
             }
         });
 
-
-    }
-
-    private void showApplicationLog() {
-        final StringBuilder sb = new StringBuilder("Application log:");
-        for (String logLine : Session.getSession().getSessionLog()) {
-            sb.append("\n").append(logLine);
-        }
-        synchronisationLog.setText(sb.toString());
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         showApplicationLog();
-//        Intent intent = new Intent(this, LocalService.class);
-//        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-//        if (serviceBound) {
-//            unbindService(serviceConnection);
-//            serviceBound = false;
-//        }
     }
 
     private void getUserList() {
@@ -220,6 +160,14 @@ public class DebugActivity extends AppCompatActivity {
                 addLogMessage("Order request fail: " + t.toString());
             }
         });
+    }
+
+    private void showApplicationLog() {
+        final StringBuilder sb = new StringBuilder("Application log:");
+        for (String logLine : Session.getSession().getSessionLog()) {
+            sb.append("\n").append(logLine);
+        }
+        synchronisationLog.setText(sb.toString());
     }
 
     private void addLogMessage(String message) {

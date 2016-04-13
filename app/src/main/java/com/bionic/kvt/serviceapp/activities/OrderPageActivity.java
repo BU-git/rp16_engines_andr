@@ -1,8 +1,12 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +23,7 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
+import com.bionic.kvt.serviceapp.db.LocalService;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.LinkedList;
@@ -30,6 +35,30 @@ public class OrderPageActivity extends AppCompatActivity
     private OrderAdapter ordersAdapter;
     private RecyclerView ordersRecyclerView;
 
+    private LocalService connectionService;
+    private boolean serviceBound = false;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
+            connectionService = binder.getService();
+            serviceBound = true;
+
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.getSession().addLog("Order page service connected.");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            OrderPageActivity.this.connectionService = null;
+            serviceBound = false;
+
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.getSession().addLog("Order page service disconnected.");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +127,16 @@ public class OrderPageActivity extends AppCompatActivity
 //        ordersAdapter.notifyDataSetChanged();
         ordersRecyclerView.setAdapter(ordersAdapter);
 
-        if (BuildConfig.IS_LOGGING_ON) {
+        if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Order page created.");
-        }
+
+
+//                if (serviceBound) {
+//                    // Call a method from the LocalService.
+//                    // However, if this call were something that might hang, then this request should
+//                    // occur in a separate thread to avoid slowing down the activity performance.
+//                    connectionService.getRandomNumber();
+//                }
     }
 
     @Override
@@ -122,6 +158,21 @@ public class OrderPageActivity extends AppCompatActivity
         }
     }
 
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, LocalService.class);
+        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (serviceBound) {
+            unbindService(serviceConnection);
+            serviceBound = false;
+        }
+    }
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
