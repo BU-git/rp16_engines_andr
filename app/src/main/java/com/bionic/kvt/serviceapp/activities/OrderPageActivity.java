@@ -48,6 +48,11 @@ public class OrderPageActivity extends AppCompatActivity
 
             if (BuildConfig.IS_LOGGING_ON)
                 Session.getSession().addLog("Order page service connected.");
+
+            //This has to be run periodically while OrderPageActivity visible
+            if (serviceBound) {
+                connectionService.updateOrders();
+            }
         }
 
         @Override
@@ -130,13 +135,6 @@ public class OrderPageActivity extends AppCompatActivity
         if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Order page created.");
 
-
-//                if (serviceBound) {
-//                    // Call a method from the LocalService.
-//                    // However, if this call were something that might hang, then this request should
-//                    // occur in a separate thread to avoid slowing down the activity performance.
-//                    connectionService.getRandomNumber();
-//                }
     }
 
     @Override

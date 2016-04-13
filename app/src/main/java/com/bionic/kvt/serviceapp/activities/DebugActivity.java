@@ -81,7 +81,7 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getUserList() {
-        final Call<List<User>> userListRequest = Session.getOrderServiceApi().getAllUsers();
+        final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
 
         addLogMessage("Getting user list from " + userListRequest.request());
 
@@ -110,7 +110,7 @@ public class DebugActivity extends AppCompatActivity {
     private void getOrdersBriefList() {
         final String currentUser = Session.getSession().getEngineerEmail();
 
-        final Call<List<OrderBrief>> userListRequest = Session.getOrderServiceApi().getOrdersBrief(currentUser);
+        final Call<List<OrderBrief>> userListRequest = Session.getOrderServiceConnection().getOrdersBrief(currentUser);
 
         addLogMessage("Getting orders brief list from " + userListRequest.request());
 
@@ -139,7 +139,7 @@ public class DebugActivity extends AppCompatActivity {
     private void getOrderById(long id) {
         final String currentUser = Session.getSession().getEngineerEmail();
 
-        final Call<Order> orderRequest = Session.getOrderServiceApi().getOrder(id, currentUser);
+        final Call<Order> orderRequest = Session.getOrderServiceConnection().getOrder(id, currentUser);
 
         addLogMessage("Getting order from " + orderRequest.request());
 

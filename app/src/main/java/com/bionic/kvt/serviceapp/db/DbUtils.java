@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.db;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.models.OrderBrief;
 
 import java.util.List;
 
@@ -12,9 +13,9 @@ public class DbUtils {
 
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
-        if (BuildConfig.IS_LOGGING_ON) {
+        if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Resetting User table.");
-        }
+
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -88,10 +89,69 @@ public class DbUtils {
         realm.close();
     }
 
+    public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.getSession().addLog("Looking for orders to be updated.");
+        // Code to generate List<OrderBrief> - Orders actually newer on Server than in app database
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.getSession().addLog("Found XXX orders to be updated.");
+        return null;
+    }
+
+    public static void updateOrderTableFromServer(final com.bionic.kvt.serviceapp.models.Order serverOrder) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.getSession().addLog("Updating order table from server order data: " + serverOrder.getNumber());
+
+
+//        final Realm realm = Realm.getDefaultInstance();
+//
+//        final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
+//
+//        // Set all current users in DB not on server
+//        realm.beginTransaction();
+//        for (User userInDb : allCurrentUsers) {
+//            userInDb.setOnServer(false);
+//        }
+//        realm.where(User.class).equalTo("email", "demo@kvt.nl").findAll().get(0).setOnServer(true);
+//        realm.commitTransaction(); //No logic if transaction fail!!!
+//
+//        // Updating users in DB
+//        realm.beginTransaction();
+//        for (com.bionic.kvt.serviceapp.models.User userOnServer : serverUserList) {
+//            // Searching for user in DB
+//            RealmResults<User> getUserInDb = realm.where(User.class)
+//                    .equalTo("email", userOnServer.getEmail())
+//                    .findAll();
+//
+//            if (getUserInDb.size() == 1) { // We have this user on DB, updating it
+//                User thisUser = getUserInDb.get(0);
+//                thisUser.setName(userOnServer.getName());
+//                thisUser.setPassword(userOnServer.getPassword());
+//                thisUser.setOnServer(true);
+//            } else { // New user, creating it in DB
+//                User newUser = realm.createObject(User.class);
+//                newUser.setName(userOnServer.getName());
+//                newUser.setEmail(userOnServer.getEmail());
+//                newUser.setPassword(userOnServer.getPassword());
+//                newUser.setOnServer(true);
+//            }
+//        }
+//        realm.commitTransaction(); //No logic if transaction fail!!!
+//
+//        // Returning updated in DB User count;
+//        final int count = realm.where(User.class).equalTo("isOnServer", true).findAll().size();
+//        realm.close();
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.getSession().addLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+
+    }
+
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.models.User> serverUserList) {
-        if (BuildConfig.IS_LOGGING_ON) {
+        if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Updating User table from server data");
-        }
+
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -135,9 +195,9 @@ public class DbUtils {
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
-        if (BuildConfig.IS_LOGGING_ON) {
+        if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Validating user: " + email + " : " + password);
-        }
+
 
         Realm realm = Realm.getDefaultInstance();
 
@@ -153,9 +213,9 @@ public class DbUtils {
     }
 
     public static void setUserSession(String email) {
-        if (BuildConfig.IS_LOGGING_ON) {
+        if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Setting user session: " + email);
-        }
+
 
         Session.getSession().clearSession();
 

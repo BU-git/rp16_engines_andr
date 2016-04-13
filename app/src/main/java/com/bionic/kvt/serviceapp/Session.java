@@ -2,7 +2,7 @@ package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
 
-import com.bionic.kvt.serviceapp.api.OrderServiceApi;
+import com.bionic.kvt.serviceapp.api.OrderServiceConnection;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Session extends Application {
 
     private static Session currentUserSession;
-    private OrderServiceApi orderServiceApi;
+    private OrderServiceConnection orderServiceConnection;
     private ArrayList<String> sessionLog;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
@@ -36,7 +36,7 @@ public class Session extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        orderServiceApi = retrofit.create(OrderServiceApi.class);
+        orderServiceConnection = retrofit.create(OrderServiceConnection.class);
 
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .name(BuildConfig.DB_NAME)
@@ -46,8 +46,8 @@ public class Session extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
-    public static OrderServiceApi getOrderServiceApi() {
-        return currentUserSession.orderServiceApi;
+    public static OrderServiceConnection getOrderServiceConnection() {
+        return currentUserSession.orderServiceConnection;
     }
 
     public static Session getSession() {

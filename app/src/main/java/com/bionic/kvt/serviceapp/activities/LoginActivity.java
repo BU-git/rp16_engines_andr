@@ -433,7 +433,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (BuildConfig.IS_LOGGING_ON) {
             Session.getSession().addLog("Conneting to server for user list update");
         }
-        final Call<List<User>> userListRequest = Session.getOrderServiceApi().getAllUsers();
+        final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
