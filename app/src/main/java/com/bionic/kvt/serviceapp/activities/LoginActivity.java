@@ -37,6 +37,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
@@ -429,6 +430,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void updateUserList() {
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Conneting to server for user list update");
+        }
         final Call<List<User>> userListRequest = Session.getOrderServiceApi().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
@@ -479,5 +483,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
         mConnectionStatusText.setTextColor(textColor);
         mConnectionStatusText.setText(text);
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog(text);
+        }
     }
 }

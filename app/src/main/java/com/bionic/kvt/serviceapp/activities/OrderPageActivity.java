@@ -7,22 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
-import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import io.realm.Realm;
 
 public class OrderPageActivity extends AppCompatActivity
         implements OrderAdapter.OnOrderLineClickListener, OrderAdapter.OnPDFButtonClickListener {
@@ -36,7 +36,7 @@ public class OrderPageActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
 
-        DbUtils.resetOrderTableWithSubTables();
+//        DbUtils.resetOrderTableWithSubTables();
 
 
         //Configuring Search view
@@ -81,16 +81,6 @@ public class OrderPageActivity extends AppCompatActivity
             }
         });
 
-        // Configuring connection button
-        Button connectionStatus = (Button) findViewById(R.id.service_engineer_connection_button);
-        connectionStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ConnectionActivity.class);
-                startActivity(intent);
-            }
-        });
-
 
         // Configuring engineer Id
         TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
@@ -105,8 +95,33 @@ public class OrderPageActivity extends AppCompatActivity
         // Showing all orders
         ordersAdapter = new OrderAdapter(Session.ordersDataSet);
         ordersAdapter.setOnOrderLineClickListener(this, this);
+//        ordersAdapter.notifyDataSetChanged();
         ordersRecyclerView.setAdapter(ordersAdapter);
+
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Order page created.");
+        }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int id = item.getItemId();
+        switch (id) {
+            case R.id.show_log:
+                Intent intent = new Intent(getApplicationContext(), DebugActivity.class);
+                startActivity(intent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     public void OnOrderLineClicked(View view, int position) {

@@ -56,7 +56,7 @@
             android:parentActivityName=".activities.NSAActivity"
             android:screenOrientation="sensorPortrait" />
         <activity
-            android:name=".activities.ConnectionActivity"
+            android:name=".activities.DebugActivity"
             android:parentActivityName=".activities.OrderPageActivity" />
 
         <service android:name=".db.LocalService" />

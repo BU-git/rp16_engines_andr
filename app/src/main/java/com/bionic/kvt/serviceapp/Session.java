@@ -4,12 +4,14 @@ import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.OrderServiceApi;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmMigration;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -17,6 +19,7 @@ public class Session extends Application {
 
     private static Session currentUserSession;
     private OrderServiceApi orderServiceApi;
+    private ArrayList<String> sessionLog;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
     public static final int ORDER_STATUS_IN_PROGRESS = 1;
@@ -26,6 +29,7 @@ public class Session extends Application {
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
+        sessionLog = new ArrayList<>();
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BACK_OFFICE_HOST)
@@ -91,6 +95,14 @@ public class Session extends Application {
         orderStatus = null;
         checkBoxInstructions = false;
         checkBoxLMRA = false;
+    }
+
+    public ArrayList<String> getSessionLog() {
+        return sessionLog;
+    }
+
+    public void addLog(String text) {
+        sessionLog.add("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(Calendar.getInstance().getTime()) + "] " + text);
     }
 
     public String getOrderStatus() {

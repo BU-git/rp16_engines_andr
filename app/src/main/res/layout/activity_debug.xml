@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.ConnectionActivity">
+    tools:context=".activities.DebugActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,9 +21,39 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Synchronisation status"
+            android:text="Application log"
             android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/refresh_log"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refresh log" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_orders_space" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?listPreferredItemHeightSmall"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:textAppearance="?android:textAppearanceMedium">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Test requests (no change to database)"
+            android:textColor="@color/colorSecondaryText"
+            />
 
         <Button
             android:id="@+id/connection_get_users"
@@ -41,6 +71,7 @@
             android:id="@+id/connection_order_id"
             android:layout_width="100dp"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/activity_search_space"
             android:background="@color/colorSecondaryBackground"
             android:inputType="numberDecimal" />
 

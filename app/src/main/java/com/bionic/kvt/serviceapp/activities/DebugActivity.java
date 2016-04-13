@@ -1,12 +1,10 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ConnectionActivity extends AppCompatActivity {
+public class DebugActivity extends AppCompatActivity {
     private List<User> userListOnServer = new ArrayList<>();
     private List<OrderBrief> orderBriefList = new ArrayList<>();
     private Order order;
@@ -50,7 +48,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            ConnectionActivity.this.connectionService = null;
+            DebugActivity.this.connectionService = null;
             serviceBound = false;
         }
     };
@@ -59,9 +57,18 @@ public class ConnectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_connection);
+        setContentView(R.layout.activity_debug);
 
         synchronisationLog = (TextView) findViewById(R.id.synchronisation_log);
+
+        final Button refreshLog = (Button) findViewById(R.id.refresh_log);
+        refreshLog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showApplicationLog();
+            }
+        });
+
 
         final Button getUsers = (Button) findViewById(R.id.connection_get_users);
         getUsers.setOnClickListener(new View.OnClickListener() {
@@ -106,23 +113,31 @@ public class ConnectionActivity extends AppCompatActivity {
 
     }
 
+    private void showApplicationLog() {
+        final StringBuilder sb = new StringBuilder("Application log:");
+        for (String logLine : Session.getSession().getSessionLog()) {
+            sb.append("\n").append(logLine);
+        }
+        synchronisationLog.setText(sb.toString());
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        Intent intent = new Intent(this, LocalService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        showApplicationLog();
+//        Intent intent = new Intent(this, LocalService.class);
+//        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        if (serviceBound) {
-            unbindService(serviceConnection);
-            serviceBound = false;
-        }
+//        if (serviceBound) {
+//            unbindService(serviceConnection);
+//            serviceBound = false;
+//        }
     }
 
     private void getUserList() {
@@ -209,7 +224,7 @@ public class ConnectionActivity extends AppCompatActivity {
 
     private void addLogMessage(String message) {
         String logText = synchronisationLog.getText().toString();
-        logText = logText + "\n" + message;
+        logText = logText + "\n[TEST] ==> " + message;
         synchronisationLog.setText(logText);
     }
 }

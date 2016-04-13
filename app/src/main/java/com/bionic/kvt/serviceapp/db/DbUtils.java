@@ -1,17 +1,21 @@
 package com.bionic.kvt.serviceapp.db;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DbUtils {
 
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Resetting User table.");
+        }
+
         final Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
@@ -40,34 +44,34 @@ public class DbUtils {
         realm.clear(Relation.class);
         realm.clear(Task.class);
         realm.commitTransaction();
-
-        realm.beginTransaction();
-        Order order = realm.createObject(Order.class);
-
-        Relation relation = realm.createObject(Relation.class);
-        order.setRelation(relation);
-
-        Employee employee = realm.createObject(Employee.class);
-        order.setEmployee(employee);
-
-        Installation installation = realm.createObject(Installation.class);
-        order.setInstallation(installation);
-
-        Task task = realm.createObject(Task.class);
-        RealmList<Task> taskRealmList = new RealmList<>(task);
-        order.setTasks(taskRealmList);
-
-        Component component = realm.createObject(Component.class);
-        RealmList<Component> componentRealmList = new RealmList<>(component);
-        order.setComponents(componentRealmList);
-
-        Part part = realm.createObject(Part.class);
-        RealmList<Part> partRealmList = new RealmList<>(part);
-        order.setParts(partRealmList);
-
-        Info info = realm.createObject(Info.class);
-        RealmList<Info> infoRealmList = new RealmList<>(info);
-        order.setExtraInfo(infoRealmList);
+//
+//        realm.beginTransaction();
+//        Order order = realm.createObject(Order.class);
+//
+//        Relation relation = realm.createObject(Relation.class);
+//        order.setRelation(relation);
+//
+//        Employee employee = realm.createObject(Employee.class);
+//        order.setEmployee(employee);
+//
+//        Installation installation = realm.createObject(Installation.class);
+//        order.setInstallation(installation);
+//
+//        Task task = realm.createObject(Task.class);
+//        RealmList<Task> taskRealmList = new RealmList<>(task);
+//        order.setTasks(taskRealmList);
+//
+//        Component component = realm.createObject(Component.class);
+//        RealmList<Component> componentRealmList = new RealmList<>(component);
+//        order.setComponents(componentRealmList);
+//
+//        Part part = realm.createObject(Part.class);
+//        RealmList<Part> partRealmList = new RealmList<>(part);
+//        order.setParts(partRealmList);
+//
+//        Info info = realm.createObject(Info.class);
+//        RealmList<Info> infoRealmList = new RealmList<>(info);
+//        order.setExtraInfo(infoRealmList);
 
         realm.commitTransaction();
 
@@ -85,10 +89,13 @@ public class DbUtils {
     }
 
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.models.User> serverUserList) {
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Updating User table from server data");
+        }
+
         final Realm realm = Realm.getDefaultInstance();
 
         final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
-        int index;
 
         // Set all current users in DB not on server
         realm.beginTransaction();
@@ -128,6 +135,10 @@ public class DbUtils {
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Validating user: " + email + " : " + password);
+        }
+
         Realm realm = Realm.getDefaultInstance();
 
         boolean res = realm.where(User.class)
@@ -142,6 +153,10 @@ public class DbUtils {
     }
 
     public static void setUserSession(String email) {
+        if (BuildConfig.IS_LOGGING_ON) {
+            Session.getSession().addLog("Setting user session: " + email);
+        }
+
         Session.getSession().clearSession();
 
         final Realm realm = Realm.getDefaultInstance();
