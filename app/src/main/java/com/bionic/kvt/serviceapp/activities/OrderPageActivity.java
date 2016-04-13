@@ -51,7 +51,7 @@ public class OrderPageActivity extends AppCompatActivity
 
             //This has to be run periodically while OrderPageActivity visible
             if (serviceBound) {
-                connectionService.updateOrders();
+                connectionService.runTask();
             }
         }
 
@@ -64,6 +64,7 @@ public class OrderPageActivity extends AppCompatActivity
                 Session.getSession().addLog("Order page service disconnected.");
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,7 @@ public class OrderPageActivity extends AppCompatActivity
         super.onStop();
 
         if (serviceBound) {
+            connectionService.stopTask();
             unbindService(serviceConnection);
             serviceBound = false;
         }

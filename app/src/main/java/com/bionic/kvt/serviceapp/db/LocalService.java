@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.db;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -18,6 +19,8 @@ import retrofit2.Response;
 
 public class LocalService extends Service {
     private boolean isSyncing = false;
+    final Handler handler = new Handler();
+    private static final long UPDATE_PERIOD = 10_000; // 60 sec
     private final IBinder mBinder = new LocalBinder();
 
     public class LocalBinder extends Binder {
@@ -30,6 +33,23 @@ public class LocalService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
+    }
+
+    private Runnable updateTask = new Runnable() {
+        @Override
+        public void run() {
+            updateOrders();
+            handler.postDelayed(this, UPDATE_PERIOD);
+        }
+    };
+
+    public void runTask() {
+        updateOrders();
+        handler.postDelayed(updateTask, UPDATE_PERIOD);
+    }
+
+    public void stopTask(){
+        handler.removeCallbacks(updateTask);
     }
 
     public void updateOrders() {
@@ -84,7 +104,6 @@ public class LocalService extends Service {
             }
         });
     }
-
 
     private void getOrderFomServer(long orderNumber, String user) {
         final Call<com.bionic.kvt.serviceapp.models.Order> orderRequest = Session.getOrderServiceConnection().getOrder(orderNumber, user);
