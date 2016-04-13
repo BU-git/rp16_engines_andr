@@ -20,6 +20,7 @@ public class Session extends Application {
     private static Session currentUserSession;
     private OrderServiceConnection orderServiceConnection;
     private ArrayList<String> sessionLog;
+    private static int connectionAttemptCount;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
     public static final int ORDER_STATUS_IN_PROGRESS = 1;
@@ -103,6 +104,10 @@ public class Session extends Application {
 
     public void addLog(String text) {
         sessionLog.add("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(Calendar.getInstance().getTime()) + "] " + text);
+    }
+
+    public static int getAndAddConnectionAttemptCount() {
+        return ++connectionAttemptCount;
     }
 
     public String getOrderStatus() {

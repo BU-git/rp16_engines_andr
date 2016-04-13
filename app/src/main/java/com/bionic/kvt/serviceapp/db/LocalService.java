@@ -1,5 +1,6 @@
 package com.bionic.kvt.serviceapp.db;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -19,14 +20,26 @@ import retrofit2.Response;
 
 public class LocalService extends Service {
     private boolean isSyncing = false;
-    final Handler handler = new Handler();
-    private static final long UPDATE_PERIOD = 10_000; // 60 sec
+    private final Handler handler = new Handler();
+    private static final long UPDATE_PERIOD = 30_000; // 60 sec
+
+    private Callbacks orderActivity;
     private final IBinder mBinder = new LocalBinder();
 
     public class LocalBinder extends Binder {
         public LocalService getService() {
             return LocalService.this;
         }
+    }
+
+    //callbacks interface for communication with service client - OrderPageActivity!
+    public interface Callbacks {
+        public void updateUpdateStatus(String message);
+    }
+
+    //Here Order Activity register to the service as Callbacks client
+    public void registerClient(Activity activity) {
+        this.orderActivity = (Callbacks) activity;
     }
 
     @Nullable
@@ -44,11 +57,10 @@ public class LocalService extends Service {
     };
 
     public void runTask() {
-        updateOrders();
         handler.postDelayed(updateTask, UPDATE_PERIOD);
     }
 
-    public void stopTask(){
+    public void stopTask() {
         handler.removeCallbacks(updateTask);
     }
 
@@ -92,6 +104,7 @@ public class LocalService extends Service {
                 } else {
                     if (BuildConfig.IS_LOGGING_ON)
                         Session.getSession().addLog("Orders brief list request error: " + response.code());
+                    orderActivity.updateUpdateStatus("[" + Session.getAndAddConnectionAttemptCount()+ "] Orders brief list request error: " + response.code());
                     isSyncing = false;
                 }
             }
@@ -100,6 +113,7 @@ public class LocalService extends Service {
             public void onFailure(final Call<List<OrderBrief>> call, final Throwable t) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.getSession().addLog("Orders brief list request fail: " + t.toString());
+                orderActivity.updateUpdateStatus("Orders brief list request fail: " + t.toString());
                 isSyncing = false;
             }
         });

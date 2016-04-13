@@ -52,8 +52,7 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="Test requests (no change to database)"
-            android:textColor="@color/colorSecondaryText"
-            />
+            android:textColor="@color/colorSecondaryText" />
 
         <Button
             android:id="@+id/connection_get_users"

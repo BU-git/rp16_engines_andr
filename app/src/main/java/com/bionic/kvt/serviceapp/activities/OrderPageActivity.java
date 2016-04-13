@@ -29,14 +29,17 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import java.util.LinkedList;
 import java.util.List;
 
-public class OrderPageActivity extends AppCompatActivity
-        implements OrderAdapter.OnOrderLineClickListener, OrderAdapter.OnPDFButtonClickListener {
+public class OrderPageActivity extends AppCompatActivity implements
+        OrderAdapter.OnOrderLineClickListener,
+        OrderAdapter.OnPDFButtonClickListener,
+        LocalService.Callbacks {
 
     private OrderAdapter ordersAdapter;
     private RecyclerView ordersRecyclerView;
 
     private LocalService connectionService;
     private boolean serviceBound = false;
+    private TextView orderUpdateStatusText;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -45,6 +48,8 @@ public class OrderPageActivity extends AppCompatActivity
             LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
             connectionService = binder.getService();
             serviceBound = true;
+
+            connectionService.registerClient(OrderPageActivity.this);
 
             if (BuildConfig.IS_LOGGING_ON)
                 Session.getSession().addLog("Order page service connected.");
@@ -73,6 +78,8 @@ public class OrderPageActivity extends AppCompatActivity
 
 //        DbUtils.resetOrderTableWithSubTables();
 
+
+        orderUpdateStatusText = (TextView) findViewById(R.id.order_update_status);
 
         //Configuring Search view
         SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
@@ -221,5 +228,10 @@ public class OrderPageActivity extends AppCompatActivity
         }
 
         ordersRecyclerView.swapAdapter(ordersAdapter, false);
+    }
+
+    @Override
+    public void updateUpdateStatus(String message) {
+        orderUpdateStatusText.setText(message);
     }
 }
