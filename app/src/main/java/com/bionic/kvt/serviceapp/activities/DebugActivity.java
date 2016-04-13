@@ -9,9 +9,10 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.models.Order;
-import com.bionic.kvt.serviceapp.models.OrderBrief;
-import com.bionic.kvt.serviceapp.models.User;
+import com.bionic.kvt.serviceapp.api.Order;
+import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.api.User;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +109,10 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getOrdersBriefList() {
-        final String currentUser = Session.getSession().getEngineerEmail();
+        final String currentUserId = Utils.getUserIdFromEmail(Session.getSession().getEngineerEmail());
 
-        final Call<List<OrderBrief>> userListRequest = Session.getOrderServiceConnection().getOrdersBrief(currentUser);
+        final Call<List<OrderBrief>> userListRequest =
+                Session.getOrderServiceConnection().getOrdersBrief(currentUserId);
 
         addLogMessage("Getting orders brief list from " + userListRequest.request());
 
@@ -137,9 +139,9 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getOrderById(long id) {
-        final String currentUser = Session.getSession().getEngineerEmail();
+        final String currentUserId = Utils.getUserIdFromEmail(Session.getSession().getEngineerEmail());
 
-        final Call<Order> orderRequest = Session.getOrderServiceConnection().getOrder(id, currentUser);
+        final Call<Order> orderRequest = Session.getOrderServiceConnection().getOrder(id, currentUserId);
 
         addLogMessage("Getting order from " + orderRequest.request());
 

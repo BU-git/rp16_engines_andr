@@ -2,7 +2,7 @@ package com.bionic.kvt.serviceapp.db;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.models.OrderBrief;
+import com.bionic.kvt.serviceapp.api.OrderBrief;
 
 import java.util.List;
 
@@ -99,7 +99,7 @@ public class DbUtils {
         return null;
     }
 
-    public static void updateOrderTableFromServer(final com.bionic.kvt.serviceapp.models.Order serverOrder) {
+    public static void updateOrderTableFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Updating order table from server order data: " + serverOrder.getNumber());
 
@@ -118,7 +118,7 @@ public class DbUtils {
 //
 //        // Updating users in DB
 //        realm.beginTransaction();
-//        for (com.bionic.kvt.serviceapp.models.User userOnServer : serverUserList) {
+//        for (com.bionic.kvt.serviceapp.api.User userOnServer : serverUserList) {
 //            // Searching for user in DB
 //            RealmResults<User> getUserInDb = realm.where(User.class)
 //                    .equalTo("email", userOnServer.getEmail())
@@ -148,7 +148,7 @@ public class DbUtils {
 
     }
 
-    public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.models.User> serverUserList) {
+    public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Updating User table from server data");
 
@@ -167,7 +167,7 @@ public class DbUtils {
 
         // Updating users in DB
         realm.beginTransaction();
-        for (com.bionic.kvt.serviceapp.models.User userOnServer : serverUserList) {
+        for (com.bionic.kvt.serviceapp.api.User userOnServer : serverUserList) {
             // Searching for user in DB
             RealmResults<User> getUserInDb = realm.where(User.class)
                     .equalTo("email", userOnServer.getEmail())

@@ -43,7 +43,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
-import com.bionic.kvt.serviceapp.models.User;
+import com.bionic.kvt.serviceapp.api.User;
 
 import java.util.ArrayList;
 import java.util.List;

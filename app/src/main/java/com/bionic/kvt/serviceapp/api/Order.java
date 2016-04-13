@@ -1,4 +1,4 @@
-package com.bionic.kvt.serviceapp.models;
+package com.bionic.kvt.serviceapp.api;
 
 import java.util.Date;
 import java.util.List;

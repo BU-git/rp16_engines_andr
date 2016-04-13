@@ -1,19 +1,13 @@
 package com.bionic.kvt.serviceapp.api;
 
 
-import com.bionic.kvt.serviceapp.models.Order;
-import com.bionic.kvt.serviceapp.models.OrderBrief;
-import com.bionic.kvt.serviceapp.models.User;
-
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface OrderServiceConnection {
 
@@ -33,14 +27,14 @@ public interface OrderServiceConnection {
 //    Call<List<OrderBrief>> getOrdersBrief(@Query("user") String email);
     @FormUrlEncoded
     @POST("orders/brief")
-    Call<List<OrderBrief>> getOrdersBrief(@Field("user") String email);
+    Call<List<OrderBrief>> getOrdersBrief(@Field("user") String userId);
 
     // Request one order with {number} for {user}
     // URL format /orders/{number}?user={email}
     // Expecting JSON
     @FormUrlEncoded
     @POST("orders/{number}")
-    Call<Order> getOrder(@Path("number") long number, @Field("user") String email);
+    Call<Order> getOrder(@Path("number") long number, @Field("user") String userId);
 
 //    @GET("orders/{number}")
 //    Call<Order> getOrder(@Path("number") long number, @Query("user") String email);

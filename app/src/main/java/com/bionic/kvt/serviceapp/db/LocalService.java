@@ -10,7 +10,9 @@ import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.models.OrderBrief;
+import com.bionic.kvt.serviceapp.api.Order;
+import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.List;
 
@@ -57,6 +59,7 @@ public class LocalService extends Service {
     };
 
     public void runTask() {
+        updateOrders();
         handler.postDelayed(updateTask, UPDATE_PERIOD);
     }
 
@@ -75,8 +78,9 @@ public class LocalService extends Service {
     }
 
     private void getOrdersBriefListFromServer() {
-        final String currentUser = Session.getSession().getEngineerEmail();
-        final Call<List<OrderBrief>> orderBriefListRequest = Session.getOrderServiceConnection().getOrdersBrief(currentUser);
+        final String currentUserId = Utils.getUserIdFromEmail(Session.getSession().getEngineerEmail());
+        final Call<List<OrderBrief>> orderBriefListRequest =
+                Session.getOrderServiceConnection().getOrdersBrief(currentUserId);
 
         if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Getting orders brief list from: " + orderBriefListRequest.request());
@@ -94,11 +98,11 @@ public class LocalService extends Service {
                         Session.getSession().addLog("Getting orders from server.");
 
                     for (OrderBrief orderBrief : ordersToBeUpdated) {
-                        getOrderFomServer(orderBrief.getNumber(), currentUser);
+                        getOrderFomServer(orderBrief.getNumber(), currentUserId);
                     }
 
                     if (BuildConfig.IS_LOGGING_ON)
-                        Session.getSession().addLog("Orders update compleete!");
+                        Session.getSession().addLog("Orders update complete!");
                     isSyncing = false;
 
                 } else {
@@ -119,16 +123,17 @@ public class LocalService extends Service {
         });
     }
 
-    private void getOrderFomServer(long orderNumber, String user) {
-        final Call<com.bionic.kvt.serviceapp.models.Order> orderRequest = Session.getOrderServiceConnection().getOrder(orderNumber, user);
+    private void getOrderFomServer(long orderNumber, String userId) {
+        final Call<Order> orderRequest =
+                Session.getOrderServiceConnection().getOrder(orderNumber, userId);
 
         if (BuildConfig.IS_LOGGING_ON)
             Session.getSession().addLog("Getting order from: " + orderRequest.request());
 
-        orderRequest.enqueue(new Callback<com.bionic.kvt.serviceapp.models.Order>() {
+        orderRequest.enqueue(new Callback<Order>() {
             @Override
-            public void onResponse(final Call<com.bionic.kvt.serviceapp.models.Order> call,
-                                   final Response<com.bionic.kvt.serviceapp.models.Order> response) {
+            public void onResponse(final Call<com.bionic.kvt.serviceapp.api.Order> call,
+                                   final Response<Order> response) {
                 if (response.isSuccessful()) {
                     if (BuildConfig.IS_LOGGING_ON)
                         Session.getSession().addLog("Request successful!");
@@ -142,7 +147,7 @@ public class LocalService extends Service {
             }
 
             @Override
-            public void onFailure(final Call<com.bionic.kvt.serviceapp.models.Order> call, final Throwable t) {
+            public void onFailure(final Call<Order> call, final Throwable t) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.getSession().addLog("Order request fail: " + t.toString());
             }

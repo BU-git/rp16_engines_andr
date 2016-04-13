@@ -47,4 +47,8 @@ public class Utils {
         return storageDir;
     }
 
+    public static String getUserIdFromEmail(String email){
+        return email.substring(0, email.indexOf('@'));
+    }
+
 }

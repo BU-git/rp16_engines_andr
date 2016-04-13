@@ -1,4 +1,4 @@
-package com.bionic.kvt.serviceapp.models;
+package com.bionic.kvt.serviceapp.api;
 
 public class Relation {
     private int number; //nummer
