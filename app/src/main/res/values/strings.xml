@@ -19,7 +19,7 @@
     <string name="order_number">Order number</string>
 
     <string name="date">Date</string>
-    <string name="device_type">Device type</string>
+    <string name="installation">Installation</string>
     <string name="task">Task</string>
     <string name="address">Address</string>
     <string name="status">Status</string>

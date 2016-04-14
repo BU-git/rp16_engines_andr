@@ -127,7 +127,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/device_type"
+            android:text="@string/installation"
             android:textColor="@color/colorSecondaryText" />
 
         <TextView

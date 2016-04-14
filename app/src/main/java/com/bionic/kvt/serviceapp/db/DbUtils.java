@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.db;
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -58,6 +59,31 @@ public class DbUtils {
             }
         }
         realm.close();
+    }
+
+    public static void updateOrderOverviewList() {
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating Order Overview List");
+
+        final Realm realm = Realm.getDefaultInstance();
+        final List<Order> allOrdersInDb = realm.where(Order.class).findAll();
+
+        Session.getOrderOverviewList().clear();
+        for (Order order : allOrdersInDb) {
+            final OrderOverview orderOverview = new OrderOverview();
+            orderOverview.setNumber(order.getNumber());
+            orderOverview.setDate(order.getDate());
+            orderOverview.setInstallationName(order.getInstallation().getName());
+            orderOverview.setTaskLtxa1(order.getTasks().first().getLtxa1());
+            orderOverview.setInstallationAddress(order.getInstallation().getAddress());
+            orderOverview.setOrderStatus(order.getOrderStatus());
+            orderOverview.setPdfString("PDF");
+
+            Session.getOrderOverviewList().add(orderOverview);
+        }
+
+        realm.close();
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Added " + Session.getOrderOverviewList().size() + " orders.");
     }
 
     public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {

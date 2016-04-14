@@ -23,12 +23,14 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.LocalService;
+import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 
 public class OrderPageActivity extends AppCompatActivity implements
@@ -65,7 +67,8 @@ public class OrderPageActivity extends AppCompatActivity implements
             OrderPageActivity.this.connectionService = null;
             serviceBound = false;
 
-            if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page service disconnected.");
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Order page service disconnected.");
         }
     };
 
@@ -131,13 +134,15 @@ public class OrderPageActivity extends AppCompatActivity implements
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager ordersLayoutManager =
-                new GridLayoutManager(this, Session.ordersDataSetColNumber);
+                new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
+        // Generating OrderOverviewList
+        DbUtils.updateOrderOverviewList();
+
         // Showing all orders
-        ordersAdapter = new OrderAdapter(Session.ordersDataSet);
+        ordersAdapter = new OrderAdapter(Session.getOrderOverviewList());
         ordersAdapter.setOnOrderLineClickListener(this, this);
-//        ordersAdapter.notifyDataSetChanged();
         ordersRecyclerView.setAdapter(ordersAdapter);
 
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page created.");
@@ -182,8 +187,10 @@ public class OrderPageActivity extends AppCompatActivity implements
     @Override
     public void OnOrderLineClicked(View view, int position) {
         // Setting selected Order number to current session
-        Session.setCurrentOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
-//        Session.getSession().setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
+        Session.setCurrentOrderNumber(
+                Session.getOrderOverviewList().
+                        get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber()
+        );
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -192,7 +199,10 @@ public class OrderPageActivity extends AppCompatActivity implements
     @Override
     public void OnPDFButtonClicked(View view, int position) {
         // Setting selected Order number to current session
-        Session.setCurrentOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+        Session.setCurrentOrderNumber(
+                Session.getOrderOverviewList().
+                        get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber()
+        );
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
 
@@ -214,18 +224,18 @@ public class OrderPageActivity extends AppCompatActivity implements
 
     private void doOrdersSearch(String query) {
         if ("".equals(query)) {
-            ordersAdapter.setOrdersDataSet(Session.ordersDataSet);
+            ordersAdapter.setOrdersDataSet(Session.getOrderOverviewList());
         } else {
-            List<String[]> searchOrdersDataSet = new LinkedList<>();
-            for (String[] oneOrder : Session.ordersDataSet) {
-                if (oneOrder[0].contains(query)) {
-                    searchOrdersDataSet.add(oneOrder);
+            List<OrderOverview> searchOrderOverview = new ArrayList<>();
+            for (OrderOverview oneOrder : Session.getOrderOverviewList()) {
+                if (oneOrder.getNumber().toString().contains(query)) {
+                    searchOrderOverview.add(oneOrder);
                 }
             }
-            ordersAdapter.setOrdersDataSet(searchOrdersDataSet);
+            ordersAdapter.setOrdersDataSet(searchOrderOverview);
         }
-
-        ordersRecyclerView.swapAdapter(ordersAdapter, false);
+        ordersAdapter.notifyDataSetChanged();
+//        ordersRecyclerView.swapAdapter(ordersAdapter, false);
     }
 
     @Override
