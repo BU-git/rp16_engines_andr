@@ -6,6 +6,7 @@ import com.bionic.kvt.serviceapp.api.OrderServiceConnection;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -128,7 +129,37 @@ public class Session extends Application {
     }
 
 
-    //ALL DOWN IS FOR TEST
+    // ALL DOWN IS FOR TEST
+
+    public static void setDemoData() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        OrderOverview orderOverview = new OrderOverview();
+        orderOverview.setNumber(4013730);
+        try {
+            orderOverview.setDate(sdf.parse("2016-04-05"));
+        } catch (ParseException e) {
+        }
+        orderOverview.setInstallationName("Viatel Doorn 1");
+        orderOverview.setTaskLtxa1("Serviceonderhoud noodstroominstallatie");
+        orderOverview.setInstallationAddress("Leersumsestraatweg");
+        orderOverview.setOrderStatus(ORDER_STATUS_NOT_STARTED);
+        orderOverview.setPdfString("PDF");
+        currentUserSession.orderOverviewList.add(orderOverview);
+
+        OrderOverview orderOverview2 = new OrderOverview();
+        orderOverview2.setNumber(4014137);
+        try {
+            orderOverview2.setDate(sdf.parse("2016-04-06"));
+        } catch (ParseException e) {
+        }
+        orderOverview2.setInstallationName("Petrochemical Pipeline Services");
+        orderOverview2.setTaskLtxa1("Belast beproeven extern");
+        orderOverview2.setInstallationAddress("Sanderboutlaan");
+        orderOverview2.setOrderStatus(ORDER_STATUS_NOT_STARTED);
+        orderOverview2.setPdfString("PDF");
+        currentUserSession.orderOverviewList.add(orderOverview2);
+    }
 
     private boolean checkBoxInstructions;
     private boolean checkBoxLMRA;

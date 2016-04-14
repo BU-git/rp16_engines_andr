@@ -12,11 +12,13 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
     private List<OrderOverview> orderOverviewList;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     OnOrderLineClickListener onOrderLineClickListener;
     OnPDFButtonClickListener onPDFButtonClickListener;
@@ -80,7 +82,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 1: // Column Date
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
-                textCell.setText(orderOverviewList.get(row).getDate().toString());
+                textCell.setText(simpleDateFormat.format(orderOverviewList.get(row).getDate()));
                 break;
 
             case 2: // Column Installation
@@ -104,22 +106,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 5: // Column Status
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
-                textCell.setText(orderOverviewList.get(row).getInstallationAddress());
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE)
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+                    textCell.setText("Complete");
                     textCell.setTextColor(Color.parseColor("#388E3C"));
+                }
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS)
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+                    textCell.setText("In progress");
                     textCell.setTextColor(Color.parseColor("#FFA000"));
+                }
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED)
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+                    textCell.setText("Not started");
                     textCell.setTextColor(Color.parseColor("#CC0234"));
+                }
                 break;
 
             case 6: // Column PDF Button
                 textCell.setVisibility(View.GONE);
                 buttonCell.setVisibility(View.VISIBLE);
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE)
+                if (orderOverviewList.get(row).getOrderStatus() != Session.ORDER_STATUS_COMPLETE)
                     buttonCell.setEnabled(false);
                 break;
         }

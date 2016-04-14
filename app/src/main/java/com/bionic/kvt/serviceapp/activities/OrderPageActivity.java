@@ -140,6 +140,7 @@ public class OrderPageActivity extends AppCompatActivity implements
         // Generating OrderOverviewList
         DbUtils.updateOrderOverviewList();
 
+        Session.setDemoData();
         // Showing all orders
         ordersAdapter = new OrderAdapter(Session.getOrderOverviewList());
         ordersAdapter.setOnOrderLineClickListener(this, this);

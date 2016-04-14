@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_search_space"
             android:layout_marginTop="@dimen/activity_search_space"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:background="@color/colorMainBackground"
             android:inputType="text"
             android:maxLines="1"

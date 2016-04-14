@@ -95,7 +95,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="23-05-2016"
                     tools:text="23-05-2016" />
             </TableRow>
         </TableRow>
