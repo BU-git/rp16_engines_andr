@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.db;
 
+import android.support.annotation.Nullable;
+
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
@@ -316,5 +318,16 @@ public class DbUtils {
             Session.setEngineerName(result.get(0).getName());
         }
         realm.close();
+    }
+
+    @Nullable
+    public static Order getOrder(long orderNumber) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Getting order from DB: " + orderNumber);
+
+        final Realm realm = Realm.getDefaultInstance();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        realm.close();
+        return order;
     }
 }

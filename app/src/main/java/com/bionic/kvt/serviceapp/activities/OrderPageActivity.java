@@ -187,11 +187,10 @@ public class OrderPageActivity extends AppCompatActivity implements
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
-        // Setting selected Order number to current session
-        Session.setCurrentOrderNumber(
-                Session.getOrderOverviewList().
-                        get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber()
-        );
+        // Setting selected Order to current session
+        final long currentOrderNumber = Session.getOrderOverviewList().
+                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+        Session.setCurrentOrder(DbUtils.getOrder(currentOrderNumber));
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -199,11 +198,10 @@ public class OrderPageActivity extends AppCompatActivity implements
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
-        // Setting selected Order number to current session
-        Session.setCurrentOrderNumber(
-                Session.getOrderOverviewList().
-                        get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber()
-        );
+        // Setting selected Order to current session
+        final long currentOrderNumber = Session.getOrderOverviewList().
+                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+        Session.setCurrentOrder(DbUtils.getOrder(currentOrderNumber));
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
 

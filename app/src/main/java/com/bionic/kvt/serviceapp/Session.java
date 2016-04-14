@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.OrderServiceConnection;
+import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
@@ -27,7 +28,7 @@ public class Session extends Application {
     private String engineerName;
     private String engineerEmail;
     private String engineerId;
-    private long currentOrderNumber;
+    private Order currentOrder;
     private List<OrderOverview> orderOverviewList;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
@@ -66,7 +67,7 @@ public class Session extends Application {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
         currentUserSession.engineerId = null;
-        currentUserSession.currentOrderNumber = 0L;
+        currentUserSession.currentOrder = null;
 
         currentUserSession.sessionLog.clear();
         currentUserSession.orderOverviewList.clear();
@@ -114,14 +115,14 @@ public class Session extends Application {
         return currentUserSession.engineerId;
     }
 
-    public static void setCurrentOrderNumber(long orderNumber) {
+    public static void setCurrentOrder(Order order) {
 //        checkBoxInstructions = false;
 //        checkBoxLMRA = false;
-        currentUserSession.currentOrderNumber = orderNumber;
+        currentUserSession.currentOrder = order;
     }
 
-    public static long getCurrentOrderNumber() {
-        return currentUserSession.currentOrderNumber;
+    public static Order getCurrentOrder() {
+        return currentUserSession.currentOrder;
     }
 
     public static List<OrderOverview> getOrderOverviewList() {
