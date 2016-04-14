@@ -20,22 +20,22 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/service_engenieer"
+            android:text="@string/service_engineer"
             android:textColor="@color/colorSecondaryText" />
 
         <TextView
-            android:id="@+id/service_engenieer_id"
+            android:id="@+id/service_engineer_id"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
+            android:textColor="@color/colorSecondaryText"
             android:textStyle="bold"
-            tools:text="Engineer name"
-            android:textColor="@color/colorSecondaryText"/>
+            tools:text="Engineer name" />
 
         <Button
-            android:id="@+id/service_engenieer_logout_button"
+            android:id="@+id/service_engineer_logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/activity_logout" />
@@ -55,20 +55,36 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/orders"
+            android:textColor="@color/colorSecondaryText" />
+
+        <TextView
+            android:id="@+id/order_updating"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=" updating... "
+            android:visibility="invisible"
+            android:textColor="@color/colorSecondaryText" />
+
+        <TextView
+            android:id="@+id/order_update_status"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center_vertical"
-            android:text="@string/orders"
             android:textColor="@color/colorSecondaryText" />
 
         <SearchView
             android:id="@+id/order_page_search_view"
             android:layout_width="0dp"
-            android:layout_height="?listPreferredItemHeightSmall"
-            android:layout_marginBottom="@dimen/activity_orders_space"
-            android:layout_marginTop="@dimen/activity_orders_space"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_search_space"
+            android:layout_marginTop="@dimen/activity_search_space"
+            android:layout_weight="1.3"
             android:background="@color/colorMainBackground"
             android:inputType="text"
             android:maxLines="1"
@@ -111,8 +127,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/device_type"
-            android:textColor="@color/colorSecondaryText"/>
+            android:text="@string/installation"
+            android:textColor="@color/colorSecondaryText" />
 
         <TextView
             android:layout_width="0dp"
@@ -120,7 +136,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/task"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText" />
 
         <TextView
             android:layout_width="0dp"
@@ -128,7 +144,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/address"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText" />
 
         <TextView
             android:layout_width="0dp"
@@ -136,14 +152,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/status"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText" />
     </LinearLayout>
 
     <Space

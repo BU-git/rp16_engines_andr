@@ -52,7 +52,13 @@
             android:parentActivityName=".activities.MeasurementsActivity" />
         <activity
             android:name=".activities.InsertSignaturesActivity"
-            android:parentActivityName=".activities.NSAActivity" />
+            android:parentActivityName=".activities.NSAActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".activities.DebugActivity"
+            android:parentActivityName=".activities.OrderPageActivity" />
+
+        <service android:name=".db.LocalService" />
     </application>
 
 </manifest>

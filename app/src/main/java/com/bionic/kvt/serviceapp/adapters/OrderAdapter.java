@@ -1,7 +1,6 @@
 package com.bionic.kvt.serviceapp.adapters;
 
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,39 +10,25 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.models.OrderOverview;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
-    private List<String[]> ordersDataSet;
-    private int ordersDataSetColNumber;
+    private List<OrderOverview> orderOverviewList;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     OnOrderLineClickListener onOrderLineClickListener;
     OnPDFButtonClickListener onPDFButtonClickListener;
 
-    public OrderAdapter(List<String[]> ordersDataSet) {
-        this.ordersDataSet = ordersDataSet;
-        if (ordersDataSet.size() > 0)
-            ordersDataSetColNumber = ordersDataSet.get(0).length;
+    public OrderAdapter(List<OrderOverview> orderOverviewList) {
+        this.orderOverviewList = orderOverviewList;
     }
 
-    public void setOrdersDataSet(List<String[]> ordersDataSet) {
-        this.ordersDataSet = ordersDataSet;
-        if (ordersDataSet.size() > 0)
-            ordersDataSetColNumber = ordersDataSet.get(0).length;
-        else ordersDataSetColNumber = 0;
-    }
-
-    public Long getOrderNumber(int rowNumber) {
-        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return (long) 0;
-        return Long.valueOf(ordersDataSet.get(rowNumber)[0]);
-    }
-
-    @Nullable
-    public String OrderStatus(int rowNumber) {
-        if (rowNumber < 0 || rowNumber >= ordersDataSet.size()) return null;
-        return ordersDataSet.get(rowNumber)[Session.ordersDataSetColNumber - 2];
+    public void setOrdersDataSet(List<OrderOverview> orderOverviewList) {
+        this.orderOverviewList = orderOverviewList;
     }
 
     public interface OnOrderLineClickListener {
@@ -69,7 +54,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         this.onPDFButtonClickListener = onPDFButtonClickListener;
     }
 
-
     @Override
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_order_page_one_cell, parent, false);
@@ -78,41 +62,73 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, final int position) {
-        int row = position / ordersDataSetColNumber;
-        int cell = position - row * ordersDataSetColNumber;
+        int row = position / Session.ORDER_OVERVIEW_COLUMN_COUNT;
+        int cell = position - row * Session.ORDER_OVERVIEW_COLUMN_COUNT;
 
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
 
-        String orderStatus;
+        // Setting default cell text color
+//              ContextCompat.getColor(context, R.color.colorOK);
+        textCell.setTextColor(Color.parseColor("#424242"));
 
-        // PDF Button
-        if (cell == ordersDataSetColNumber - 1) {
-            textCell.setVisibility(View.GONE);
-            buttonCell.setVisibility(View.VISIBLE);
-            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
-            if (!("Completed".equals(orderStatus))) {
-                buttonCell.setEnabled(false);
-            }
-        } else {
-            textCell.setVisibility(View.VISIBLE);
-            buttonCell.setVisibility(View.GONE);
-            textCell.setText(ordersDataSet.get(row)[cell]);
-        }
+        switch (cell) {
+            case 0: // Column Order number
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+                textCell.setText(orderOverviewList.get(row).getNumber().toString());
+                break;
 
-        //Order Status
-//        ContextCompat.getColor(context, R.color.colorOK);
-        if (cell == ordersDataSetColNumber - 2) {
-            orderStatus = Session.ordersDataSet.get(row)[ordersDataSetColNumber - 2];
-            if ("Completed".equals(orderStatus)) {
-                textCell.setTextColor(Color.parseColor("#388E3C"));
-            } else if ("In progress".equals(orderStatus)) {
-                textCell.setTextColor(Color.parseColor("#FFA000"));
-            } else {
-                textCell.setTextColor(Color.parseColor("#CC0234"));
-            }
-        } else {
-            textCell.setTextColor(Color.parseColor("#424242"));
+            case 1: // Column Date
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+                textCell.setText(simpleDateFormat.format(orderOverviewList.get(row).getDate()));
+                break;
+
+            case 2: // Column Installation
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+                textCell.setText(orderOverviewList.get(row).getInstallationName());
+                break;
+
+            case 3: // Column Task
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+                textCell.setText(orderOverviewList.get(row).getTaskLtxa1());
+                break;
+
+            case 4: // Column Address
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+                textCell.setText(orderOverviewList.get(row).getInstallationAddress());
+                break;
+
+            case 5: // Column Status
+                textCell.setVisibility(View.VISIBLE);
+                buttonCell.setVisibility(View.GONE);
+
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+                    textCell.setText("Complete");
+                    textCell.setTextColor(Color.parseColor("#388E3C"));
+                }
+
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+                    textCell.setText("In progress");
+                    textCell.setTextColor(Color.parseColor("#FFA000"));
+                }
+
+                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+                    textCell.setText("Not started");
+                    textCell.setTextColor(Color.parseColor("#CC0234"));
+                }
+                break;
+
+            case 6: // Column PDF Button
+                textCell.setVisibility(View.GONE);
+                buttonCell.setVisibility(View.VISIBLE);
+                if (orderOverviewList.get(row).getOrderStatus() != Session.ORDER_STATUS_COMPLETE)
+                    buttonCell.setEnabled(false);
+                break;
         }
 
         textCell.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +148,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public int getItemCount() {
-        return ordersDataSet.size() * ordersDataSetColNumber;
+        return orderOverviewList.size() * Session.ORDER_OVERVIEW_COLUMN_COUNT;
     }
 }

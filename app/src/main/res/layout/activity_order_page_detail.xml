@@ -95,7 +95,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="23-05-2016"
                     tools:text="23-05-2016" />
             </TableRow>
         </TableRow>
@@ -217,7 +216,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/device_type"
+                    android:text="@string/installation"
                     android:textStyle="bold" />
             </TableRow>
 

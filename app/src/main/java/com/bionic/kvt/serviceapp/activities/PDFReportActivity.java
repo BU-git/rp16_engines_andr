@@ -52,8 +52,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             return;
         }
 
-        Long orderNumber = Session.getSession().getOrderNumber();
-        if (orderNumber == null) {
+        if (Session.getCurrentOrder() == null) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -68,6 +67,7 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             }
         });
 
+        final long orderNumber = Session.getCurrentOrder().getNumber();
         pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;

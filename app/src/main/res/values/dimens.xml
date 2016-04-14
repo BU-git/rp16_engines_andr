@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_login_padding">32dp</dimen>
+    <dimen name="activity_login_padding_small">16dp</dimen>
+    <dimen name="activity_search_space">6dp</dimen>
     <dimen name="activity_orders_space">2dp</dimen>
     <dimen name="orders_list_padding">8dp</dimen>
     <dimen name="orders_list_margin">2dp</dimen>
