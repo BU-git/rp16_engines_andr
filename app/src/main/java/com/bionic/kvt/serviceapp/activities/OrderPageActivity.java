@@ -39,10 +39,7 @@ public class OrderPageActivity extends AppCompatActivity implements
         LocalService.Callbacks {
 
     private OrderAdapter ordersAdapter;
-    private RecyclerView ordersRecyclerView;
-
     private LocalService connectionService;
-    private boolean serviceBound = false;
     private TextView orderUpdatingText;
     private TextView orderUpdateStatusText;
 
@@ -52,11 +49,10 @@ public class OrderPageActivity extends AppCompatActivity implements
         public void onServiceConnected(ComponentName className, IBinder service) {
             LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
             connectionService = binder.getService();
-            serviceBound = true;
-
             connectionService.registerClient(OrderPageActivity.this);
 
-            if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page service connected.");
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Order page service connected.");
 
             // Running service task
             connectionService.runTask();
@@ -65,7 +61,6 @@ public class OrderPageActivity extends AppCompatActivity implements
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             OrderPageActivity.this.connectionService = null;
-            serviceBound = false;
 
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("Order page service disconnected.");
@@ -131,7 +126,7 @@ public class OrderPageActivity extends AppCompatActivity implements
         engineerId.setText(Session.getEngineerName() + " (" + Session.getEngineerEmail() + ")");
 
         // Configuring Recycler View
-        ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
+        RecyclerView ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager ordersLayoutManager =
                 new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT);
@@ -142,7 +137,7 @@ public class OrderPageActivity extends AppCompatActivity implements
 
         Session.setDemoData();
         // Showing all orders
-        ordersAdapter = new OrderAdapter(Session.getOrderOverviewList());
+        ordersAdapter = new OrderAdapter(getApplicationContext(), Session.getOrderOverviewList());
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
 
@@ -178,10 +173,9 @@ public class OrderPageActivity extends AppCompatActivity implements
     protected void onStop() {
         super.onStop();
 
-        if (serviceBound) {
+        if (connectionService != null) {
             connectionService.stopTask();
             unbindService(serviceConnection);
-            serviceBound = false;
         }
     }
 
@@ -234,7 +228,6 @@ public class OrderPageActivity extends AppCompatActivity implements
             ordersAdapter.setOrdersDataSet(searchOrderOverview);
         }
         ordersAdapter.notifyDataSetChanged();
-//        ordersRecyclerView.swapAdapter(ordersAdapter, false);
     }
 
     @Override
@@ -242,5 +235,13 @@ public class OrderPageActivity extends AppCompatActivity implements
         String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
         orderUpdateStatusText.setText("[" + time + "] " + message);
         orderUpdatingText.setVisibility(visibility);
+    }
+
+    @Override
+    public void updateOrderAdapter() {
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Update OrderAdapter data.");
+        DbUtils.updateOrderOverviewList();
+        ordersAdapter.setOrdersDataSet(Session.getOrderOverviewList());
+        ordersAdapter.notifyDataSetChanged();
     }
 }

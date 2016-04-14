@@ -1,6 +1,7 @@
 package com.bionic.kvt.serviceapp.adapters;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +18,16 @@ import java.util.List;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
+    private Context context;
     private List<OrderOverview> orderOverviewList;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     OnOrderLineClickListener onOrderLineClickListener;
     OnPDFButtonClickListener onPDFButtonClickListener;
 
-    public OrderAdapter(List<OrderOverview> orderOverviewList) {
+
+    public OrderAdapter(Context context, List<OrderOverview> orderOverviewList) {
+        this.context = context;
         this.orderOverviewList = orderOverviewList;
     }
 
@@ -69,8 +73,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);
 
         // Setting default cell text color
-//              ContextCompat.getColor(context, R.color.colorOK);
-        textCell.setTextColor(Color.parseColor("#424242"));
+        textCell.setTextColor(ContextCompat.getColor(context, R.color.colorMainText));
 
         switch (cell) {
             case 0: // Column Order number
@@ -109,17 +112,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
                 if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
                     textCell.setText("Complete");
-                    textCell.setTextColor(Color.parseColor("#388E3C"));
+                    textCell.setTextColor(ContextCompat.getColor(context, R.color.colorOK));
                 }
 
                 if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
                     textCell.setText("In progress");
-                    textCell.setTextColor(Color.parseColor("#FFA000"));
+                    textCell.setTextColor(ContextCompat.getColor(context, R.color.colorWarring));
                 }
 
                 if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
                     textCell.setText("Not started");
-                    textCell.setTextColor(Color.parseColor("#CC0234"));
+                    textCell.setTextColor(ContextCompat.getColor(context, R.color.colorError));
                 }
                 break;
 

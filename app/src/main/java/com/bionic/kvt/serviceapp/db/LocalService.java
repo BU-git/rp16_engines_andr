@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -42,11 +41,13 @@ public class LocalService extends Service {
     //Callback interface for communication with service client - OrderPageActivity
     public interface Callbacks {
         void updateUpdateStatus(String message, int visibility);
+
+        void updateOrderAdapter();
     }
 
     //Here Order Activity register to the service as Callbacks client
-    public void registerClient(Activity activity) {
-        this.orderActivity = (Callbacks) activity;
+    public void registerClient(Callbacks callbacks) {
+        this.orderActivity = callbacks;
     }
 
     //Periodic update from server
@@ -69,6 +70,12 @@ public class LocalService extends Service {
     // Start synchronisation loop.
     // Do not terminate current update cycle.
     public void stopTask() {
+        handler.removeCallbacks(updateTask);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         handler.removeCallbacks(updateTask);
     }
 
@@ -95,7 +102,7 @@ public class LocalService extends Service {
 
                     List<OrderBrief> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(response.body());
 
-                    if (ordersToBeUpdated.size() == 0) {
+                    if (ordersToBeUpdated.isEmpty()) {
                         serviceLogging("Nothing to update.", View.INVISIBLE);
                         Session.setIsSyncingFromServer(false);
                         return;
@@ -108,9 +115,12 @@ public class LocalService extends Service {
 
                     serviceLogging("Orders update complete!", View.INVISIBLE);
                     Session.setIsSyncingFromServer(false);
+
+                    orderActivity.updateOrderAdapter();
                 } else {
                     serviceLogging("Orders brief list request error: " + response.code(), View.INVISIBLE);
                     Session.setIsSyncingFromServer(false);
+
                 }
             }
 
