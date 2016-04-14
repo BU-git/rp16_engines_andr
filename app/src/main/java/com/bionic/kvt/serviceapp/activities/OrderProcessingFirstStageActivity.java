@@ -66,15 +66,15 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
             nextButtonHint.setVisibility(View.INVISIBLE);
         } else nextButtonHint.setVisibility(View.VISIBLE);
 
-        Session.getSession().setCheckBoxInstructions(checkBoxInstructions.isChecked());
-        Session.getSession().setCheckBoxLMRA(checkBoxLMRA.isChecked());
+//        Session.getSession().setCheckBoxInstructions(checkBoxInstructions.isChecked());
+//        Session.getSession().setCheckBoxLMRA(checkBoxLMRA.isChecked());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkBoxInstructions.setChecked(Session.getSession().isCheckBoxInstructions());
-        checkBoxLMRA.setChecked(Session.getSession().isCheckBoxLMRA());
+//        checkBoxInstructions.setChecked(Session.getSession().isCheckBoxInstructions());
+//        checkBoxLMRA.setChecked(Session.getSession().isCheckBoxLMRA());
         nextButtonEnableHintDisable();
 
     }

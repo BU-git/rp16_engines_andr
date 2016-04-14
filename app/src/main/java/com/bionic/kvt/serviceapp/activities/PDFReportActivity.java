@@ -52,8 +52,8 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             return;
         }
 
-        Long orderNumber = Session.getSession().getOrderNumber();
-        if (orderNumber == null) {
+        long orderNumber = Session.getCurrentOrderNumber();
+        if (orderNumber == 0L) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }

@@ -21,20 +21,20 @@ public class OrderPageDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
 
-        final Long orderNumber = Session.getSession().getOrderNumber();
+        final long orderNumber = Session.getCurrentOrderNumber();
         acceptButton = (ToggleButton) findViewById(R.id.service_engenieer_accept_toggleButton);
         startButton = (Button) findViewById(R.id.service_engenieer_start_button);
         orderAcceptInstructions = findViewById(R.id.process_order_page_accept_instructions);
 
-        if ("Completed".equals(Session.getSession().getOrderStatus())) {
-            acceptButton.setVisibility(View.GONE);
-            startButton.setVisibility(View.GONE);
-            orderAcceptInstructions.setVisibility(View.GONE);
-            findViewById(R.id.process_order_page_order_complete).setVisibility(View.VISIBLE);
-        }
+//        if ("Completed".equals(Session.getOrderStatus())) {
+//            acceptButton.setVisibility(View.GONE);
+//            startButton.setVisibility(View.GONE);
+//            orderAcceptInstructions.setVisibility(View.GONE);
+//            findViewById(R.id.process_order_page_order_complete).setVisibility(View.VISIBLE);
+//        }
 
-        if (orderNumber != null) {
-            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber.toString());
+        if (orderNumber != 0L) {
+//            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber);
 
 
             findViewById(R.id.service_engenieer_start_button).setOnClickListener(new View.OnClickListener() {

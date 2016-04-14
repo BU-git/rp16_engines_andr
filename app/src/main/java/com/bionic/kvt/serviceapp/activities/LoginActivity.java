@@ -40,10 +40,10 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
-import com.bionic.kvt.serviceapp.api.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onResume() {
         super.onResume();
-        Session.getSession().clearSession();
+        Session.clearSession();
         updateUserList();
     }
 
@@ -430,13 +430,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void updateUserList() {
-        if (BuildConfig.IS_LOGGING_ON) {
-            Session.getSession().addLog("Conneting to server for user list update");
-        }
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Connecting to server for user list update");
+
         final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
-            public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
+            public void onResponse(final Call<List<User>> call,
+                                   final Response<List<User>> response) {
                 if (response.isSuccessful()) {
 
                     if (response.body() == null || response.body().size() == 0) {
@@ -483,8 +483,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
         mConnectionStatusText.setTextColor(textColor);
         mConnectionStatusText.setText(text);
-        if (BuildConfig.IS_LOGGING_ON) {
-            Session.getSession().addLog(text);
-        }
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(text);
+
     }
 }

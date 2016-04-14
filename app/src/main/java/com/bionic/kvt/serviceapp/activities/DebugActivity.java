@@ -12,7 +12,6 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.Order;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.api.User;
-import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,13 +81,15 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getUserList() {
-        final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
+        final Call<List<User>> userListRequest =
+                Session.getOrderServiceConnection().getAllUsers();
 
         addLogMessage("Getting user list from " + userListRequest.request());
 
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
-            public void onResponse(final Call<List<User>> call, final Response<List<User>> response) {
+            public void onResponse(final Call<List<User>> call,
+                                   final Response<List<User>> response) {
                 if (response.isSuccessful()) {
                     userListOnServer.clear();
                     userListOnServer.addAll(response.body());
@@ -109,16 +110,15 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getOrdersBriefList() {
-        final String currentUserId = Utils.getUserIdFromEmail(Session.getSession().getEngineerEmail());
-
         final Call<List<OrderBrief>> userListRequest =
-                Session.getOrderServiceConnection().getOrdersBrief(currentUserId);
+                Session.getOrderServiceConnection().getOrdersBrief(Session.getEngineerId());
 
         addLogMessage("Getting orders brief list from " + userListRequest.request());
 
         userListRequest.enqueue(new Callback<List<OrderBrief>>() {
             @Override
-            public void onResponse(final Call<List<OrderBrief>> call, final Response<List<OrderBrief>> response) {
+            public void onResponse(final Call<List<OrderBrief>> call,
+                                   final Response<List<OrderBrief>> response) {
                 if (response.isSuccessful()) {
                     orderBriefList.clear();
                     orderBriefList.addAll(response.body());
@@ -139,9 +139,8 @@ public class DebugActivity extends AppCompatActivity {
     }
 
     private void getOrderById(long id) {
-        final String currentUserId = Utils.getUserIdFromEmail(Session.getSession().getEngineerEmail());
-
-        final Call<Order> orderRequest = Session.getOrderServiceConnection().getOrder(id, currentUserId);
+        final Call<Order> orderRequest =
+                Session.getOrderServiceConnection().getOrder(id, Session.getEngineerId());
 
         addLogMessage("Getting order from " + orderRequest.request());
 
@@ -166,7 +165,7 @@ public class DebugActivity extends AppCompatActivity {
 
     private void showApplicationLog() {
         final StringBuilder sb = new StringBuilder("Application log:");
-        for (String logLine : Session.getSession().getSessionLog()) {
+        for (String logLine : Session.getSessionLog()) {
             sb.append("\n").append(logLine);
         }
         synchronisationLog.setText(sb.toString());

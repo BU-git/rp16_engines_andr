@@ -55,11 +55,19 @@
         android:textAppearance="?android:textAppearanceMedium">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
             android:gravity="center_vertical"
             android:text="@string/orders"
+            android:textColor="@color/colorSecondaryText" />
+
+        <TextView
+            android:id="@+id/order_updating"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text=" updating... "
+            android:visibility="invisible"
             android:textColor="@color/colorSecondaryText" />
 
         <TextView

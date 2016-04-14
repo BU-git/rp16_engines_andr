@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.OrderServiceConnection;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,11 +17,17 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Session extends Application {
-
     private static Session currentUserSession;
+
     private OrderServiceConnection orderServiceConnection;
     private ArrayList<String> sessionLog;
-    private static int connectionAttemptCount;
+    private boolean isSyncingFromServer = false;
+
+    private String engineerName;
+    private String engineerEmail;
+    private String engineerId;
+    private long currentOrderNumber;
+
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
     public static final int ORDER_STATUS_IN_PROGRESS = 1;
@@ -51,9 +58,70 @@ public class Session extends Application {
         return currentUserSession.orderServiceConnection;
     }
 
-    public static Session getSession() {
-        return currentUserSession;
+//    public static Session getSession() {
+//        return currentUserSession;
+//    }
+
+    public static void clearSession() {
+        currentUserSession.engineerName = null;
+        currentUserSession.engineerEmail = null;
+        currentUserSession.engineerId = null;
+        currentUserSession.currentOrderNumber = 0L;
+//        orderNumber = 0L;
+//        orderStatus = null;
+//        checkBoxInstructions = false;
+//        checkBoxLMRA = false;
     }
+
+    public static ArrayList<String> getSessionLog() {
+        return currentUserSession.sessionLog;
+    }
+
+    public static void addToSessionLog(String message) {
+        String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
+                .format(Calendar.getInstance().getTime());
+        currentUserSession.sessionLog.add("[" + dateTime + "] " + message);
+    }
+
+    public static boolean isSyncingFromServer() {
+        return currentUserSession.isSyncingFromServer;
+    }
+
+    public static void setIsSyncingFromServer(boolean state) {
+        currentUserSession.isSyncingFromServer = state;
+    }
+
+    public static void setEngineerName(String engineerName) {
+        currentUserSession.engineerName = engineerName;
+    }
+
+    public static String getEngineerName() {
+        return currentUserSession.engineerName;
+    }
+
+    public static void setEngineerEmail(String engineerEmail) {
+        currentUserSession.engineerEmail = engineerEmail;
+        currentUserSession.engineerId = Utils.getUserIdFromEmail(engineerEmail);
+    }
+
+    public static String getEngineerEmail() {
+        return currentUserSession.engineerEmail;
+    }
+
+    public static String getEngineerId() {
+        return currentUserSession.engineerId;
+    }
+
+    public static void setCurrentOrderNumber(long orderNumber) {
+//        checkBoxInstructions = false;
+//        checkBoxLMRA = false;
+        currentUserSession.currentOrderNumber = orderNumber;
+    }
+
+    public static long getCurrentOrderNumber() {
+        return currentUserSession.currentOrderNumber;
+    }
+
 
     //ALL DOWN IS FOR TEST
     public static final List<String[]> ordersDataSet = new LinkedList<>();
@@ -82,33 +150,11 @@ public class Session extends Application {
         ordersDataSetColNumber = ordersDataSet.get(0).length;
     }
 
-    private String engineerName;
-    private String engineerEmail;
-    private long orderNumber;
+
     private String orderStatus;
     private boolean checkBoxInstructions;
     private boolean checkBoxLMRA;
 
-    public void clearSession() {
-        engineerName = null;
-        engineerEmail = null;
-        orderNumber = 0L;
-        orderStatus = null;
-        checkBoxInstructions = false;
-        checkBoxLMRA = false;
-    }
-
-    public ArrayList<String> getSessionLog() {
-        return sessionLog;
-    }
-
-    public void addLog(String text) {
-        sessionLog.add("[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ").format(Calendar.getInstance().getTime()) + "] " + text);
-    }
-
-    public static int getAndAddConnectionAttemptCount() {
-        return ++connectionAttemptCount;
-    }
 
     public String getOrderStatus() {
         return orderStatus;
@@ -118,38 +164,13 @@ public class Session extends Application {
         this.orderStatus = orderStatus;
     }
 
-    public void clearOrderNumber() {
-        orderNumber = 0L;
-        orderStatus = null;
-        checkBoxInstructions = false;
-        checkBoxLMRA = false;
-    }
+//    public void clearOrderNumber() {
+//        orderNumber = 0L;
+//        orderStatus = null;
+//        checkBoxInstructions = false;
+//        checkBoxLMRA = false;
+//    }
 
-    public long getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(long orderNumber) {
-        checkBoxInstructions = false;
-        checkBoxLMRA = false;
-        this.orderNumber = orderNumber;
-    }
-
-    public String getEngineerName() {
-        return engineerName;
-    }
-
-    public void setEngineerName(String engineerName) {
-        this.engineerName = engineerName;
-    }
-
-    public String getEngineerEmail() {
-        return engineerEmail;
-    }
-
-    public void setEngineerEmail(String engineerEmail) {
-        this.engineerEmail = engineerEmail;
-    }
 
     public boolean isCheckBoxInstructions() {
         return checkBoxInstructions;

@@ -26,6 +26,8 @@ import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.db.LocalService;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class OrderPageActivity extends AppCompatActivity implements
 
     private LocalService connectionService;
     private boolean serviceBound = false;
+    private TextView orderUpdatingText;
     private TextView orderUpdateStatusText;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -51,13 +54,10 @@ public class OrderPageActivity extends AppCompatActivity implements
 
             connectionService.registerClient(OrderPageActivity.this);
 
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.getSession().addLog("Order page service connected.");
+            if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page service connected.");
 
-            //This has to be run periodically while OrderPageActivity visible
-            if (serviceBound) {
-                connectionService.runTask();
-            }
+            // Running service task
+            connectionService.runTask();
         }
 
         @Override
@@ -65,8 +65,7 @@ public class OrderPageActivity extends AppCompatActivity implements
             OrderPageActivity.this.connectionService = null;
             serviceBound = false;
 
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.getSession().addLog("Order page service disconnected.");
+            if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page service disconnected.");
         }
     };
 
@@ -78,7 +77,7 @@ public class OrderPageActivity extends AppCompatActivity implements
 
 //        DbUtils.resetOrderTableWithSubTables();
 
-
+        orderUpdatingText = (TextView) findViewById(R.id.order_updating);
         orderUpdateStatusText = (TextView) findViewById(R.id.order_update_status);
 
         //Configuring Search view
@@ -117,7 +116,7 @@ public class OrderPageActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                Session.getSession().clearSession();
+                Session.clearSession();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -126,12 +125,13 @@ public class OrderPageActivity extends AppCompatActivity implements
 
         // Configuring engineer Id
         TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
-        engineerId.setText(Session.getSession().getEngineerName() + " (" + Session.getSession().getEngineerEmail() + ")");
+        engineerId.setText(Session.getEngineerName() + " (" + Session.getEngineerEmail() + ")");
 
         // Configuring Recycler View
         ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager ordersLayoutManager = new GridLayoutManager(this, Session.ordersDataSetColNumber);
+        RecyclerView.LayoutManager ordersLayoutManager =
+                new GridLayoutManager(this, Session.ordersDataSetColNumber);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         // Showing all orders
@@ -140,9 +140,7 @@ public class OrderPageActivity extends AppCompatActivity implements
 //        ordersAdapter.notifyDataSetChanged();
         ordersRecyclerView.setAdapter(ordersAdapter);
 
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Order page created.");
-
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page created.");
     }
 
     @Override
@@ -184,8 +182,8 @@ public class OrderPageActivity extends AppCompatActivity implements
     @Override
     public void OnOrderLineClicked(View view, int position) {
         // Setting selected Order number to current session
-        Session.getSession().setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
-        Session.getSession().setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
+        Session.setCurrentOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+//        Session.getSession().setOrderStatus(ordersAdapter.OrderStatus(position / Session.ordersDataSetColNumber));
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -194,7 +192,7 @@ public class OrderPageActivity extends AppCompatActivity implements
     @Override
     public void OnPDFButtonClicked(View view, int position) {
         // Setting selected Order number to current session
-        Session.getSession().setOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
+        Session.setCurrentOrderNumber(ordersAdapter.getOrderNumber(position / Session.ordersDataSetColNumber));
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
 
@@ -231,7 +229,9 @@ public class OrderPageActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void updateUpdateStatus(String message) {
-        orderUpdateStatusText.setText(message);
+    public void updateUpdateStatus(String message, int visibility) {
+        String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+        orderUpdateStatusText.setText("[" + time + "] " + message);
+        orderUpdatingText.setVisibility(visibility);
     }
 }

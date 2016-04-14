@@ -13,9 +13,7 @@ public class DbUtils {
 
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Resetting User table.");
-
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Resetting User table.");
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -90,18 +88,15 @@ public class DbUtils {
     }
 
     public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Looking for orders to be updated.");
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Looking for orders to be updated.");
         // Code to generate List<OrderBrief> - Orders actually newer on Server than in app database
 
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Found XXX orders to be updated.");
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Found XXX orders to be updated.");
         return null;
     }
 
     public static void updateOrderTableFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Updating order table from server order data: " + serverOrder.getNumber());
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating order table from server order data: " + serverOrder.getNumber());
 
 
 //        final Realm realm = Realm.getDefaultInstance();
@@ -143,18 +138,14 @@ public class DbUtils {
 //        final int count = realm.where(User.class).equalTo("isOnServer", true).findAll().size();
 //        realm.close();
 
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
 
     }
 
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Updating User table from server data");
-
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating User table from server data");
 
         final Realm realm = Realm.getDefaultInstance();
-
         final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
 
         // Set all current users in DB not on server
@@ -195,38 +186,28 @@ public class DbUtils {
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Validating user: " + email + " : " + password);
-
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Validating user: " + email + " : " + password);
 
         Realm realm = Realm.getDefaultInstance();
-
         boolean res = realm.where(User.class)
                 .equalTo("email", email)
                 .equalTo("password", password)
                 .findAll()
                 .size() == 1;
-
         realm.close();
-
         return res;
     }
 
     public static void setUserSession(String email) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.getSession().addLog("Setting user session: " + email);
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Setting user session: " + email);
 
-
-        Session.getSession().clearSession();
-
+        Session.clearSession();
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<User> result = realm.where(User.class).equalTo("email", email).findAll();
-
         if (result.size() == 1) {
-            Session.getSession().setEngineerEmail(email);
-            Session.getSession().setEngineerName(result.get(0).getName());
+            Session.setEngineerEmail(email);
+            Session.setEngineerName(result.get(0).getName());
         }
-
         realm.close();
     }
 }
