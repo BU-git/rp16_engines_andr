@@ -116,8 +116,6 @@ public class Session extends Application {
     }
 
     public static void setCurrentOrder(Order order) {
-//        checkBoxInstructions = false;
-//        checkBoxLMRA = false;
         currentUserSession.currentOrder = order;
     }
 
@@ -160,34 +158,6 @@ public class Session extends Application {
         orderOverview2.setOrderStatus(ORDER_STATUS_NOT_STARTED);
         orderOverview2.setPdfString("PDF");
         currentUserSession.orderOverviewList.add(orderOverview2);
-    }
-
-    private boolean checkBoxInstructions;
-    private boolean checkBoxLMRA;
-
-
-//    public void clearOrderNumber() {
-//        orderNumber = 0L;
-//        orderStatus = null;
-//        checkBoxInstructions = false;
-//        checkBoxLMRA = false;
-//    }
-
-
-    public boolean isCheckBoxInstructions() {
-        return checkBoxInstructions;
-    }
-
-    public void setCheckBoxInstructions(boolean checkBoxInstructions) {
-        this.checkBoxInstructions = checkBoxInstructions;
-    }
-
-    public boolean isCheckBoxLMRA() {
-        return checkBoxLMRA;
-    }
-
-    public void setCheckBoxLMRA(boolean checkBoxLMRA) {
-        this.checkBoxLMRA = checkBoxLMRA;
     }
 
 }

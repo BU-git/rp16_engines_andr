@@ -27,36 +27,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ForgetPasswordActivity"
-            android:parentActivityName=".activities.LoginActivity" />
+        <activity android:name=".activities.ForgetPasswordActivity" />
         <activity android:name=".activities.OrderPageActivity" />
-        <activity
-            android:name=".activities.OrderPageDetailActivity"
-            android:parentActivityName=".activities.OrderPageActivity" />
+        <activity android:name=".activities.OrderPageDetailActivity" />
         <activity android:name=".activities.PDFReportActivity" />
-        <activity
-            android:name=".activities.OrderProcessingFirstStageActivity"
-            android:parentActivityName=".activities.OrderPageDetailActivity" />
-        <activity
-            android:name=".activities.LMRAActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
-        <activity
-            android:name=".activities.ComponentDefectsActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
-        <activity
-            android:name=".activities.MeasurementsActivity"
-            android:parentActivityName=".activities.ComponentDefectsActivity" />
-        <activity
-            android:name=".activities.NSAActivity"
-            android:parentActivityName=".activities.MeasurementsActivity" />
+        <activity android:name=".activities.OrderProcessingFirstStageActivity" />
+        <activity android:name=".activities.LMRAActivity" />
+        <activity android:name=".activities.ComponentDefectsActivity" />
+        <activity android:name=".activities.MeasurementsActivity" />
+        <activity android:name=".activities.NSAActivity" />
         <activity
             android:name=".activities.InsertSignaturesActivity"
-            android:parentActivityName=".activities.NSAActivity"
             android:screenOrientation="sensorPortrait" />
-        <activity
-            android:name=".activities.DebugActivity"
-            android:parentActivityName=".activities.OrderPageActivity" />
+        <activity android:name=".activities.DebugActivity" />
 
         <service android:name=".db.LocalService" />
     </application>

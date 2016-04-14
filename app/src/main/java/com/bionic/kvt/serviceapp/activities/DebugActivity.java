@@ -20,7 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DebugActivity extends AppCompatActivity {
+public class DebugActivity extends BaseActivity {
     private List<User> userListOnServer = new ArrayList<>();
     private List<OrderBrief> orderBriefList = new ArrayList<>();
     private Order order;

@@ -2,16 +2,14 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.Session;
 
-public class OrderProcessingFirstStageActivity extends AppCompatActivity {
+public class OrderProcessingFirstStageActivity extends BaseActivity {
     CheckBox checkBoxInstructions;
     CheckBox checkBoxLMRA;
     Button nextButton;
@@ -66,16 +64,11 @@ public class OrderProcessingFirstStageActivity extends AppCompatActivity {
             nextButtonHint.setVisibility(View.INVISIBLE);
         } else nextButtonHint.setVisibility(View.VISIBLE);
 
-//        Session.getSession().setCheckBoxInstructions(checkBoxInstructions.isChecked());
-//        Session.getSession().setCheckBoxLMRA(checkBoxLMRA.isChecked());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        checkBoxInstructions.setChecked(Session.getSession().isCheckBoxInstructions());
-//        checkBoxLMRA.setChecked(Session.getSession().isCheckBoxLMRA());
         nextButtonEnableHintDisable();
-
     }
 }

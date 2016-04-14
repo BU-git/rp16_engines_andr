@@ -13,7 +13,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
 
-public class ForgetPasswordActivity extends AppCompatActivity {
+public class ForgetPasswordActivity extends BaseActivity {
     public static final String TAG = ForgetPasswordActivity.class.getName();
     private MailHelper mailHelper;
     private boolean sentStatus;

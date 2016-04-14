@@ -32,7 +32,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PDFReportActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
+public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
     File pdfFile;
     Button sendButton;
 

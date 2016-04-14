@@ -14,7 +14,7 @@ import com.bionic.kvt.serviceapp.models.LMRA;
 
 import java.util.ArrayList;
 
-public class LMRAActivity extends AppCompatActivity {
+public class LMRAActivity extends BaseActivity {
 
     private static final String LMRALISTNAME = "LMRA List";
 

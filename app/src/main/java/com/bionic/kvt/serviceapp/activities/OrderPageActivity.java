@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class OrderPageActivity extends AppCompatActivity implements
+public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener,
         LocalService.Callbacks {

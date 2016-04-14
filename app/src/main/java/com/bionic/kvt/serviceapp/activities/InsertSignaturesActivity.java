@@ -19,7 +19,7 @@ import java.util.UUID;
 
 import static android.provider.MediaStore.Images.Media.insertImage;
 
-public class InsertSignaturesActivity extends AppCompatActivity {
+public class InsertSignaturesActivity extends BaseActivity {
     private DrawingView engineerDrawingView;
     private DrawingView clientDrawingView;
     private Button buttonComplete;

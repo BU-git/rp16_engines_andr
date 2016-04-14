@@ -10,7 +10,7 @@ import android.widget.ToggleButton;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 
-public class OrderPageDetailActivity extends AppCompatActivity {
+public class OrderPageDetailActivity extends BaseActivity {
     private ToggleButton acceptButton;
     private Button startButton;
     private View orderAcceptInstructions;
@@ -19,6 +19,8 @@ public class OrderPageDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
+
+
 
         acceptButton = (ToggleButton) findViewById(R.id.service_engenieer_accept_toggleButton);
         startButton = (Button) findViewById(R.id.service_engenieer_start_button);
@@ -36,7 +38,7 @@ public class OrderPageDetailActivity extends AppCompatActivity {
             // Setting Order data to textView
 //            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber);
 
-
+        }
             findViewById(R.id.service_engenieer_start_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -45,7 +47,7 @@ public class OrderPageDetailActivity extends AppCompatActivity {
                 }
             });
 
-        }
+//        }
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -58,7 +58,7 @@ import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
     private static final int CONNECTION_SUCCESSFUL = 0;

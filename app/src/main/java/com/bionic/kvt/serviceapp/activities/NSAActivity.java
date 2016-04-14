@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.bionic.kvt.serviceapp.R;
 
-public class NSAActivity extends AppCompatActivity {
+public class NSAActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

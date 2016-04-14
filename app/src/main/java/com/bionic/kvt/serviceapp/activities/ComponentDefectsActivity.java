@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.bionic.kvt.serviceapp.R;
 
-public class ComponentDefectsActivity extends AppCompatActivity {
+public class ComponentDefectsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

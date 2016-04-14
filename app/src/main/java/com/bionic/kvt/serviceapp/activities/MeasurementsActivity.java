@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.bionic.kvt.serviceapp.R;
 
-public class MeasurementsActivity extends AppCompatActivity {
+public class MeasurementsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
