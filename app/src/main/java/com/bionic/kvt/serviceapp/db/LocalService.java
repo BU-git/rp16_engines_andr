@@ -103,7 +103,7 @@ public class LocalService extends Service {
 
                     serviceLogging("Getting orders from server.");
                     for (OrderBrief orderBrief : ordersToBeUpdated) {
-                        getOrderFomServer(orderBrief.getNumber(), Session.getEngineerId());
+                        updateOrderFomServer(orderBrief.getNumber(), Session.getEngineerId());
                     }
 
                     serviceLogging("Orders update complete!", View.INVISIBLE);
@@ -122,7 +122,7 @@ public class LocalService extends Service {
         });
     }
 
-    private void getOrderFomServer(long orderNumber, String userId) {
+    private void updateOrderFomServer(long orderNumber, String userId) {
         final Call<Order> orderRequest =
                 Session.getOrderServiceConnection().getOrder(orderNumber, userId);
 
@@ -134,7 +134,7 @@ public class LocalService extends Service {
                                    final Response<Order> response) {
                 if (response.isSuccessful()) {
                     serviceLogging("Request successful!");
-                    DbUtils.updateOrderTableFromServer(response.body());
+                    DbUtils.updateOrderFromServer(response.body());
                 } else {
                     serviceLogging("Order request error: " + response.code());
                 }

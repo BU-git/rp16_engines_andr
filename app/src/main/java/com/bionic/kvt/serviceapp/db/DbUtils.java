@@ -3,10 +3,13 @@ package com.bionic.kvt.serviceapp.db;
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class DbUtils {
@@ -29,7 +32,7 @@ public class DbUtils {
         realm.close();
     }
 
-    // Completely erase Order Table and all sub tables and add Demo orders
+    // Completely erase Order Table and all sub tables
     public static void resetOrderTableWithSubTables() {
         final Realm realm = Realm.getDefaultInstance();
 
@@ -42,36 +45,6 @@ public class DbUtils {
         realm.clear(Part.class);
         realm.clear(Relation.class);
         realm.clear(Task.class);
-        realm.commitTransaction();
-//
-//        realm.beginTransaction();
-//        Order order = realm.createObject(Order.class);
-//
-//        Relation relation = realm.createObject(Relation.class);
-//        order.setRelation(relation);
-//
-//        Employee employee = realm.createObject(Employee.class);
-//        order.setEmployee(employee);
-//
-//        Installation installation = realm.createObject(Installation.class);
-//        order.setInstallation(installation);
-//
-//        Task task = realm.createObject(Task.class);
-//        RealmList<Task> taskRealmList = new RealmList<>(task);
-//        order.setTasks(taskRealmList);
-//
-//        Component component = realm.createObject(Component.class);
-//        RealmList<Component> componentRealmList = new RealmList<>(component);
-//        order.setComponents(componentRealmList);
-//
-//        Part part = realm.createObject(Part.class);
-//        RealmList<Part> partRealmList = new RealmList<>(part);
-//        order.setParts(partRealmList);
-//
-//        Info info = realm.createObject(Info.class);
-//        RealmList<Info> infoRealmList = new RealmList<>(info);
-//        order.setExtraInfo(infoRealmList);
-
         realm.commitTransaction();
 
         realm.close();
@@ -89,61 +62,168 @@ public class DbUtils {
 
     public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Looking for orders to be updated.");
-        // Code to generate List<OrderBrief> - Orders actually newer on Server than in app database
 
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Found XXX orders to be updated.");
-        return null;
+        final List<OrderBrief> ordersToBeUpdated = new ArrayList<>();
+        final Realm realm = Realm.getDefaultInstance();
+
+        for (OrderBrief orderBrief : serverOrderBriefList) {
+            final Order orderInDb = realm
+                    .where(Order.class)
+                    .equalTo("number", orderBrief.getNumber())
+                    .findFirst();
+
+            if (orderInDb == null // No such order in DB
+                    || isOrderNewerOnServer(orderInDb, orderBrief) // We have order in DB but it's outdated
+                    ) {
+                ordersToBeUpdated.add(orderBrief);
+            }
+        }
+
+        realm.close();
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Found " + ordersToBeUpdated.size() + " orders to be updated.");
+        return ordersToBeUpdated;
     }
 
-    public static void updateOrderTableFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating order table from server order data: " + serverOrder.getNumber());
+    private static boolean isOrderNewerOnServer(Order orderInDb, OrderBrief orderBrief) {
+        if (orderInDb.getImportDate()
+                .compareTo(orderBrief.getImportDate()) != 0)
+            return true;
 
+        if (orderInDb.getLastServerChangeDate()
+                .compareTo(orderBrief.getLastServerChangeDate()) != 0)
+            return true;
 
-//        final Realm realm = Realm.getDefaultInstance();
-//
-//        final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
-//
-//        // Set all current users in DB not on server
-//        realm.beginTransaction();
-//        for (User userInDb : allCurrentUsers) {
-//            userInDb.setOnServer(false);
-//        }
-//        realm.where(User.class).equalTo("email", "demo@kvt.nl").findAll().get(0).setOnServer(true);
-//        realm.commitTransaction(); //No logic if transaction fail!!!
-//
-//        // Updating users in DB
-//        realm.beginTransaction();
-//        for (com.bionic.kvt.serviceapp.api.User userOnServer : serverUserList) {
-//            // Searching for user in DB
-//            RealmResults<User> getUserInDb = realm.where(User.class)
-//                    .equalTo("email", userOnServer.getEmail())
-//                    .findAll();
-//
-//            if (getUserInDb.size() == 1) { // We have this user on DB, updating it
-//                User thisUser = getUserInDb.get(0);
-//                thisUser.setName(userOnServer.getName());
-//                thisUser.setPassword(userOnServer.getPassword());
-//                thisUser.setOnServer(true);
-//            } else { // New user, creating it in DB
-//                User newUser = realm.createObject(User.class);
-//                newUser.setName(userOnServer.getName());
-//                newUser.setEmail(userOnServer.getEmail());
-//                newUser.setPassword(userOnServer.getPassword());
-//                newUser.setOnServer(true);
-//            }
-//        }
-//        realm.commitTransaction(); //No logic if transaction fail!!!
-//
-//        // Returning updated in DB User count;
-//        final int count = realm.where(User.class).equalTo("isOnServer", true).findAll().size();
-//        realm.close();
+        return false;
+    }
 
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+    public static void updateOrderFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Updating order from server order data: " + serverOrder.getNumber());
 
+        final Realm realm = Realm.getDefaultInstance();
+
+        final Order currentOrderInDB = realm
+                .where(Order.class)
+                .equalTo("number", serverOrder.getNumber())
+                .findFirst();
+
+        if (currentOrderInDB == null) { // New order
+            createNewOrderInDb(serverOrder);
+
+            realm.close();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+        }
+
+        if (currentOrderInDB != null) { // Existing order
+            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
+                realm.beginTransaction();
+                currentOrderInDB.removeFromRealm();
+                realm.commitTransaction(); // No logic if transaction fail!!!
+                createNewOrderInDb(serverOrder);
+
+                realm.close();
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+            }
+
+            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
+                            + currentOrderInDB.getNumber());
+            }
+
+            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
+                            + currentOrderInDB.getNumber());
+            }
+        }
+    }
+
+    private static void createNewOrderInDb(com.bionic.kvt.serviceapp.api.Order serverOrder) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
+
+        final Realm realm = Realm.getDefaultInstance();
+        final Gson gson = new Gson();
+        realm.beginTransaction();
+
+        final Order newOrder = realm.createObject(Order.class);
+
+        newOrder.setOrderType(serverOrder.getOrderType());
+        newOrder.setDate(serverOrder.getDate());
+        newOrder.setReference(serverOrder.getReference());
+        newOrder.setNote(serverOrder.getNote());
+
+        // Relation
+        newOrder.setRelation(realm.createObjectFromJson
+                (Relation.class, gson.toJson(serverOrder.getRelation()))
+        );
+
+        // Employee
+        newOrder.setEmployee(realm.createObjectFromJson
+                (Employee.class, gson.toJson(serverOrder.getEmployee()))
+        );
+
+        // Installation
+        newOrder.setInstallation(realm.createObjectFromJson
+                (Installation.class, gson.toJson(serverOrder.getInstallation()))
+        );
+
+        // Task
+        final RealmList<Task> newTaskList = new RealmList<>();
+        for (com.bionic.kvt.serviceapp.api.Task serverTask : serverOrder.getTasks()) {
+            newTaskList.add(realm.createObjectFromJson
+                    (Task.class, gson.toJson(serverTask))
+            );
+        }
+        newOrder.setTasks(newTaskList);
+
+        // Component
+        final RealmList<Component> newComponentList = new RealmList<>();
+        for (com.bionic.kvt.serviceapp.api.Component serverComponent : serverOrder.getComponents()) {
+            newComponentList.add(realm.createObjectFromJson
+                    (Component.class, gson.toJson(serverComponent))
+            );
+        }
+        newOrder.setComponents(newComponentList);
+
+        // Part
+        final RealmList<Part> newPartList = new RealmList<>();
+        for (com.bionic.kvt.serviceapp.api.Part serverPart : serverOrder.getParts()) {
+            newPartList.add(realm.createObjectFromJson
+                    (Part.class, gson.toJson(serverPart))
+            );
+        }
+        newOrder.setParts(newPartList);
+
+        // Info
+        final RealmList<Info> newInfoList = new RealmList<>();
+        for (com.bionic.kvt.serviceapp.api.Info serverInfo : serverOrder.getExtraInfo()) {
+            newInfoList.add(realm.createObjectFromJson
+                    (Info.class, gson.toJson(serverInfo))
+            );
+        }
+        newOrder.setExtraInfo(newInfoList);
+
+        newOrder.setImportDate(serverOrder.getImportDate());
+        newOrder.setLastServerChangeDate(serverOrder.getLastServerChangeDate());
+        newOrder.setLastAndroidChangeDate(serverOrder.getLastAndroidChangeDate());
+
+        newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // ???????????????????????
+
+        realm.commitTransaction(); // No logic if transaction fail!!!
+
+        realm.close();
     }
 
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating User table from server data");
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Updating User table from server data");
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
@@ -186,7 +266,8 @@ public class DbUtils {
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Validating user: " + email + " : " + password);
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Validating user: " + email + " : " + password);
 
         Realm realm = Realm.getDefaultInstance();
         boolean res = realm.where(User.class)

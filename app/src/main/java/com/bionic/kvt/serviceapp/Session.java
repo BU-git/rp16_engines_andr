@@ -58,10 +58,6 @@ public class Session extends Application {
         return currentUserSession.orderServiceConnection;
     }
 
-//    public static Session getSession() {
-//        return currentUserSession;
-//    }
-
     public static void clearSession() {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
