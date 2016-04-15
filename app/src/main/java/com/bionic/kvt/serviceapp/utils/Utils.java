@@ -3,6 +3,8 @@ package com.bionic.kvt.serviceapp.utils;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -47,8 +49,14 @@ public class Utils {
         return storageDir;
     }
 
-    public static String getUserIdFromEmail(String email){
+    public static String getUserIdFromEmail(String email) {
         return email.substring(0, email.indexOf('@'));
     }
 
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
 }

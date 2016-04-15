@@ -35,6 +35,11 @@ public class Session extends Application {
     public static final int ORDER_STATUS_IN_PROGRESS = 1;
     public static final int ORDER_STATUS_COMPLETE = 2;
 
+    public static final int UPDATE_STATUS_DEFAULT = 0;
+    public static final int UPDATE_STATUS_OK = 1;
+    public static final int UPDATE_STATUS_WARRING = 2;
+    public static final int UPDATE_STATUS_ERROR = 3;
+
     public static final int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
     @Override

@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -42,9 +43,6 @@ public class OrderPageActivity extends BaseActivity implements
 
     private OrderAdapter ordersAdapter;
     private LocalService connectionService;
-
-    @Bind(R.id.order_updating)
-    TextView orderUpdatingText;
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -236,10 +234,28 @@ public class OrderPageActivity extends BaseActivity implements
     }
 
     @Override
-    public void updateUpdateStatus(String message, int visibility) {
-        String time = new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
+    public void updateUpdateStatus(String message, int updateStatus) {
+        String time = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
         orderUpdateStatusText.setText("[" + time + "] " + message);
-        orderUpdatingText.setVisibility(visibility);
+
+        switch (updateStatus) {
+            case Session.UPDATE_STATUS_OK:
+                orderUpdateStatusText.setTextColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorOK));
+                break;
+            case Session.UPDATE_STATUS_WARRING:
+                orderUpdateStatusText.setTextColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorWarring));
+                break;
+            case Session.UPDATE_STATUS_ERROR:
+                orderUpdateStatusText.setTextColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorError));
+                break;
+            case Session.UPDATE_STATUS_DEFAULT:
+                orderUpdateStatusText.setTextColor(
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
+                break;
+        }
     }
 
     @Override

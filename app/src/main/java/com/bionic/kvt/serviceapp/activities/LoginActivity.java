@@ -41,6 +41,7 @@ import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -412,6 +413,12 @@ public class LoginActivity extends BaseActivity implements
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Connecting to server for user list update");
 
+        // Is device connected to network
+        if (!Utils.isConnected(getApplicationContext())) {
+            showConnectionMessage("No connection to network.", CONNECTION_ERROR);
+            return;
+        }
+
         final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
@@ -420,31 +427,31 @@ public class LoginActivity extends BaseActivity implements
                 if (response.isSuccessful()) {
 
                     if (response.body() == null || response.body().size() == 0) {
-                        showConnectionMessage(CONNECTION_SUCCESSFUL, "No users on server found.");
+                        showConnectionMessage("No users on server found.", CONNECTION_SUCCESSFUL);
                         DbUtils.resetUserTable();
                         return;
                     }
 
                     int updateUsers = DbUtils.updateUserTableFromServer(response.body());
                     if (updateUsers == 0) {
-                        showConnectionMessage(CONNECTION_SUCCESSFUL, "Nothing to update.");
+                        showConnectionMessage("Nothing to update.", CONNECTION_SUCCESSFUL);
                     } else {
-                        showConnectionMessage(CONNECTION_SUCCESSFUL, "Updated " + updateUsers + " users.");
+                        showConnectionMessage("Updated " + updateUsers + " users.", CONNECTION_SUCCESSFUL);
                     }
 
                 } else {
-                    showConnectionMessage(CONNECTION_ERROR, "" + response.code());
+                    showConnectionMessage("" + response.code(), CONNECTION_ERROR);
                 }
             }
 
             @Override
             public void onFailure(final Call<List<User>> call, final Throwable t) {
-                showConnectionMessage(CONNECTION_FAIL, "Device is offline."); //t.toString()
+                showConnectionMessage(t.toString(), CONNECTION_FAIL);
             }
         });
     }
 
-    private void showConnectionMessage(final int status, final String message) {
+    private void showConnectionMessage(final String message, final int status) {
         String text = "";
         int textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
         switch (status) {
@@ -453,11 +460,11 @@ public class LoginActivity extends BaseActivity implements
                 textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorOK);
                 break;
             case CONNECTION_ERROR:
-                text = "Error while connecting to server: " + message;
+                text = "Error connecting to server: " + message;
                 textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
                 break;
             case CONNECTION_FAIL:
-                text = "Fail to connect to server. " + message;
+                text = "Orders brief list request fail: " + message;
                 textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
                 break;
         }
