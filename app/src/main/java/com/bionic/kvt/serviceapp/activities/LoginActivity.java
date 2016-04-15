@@ -21,17 +21,14 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -49,121 +46,103 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnFocusChange;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 
-/**
- * A login screen that offers login via email/password.
- */
-public class LoginActivity extends BaseActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class LoginActivity extends BaseActivity implements
+        LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
     private static final int CONNECTION_SUCCESSFUL = 0;
     private static final int CONNECTION_ERROR = 1;
     private static final int CONNECTION_FAIL = 2;
 
-
     private final String TAG = this.getClass().getName();
-
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-    //    private ImageView mImageView;
-//    private ImageView mImageLogoView;
+    @Bind(R.id.connection_status)
+    TextView mConnectionStatusText;
+
+    @Bind(R.id.email)
+    AutoCompleteTextView mEmailView;
+
+    @Bind(R.id.password)
+    EditText mPasswordView;
+
+    @Bind(R.id.login_progress)
+    View mProgressView;
+
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+
     private View mLoginLayout;
-    //    private TextView mHeaderTextView;
     private SharedPreferences userSharedPreferences;
-    private TextView mConnectionStatusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
 
         DbUtils.createTableIfNotExist(com.bionic.kvt.serviceapp.db.User.class);
-
-        mConnectionStatusText = (TextView) findViewById(R.id.connection_status);
 
         //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+    }
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-
-        //Restore saved password, if any
-        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
-                    if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
-                        mPasswordView.setText(userSharedPreferences.getString("password", ""));
-                    }
-                }
+    // Restore saved password, if any
+    @OnFocusChange(R.id.email)
+    public void onEmailFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
+            if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
+                mPasswordView.setText(userSharedPreferences.getString("password", ""));
             }
-        });
+        }
+    }
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    @OnEditorAction(R.id.password)
+    public boolean onPasswordEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+        if (id == R.id.login || id == EditorInfo.IME_NULL) {
+            attemptLogin();
+            return true;
+        }
+        return false;
+    }
 
+    @OnClick(R.id.email_sign_in_button)
+    public void onSingInClick(View view) {
+        attemptLogin();
+    }
 
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+    // Forget Password Button
+    @OnClick(R.id.forget_password_button)
+    public void onForgetPasswordClick(View v) {
+        if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+            requestNetworkStatePermission();
+        } else {
+            NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
+            if (!networkHelper.isNetworkConnected()) {
+                Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            } else {
+                //Start login activity
+                startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
+                //Disable animation
+                overridePendingTransition(0, 0);
             }
-        });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-
-        //Forget Password Button
-        Button mForgetPassword = (Button) findViewById(R.id.forget_password_button);
-        mForgetPassword.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    requestNetworkStatePermission();
-                } else {
-                    NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
-                    if (!networkHelper.isNetworkConnected()) {
-                        Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        //Start login activity
-                        startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
-                        //Disable animation
-                        overridePendingTransition(0, 0);
-                    }
-                }
-            }
-        });
-
+        }
     }
 
 
@@ -430,7 +409,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     }
 
     private void updateUserList() {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Connecting to server for user list update");
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Connecting to server for user list update");
 
         final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {

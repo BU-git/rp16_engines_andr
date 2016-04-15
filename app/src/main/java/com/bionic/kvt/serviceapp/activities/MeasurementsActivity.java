@@ -2,11 +2,12 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.bionic.kvt.serviceapp.R;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MeasurementsActivity extends BaseActivity {
 
@@ -14,14 +15,12 @@ public class MeasurementsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurements);
+        ButterKnife.bind(this);
+    }
 
-        Button nextButton = (Button) findViewById(R.id.measurements_next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NSAActivity.class);
-                startActivity(intent);
-            }
-        });
+    @OnClick(R.id.measurements_next_button)
+    public void onNextClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), NSAActivity.class);
+        startActivity(intent);
     }
 }

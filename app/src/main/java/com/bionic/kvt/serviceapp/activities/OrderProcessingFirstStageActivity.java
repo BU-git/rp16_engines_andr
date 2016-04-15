@@ -9,61 +9,55 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class OrderProcessingFirstStageActivity extends BaseActivity {
-    CheckBox checkBoxInstructions;
-    CheckBox checkBoxLMRA;
-    Button nextButton;
+    @Bind(R.id.process_order_page_hint)
     TextView nextButtonHint;
+
+    @Bind(R.id.order_processing_first_stage_next_button)
+    Button nextButton;
+
+    @Bind(R.id.order_processing_first_stage_instructions_checkbox)
+    CheckBox checkBoxInstructions;
+
+    @Bind(R.id.order_processing_first_stage_lmra_checkbox)
+    CheckBox checkBoxLMRA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_processing_first_stage);
+        ButterKnife.bind(this);
+    }
 
-        //Navigation to LMRA
-        Button registerDangerous = (Button) findViewById(R.id.order_processing_first_stage_lmra_button);
-        registerDangerous.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LMRAActivity.class);
-                startActivity(intent);
-            }
-        });
+    @OnClick(R.id.order_processing_first_stage_lmra_button)
+    public void onLMRAClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), LMRAActivity.class);
+        startActivity(intent);
+    }
 
-        nextButtonHint = (TextView) findViewById(R.id.process_order_page_hint);
+    @OnClick(R.id.order_processing_first_stage_next_button)
+    public void onNextClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), ComponentDefectsActivity.class);
+        startActivity(intent);
+    }
 
-        nextButton = (Button) findViewById(R.id.order_processing_first_stage_next_button);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ComponentDefectsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-        checkBoxInstructions = (CheckBox) findViewById(R.id.order_processing_first_stage_instructions_checkbox);
-        checkBoxLMRA = (CheckBox) findViewById(R.id.order_processing_first_stage_lmra_checkbox);
-        checkBoxInstructions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextButtonEnableHintDisable();
-            }
-        });
-        checkBoxLMRA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextButtonEnableHintDisable();
-            }
-        });
+    @OnClick({R.id.order_processing_first_stage_instructions_checkbox,
+            R.id.order_processing_first_stage_lmra_checkbox})
+    public void onCheckboxClick(View v) {
+        nextButtonEnableHintDisable();
     }
 
     private void nextButtonEnableHintDisable() {
         nextButton.setEnabled(checkBoxInstructions.isChecked() && checkBoxLMRA.isChecked());
         if (nextButton.isEnabled()) {
             nextButtonHint.setVisibility(View.INVISIBLE);
-        } else nextButtonHint.setVisibility(View.VISIBLE);
-
+        } else {
+            nextButtonHint.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -67,8 +67,8 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text=" updating... "
-            android:visibility="invisible"
-            android:textColor="@color/colorSecondaryText" />
+            android:textColor="@color/colorSecondaryText"
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/order_update_status"

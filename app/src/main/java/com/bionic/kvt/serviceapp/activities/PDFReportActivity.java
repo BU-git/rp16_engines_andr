@@ -16,7 +16,6 @@ import android.print.pdf.PrintedPdfDocument;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -32,14 +31,27 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
     File pdfFile;
+
+    @Bind(R.id.pdf_report_send_button)
     Button sendButton;
+
+    @Bind(R.id.pdf_report_header)
+    TextView pdfReportHeaderTextView;
+
+    @Bind(R.id.pdf_text_status)
+    TextView pdfTextLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
+        ButterKnife.bind(this);
 
         if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
@@ -57,28 +69,15 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             return;
         }
 
-        Button doneButton = (Button) findViewById(R.id.pdf_button_done);
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
         final long orderNumber = Session.getCurrentOrder().getNumber();
         pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
-        ((TextView) findViewById(R.id.pdf_report_header)).setText(pdfReportHeader);
+        pdfReportHeaderTextView.setText(pdfReportHeader);
 
-        TextView pdfTextLog = ((TextView) findViewById(R.id.pdf_text_status));
         String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
                 + " Report_" + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFullPath);
-
-        sendButton = (Button) findViewById(R.id.pdf_report_send_button);
 
         getSupportLoaderManager().initLoader(1, null, this);
     }
@@ -94,9 +93,16 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         showPDFReport(pdfFile);
     }
 
+    @OnClick(R.id.pdf_button_done)
+    public void onDoneClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     @Override
     public void onLoaderReset(Loader<Void> loader) {
-
+        // NOOP
     }
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {

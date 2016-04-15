@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,14 +16,27 @@ import com.bionic.kvt.serviceapp.views.DrawingView;
 import java.io.File;
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static android.provider.MediaStore.Images.Media.insertImage;
 
 public class InsertSignaturesActivity extends BaseActivity {
-    private DrawingView engineerDrawingView;
-    private DrawingView clientDrawingView;
-    private Button buttonComplete;
-    private ToggleButton buttonConfirmEngineer;
-    private ToggleButton buttonConfirmClient;
+    @Bind(R.id.draw_engineer_signature)
+    DrawingView engineerDrawingView;
+
+    @Bind(R.id.draw_client_signature)
+    DrawingView clientDrawingView;
+
+    @Bind(R.id.button_complete)
+    Button buttonComplete;
+
+    @Bind(R.id.button_confirm_engineer)
+    ToggleButton buttonConfirmEngineer;
+
+    @Bind(R.id.button_confirm_client)
+    ToggleButton buttonConfirmClient;
 
     private final int ENGINEER_BUTTON = 1;
     private final int CLIENT_BUTTON = 2;
@@ -34,56 +46,39 @@ public class InsertSignaturesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_signatures);
+        ButterKnife.bind(this);
+    }
 
-        engineerDrawingView = (DrawingView) findViewById(R.id.draw_engineer_signature);
-        clientDrawingView = (DrawingView) findViewById(R.id.draw_client_signature);
+    @OnClick(R.id.button_clear_engineer)
+    public void onClearEngineerClick(View v) {
+        engineerDrawingView.clearCanvas();
+        buttonConfirmEngineer.setChecked(false);
+        buttonComplete.setEnabled(false);
+    }
 
-        Button buttonClearEngineer = (Button) findViewById(R.id.button_clear_engineer);
-        buttonClearEngineer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                engineerDrawingView.clearCanvas();
-                buttonConfirmEngineer.setChecked(false);
-                buttonComplete.setEnabled(false);
-            }
-        });
+    @OnClick(R.id.button_clear_client)
+    public void onClearClientClick(View v) {
+        clientDrawingView.clearCanvas();
+        buttonConfirmClient.setChecked(false);
+        buttonComplete.setEnabled(false);
+    }
 
-        Button buttonClearClient = (Button) findViewById(R.id.button_clear_client);
-        buttonClearClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clientDrawingView.clearCanvas();
-                buttonConfirmClient.setChecked(false);
-                buttonComplete.setEnabled(false);
-            }
-        });
+    @OnClick(R.id.button_complete)
+    public void onCompleteClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
+        startActivity(intent);
+    }
 
-        buttonComplete = (Button) findViewById(R.id.button_complete);
-        buttonComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-                startActivity(intent);
-            }
-        });
+    @OnClick(R.id.button_confirm_engineer)
+    public void onConfirmEngineerClick(View v) {
+        currentButtonClicked = ENGINEER_BUTTON;
+        onConfirmClicked();
+    }
 
-        buttonConfirmEngineer = (ToggleButton) findViewById(R.id.button_confirm_engineer);
-        buttonConfirmEngineer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentButtonClicked = ENGINEER_BUTTON;
-                onConfirmClicked();
-            }
-        });
-
-        buttonConfirmClient = (ToggleButton) findViewById(R.id.button_confirm_client);
-        buttonConfirmClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentButtonClicked = CLIENT_BUTTON;
-                onConfirmClicked();
-            }
-        });
+    @OnClick(R.id.button_confirm_client)
+    public void onConfirmClientClick(View v) {
+        currentButtonClicked = CLIENT_BUTTON;
+        onConfirmClicked();
     }
 
     private void onConfirmClicked() {
@@ -114,7 +109,8 @@ public class InsertSignaturesActivity extends BaseActivity {
                 description = "Engineer's signature";
                 currentToggleButton = buttonConfirmEngineer;
                 break;
-            default: // CLIENT_BUTTON:
+            case CLIENT_BUTTON:
+            default:
                 currentDrawingView = clientDrawingView;
                 description = "Client's signature";
                 currentToggleButton = buttonConfirmClient;
@@ -130,9 +126,7 @@ public class InsertSignaturesActivity extends BaseActivity {
         );
 
         if (signature == null) {
-            Toast unsavedToast = Toast.makeText(getApplicationContext(),
-                    "Signatures could not be saved", Toast.LENGTH_SHORT);
-            unsavedToast.show();
+            Toast.makeText(getApplicationContext(), "Signatures could not be saved", Toast.LENGTH_SHORT).show();
             currentToggleButton.setChecked(false);
         }
 

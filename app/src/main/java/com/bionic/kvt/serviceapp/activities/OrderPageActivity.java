@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -15,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -33,6 +31,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener,
@@ -40,8 +42,21 @@ public class OrderPageActivity extends BaseActivity implements
 
     private OrderAdapter ordersAdapter;
     private LocalService connectionService;
-    private TextView orderUpdatingText;
-    private TextView orderUpdateStatusText;
+
+    @Bind(R.id.order_updating)
+    TextView orderUpdatingText;
+
+    @Bind(R.id.order_update_status)
+    TextView orderUpdateStatusText;
+
+    @Bind(R.id.order_page_search_view)
+    SearchView searchView;
+
+    @Bind(R.id.service_engineer_id)
+    TextView engineerId;
+
+    @Bind(R.id.orders_recycler_view)
+    RecyclerView ordersRecyclerView;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
 
@@ -67,19 +82,19 @@ public class OrderPageActivity extends BaseActivity implements
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
+        ButterKnife.bind(this);
 
+        // Generating OrderOverviewList
+        DbUtils.updateOrderOverviewList();
+
+        Session.setDemoData();
 //        DbUtils.resetOrderTableWithSubTables();
 
-        orderUpdatingText = (TextView) findViewById(R.id.order_updating);
-        orderUpdateStatusText = (TextView) findViewById(R.id.order_update_status);
-
         //Configuring Search view
-        SearchView searchView = (SearchView) findViewById(R.id.order_page_search_view);
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         searchView.setInputType(InputType.TYPE_CLASS_NUMBER);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -103,45 +118,34 @@ public class OrderPageActivity extends BaseActivity implements
             }
         });
 
-        AutoCompleteTextView search_text = (AutoCompleteTextView) searchView.findViewById(
-                searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null));
-        search_text.setTextSize(14);
-
-
-        // Configuring Log out button
-        Button logOut = (Button) findViewById(R.id.service_engineer_logout_button);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                Session.clearSession();
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
+        ((AutoCompleteTextView) searchView
+                .findViewById(searchView
+                        .getContext()
+                        .getResources()
+                        .getIdentifier("android:id/search_src_text", null, null))
+        ).setTextSize(14);
 
         // Configuring engineer Id
-        TextView engineerId = (TextView) findViewById(R.id.service_engineer_id);
         engineerId.setText(Session.getEngineerName() + " (" + Session.getEngineerEmail() + ")");
 
         // Configuring Recycler View
-        RecyclerView ordersRecyclerView = (RecyclerView) findViewById(R.id.orders_recycler_view);
         ordersRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager ordersLayoutManager =
                 new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT);
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
-        // Generating OrderOverviewList
-        DbUtils.updateOrderOverviewList();
-
-        Session.setDemoData();
         // Showing all orders
         ordersAdapter = new OrderAdapter(getApplicationContext(), Session.getOrderOverviewList());
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
+    }
 
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order page created.");
+    @OnClick(R.id.service_engineer_logout_button)
+    public void onLogOutClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Session.clearSession();
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     @Override
@@ -163,16 +167,17 @@ public class OrderPageActivity extends BaseActivity implements
         }
     }
 
+    @Override
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(this, LocalService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        Session.setCurrentOrder(null);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
         if (connectionService != null) {
             connectionService.stopTask();
             unbindService(serviceConnection);
