@@ -34,7 +34,6 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -138,14 +137,6 @@ public class OrderPageActivity extends BaseActivity implements
         ordersRecyclerView.setAdapter(ordersAdapter);
     }
 
-    @OnClick(R.id.service_engineer_logout_button)
-    public void onLogOutClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-        Session.clearSession();
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -156,13 +147,20 @@ public class OrderPageActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item.getItemId();
+        Intent intent;
         switch (id) {
-            case R.id.show_log:
-                Intent intent = new Intent(getApplicationContext(), DebugActivity.class);
+            case R.id.log_out:
+                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Session.clearSession();
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
+            case R.id.show_log:
+                intent = new Intent(getApplicationContext(), DebugActivity.class);
+                startActivity(intent);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
