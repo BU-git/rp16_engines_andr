@@ -52,7 +52,7 @@ public class LocalService extends Service {
     }
 
     //Periodic update from server
-    private Runnable updateTask = new Runnable() {
+    private final Runnable updateTask = new Runnable() {
         @Override
         public void run() {
             updateOrders();

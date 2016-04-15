@@ -18,12 +18,12 @@ import java.util.List;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
-    private Context context;
+    private final Context context;
     private List<OrderOverview> orderOverviewList;
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    OnOrderLineClickListener onOrderLineClickListener;
-    OnPDFButtonClickListener onPDFButtonClickListener;
+    private OnOrderLineClickListener onOrderLineClickListener;
+    private OnPDFButtonClickListener onPDFButtonClickListener;
 
 
     public OrderAdapter(Context context, List<OrderOverview> orderOverviewList) {
@@ -44,7 +44,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
-        View oneCellView;
+        final View oneCellView;
 
         public UserViewHolder(View itemView) {
             super(itemView);

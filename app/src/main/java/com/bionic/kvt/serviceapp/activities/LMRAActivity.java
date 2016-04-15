@@ -17,7 +17,7 @@ public class LMRAActivity extends BaseActivity {
 
     private static final String LMRALISTNAME = "LMRA List";
 
-    public static ArrayList<LMRA> lmraList = new ArrayList<LMRA>();
+    public static ArrayList<LMRA> lmraList = new ArrayList<>();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

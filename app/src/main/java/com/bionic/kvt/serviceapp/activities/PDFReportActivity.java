@@ -36,7 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
-    File pdfFile;
+    private File pdfFile;
 
     @Bind(R.id.pdf_report_send_button)
     Button sendButton;
@@ -107,8 +107,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {
         private int pdfPageCount = 1;
-        private File pdfFile;
-        private Context context;
+        private final File pdfFile;
+        private final Context context;
 
         public GeneratePDFReportFile(Context context, File pdfFile) {
             super(context);

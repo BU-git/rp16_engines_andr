@@ -1,7 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +20,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DebugActivity extends BaseActivity {
-    private List<User> userListOnServer = new ArrayList<>();
-    private List<OrderBrief> orderBriefList = new ArrayList<>();
+    private final List<User> userListOnServer = new ArrayList<>();
+    private final List<OrderBrief> orderBriefList = new ArrayList<>();
     private Order order;
 
     private EditText orderIdInput;
