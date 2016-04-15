@@ -40,4 +40,15 @@ public class Installation {
     public void setTown(String town) {
         this.town = town;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Installation{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", postCode='").append(postCode).append('\'');
+        sb.append(", town='").append(town).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

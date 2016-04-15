@@ -32,4 +32,14 @@ public class Part { //Onderdeel
     public void setMattx(String mattx) {
         this.mattx = mattx;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Part{");
+        sb.append("bdmng='").append(bdmng).append('\'');
+        sb.append(", matnr='").append(matnr).append('\'');
+        sb.append(", mattx='").append(mattx).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

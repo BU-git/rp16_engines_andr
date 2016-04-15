@@ -16,7 +16,7 @@
     <string name="no_connection">No connection detected</string>
     <string name="service_engineer">Service engineer:</string>
     <string name="orders">Orders</string>
-    <string name="order_number">Order number</string>
+    <string name="order_number">Order</string>
 
     <string name="date">Date</string>
     <string name="installation">Installation</string>

@@ -1,26 +1,21 @@
 package com.bionic.kvt.serviceapp.api;
 
+import android.support.annotation.Nullable;
+
 import java.util.Date;
 
 public class OrderBrief {
 
     /**
      * Order number [nummer in XML}
-     * NotNull
      */
     private long number;
 
     /**
      * This is time when this order was imported to BO Server.
      * After import it never changed.
-     * NotNull
      */
-    /**
-     * This is time when this order was imported to BO Server.
-     * After import it never changed.
-     * NotNull
-     */
-    private Date importDate;
+    private long importDate;
 
     /**
      * This is time when this order was changed in BO Server.
@@ -28,45 +23,43 @@ public class OrderBrief {
      * This field will be used by Android App to check if order has to be updated from server.
      * When order is imported to BO Server this time is set the same value as lastServerChangeDate
      * This field will NOT changed in Android App.
-     * NotNull
      */
-    private Date lastServerChangeDate;
+    private long lastServerChangeDate;
 
     /**
      * This is time when this order was changed in Android.
      * If order changed in Android App this field has to be updated.
      * This field will be used by Android App to check if order need to be updated to server.
      * This field will NOT changed in BO Server.
-     * When order is imported to BO Server this time is set the same value as lastServerChangeDate
-     * NotNull
+     * When order is imported to BO Server this time is set to NULL
      */
-    private Date lastAndroidChangeDate;
+    private long lastAndroidChangeDate;
 
 
     public OrderBrief() {
     }
 
-    public Date getImportDate() {
+    public long getImportDate() {
         return importDate;
     }
 
-    public void setImportDate(Date importDate) {
+    public void setImportDate(long importDate) {
         this.importDate = importDate;
     }
 
-    public Date getLastServerChangeDate() {
+    public long getLastServerChangeDate() {
         return lastServerChangeDate;
     }
 
-    public void setLastServerChangeDate(Date lastServerChangeDate) {
+    public void setLastServerChangeDate(long lastServerChangeDate) {
         this.lastServerChangeDate = lastServerChangeDate;
     }
 
-    public Date getLastAndroidChangeDate() {
+    public long getLastAndroidChangeDate() {
         return lastAndroidChangeDate;
     }
 
-    public void setLastAndroidChangeDate(Date lastAndroidChangeDate) {
+    public void setLastAndroidChangeDate(long lastAndroidChangeDate) {
         this.lastAndroidChangeDate = lastAndroidChangeDate;
     }
 

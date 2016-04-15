@@ -67,7 +67,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
     @Override
     public void onBindViewHolder(UserViewHolder holder, final int position) {
         int row = position / Session.ORDER_OVERVIEW_COLUMN_COUNT;
-        int cell = position - row * Session.ORDER_OVERVIEW_COLUMN_COUNT;
+        int cell = position % Session.ORDER_OVERVIEW_COLUMN_COUNT;
+//        int cell = position - row * Session.ORDER_OVERVIEW_COLUMN_COUNT;
 
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
         Button buttonCell = (Button) holder.oneCellView.findViewById(R.id.order_make_pdf_button);

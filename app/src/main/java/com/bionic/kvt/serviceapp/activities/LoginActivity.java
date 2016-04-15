@@ -245,12 +245,12 @@ public class LoginActivity extends BaseActivity implements
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+        // Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
+        //: Replace this with your own logic
         return password.length() >= 4;
     }
 
@@ -432,11 +432,11 @@ public class LoginActivity extends BaseActivity implements
                         return;
                     }
 
-                    int updateUsers = DbUtils.updateUserTableFromServer(response.body());
+                    int updateUsers = DbUtils.updateUserTableFromServer(response.body()); //TODO Change messages
                     if (updateUsers == 0) {
                         showConnectionMessage("Nothing to update.", CONNECTION_SUCCESSFUL);
                     } else {
-                        showConnectionMessage("Updated " + updateUsers + " users.", CONNECTION_SUCCESSFUL);
+                        showConnectionMessage("Synchronised " + updateUsers + " user(s).", CONNECTION_SUCCESSFUL);
                     }
 
                 } else {

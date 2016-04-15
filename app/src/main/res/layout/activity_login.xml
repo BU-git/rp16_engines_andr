@@ -66,7 +66,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="demo@kvt.nl" />
+                        android:text="rvrooy@kvt.nl" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -90,7 +90,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="demo" />
+                        android:text="rvrooy@kvt.nl" />
 
                 </android.support.design.widget.TextInputLayout>
 

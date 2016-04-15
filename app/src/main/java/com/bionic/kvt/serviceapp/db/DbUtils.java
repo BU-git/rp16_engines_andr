@@ -9,6 +9,7 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.realm.Realm;
@@ -115,13 +116,13 @@ public class DbUtils {
 
     private static boolean isOrderNewerOnServer(Order orderInDb, OrderBrief orderBrief) {
         if (orderInDb.getImportDate()
-                .compareTo(orderBrief.getImportDate()) != 0)
+                .compareTo(new Date(orderBrief.getImportDate())) != 0)
             return true;
 
         if (orderInDb.getLastServerChangeDate()
-                .compareTo(orderBrief.getLastServerChangeDate()) != 0)
+                .compareTo(new Date(orderBrief.getLastServerChangeDate())) != 0)
             return true;
-
+//TODO WHAT WITH DONE STATUS ?
         return false;
     }
 
@@ -183,7 +184,7 @@ public class DbUtils {
         final Order newOrder = realm.createObject(Order.class);
 
         newOrder.setOrderType(serverOrder.getOrderType());
-        newOrder.setDate(serverOrder.getDate());
+        newOrder.setDate(new Date(serverOrder.getDate()));
         newOrder.setReference(serverOrder.getReference());
         newOrder.setNote(serverOrder.getNote());
 
@@ -238,17 +239,18 @@ public class DbUtils {
         }
         newOrder.setExtraInfo(newInfoList);
 
-        newOrder.setImportDate(serverOrder.getImportDate());
-        newOrder.setLastServerChangeDate(serverOrder.getLastServerChangeDate());
-        newOrder.setLastAndroidChangeDate(serverOrder.getLastAndroidChangeDate());
+        newOrder.setImportDate(new Date(serverOrder.getImportDate()));
+        newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
+        newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
 
-        newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // ???????????????????????
+        newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // TODO
 
         realm.commitTransaction(); // No logic if transaction fail!!!
 
         realm.close();
     }
 
+    // TODO
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Updating User table from server data");
@@ -258,8 +260,8 @@ public class DbUtils {
 
         // Set all current users in DB not on server
         realm.beginTransaction();
-        for (User userInDb : allCurrentUsers) {
-            userInDb.setOnServer(false);
+        for (int i = allCurrentUsers.size() - 1; i >= 0; i--) {
+            allCurrentUsers.get(i).setOnServer(false);
         }
         realm.where(User.class).equalTo("email", "demo@kvt.nl").findAll().get(0).setOnServer(true);
         realm.commitTransaction(); //No logic if transaction fail!!!

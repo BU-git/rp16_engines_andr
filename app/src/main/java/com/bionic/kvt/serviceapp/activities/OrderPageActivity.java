@@ -128,8 +128,16 @@ public class OrderPageActivity extends BaseActivity implements
 
         // Configuring Recycler View
         ordersRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager ordersLayoutManager =
-                new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT);
+        GridLayoutManager ordersLayoutManager =
+                new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT + 3);
+        ordersLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int cell = position % Session.ORDER_OVERVIEW_COLUMN_COUNT;
+                if (cell == 2 || cell == 3 || cell == 4) return 2;
+                return 1;
+            }
+        });
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         // Showing all orders
