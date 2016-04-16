@@ -20,7 +20,6 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -63,9 +62,6 @@ public class LoginActivity extends BaseActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
-    private static final int CONNECTION_SUCCESSFUL = 0;
-    private static final int CONNECTION_ERROR = 1;
-    private static final int CONNECTION_FAIL = 2;
 
     private final String TAG = this.getClass().getName();
     private UserLoginTask mAuthTask = null;
@@ -415,11 +411,11 @@ public class LoginActivity extends BaseActivity implements
 
         // Is device connected to network
         if (!Utils.isConnected(getApplicationContext())) {
-            showConnectionMessage("No connection to network.", CONNECTION_ERROR);
+            showConnectionMessage("No connection to network.");
             return;
         }
 
-        final Call<List<User>> userListRequest = Session.getOrderServiceConnection().getAllUsers();
+        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(final Call<List<User>> call,
@@ -427,50 +423,33 @@ public class LoginActivity extends BaseActivity implements
                 if (response.isSuccessful()) {
 
                     if (response.body() == null || response.body().size() == 0) {
-                        showConnectionMessage("No users on server found.", CONNECTION_SUCCESSFUL);
+                        showConnectionMessage("Connection successful. No users on server found.");
                         DbUtils.resetUserTable();
                         return;
                     }
 
-                    int updateUsers = DbUtils.updateUserTableFromServer(response.body()); //TODO Change messages
-                    if (updateUsers == 0) {
-                        showConnectionMessage("Nothing to update.", CONNECTION_SUCCESSFUL);
+                    int activeUsers = DbUtils.updateUserTableFromServer(response.body());
+                    if (activeUsers == 0) {
+                        showConnectionMessage(" Connection successful. No active users on server.");
                     } else {
-                        showConnectionMessage("Synchronised " + updateUsers + " user(s).", CONNECTION_SUCCESSFUL);
+                        showConnectionMessage("Connection successful. Synchronised " + activeUsers + " user(s).");
                     }
 
                 } else {
-                    showConnectionMessage("" + response.code(), CONNECTION_ERROR);
+                    showConnectionMessage("Error connecting to server: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(final Call<List<User>> call, final Throwable t) {
-                showConnectionMessage(t.toString(), CONNECTION_FAIL);
+                showConnectionMessage("User list request fail: " + t.toString());
             }
         });
     }
 
-    private void showConnectionMessage(final String message, final int status) {
-        String text = "";
-        int textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
-        switch (status) {
-            case CONNECTION_SUCCESSFUL:
-                text = "Connection successful. " + message;
-                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorOK);
-                break;
-            case CONNECTION_ERROR:
-                text = "Error connecting to server: " + message;
-                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
-                break;
-            case CONNECTION_FAIL:
-                text = "Orders brief list request fail: " + message;
-                textColor = ContextCompat.getColor(getApplicationContext(), R.color.colorWarring);
-                break;
-        }
-        mConnectionStatusText.setTextColor(textColor);
-        mConnectionStatusText.setText(text);
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(text);
+    private void showConnectionMessage(final String message) {
+        mConnectionStatusText.setText(message);
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(message);
 
     }
 }

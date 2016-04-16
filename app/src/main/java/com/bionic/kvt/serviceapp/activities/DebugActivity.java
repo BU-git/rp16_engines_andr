@@ -2,19 +2,23 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.Order;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.api.User;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,64 +28,55 @@ public class DebugActivity extends BaseActivity {
     private final List<OrderBrief> orderBriefList = new ArrayList<>();
     private Order order;
 
-    private EditText orderIdInput;
-    private TextView synchronisationLog;
+    @Bind(R.id.connection_order_id)
+    EditText orderIdInput;
+    @Bind(R.id.synchronisation_log)
+    TextView synchronisationLog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
-
-        synchronisationLog = (TextView) findViewById(R.id.synchronisation_log);
-
-        final Button refreshLog = (Button) findViewById(R.id.refresh_log);
-        refreshLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showApplicationLog();
-            }
-        });
-
-
-        final Button getUsers = (Button) findViewById(R.id.connection_get_users);
-        getUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getUserList();
-            }
-        });
-
-
-        final Button getOrdersBriefList = (Button) findViewById(R.id.connection_get_orders_brief);
-        getOrdersBriefList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getOrdersBriefList();
-            }
-        });
-
-
-        orderIdInput = (EditText) findViewById(R.id.connection_order_id);
-        final Button getOrdersById = (Button) findViewById(R.id.connection_get_order);
-        getOrdersById.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final long orderId;
-                if ("".equals(orderIdInput.getText().toString())) {
-                    orderId = 0;
-                } else {
-                    orderId = Long.valueOf(orderIdInput.getText().toString());
-                }
-                getOrderById(orderId);
-            }
-        });
+        ButterKnife.bind(this);
 
         showApplicationLog();
     }
 
+    @OnClick(R.id.reset_user_db)
+    public void onResetUserBDClick(View v) {
+        DbUtils.resetUserTable();
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("User DB reset done!");
+        showApplicationLog();
+    }
+
+    @OnClick(R.id.refresh_log)
+    public void onRefreshLogClick(View v) {
+        showApplicationLog();
+    }
+
+    @OnClick(R.id.connection_get_users)
+    public void onGetUsersClick(View v) {
+        getUserList();
+    }
+
+    @OnClick(R.id.connection_get_orders_brief)
+    public void onGetOrdersBriefClick(View v) {
+        getOrdersBriefList();
+    }
+
+    @OnClick(R.id.connection_get_order)
+    public void onGetOrderClick(View v) {
+        final long orderId;
+        if ("".equals(orderIdInput.getText().toString())) {
+            orderId = 0;
+        } else {
+            orderId = Long.valueOf(orderIdInput.getText().toString());
+        }
+        getOrderById(orderId);
+    }
+
     private void getUserList() {
-        final Call<List<User>> userListRequest =
-                Session.getOrderServiceConnection().getAllUsers();
+        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
 
         addLogMessage("Getting user list from " + userListRequest.request());
 
@@ -110,7 +105,7 @@ public class DebugActivity extends BaseActivity {
 
     private void getOrdersBriefList() {
         final Call<List<OrderBrief>> userListRequest =
-                Session.getOrderServiceConnection().getOrdersBrief(Session.getEngineerId());
+                Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
 
         addLogMessage("Getting orders brief list from " + userListRequest.request());
 
@@ -139,7 +134,7 @@ public class DebugActivity extends BaseActivity {
 
     private void getOrderById(long id) {
         final Call<Order> orderRequest =
-                Session.getOrderServiceConnection().getOrder(id, Session.getEngineerId());
+                Session.getServiceConnection().getOrder(id, Session.getEngineerId());
 
         addLogMessage("Getting order from " + orderRequest.request());
 

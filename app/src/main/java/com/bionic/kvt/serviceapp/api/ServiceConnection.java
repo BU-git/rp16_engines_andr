@@ -5,14 +5,13 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface OrderServiceConnection {
+public interface ServiceConnection {
     // Request list of all Users currently available in system
     // URL format /users
     // Expecting JSON
-    @POST("users")
+    @GET("users")
     Call<List<User>> getAllUsers();
 
     // Request list of all Orders currently available for {userId} in brief format

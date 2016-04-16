@@ -26,6 +26,12 @@
             android:textStyle="bold" />
 
         <Button
+            android:id="@+id/reset_user_db"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reset User DB" />
+
+        <Button
             android:id="@+id/refresh_log"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

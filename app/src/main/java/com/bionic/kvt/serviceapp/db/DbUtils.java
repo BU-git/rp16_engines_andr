@@ -250,20 +250,19 @@ public class DbUtils {
         realm.close();
     }
 
-    // TODO
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Updating User table from server data");
 
         final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<User> allCurrentUsers = realm.where(User.class).findAll();
 
-        // Set all current users in DB not on server
+        // Set all current users in DB  flag not on server
+        final RealmResults<User> allCurrentUsers =
+                realm.where(User.class).notEqualTo("email", "demo@kvt.nl").findAll();
         realm.beginTransaction();
         for (int i = allCurrentUsers.size() - 1; i >= 0; i--) {
             allCurrentUsers.get(i).setOnServer(false);
         }
-        realm.where(User.class).equalTo("email", "demo@kvt.nl").findAll().get(0).setOnServer(true);
         realm.commitTransaction(); //No logic if transaction fail!!!
 
         // Updating users in DB
@@ -289,8 +288,9 @@ public class DbUtils {
         }
         realm.commitTransaction(); //No logic if transaction fail!!!
 
-        // Returning updated in DB User count;
-        final int count = realm.where(User.class).equalTo("isOnServer", true).findAll().size();
+        // Returning active Users in DB;
+        final int count = realm.where(User.class).equalTo("isOnServer", true).
+                notEqualTo("email", "demo@kvt.nl").findAll().size();
         realm.close();
         return count;
     }

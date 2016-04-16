@@ -2,7 +2,7 @@ package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
 
-import com.bionic.kvt.serviceapp.api.OrderServiceConnection;
+import com.bionic.kvt.serviceapp.api.ServiceConnection;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Session extends Application {
     private static Session currentUserSession;
 
-    private OrderServiceConnection orderServiceConnection;
+    private ServiceConnection serviceConnection;
     private List<String> sessionLog;
     private boolean isSyncingFromServer = false;
 
@@ -54,7 +54,7 @@ public class Session extends Application {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        orderServiceConnection = retrofit.create(OrderServiceConnection.class);
+        serviceConnection = retrofit.create(ServiceConnection.class);
 
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .name(BuildConfig.DB_NAME)
@@ -64,8 +64,8 @@ public class Session extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
-    public static OrderServiceConnection getOrderServiceConnection() {
-        return currentUserSession.orderServiceConnection;
+    public static ServiceConnection getServiceConnection() {
+        return currentUserSession.serviceConnection;
     }
 
     public static void clearSession() {

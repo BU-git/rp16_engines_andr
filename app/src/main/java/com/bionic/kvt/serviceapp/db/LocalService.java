@@ -97,7 +97,7 @@ public class LocalService extends Service {
 
     private void getOrdersBriefListFromServer() {
         final Call<List<OrderBrief>> orderBriefListRequest =
-                Session.getOrderServiceConnection().getOrdersBrief(Session.getEngineerId());
+                Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
 
         serviceLogging("Getting orders brief list from: " + orderBriefListRequest.request(),
                 Session.UPDATE_STATUS_DEFAULT);
@@ -145,7 +145,7 @@ public class LocalService extends Service {
 
     private void updateOrderFomServer(long orderNumber, String userId) {
         final Call<Order> orderRequest =
-                Session.getOrderServiceConnection().getOrder(orderNumber, userId);
+                Session.getServiceConnection().getOrder(orderNumber, userId);
 
         serviceLogging("Getting order from: " + orderRequest.request(), Session.UPDATE_STATUS_DEFAULT);
 
