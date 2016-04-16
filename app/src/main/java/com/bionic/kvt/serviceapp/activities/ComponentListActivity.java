@@ -66,7 +66,7 @@ public class ComponentListActivity extends AppCompatActivity {
 
     private List<Element> elementList;
     public static Map<String, Map<String, JsonObject>> partMap = new HashMap<>();
-    public Map<String, JsonObject> elementMap = new HashMap<>();
+    //public Map<String, JsonObject> elementMap = new HashMap<>();
 
     private String COMPONENTFILE = BuildConfig.COMPONENTS_JSON;
 
@@ -211,11 +211,13 @@ public class ComponentListActivity extends AppCompatActivity {
 
                             Log.d(TAG,"Part: " + entry.getKey());
                             JsonArray thirdArray = entry.getValue().getAsJsonArray();
-
+                            Map<String, JsonObject> elementMap = new HashMap<>();
                             for (int j = 0; j < thirdArray.size(); j++) {
                                 JsonObject thirdObject =  thirdArray.get(j).getAsJsonObject();
                                 Set<Map.Entry<String,JsonElement>> entrySetSecond = thirdObject.entrySet();
+
                                 for (Map.Entry<String,JsonElement> entrySecond : entrySetSecond){
+                                    //elementMap.put(entrySecond.getKey(),null);
                                     elementMap.put(entrySecond.getKey(),entrySecond.getValue().getAsJsonObject());
                                     //Log.d(TAG,"Element: " + entrySecond.getKey());
                                     //Log.d(TAG, "Problem: " + entrySecond.getValue());
