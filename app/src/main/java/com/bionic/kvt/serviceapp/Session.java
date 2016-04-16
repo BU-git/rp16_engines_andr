@@ -3,11 +3,9 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.ServiceConnection;
-import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,17 +26,12 @@ public class Session extends Application {
     private String engineerName;
     private String engineerEmail;
     private String engineerId;
-    private Order currentOrder;
+    private long currentOrder;
     private List<OrderOverview> orderOverviewList;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
     public static final int ORDER_STATUS_IN_PROGRESS = 1;
     public static final int ORDER_STATUS_COMPLETE = 2;
-
-    public static final int UPDATE_STATUS_DEFAULT = 0;
-    public static final int UPDATE_STATUS_OK = 1;
-    public static final int UPDATE_STATUS_WARRING = 2;
-    public static final int UPDATE_STATUS_ERROR = 3;
 
     public static final int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
@@ -72,13 +65,8 @@ public class Session extends Application {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
         currentUserSession.engineerId = null;
-        currentUserSession.currentOrder = null;
-
-        currentUserSession.sessionLog.clear();
+        currentUserSession.currentOrder = 0L;
         currentUserSession.orderOverviewList.clear();
-//        orderStatus = null;
-//        checkBoxInstructions = false;
-//        checkBoxLMRA = false;
     }
 
     public static List<String> getSessionLog() {
@@ -88,7 +76,7 @@ public class Session extends Application {
     public static void addToSessionLog(String message) {
         String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
                 .format(Calendar.getInstance().getTime());
-        currentUserSession.sessionLog.add("[" + dateTime + "] " + message);
+        currentUserSession.sessionLog.add("[" + dateTime + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 
     public static boolean isSyncingFromServer() {
@@ -120,49 +108,15 @@ public class Session extends Application {
         return currentUserSession.engineerId;
     }
 
-    public static void setCurrentOrder(Order order) {
+    public static void setCurrentOrder(long order) {
         currentUserSession.currentOrder = order;
     }
 
-    public static Order getCurrentOrder() {
+    public static long getCurrentOrder() {
         return currentUserSession.currentOrder;
     }
 
     public static List<OrderOverview> getOrderOverviewList() {
         return currentUserSession.orderOverviewList;
     }
-
-
-    // ALL DOWN IS FOR TEST
-
-    public static void setDemoData() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        OrderOverview orderOverview = new OrderOverview();
-        orderOverview.setNumber(4013730);
-        try {
-            orderOverview.setDate(sdf.parse("2016-04-05"));
-        } catch (ParseException e) {
-        }
-        orderOverview.setInstallationName("Viatel Doorn 1");
-        orderOverview.setTaskLtxa1("Serviceonderhoud noodstroominstallatie");
-        orderOverview.setInstallationAddress("Leersumsestraatweg");
-        orderOverview.setOrderStatus(ORDER_STATUS_NOT_STARTED);
-        orderOverview.setPdfString("PDF");
-        currentUserSession.orderOverviewList.add(orderOverview);
-
-        OrderOverview orderOverview2 = new OrderOverview();
-        orderOverview2.setNumber(4014137);
-        try {
-            orderOverview2.setDate(sdf.parse("2016-04-06"));
-        } catch (ParseException e) {
-        }
-        orderOverview2.setInstallationName("Petrochemical Pipeline Services");
-        orderOverview2.setTaskLtxa1("Belast beproeven extern");
-        orderOverview2.setInstallationAddress("Sanderboutlaan");
-        orderOverview2.setOrderStatus(ORDER_STATUS_NOT_STARTED);
-        orderOverview2.setPdfString("PDF");
-        currentUserSession.orderOverviewList.add(orderOverview2);
-    }
-
 }

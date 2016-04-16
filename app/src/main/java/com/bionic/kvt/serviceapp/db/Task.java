@@ -39,4 +39,15 @@ public class Task extends RealmObject {
     public void setKtsch(String ktsch) {
         this.ktsch = ktsch;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Task{");
+        sb.append("vornr='").append(vornr).append('\'');
+        sb.append(", ltxa1='").append(ltxa1).append('\'');
+        sb.append(", steus='").append(steus).append('\'');
+        sb.append(", ktsch='").append(ktsch).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

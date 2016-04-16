@@ -48,4 +48,16 @@ public class Component extends RealmObject {
     public void setSernr(String sernr) {
         this.sernr = sernr;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Component{");
+        sb.append("eqart='").append(eqart).append('\'');
+        sb.append(", equnr=").append(equnr);
+        sb.append(", herst='").append(herst).append('\'');
+        sb.append(", typbz='").append(typbz).append('\'');
+        sb.append(", sernr='").append(sernr).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

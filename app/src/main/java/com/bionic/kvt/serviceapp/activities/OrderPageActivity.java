@@ -8,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -88,9 +87,6 @@ public class OrderPageActivity extends BaseActivity implements
 
         // Generating OrderOverviewList
         DbUtils.updateOrderOverviewList();
-
-        Session.setDemoData();
-//        DbUtils.resetOrderTableWithSubTables();
 
         //Configuring Search view
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
@@ -177,7 +173,7 @@ public class OrderPageActivity extends BaseActivity implements
         super.onStart();
         Intent intent = new Intent(this, LocalService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        Session.setCurrentOrder(null);
+        Session.setCurrentOrder(0L);
     }
 
     @Override
@@ -194,7 +190,7 @@ public class OrderPageActivity extends BaseActivity implements
         // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
                 get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
-        Session.setCurrentOrder(DbUtils.getOrder(currentOrderNumber));
+        Session.setCurrentOrder(currentOrderNumber);
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
         startActivity(intent);
@@ -205,7 +201,7 @@ public class OrderPageActivity extends BaseActivity implements
         // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
                 get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
-        Session.setCurrentOrder(DbUtils.getOrder(currentOrderNumber));
+        Session.setCurrentOrder(currentOrderNumber);
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
 
@@ -241,28 +237,9 @@ public class OrderPageActivity extends BaseActivity implements
     }
 
     @Override
-    public void updateUpdateStatus(String message, int updateStatus) {
+    public void updateUpdateStatus(String message) {
         String time = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
         orderUpdateStatusText.setText("[" + time + "] " + message);
-
-        switch (updateStatus) {
-            case Session.UPDATE_STATUS_OK:
-                orderUpdateStatusText.setTextColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorOK));
-                break;
-            case Session.UPDATE_STATUS_WARRING:
-                orderUpdateStatusText.setTextColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorWarring));
-                break;
-            case Session.UPDATE_STATUS_ERROR:
-                orderUpdateStatusText.setTextColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorError));
-                break;
-            case Session.UPDATE_STATUS_DEFAULT:
-                orderUpdateStatusText.setTextColor(
-                        ContextCompat.getColor(getApplicationContext(), R.color.colorSecondaryText));
-                break;
-        }
     }
 
     @Override

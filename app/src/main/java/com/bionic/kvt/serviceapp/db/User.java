@@ -1,10 +1,8 @@
 package com.bionic.kvt.serviceapp.db;
 
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class User extends RealmObject {
-    @PrimaryKey
     private String email;
     private String name;
     private String password;
@@ -40,5 +38,16 @@ public class User extends RealmObject {
 
     public void setOnServer(boolean onServer) {
         isOnServer = onServer;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("email='").append(email).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", isOnServer=").append(isOnServer);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -9,6 +9,7 @@ import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,9 +35,9 @@ public class OrderPageDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == null) return;
+        if (Session.getCurrentOrder() == 0L) return;
 
-        if (Session.getCurrentOrder().getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+        if (DbUtils.getOrderStatus(Session.getCurrentOrder()) == Session.ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);

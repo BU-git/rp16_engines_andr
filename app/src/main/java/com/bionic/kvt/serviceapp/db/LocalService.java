@@ -41,7 +41,7 @@ public class LocalService extends Service {
 
     //Callback interface for communication with service client - OrderPageActivity
     public interface Callbacks {
-        void updateUpdateStatus(String message, int updateStatus);
+        void updateUpdateStatus(String message);
 
         void updateOrderAdapter();
     }
@@ -86,12 +86,12 @@ public class LocalService extends Service {
 
         // Is device connected to network
         if (!Utils.isConnected(getApplicationContext())) {
-            serviceLogging("No connection to network.", Session.UPDATE_STATUS_WARRING);
+            serviceLogging("No connection to network.");
             return;
         }
 
         Session.setIsSyncingFromServer(true);
-        serviceLogging("Updating orders.", Session.UPDATE_STATUS_DEFAULT);
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating orders.");
         getOrdersBriefListFromServer();
     }
 
@@ -99,37 +99,34 @@ public class LocalService extends Service {
         final Call<List<OrderBrief>> orderBriefListRequest =
                 Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
 
-        serviceLogging("Getting orders brief list from: " + orderBriefListRequest.request(),
-                Session.UPDATE_STATUS_DEFAULT);
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Getting orders brief list from: " + orderBriefListRequest.request());
 
         orderBriefListRequest.enqueue(new Callback<List<OrderBrief>>() {
             @Override
             public void onResponse(final Call<List<OrderBrief>> call,
                                    final Response<List<OrderBrief>> response) {
                 if (response.isSuccessful()) {
-                    serviceLogging("Request successful. Get " + response.body().size() + "brief orders.",
-                            Session.UPDATE_STATUS_OK);
+                    serviceLogging("Request successful. Get " + response.body().size() + " brief orders.");
 
                     List<OrderBrief> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(response.body());
 
                     if (ordersToBeUpdated.isEmpty()) {
-                        serviceLogging("Nothing to update.", Session.UPDATE_STATUS_OK);
+                        serviceLogging("Nothing to update.");
                         Session.setIsSyncingFromServer(false);
                         return;
                     }
 
-                    serviceLogging("Getting orders from server.", Session.UPDATE_STATUS_DEFAULT);
+                    serviceLogging("Getting orders from server.");
                     for (OrderBrief orderBrief : ordersToBeUpdated) {
                         updateOrderFomServer(orderBrief.getNumber(), Session.getEngineerId());
                     }
 
-                    serviceLogging("Orders update complete!", Session.UPDATE_STATUS_OK);
+                    serviceLogging("Orders update complete!");
                     Session.setIsSyncingFromServer(false);
 
-                    orderActivity.updateOrderAdapter();
                 } else {
-                    serviceLogging("Orders brief list request error: " + response.code(),
-                            Session.UPDATE_STATUS_WARRING);
+                    serviceLogging("Orders brief list request error: " + response.code());
                     Session.setIsSyncingFromServer(false);
 
                 }
@@ -137,7 +134,7 @@ public class LocalService extends Service {
 
             @Override
             public void onFailure(final Call<List<OrderBrief>> call, final Throwable t) {
-                serviceLogging("Orders brief list request fail: " + t.toString(), Session.UPDATE_STATUS_ERROR);
+                serviceLogging("Orders brief list request fail: " + t.toString());
                 Session.setIsSyncingFromServer(false);
             }
         });
@@ -147,29 +144,31 @@ public class LocalService extends Service {
         final Call<Order> orderRequest =
                 Session.getServiceConnection().getOrder(orderNumber, userId);
 
-        serviceLogging("Getting order from: " + orderRequest.request(), Session.UPDATE_STATUS_DEFAULT);
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Getting order from: " + orderRequest.request());
 
         orderRequest.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(final Call<com.bionic.kvt.serviceapp.api.Order> call,
                                    final Response<Order> response) {
                 if (response.isSuccessful()) {
-                    serviceLogging("Request successful!", Session.UPDATE_STATUS_DEFAULT);
+                    if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Request successful!");
                     DbUtils.updateOrderFromServer(response.body());
+                    orderActivity.updateOrderAdapter();
                 } else {
-                    serviceLogging("Order request error: " + response.code(),Session.UPDATE_STATUS_WARRING);
+                    serviceLogging("Order request error: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(final Call<Order> call, final Throwable t) {
-                serviceLogging("Order request fail: " + t.toString(), Session.UPDATE_STATUS_ERROR);
+                serviceLogging("Order request fail: " + t.toString());
             }
         });
     }
 
-    private void serviceLogging(String message, int updateStatus) {
+    private void serviceLogging(String message) {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(message);
-        orderActivity.updateUpdateStatus(message, updateStatus);
+        orderActivity.updateUpdateStatus(message);
     }
 }

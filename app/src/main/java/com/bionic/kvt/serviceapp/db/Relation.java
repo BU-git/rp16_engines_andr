@@ -48,4 +48,16 @@ public class Relation  extends RealmObject {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Relation{");
+        sb.append("number=").append(number);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", town='").append(town).append('\'');
+        sb.append(", contactPerson='").append(contactPerson).append('\'');
+        sb.append(", telephone='").append(telephone).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

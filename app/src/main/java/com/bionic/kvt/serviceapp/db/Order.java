@@ -29,6 +29,7 @@ public class Order extends RealmObject {
     private Date lastServerChangeDate;
     private Date lastAndroidChangeDate;
     private int orderStatus;
+    private String employeeEmail; // Copy of employee -> email for search optimisation
 
     public long getNumber() {
         return number;
@@ -156,5 +157,37 @@ public class Order extends RealmObject {
 
     public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getEmployeeEmail() {
+        return employeeEmail;
+    }
+
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Order{");
+        sb.append("number=").append(number);
+        sb.append(", orderType='").append(orderType).append('\'');
+        sb.append(", date=").append(date);
+        sb.append(", reference='").append(reference).append('\'');
+        sb.append(", note='").append(note).append('\'');
+        sb.append(", relation=").append(relation);
+        sb.append(", employee=").append(employee);
+        sb.append(", installation=").append(installation);
+        sb.append(", tasks=").append(tasks);
+        sb.append(", components=").append(components);
+        sb.append(", parts=").append(parts);
+        sb.append(", extraInfo=").append(extraInfo);
+        sb.append(", importDate=").append(importDate);
+        sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
+        sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
+        sb.append(", orderStatus=").append(orderStatus);
+        sb.append(", employeeEmail='").append(employeeEmail).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

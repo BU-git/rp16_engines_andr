@@ -31,4 +31,14 @@ public class Employee extends RealmObject {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Employee{");
+        sb.append("number=").append(number);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -64,12 +64,12 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             return;
         }
 
-        if (Session.getCurrentOrder() == null) {
+        if (Session.getCurrentOrder() == 0L) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        final long orderNumber = Session.getCurrentOrder().getNumber();
+        final long orderNumber = Session.getCurrentOrder();
         pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;

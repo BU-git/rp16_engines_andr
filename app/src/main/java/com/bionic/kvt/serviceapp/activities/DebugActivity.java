@@ -43,9 +43,16 @@ public class DebugActivity extends BaseActivity {
     }
 
     @OnClick(R.id.reset_user_db)
-    public void onResetUserBDClick(View v) {
+    public void onResetUserDBClick(View v) {
         DbUtils.resetUserTable();
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("User DB reset done!");
+        showApplicationLog();
+    }
+
+    @OnClick(R.id.reset_order_db)
+    public void onResetOrderDBClick(View v) {
+        DbUtils.resetOrderTableWithSubTables();
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order DB reset done!");
         showApplicationLog();
     }
 

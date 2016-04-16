@@ -18,6 +18,18 @@ import io.realm.RealmResults;
 
 public class DbUtils {
 
+    public static void dropDatabase() {
+        final Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.deleteAll();
+            //Realm file has been deleted.
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //No Realm file to remove.
+        }
+        realm.close();
+    }
+
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Resetting User table.");
@@ -29,7 +41,7 @@ public class DbUtils {
         User user = realm.createObject(User.class);
         user.setName("Demo User");
         user.setEmail("demo@kvt.nl");
-        user.setPassword("demo");
+        user.setPassword("demo@kvt.nl");
         user.setOnServer(true);
         realm.commitTransaction();
 
@@ -38,6 +50,8 @@ public class DbUtils {
 
     // Completely erase Order Table and all sub tables
     public static void resetOrderTableWithSubTables() {
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Resetting Order table.");
+
         final Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
@@ -54,12 +68,10 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void createTableIfNotExist(Class realmClass) {
+    public static void createUserTableIfNotExist() {
         final Realm realm = Realm.getDefaultInstance();
-        if (realm.where(realmClass).findAll().size() == 0) {
-            if (realmClass == User.class) {
-                resetUserTable();
-            }
+        if (realm.where(User.class).findAll().size() == 0) {
+            resetUserTable();
         }
         realm.close();
     }
@@ -68,16 +80,22 @@ public class DbUtils {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating Order Overview List");
 
         final Realm realm = Realm.getDefaultInstance();
-        final List<Order> allOrdersInDb = realm.where(Order.class).findAll();
+        final List<Order> allOrdersInDb =
+                realm.where(Order.class).equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
 
         Session.getOrderOverviewList().clear();
         for (Order order : allOrdersInDb) {
             final OrderOverview orderOverview = new OrderOverview();
             orderOverview.setNumber(order.getNumber());
             orderOverview.setDate(order.getDate());
-            orderOverview.setInstallationName(order.getInstallation().getName());
-            orderOverview.setTaskLtxa1(order.getTasks().first().getLtxa1());
-            orderOverview.setInstallationAddress(order.getInstallation().getAddress());
+
+            if (order.getInstallation() != null) {
+                orderOverview.setInstallationName(order.getInstallation().getName());
+                orderOverview.setInstallationAddress(order.getInstallation().getAddress());
+            }
+            if (order.getTasks().first() != null) {
+                orderOverview.setTaskLtxa1(order.getTasks().first().getLtxa1());
+            }
             orderOverview.setOrderStatus(order.getOrderStatus());
             orderOverview.setPdfString("PDF");
 
@@ -86,11 +104,13 @@ public class DbUtils {
 
         realm.close();
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Added " + Session.getOrderOverviewList().size() + " orders.");
+            Session.addToSessionLog("Added " + Session.getOrderOverviewList().size() + " orders to view.");
     }
 
-    public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Looking for orders to be updated.");
+    public static List<OrderBrief> getOrdersToBeUpdated(
+            final List<OrderBrief> serverOrderBriefList) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Looking for orders to be updated.");
 
         final List<OrderBrief> ordersToBeUpdated = new ArrayList<>();
         final Realm realm = Realm.getDefaultInstance();
@@ -142,7 +162,7 @@ public class DbUtils {
 
             realm.close();
             if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+                Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
         }
 
         if (currentOrderInDB != null) { // Existing order
@@ -156,7 +176,7 @@ public class DbUtils {
 
                 realm.close();
                 if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + "done.");
+                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
             }
 
             if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
@@ -183,6 +203,7 @@ public class DbUtils {
 
         final Order newOrder = realm.createObject(Order.class);
 
+        newOrder.setNumber(serverOrder.getNumber());
         newOrder.setOrderType(serverOrder.getOrderType());
         newOrder.setDate(new Date(serverOrder.getDate()));
         newOrder.setReference(serverOrder.getReference());
@@ -245,14 +266,19 @@ public class DbUtils {
 
         newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // TODO
 
+        newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
+
         realm.commitTransaction(); // No logic if transaction fail!!!
 
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog(newOrder.toString());
         realm.close();
     }
 
     public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Updating User table from server data");
+            Session.addToSessionLog("Updating User table from server data.");
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -323,13 +349,13 @@ public class DbUtils {
     }
 
     @Nullable
-    public static Order getOrder(long orderNumber) {
+    public static int getOrderStatus(long orderNumber) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Getting order from DB: " + orderNumber);
 
         final Realm realm = Realm.getDefaultInstance();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        final int orderStatus = realm.where(Order.class).equalTo("number", orderNumber).findFirst().getOrderStatus();
         realm.close();
-        return order;
+        return orderStatus;
     }
 }

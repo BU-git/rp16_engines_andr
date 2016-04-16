@@ -51,6 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,7 +91,9 @@ public class LoginActivity extends BaseActivity implements
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        DbUtils.createTableIfNotExist(com.bionic.kvt.serviceapp.db.User.class);
+        DbUtils.dropDatabase();
+
+        DbUtils.createUserTableIfNotExist();
 
         //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
@@ -406,9 +409,6 @@ public class LoginActivity extends BaseActivity implements
     }
 
     private void updateUserList() {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Connecting to server for user list update");
-
         // Is device connected to network
         if (!Utils.isConnected(getApplicationContext())) {
             showConnectionMessage("No connection to network.");
@@ -416,6 +416,10 @@ public class LoginActivity extends BaseActivity implements
         }
 
         final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Connecting to server: " + userListRequest.request());
+
         userListRequest.enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(final Call<List<User>> call,
@@ -430,7 +434,7 @@ public class LoginActivity extends BaseActivity implements
 
                     int activeUsers = DbUtils.updateUserTableFromServer(response.body());
                     if (activeUsers == 0) {
-                        showConnectionMessage(" Connection successful. No active users on server.");
+                        showConnectionMessage("Connection successful. No active users on server.");
                     } else {
                         showConnectionMessage("Connection successful. Synchronised " + activeUsers + " user(s).");
                     }
