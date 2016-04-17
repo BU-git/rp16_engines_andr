@@ -2,11 +2,14 @@ package com.bionic.kvt.serviceapp.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
@@ -34,14 +37,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ElementExpandableListAdapter(Context context, Map<String, JsonObject> listChildData) {
         this._context = context;
-        Log.d(TAG, "Child Size is: " + listChildData.keySet().size());
         this._listDataHeader =  Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
+        Log.d(TAG, "Child Size is: " + _listDataHeader.size());
         this._listDataChild = listChildData;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition));
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).toString();
+        //return "Hello World";
     }
 
     @Override
@@ -58,20 +62,44 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             convertView = infalInflater.inflate(R.layout.component_element, null);
+
+        }
+        LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
+
+        if (elementLayout.findViewById(groupPosition) == null){
+            LinearLayout someLayout = new LinearLayout(_context);
+            someLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            someLayout.setOrientation(LinearLayout.VERTICAL);
+            someLayout.setId(groupPosition);
+            elementLayout.addView(someLayout);
+            for (int i = 0; i < 3; i++){
+                CheckBox checkBox = new CheckBox(this._context);
+                checkBox.setText(String.valueOf(i));
+                someLayout.addView(checkBox);
+            }
+        } else {
+            LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupPosition);
+
         }
 
+
+        //parent.addView(elementLayout);
+        /*
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.component_element);
 
         txtListChild.setText(childText);
+        */
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
         //@// TODO: 4/15/2016 Replace with Object Array Size
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsJsonArray().size();
+        return 1;
+        //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsJsonArray().size();
         //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsInt();
     }
 
@@ -97,15 +125,12 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.component_element, null);
+            convertView = infalInflater.inflate(R.layout.component_detail_text, null);
         }
 
-        /*
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.component_detail_title);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.component_detail_title);
         lblListHeader.setText(headerTitle);
-        */
+        lblListHeader.setFocusable(false);
 
         return convertView;
     }

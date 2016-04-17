@@ -1,6 +1,7 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
 import com.bionic.kvt.serviceapp.dummy.DummyContent;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -66,15 +70,41 @@ public class ComponentDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.component_detail, container, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+
+        final View rootView = inflater.inflate(R.layout.component_detail, container, false);
+        rootView.setNestedScrollingEnabled(true);
 
         // Show the dummy content as text in a TextView.
         Log.d(TAG, ARG_ITEM_ID);
         if (mItem != null) {
-            ExpandableListView list = (ExpandableListView) rootView.findViewById(R.id.component_detail);
-            ExpandableListAdapter listAdapter = new ElementExpandableListAdapter(this.getContext(), mItem);
+            Log.d(TAG, "Items: " + Arrays.asList(mItem.keySet().toArray(new String[mItem.keySet().size()])));
+            final ExpandableListView list = (ExpandableListView) rootView.findViewById(R.id.component_detail);
+            ExpandableListAdapter listAdapter = new ElementExpandableListAdapter(rootView.getContext(), mItem);
 
             list.setAdapter(listAdapter);
+
+            list.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+                @Override
+                public void onGroupCollapse(int groupPosition) {
+                    //Stub
+                }
+            });
+
+            list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+                @Override
+                public void onGroupExpand(int groupPosition) {
+                    //Stub
+                }
+            });
+
+            list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+                @Override
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                    Toast.makeText(getContext(), "Expanded", Toast.LENGTH_SHORT);
+                    return false;
+                }
+            });
         }
 
         return rootView;
