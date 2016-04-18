@@ -37,6 +37,9 @@ public class ComponentDetailFragment extends Fragment {
     String TAG = ComponentDetailFragment.class.getName();
     public static final String ARG_ITEM_ID = "item_id";
 
+    private int expanded;
+    private int collapsed;
+
     /**
      * The dummy content this fragment is presenting.
      */
@@ -80,7 +83,7 @@ public class ComponentDetailFragment extends Fragment {
         if (mItem != null) {
             Log.d(TAG, "Items: " + Arrays.asList(mItem.keySet().toArray(new String[mItem.keySet().size()])));
             final ExpandableListView list = (ExpandableListView) rootView.findViewById(R.id.component_detail);
-            ExpandableListAdapter listAdapter = new ElementExpandableListAdapter(rootView.getContext(), mItem);
+            final ExpandableListAdapter listAdapter = new ElementExpandableListAdapter(rootView.getContext(), mItem);
 
             list.setAdapter(listAdapter);
 
@@ -88,12 +91,25 @@ public class ComponentDetailFragment extends Fragment {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
                     //Stub
+                    if (rootView.findViewById(groupPosition) != null) {
+                        rootView.findViewById(groupPosition).setVisibility(View.GONE);
+                    }
                 }
             });
 
             list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
+                    for (int i = 0; i < listAdapter.getGroupCount(); i++){
+                        if (i != groupPosition){
+                            list.collapseGroup(i);
+                        } else {
+                            if (rootView.findViewById(groupPosition) != null){
+                                rootView.findViewById(groupPosition).setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                    expanded = groupPosition;
                     //Stub
                 }
             });
