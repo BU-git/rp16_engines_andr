@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
 Adapter for the Expandable Parts List
@@ -44,7 +46,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).toString();
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsJsonObject();
         //return "Hello World";
     }
 
@@ -57,7 +59,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final JsonObject childElement = (JsonObject) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -74,11 +76,16 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             someLayout.setOrientation(LinearLayout.VERTICAL);
             someLayout.setId(groupPosition);
             elementLayout.addView(someLayout);
-            for (int i = 0; i < 3; i++){
+
+            Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
+
+
+            for (Map.Entry<String,JsonElement> child : childSet){
                 CheckBox checkBox = new CheckBox(this._context);
-                checkBox.setText(String.valueOf(i));
+                checkBox.setText(child.getKey());
                 someLayout.addView(checkBox);
             }
+
         } else {
             LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupPosition);
 

@@ -90,25 +90,15 @@ public class ComponentDetailFragment extends Fragment {
             list.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
-                    //Stub
-                    collapsed = groupPosition;
                     if (rootView.findViewById(groupPosition) != null) {
-                        if (collapsed != expanded){
-                            rootView.findViewById(groupPosition).setVisibility(View.GONE);
-                        }
+                        rootView.findViewById(groupPosition).setVisibility(View.GONE);
                     }
-
-                    Log.d(TAG, "Collapsed: " + collapsed);
-                    Log.d(TAG, "Expanded: " + expanded);
-
-
                 }
             });
 
             list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
-                    expanded = groupPosition;
                     for (int i = 0; i < listAdapter.getGroupCount(); i++){
                         if (i != groupPosition){
                             if (list.isGroupExpanded(i)){
@@ -120,14 +110,19 @@ public class ComponentDetailFragment extends Fragment {
                             }
                         }
                     }
-                    //Stub
                 }
             });
 
             list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                    return false;
+                    //Disallow clicks on already expanded group
+                    if (list.isGroupExpanded(groupPosition)){
+                        return true;
+                    } else {
+                        return false;
+                    }
+
                 }
             });
         }
