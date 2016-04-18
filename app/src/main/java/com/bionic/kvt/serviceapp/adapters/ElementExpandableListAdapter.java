@@ -1,25 +1,26 @@
 package com.bionic.kvt.serviceapp.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
@@ -88,12 +90,25 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 final TextView textView = new TextView(this._context);
                 LinearLayout problemLayout = new LinearLayout(_context);
+                problemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 LinearLayout problemDetailPlaceholderLayout = new LinearLayout(_context);
                 problemDetailPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
 
 
-                textView.setText(child.getKey());
+                textView.setText(child.getKey()+"\n");
+                textView.setGravity(Gravity.FILL);
+
+
+                textView.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    textView.setTextColor(_context.getColor(R.color.colorDefaultTextField));
+                } else {
+                    textView.setTextColor(ColorStateList.valueOf(Color.BLACK));
+                }
+
+                textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                textView.setSingleLine(false);
                 //checkBox.setText(child.getKey());
                 problemLayout.addView(checkBox);
                 problemLayout.addView(textView);
@@ -104,6 +119,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 TextView text = new TextView(_context);
                 //Dummy inherited data
+
                 text.setText("Some Text");
 
                 problemDetailLayout.addView(text);
@@ -132,14 +148,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
         }
 
-
-        //parent.addView(elementLayout);
-        /*
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.component_element);
-
-        txtListChild.setText(childText);
-        */
         return convertView;
     }
 
@@ -177,7 +185,14 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.component_detail_title);
-        lblListHeader.setText(headerTitle);
+        lblListHeader.setText("\t\t" + headerTitle);
+        lblListHeader.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            lblListHeader.setTextColor(_context.getColor(R.color.colorDefaultTextField));
+        } else {
+            lblListHeader.setTextColor(ColorStateList.valueOf(Color.BLACK));
+        }
+        lblListHeader.getClipBounds();
         lblListHeader.setFocusable(false);
 
         return convertView;

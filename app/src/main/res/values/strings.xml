@@ -100,6 +100,45 @@
     <string name="title_component_list">Components</string>
     <string name="title_component_detail">Component Detail</string>
 
+    <!-- Defects -->
+    <string name="defects_next">Next</string>
+
+
+    <!-- Default template string arrays -->
+    <string name="omvang">Omvang</string>
+
+    <string-array name="Omvang">
+        <item>Incidenteel</item>
+        <item>Plaatselijk</item>
+        <item>Regelmatig</item>
+        <item>Aanzienlijk</item>
+        <item>Algemeen</item>
+    </string-array>
+
+    <string name="intensiteit">Intensiteit</string>
+
+    <string-array name="Intensiteit">
+        <item>Laag</item>
+        <item>Midden</item>
+        <item>Hoog</item>
+    </string-array>
+
+    <string name="oplegost">Oplegost?</string>
+
+    <string name="acties">Acties</string>
+
+    <string-array name="Acties">
+        <item>Gecontroleerd</item>
+        <item>Vervangen</item>
+        <item>Ververst</item>
+        <item>Gerevideerd</item>
+        <item>Gereinigd</item>
+        <item>Gedemonteerd</item>
+        <item>Vernieuwd</item>
+        <item>Afgesteld</item>
+        <item>-</item>
+    </string-array>
+
     <string name="clear">Clear</string>
 
     <!-- EMail fields -->

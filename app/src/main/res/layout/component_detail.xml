@@ -9,3 +9,4 @@
         android:focusable="false"
         tools:context=".activities.ComponentDetailFragment"
     />
+
