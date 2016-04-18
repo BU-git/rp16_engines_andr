@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
-import com.bionic.kvt.serviceapp.dummy.DummyContent;
 import com.google.gson.JsonObject;
 
 import java.util.Arrays;

@@ -19,7 +19,6 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.dummy.DummyContent;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.Element;
 import com.bionic.kvt.serviceapp.models.Part;
