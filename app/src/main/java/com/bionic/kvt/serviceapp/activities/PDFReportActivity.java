@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
@@ -59,11 +58,11 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             return;
         }
 
-        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
-        if (!publicDocumentsStorageDir.exists()) {
-            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
+//        if (!publicDocumentsStorageDir.exists()) {
+//            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         if (Session.getCurrentOrder() == 0L) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
@@ -71,7 +70,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         }
 
         final long orderNumber = Session.getCurrentOrder();
-        pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
+//        pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
+
+        pdfFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), "Report_" + orderNumber + ".pdf");
+
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
         pdfReportHeaderTextView.setText(pdfReportHeader);
@@ -149,6 +151,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 orderPdfDocument.close();
                 fileOutputStream.flush();
                 fileOutputStream.close();
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("PDF file saved: " + pdfFile);
             } catch (IOException e) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());

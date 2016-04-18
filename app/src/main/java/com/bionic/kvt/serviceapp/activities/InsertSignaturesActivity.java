@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
@@ -94,36 +93,27 @@ public class InsertSignaturesActivity extends BaseActivity {
 
         if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Signature: Can not write file to external storage!");
             return;
         }
-
-        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_PICTURES, "KVTPictures");
-        if (!publicDocumentsStorageDir.exists()) {
-            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
 
         DrawingView currentDrawingView;
-        String description;
         ToggleButton currentToggleButton;
         String signatureFileName;
         switch (currentButtonClicked) {
             case ENGINEER_BUTTON:
                 currentDrawingView = engineerDrawingView;
-                description = "Engineer's signature";
                 currentToggleButton = buttonConfirmEngineer;
                 signatureFileName = "signature_engineer.png";
                 break;
             case CLIENT_BUTTON:
             default:
                 currentDrawingView = clientDrawingView;
-                description = "Client's signature";
                 currentToggleButton = buttonConfirmClient;
-                signatureFileName = "client_engineer.png";
+                signatureFileName = "signature_client.png";
                 break;
         }
-
 
         if (currentDrawingView.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
@@ -132,42 +122,26 @@ public class InsertSignaturesActivity extends BaseActivity {
             return;
         }
 
-        Session.setCurrentSignatureFolder(Utils.getPrivateDocumentsStorageDir(
-                getApplicationContext(),
-                Session.getCurrentOrder() + "/" + BuildConfig.SINGNATURE_FOLDER));
-
-        final File signatureFile = new File(Session.getCurrentSignatureFolder(), signatureFileName);
+        currentDrawingView.setDrawingCacheEnabled(true);
         final Bitmap signatureBitmap = currentDrawingView.getDrawingCache();
+        final File signatureFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), signatureFileName);
 
-//        try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
-//            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-//            fileOutputStream.flush();
-//            fileOutputStream.close();
-//        } catch (IOException e) {
-//            if (BuildConfig.IS_LOGGING_ON)
-//                Session.addToSessionLog("ERROR writing: " + signatureFile + e.toString());
-//            Toast.makeText(getApplicationContext(), "Signature could not be saved", Toast.LENGTH_SHORT).show();
-//            currentToggleButton.setChecked(false);
-//        }
+        try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
+            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+            currentToggleButton.setChecked(true);
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Signature file saved: " + signatureFile);
+        } catch (IOException e) {
+            currentToggleButton.setChecked(false);
+            Toast.makeText(getApplicationContext(), "ERROR: Signature could not be saved", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR writing: " + signatureFile + e.toString());
+        }
 
-
-//        currentDrawingView.setDrawingCacheEnabled(true);
-//        String signature = insertImage(
-//                getContentResolver(),
-//                currentDrawingView.getDrawingCache(),
-//                UUID.randomUUID().toString() + ".png",
-//                description
-//        );
-//
-//        if (signature == null) {
-//            Toast.makeText(getApplicationContext(), "Signatures could not be saved", Toast.LENGTH_SHORT).show();
-//            currentToggleButton.setChecked(false);
-//        }
-
-
-        currentToggleButton.setChecked(true);
         currentDrawingView.destroyDrawingCache();
-        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() & buttonConfirmClient.isChecked());
+        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
         currentButtonClicked = 0;
     }
 

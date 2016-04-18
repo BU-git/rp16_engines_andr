@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.Session;
 
 import java.io.File;
 
@@ -43,13 +44,13 @@ public class Utils {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    public static File getPublicDirectoryStorageDir(String directory, String folder) {
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(directory), folder);
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-        return storageDir;
-    }
+//    public static File getPublicDirectoryStorageDir(String directory, String folder) {
+//        File storageDir = new File(Environment.getExternalStoragePublicDirectory(directory), folder);
+//        if (!storageDir.exists()) {
+//            storageDir.mkdirs();
+//        }
+//        return storageDir;
+//    }
 
     // Return Private Path to folder BuildConfig.ORDERS_FOLDER
     public static File getPrivateDocumentsStorageDir(Context context, String folder) {
@@ -58,6 +59,11 @@ public class Utils {
             fileDir.mkdirs();
         }
         return fileDir;
+    }
+
+
+    public static File getCurrentOrderFolder(Context context) {
+        return getPrivateDocumentsStorageDir(context, "" + Session.getCurrentOrder());
     }
 
     public static String getUserIdFromEmail(String email) {
