@@ -162,7 +162,6 @@ public class DbUtils {
         if (currentOrderInDB == null) { // New order
             createNewOrderInDb(serverOrder);
 
-            realm.close();
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
         }
@@ -176,7 +175,7 @@ public class DbUtils {
                 realm.commitTransaction(); // No logic if transaction fail!!!
                 createNewOrderInDb(serverOrder);
 
-                realm.close();
+
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
             }
@@ -193,6 +192,7 @@ public class DbUtils {
                             + currentOrderInDB.getNumber());
             }
         }
+        realm.close();
     }
 
     private static void createNewOrderInDb(com.bionic.kvt.serviceapp.api.Order serverOrder) {
