@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.google.gson.JsonElement;
@@ -71,19 +74,57 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
 
         if (elementLayout.findViewById(groupPosition) == null){
-            LinearLayout someLayout = new LinearLayout(_context);
-            someLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            someLayout.setOrientation(LinearLayout.VERTICAL);
-            someLayout.setId(groupPosition);
-            elementLayout.addView(someLayout);
+            final LinearLayout problemPlaceholderLayout = new LinearLayout(_context);
+            problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            problemPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
+            problemPlaceholderLayout.setId(groupPosition);
+            elementLayout.addView(problemPlaceholderLayout);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
 
 
             for (Map.Entry<String,JsonElement> child : childSet){
-                CheckBox checkBox = new CheckBox(this._context);
-                checkBox.setText(child.getKey());
-                someLayout.addView(checkBox);
+                final CheckBox checkBox = new CheckBox(this._context);
+
+                final TextView textView = new TextView(this._context);
+                LinearLayout problemLayout = new LinearLayout(_context);
+
+                LinearLayout problemDetailPlaceholderLayout = new LinearLayout(_context);
+                problemDetailPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
+
+
+                textView.setText(child.getKey());
+                //checkBox.setText(child.getKey());
+                problemLayout.addView(checkBox);
+                problemLayout.addView(textView);
+
+                problemDetailPlaceholderLayout.addView(problemLayout);
+
+                final LinearLayout problemDetailLayout = new LinearLayout(_context);
+
+                TextView text = new TextView(_context);
+                //Dummy inherited data
+                text.setText("Some Text");
+
+                problemDetailLayout.addView(text);
+                problemDetailLayout.setVisibility(View.GONE);
+
+                checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (checkBox.isChecked()){
+                            problemDetailLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            problemDetailLayout.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                problemDetailPlaceholderLayout.addView(problemDetailLayout);
+
+                problemPlaceholderLayout.addView(problemDetailPlaceholderLayout);
+
+
             }
 
         } else {
