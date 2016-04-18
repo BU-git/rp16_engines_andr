@@ -37,8 +37,8 @@ public class ComponentDetailFragment extends Fragment {
     String TAG = ComponentDetailFragment.class.getName();
     public static final String ARG_ITEM_ID = "item_id";
 
-    private int expanded;
-    private int collapsed;
+    private int expanded = -1;
+    private int collapsed = -2;
 
     /**
      * The dummy content this fragment is presenting.
@@ -71,7 +71,7 @@ public class ComponentDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 
@@ -91,25 +91,35 @@ public class ComponentDetailFragment extends Fragment {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
                     //Stub
+                    collapsed = groupPosition;
                     if (rootView.findViewById(groupPosition) != null) {
-                        rootView.findViewById(groupPosition).setVisibility(View.GONE);
+                        if (collapsed != expanded){
+                            rootView.findViewById(groupPosition).setVisibility(View.GONE);
+                        }
                     }
+
+                    Log.d(TAG, "Collapsed: " + collapsed);
+                    Log.d(TAG, "Expanded: " + expanded);
+
+
                 }
             });
 
             list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
+                    expanded = groupPosition;
                     for (int i = 0; i < listAdapter.getGroupCount(); i++){
                         if (i != groupPosition){
-                            list.collapseGroup(i);
+                            if (list.isGroupExpanded(i)){
+                                list.collapseGroup(i);
+                            }
                         } else {
                             if (rootView.findViewById(groupPosition) != null){
                                 rootView.findViewById(groupPosition).setVisibility(View.VISIBLE);
                             }
                         }
                     }
-                    expanded = groupPosition;
                     //Stub
                 }
             });
@@ -117,7 +127,6 @@ public class ComponentDetailFragment extends Fragment {
             list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                    Toast.makeText(getContext(), "Expanded", Toast.LENGTH_SHORT);
                     return false;
                 }
             });
