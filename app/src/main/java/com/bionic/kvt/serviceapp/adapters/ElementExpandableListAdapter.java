@@ -102,7 +102,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 textView.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    textView.setTextColor(_context.getColor(R.color.colorDefaultTextField));
+                    textView.setTextColor(_context.getColor(R.color.colorTextField));
                 } else {
                     textView.setTextColor(ColorStateList.valueOf(Color.BLACK));
                 }
@@ -188,7 +188,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         lblListHeader.setText("\t\t" + headerTitle);
         lblListHeader.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            lblListHeader.setTextColor(_context.getColor(R.color.colorDefaultTextField));
+            lblListHeader.setTextColor(_context.getColor(R.color.colorTextField));
         } else {
             lblListHeader.setTextColor(ColorStateList.valueOf(Color.BLACK));
         }

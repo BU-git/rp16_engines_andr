@@ -15,7 +15,7 @@
             android:layout_weight="0.4"
             android:text="@string/problem_scope"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField" />
+            android:textColor="@color/colorTextField" />
 
         <Spinner
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:text="@string/problem_intensity"
             android:textAppearance="?android:textAppearanceMedium"
 
-            android:textColor="@color/colorDefaultTextField" />
+            android:textColor="@color/colorTextField" />
 
         <Spinner
             android:layout_width="match_parent"
@@ -60,14 +60,14 @@
             android:layout_weight="0.4"
             android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/problem_action"
-            android:textColor="@color/colorDefaultTextField" />
+            android:textColor="@color/colorTextField" />
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField">
+            android:textColor="@color/colorTextField">
 
         </Spinner>
 
@@ -83,7 +83,7 @@
             android:layout_height="match_parent"
             android:text="@string/problem_resolved"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField"
+            android:textColor="@color/colorTextField"
             android:layout_weight="0.4" />
 
         <Switch

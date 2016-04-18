@@ -35,15 +35,8 @@
         <activity android:name=".activities.PDFReportActivity" />
         <activity android:name=".activities.OrderProcessingFirstStageActivity" />
         <activity android:name=".activities.LMRAActivity" />
-        <activity android:name=".activities.ComponentDefectsActivity" />
         <activity android:name=".activities.MeasurementsActivity" />
         <activity android:name=".activities.NSAActivity" />
-        <activity
-            android:name=".activities.OrderProcessingFirstStageActivity"
-            android:parentActivityName=".activities.OrderPageDetailActivity" />
-        <activity
-            android:name=".activities.LMRAActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
 
         <!--
         <activity
@@ -52,12 +45,6 @@
         </activity>
         -->
 
-        <activity
-            android:name=".activities.MeasurementsActivity"
-            android:parentActivityName=".activities.ComponentListActivity" />
-        <activity
-            android:name=".activities.NSAActivity"
-            android:parentActivityName=".activities.MeasurementsActivity" />
         <activity
             android:name=".activities.InsertSignaturesActivity"
             android:screenOrientation="sensorPortrait" />

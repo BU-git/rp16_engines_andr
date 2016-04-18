@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.api.Component;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,7 +42,7 @@ public class OrderProcessingFirstStageActivity extends BaseActivity {
 
     @OnClick(R.id.order_processing_first_stage_next_button)
     public void onNextClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), ComponentDefectsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ComponentListActivity.class);
         startActivity(intent);
     }
 

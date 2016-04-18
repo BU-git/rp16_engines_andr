@@ -16,14 +16,14 @@
             android:layout_weight="0.4"
             android:text="@string/problem_name"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField" />
+            android:textColor="@color/colorTextField" />
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorDefaultTextField">
+            android:textColor="@color/colorTextField">
 
         </Spinner>
 

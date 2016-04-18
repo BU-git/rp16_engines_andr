@@ -66,7 +66,7 @@ public class ComponentListActivity extends AppCompatActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    private String TAG = ComponentDefectsActivity.class.getName();
+    private String TAG = ComponentListActivity.class.getName();
 
     private List<Element> elementList;
     public static Map<String, Map<String, JsonObject>> partMap = new HashMap<>();
