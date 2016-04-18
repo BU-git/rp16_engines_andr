@@ -131,7 +131,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
                 textCell.setVisibility(View.GONE);
                 buttonCell.setVisibility(View.VISIBLE);
                 if (orderOverviewList.get(row).getOrderStatus() != Session.ORDER_STATUS_COMPLETE)
-                    buttonCell.setEnabled(false);
+//                    buttonCell.setEnabled(false);
                 break;
         }
 

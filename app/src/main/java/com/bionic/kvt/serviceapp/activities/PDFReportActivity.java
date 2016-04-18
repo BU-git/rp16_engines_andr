@@ -10,8 +10,6 @@ import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.print.PrintAttributes;
-import android.print.pdf.PrintedPdfDocument;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -25,6 +23,15 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,6 +90,55 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         pdfTextLog.setText(pdfReportFullPath);
 
         getSupportLoaderManager().initLoader(1, null, this);
+
+        File pdfTemlate = new File(getApplicationContext().getExternalFilesDir(""), "PDFBon.pdf");
+
+//        Utils.copyFile(pdfTemlate, pdfFile);
+
+        try  {
+            PdfReader pdfReader = new PdfReader(pdfTemlate.toString());
+            PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfFile));
+
+            PdfContentByte cb = pdfStamper.getOverContent(1);
+            ColumnText ct = new ColumnText(cb);
+            ct.setSimpleColumn(120f, 48f, 200f, 600f);
+            Font f = new Font();
+            Paragraph pz = new Paragraph(new Phrase(20, "Hello World!", f));
+            ct.addElement(pz);
+            ct.go();
+            BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA_BOLD, "Cp1252", BaseFont.EMBEDDED);
+            f = new Font(bf, 13);
+            ct = new ColumnText(cb);
+            ct.setSimpleColumn(120f, 48f, 200f, 700f);
+            pz = new Paragraph ("Hello World!", f);
+            ct.addElement(pz);
+            ct.go();
+
+            pdfStamper.close();
+            pdfReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+
+//        try (OutputStream output = new FileOutputStream(pdfFile)) {
+//            Document document = new Document(PageSize.A4);
+//            PdfWriter writer = PdfWriter.getInstance(document, output);
+//            document.open();
+//            PdfReader reader = new PdfReader(pdfTemlate.toString());
+//            writer.getImportedPage(reader, 1);
+////            document.add(new Rectangle(100, 100, 1000, 1000));
+//            document.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
+
     }
 
     @Override
@@ -127,36 +183,39 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         @Override
         public Void loadInBackground() {
-            PrintAttributes printAttrs = new PrintAttributes.Builder().
-                    setColorMode(PrintAttributes.COLOR_MODE_COLOR).
-                    setMediaSize(PrintAttributes.MediaSize.ISO_A4).
-                    setResolution(new PrintAttributes.Resolution("300DPI", PRINT_SERVICE, 300, 300)).
-                    setMinMargins(PrintAttributes.Margins.NO_MARGINS).
-                    build();
-
-            PdfDocument orderPdfDocument = new PrintedPdfDocument(context, printAttrs);
-
-            int pageHeight = printAttrs.getMediaSize().getHeightMils() / 1000 * 72;
-            int pageWidth = printAttrs.getMediaSize().getWidthMils() / 1000 * 72;
-
-            PdfDocument.PageInfo newPage =
-                    new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pdfPageCount).create();
-
-            PdfDocument.Page page = orderPdfDocument.startPage(newPage);
-            drawPDFPage(page);
-            orderPdfDocument.finishPage(page);
-
-            try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
-                orderPdfDocument.writeTo(fileOutputStream);
-                orderPdfDocument.close();
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("PDF file saved: " + pdfFile);
-            } catch (IOException e) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());
-            }
+//            PrintAttributes printAttrs = new PrintAttributes.Builder().
+//                    setColorMode(PrintAttributes.COLOR_MODE_COLOR).
+//                    setMediaSize(PrintAttributes.MediaSize.ISO_A4).
+//                    setResolution(new PrintAttributes.Resolution("300 DPI", PRINT_SERVICE, 300, 300)).
+//                    setMinMargins(PrintAttributes.Margins.NO_MARGINS).
+//                    build();
+//
+//            PdfDocument orderPdfDocument = new PrintedPdfDocument(context, printAttrs);
+//
+//            int pageHeight = printAttrs.getMediaSize().getHeightMils() / 1000 * 72;
+//            int pageWidth = printAttrs.getMediaSize().getWidthMils() / 1000 * 72;
+//
+//            if (BuildConfig.IS_LOGGING_ON)
+//                Session.addToSessionLog("PDF page size on creating: " + pageHeight + "/" + pageWidth);
+//
+//            PdfDocument.PageInfo newPage =
+//                    new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pdfPageCount).create();
+//
+//            PdfDocument.Page page = orderPdfDocument.startPage(newPage);
+//            drawPDFPage(page);
+//            orderPdfDocument.finishPage(page);
+//
+//            try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
+//                orderPdfDocument.writeTo(fileOutputStream);
+//                orderPdfDocument.close();
+//                fileOutputStream.flush();
+//                fileOutputStream.close();
+//                if (BuildConfig.IS_LOGGING_ON)
+//                    Session.addToSessionLog("PDF file saved: " + pdfFile);
+//            } catch (IOException e) {
+//                if (BuildConfig.IS_LOGGING_ON)
+//                    Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());
+//            }
             return null;
         }
 
@@ -172,9 +231,9 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             canvas.drawText("Test Print Document Page " + pdfPageCount, leftMargin, titleBaseLine, paint);
 
             paint.setTextSize(14);
-            canvas.drawText("" + PrintAttributes.MediaSize.ISO_A4.getWidthMils() / 1000 * 72 * 2 + "/"
-                    + PrintAttributes.MediaSize.ISO_A4.getHeightMils() / 1000 * 72 * 2, leftMargin, titleBaseLine + 35, paint);
-
+            canvas.drawText("klvhkjhv", leftMargin, titleBaseLine + 35, paint);
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("PDF page size on canvas: " + canvas.getHeight() + "/" + canvas.getWidth());
             paint.setColor(Color.RED);
             PdfDocument.PageInfo pageInfo = page.getInfo();
             canvas.drawCircle(pageInfo.getPageWidth() / 2, pageInfo.getPageHeight() / 2, 150, paint);
@@ -186,7 +245,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         try {
             mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR: PDF file not found: " + e.toString());
         }
         PdfRenderer mPdfRenderer = null;
         try {
@@ -196,7 +256,16 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         }
 
         PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
-        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth() * 2, mCurrentPage.getHeight() * 2, Bitmap.Config.ARGB_8888);
+
+        int pageHeight = (int) (mCurrentPage.getHeight() * 2);
+//        int pageHeight = 3508;
+        int pageWidth = (int) (mCurrentPage.getWidth() * 2);
+//        int pageWidth = 2481;
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("PDF page size on viewing: " + pageHeight + "/" + pageWidth);
+
+        Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
 
         mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
 
