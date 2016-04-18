@@ -61,7 +61,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_order_number_data"
+                    android:id="@+id/process_order_page_detail_order_number"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -90,7 +90,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_order_date_data"
+                    android:id="@+id/process_order_page_detail_order_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -130,7 +130,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_datail_relation_data"
+                    android:id="@+id/process_order_page_detail_relation"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -159,7 +159,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_reference_data"
+                    android:id="@+id/process_order_page_detail_reference"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/place"
+                    android:text="@string/town"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -199,7 +199,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_place_data"
+                    android:id="@+id/process_order_page_detail_town"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -228,7 +228,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_device_type_data"
+                    android:id="@+id/process_order_page_detail_installation"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -255,7 +255,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/telephone_number"
+                    android:text="@string/telephone"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -268,7 +268,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_telephone_data"
+                    android:id="@+id/process_order_page_detail_telephone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -285,7 +285,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="@string/place_2"
+                    android:text="@string/town"
                     android:textStyle="bold" />
             </TableRow>
 
@@ -296,7 +296,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/process_order_page1_device_palce_2_data"
+                    android:id="@+id/process_order_page1_device_town"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -337,7 +337,7 @@
                 android:background="@color/colorSecondaryBackground">
 
                 <TextView
-                    android:id="@+id/process_order_page_detail_employee_data"
+                    android:id="@+id/process_order_page_detail_employee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -370,8 +370,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    tools:text="1213" />
+                    android:gravity="center_vertical" />
             </TableRow>
         </TableRow>
     </TableLayout>

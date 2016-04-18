@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KVT Service Application</string>
+    <string name="app_name">KVT Service</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -28,8 +28,8 @@
     <string name="order_date">Order date</string>
     <string name="relation">Relation</string>
     <string name="reference">Reference</string>
-    <string name="place">Place</string>
-    <string name="telephone_number">Telephone number</string>
+    <string name="town">Town</string>
+    <string name="telephone">Telephone</string>
     <string name="place_2">Place 2</string>
     <string name="employee">Employee</string>
     <string name="working_hours">Working hours</string>

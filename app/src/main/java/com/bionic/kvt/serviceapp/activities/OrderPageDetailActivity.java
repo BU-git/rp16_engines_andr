@@ -9,13 +9,18 @@ import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.Order;
+
+import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
 public class OrderPageDetailActivity extends BaseActivity {
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
     @Bind(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
 
@@ -28,6 +33,36 @@ public class OrderPageDetailActivity extends BaseActivity {
     @Bind(R.id.process_order_page_order_complete)
     TextView orderIsComplete;
 
+    @Bind(R.id.process_order_page_detail_order_number)
+    TextView orderNumber;
+
+    @Bind(R.id.process_order_page_detail_relation)
+    TextView orderRelation;
+
+    @Bind(R.id.process_order_page_detail_town)
+    TextView orderTown;
+
+    @Bind(R.id.process_order_page_detail_telephone)
+    TextView orderPhone;
+
+    @Bind(R.id.process_order_page_detail_employee)
+    TextView orderEmployee;
+
+    @Bind(R.id.process_order_page_detail_order_date)
+    TextView orderDate;
+
+    @Bind(R.id.process_order_page_detail_reference)
+    TextView orderReference;
+
+    @Bind(R.id.process_order_page_detail_installation)
+    TextView orderInstallation;
+
+    @Bind(R.id.process_order_page1_device_town)
+    TextView orderInstallationTown;
+
+    @Bind(R.id.instructions_text)
+    TextView orderInstuctions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +72,12 @@ public class OrderPageDetailActivity extends BaseActivity {
         // Exit if Session is empty
         if (Session.getCurrentOrder() == 0L) return;
 
-        if (DbUtils.getOrderStatus(Session.getCurrentOrder()) == Session.ORDER_STATUS_COMPLETE) {
+        final Realm realm = Realm.getDefaultInstance();
+        final Order currentOrder =
+                realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
+        if (currentOrder == null) return;
+
+        if (currentOrder.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);
@@ -45,8 +85,22 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         // Setting Order data to textView
-//            ((TextView) findViewById(R.id.process_order_page_detail_order_number_data)).setText(orderNumber);
+        try {
+            orderNumber.setText(Long.toString(currentOrder.getNumber()));
+            orderRelation.setText(currentOrder.getRelation().getName());
+            orderTown.setText(currentOrder.getRelation().getTown());
+            orderPhone.setText(currentOrder.getRelation().getTelephone());
+            orderEmployee.setText(currentOrder.getEmployee().getName());
+            orderDate.setText(simpleDateFormat.format(currentOrder.getDate()));
+            orderReference.setText(currentOrder.getReference());
+            orderInstallation.setText(currentOrder.getInstallation().getName());
+            orderInstallationTown.setText(currentOrder.getInstallation().getTown());
 
+            orderInstuctions.setText(currentOrder.getNote());
+        } catch (NullPointerException e) {
+        }
+
+        realm.close();
     }
 
 

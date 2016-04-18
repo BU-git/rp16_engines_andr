@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -74,8 +75,7 @@ public class Session extends Application {
     }
 
     public static void addToSessionLog(String message) {
-        String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ")
-                .format(Calendar.getInstance().getTime());
+        String dateTime = new SimpleDateFormat("HH:mm:ss.SSSZ", Locale.GERMANY).format(Calendar.getInstance().getTime());
         currentUserSession.sessionLog.add("[" + dateTime + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 
