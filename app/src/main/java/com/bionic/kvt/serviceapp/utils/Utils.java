@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
+
 import java.io.File;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -41,12 +43,21 @@ public class Utils {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
     }
 
-    public static File getPublicDirectoryStorageDir(String directory, String pdfFolder) {
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(directory), pdfFolder);
+    public static File getPublicDirectoryStorageDir(String directory, String folder) {
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(directory), folder);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
         return storageDir;
+    }
+
+    // Return Private Path to folder BuildConfig.ORDERS_FOLDER
+    public static File getPrivateDocumentsStorageDir(Context context, String folder) {
+        File fileDir = new File(context.getExternalFilesDir(BuildConfig.ORDERS_FOLDER), folder);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        return fileDir;
     }
 
     public static String getUserIdFromEmail(String email) {

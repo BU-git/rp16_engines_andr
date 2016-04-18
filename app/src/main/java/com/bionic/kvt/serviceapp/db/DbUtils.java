@@ -8,6 +8,8 @@ import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.google.gson.Gson;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +43,7 @@ public class DbUtils {
         User user = realm.createObject(User.class);
         user.setName("Demo User");
         user.setEmail("demo@kvt.nl");
-        user.setPassword("demo@kvt.nl");
+        user.setPassword("ae820b72d36942625b345ec26070073e82a6f0054b2b1d0320561147653d5abe");
         user.setOnServer(true);
         realm.commitTransaction();
 
@@ -324,6 +326,15 @@ public class DbUtils {
     public static boolean isUserLoginValid(final String email, final String password) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Validating user: " + email + " : " + password);
+
+//        String passwd = "";
+//        try {
+//            MessageDigest digester = MessageDigest.getInstance("SHA-256");
+//            digester.update(password.getBytes());
+//            passwd = digester.digest().toString();
+//        } catch (NoSuchAlgorithmException e) {
+//        }
+
 
         Realm realm = Realm.getDefaultInstance();
         boolean res = realm.where(User.class)

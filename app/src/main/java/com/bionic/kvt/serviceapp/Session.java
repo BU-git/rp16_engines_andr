@@ -6,6 +6,7 @@ import com.bionic.kvt.serviceapp.api.ServiceConnection;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +29,7 @@ public class Session extends Application {
     private String engineerEmail;
     private String engineerId;
     private long currentOrder;
+    private File currentSignatureFolder;
     private List<OrderOverview> orderOverviewList;
 
     public static final int ORDER_STATUS_NOT_STARTED = 0;
@@ -68,6 +70,7 @@ public class Session extends Application {
         currentUserSession.engineerId = null;
         currentUserSession.currentOrder = 0L;
         currentUserSession.orderOverviewList.clear();
+        currentUserSession.currentSignatureFolder.delete(); //TODO
     }
 
     public static List<String> getSessionLog() {
@@ -114,6 +117,14 @@ public class Session extends Application {
 
     public static long getCurrentOrder() {
         return currentUserSession.currentOrder;
+    }
+
+    public static File getCurrentSignatureFolder() {
+        return currentUserSession.currentSignatureFolder;
+    }
+
+    public static void setCurrentSignatureFolder(File currentSignatureFolder) {
+        currentUserSession.currentSignatureFolder = currentSignatureFolder;
     }
 
     public static List<OrderOverview> getOrderOverviewList() {

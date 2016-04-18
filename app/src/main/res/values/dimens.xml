@@ -10,7 +10,7 @@
     <dimen name="orders_list_margin">2dp</dimen>
     <dimen name="orders_processing_vertical_margin">8dp</dimen>
     <dimen name="orders_table_vertical_margin">16dp</dimen>
-    <dimen name="signature_margin">80dp</dimen>
+    <dimen name="signature_margin">64dp</dimen>
     <dimen name="measurements_table_margin">1dp</dimen>
     <dimen name="measurements_table_cell_padding">6dp</dimen>
     <dimen name="nsa_padding">8dp</dimen>

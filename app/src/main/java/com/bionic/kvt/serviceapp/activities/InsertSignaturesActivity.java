@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -10,18 +11,19 @@ import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.DrawingView;
 
 import java.io.File;
-import java.util.UUID;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.provider.MediaStore.Images.Media.insertImage;
 
 public class InsertSignaturesActivity extends BaseActivity {
     @Bind(R.id.draw_engineer_signature)
@@ -101,35 +103,67 @@ public class InsertSignaturesActivity extends BaseActivity {
             return;
         }
 
+
         DrawingView currentDrawingView;
         String description;
         ToggleButton currentToggleButton;
+        String signatureFileName;
         switch (currentButtonClicked) {
             case ENGINEER_BUTTON:
                 currentDrawingView = engineerDrawingView;
                 description = "Engineer's signature";
                 currentToggleButton = buttonConfirmEngineer;
+                signatureFileName = "signature_engineer.png";
                 break;
             case CLIENT_BUTTON:
             default:
                 currentDrawingView = clientDrawingView;
                 description = "Client's signature";
                 currentToggleButton = buttonConfirmClient;
+                signatureFileName = "client_engineer.png";
                 break;
         }
 
-        currentDrawingView.setDrawingCacheEnabled(true);
-        String signature = insertImage(
-                getContentResolver(),
-                currentDrawingView.getDrawingCache(),
-                UUID.randomUUID().toString() + ".png",
-                description
-        );
 
-        if (signature == null) {
-            Toast.makeText(getApplicationContext(), "Signatures could not be saved", Toast.LENGTH_SHORT).show();
+        if (currentDrawingView.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
             currentToggleButton.setChecked(false);
+            currentButtonClicked = 0;
+            return;
         }
+
+        Session.setCurrentSignatureFolder(Utils.getPrivateDocumentsStorageDir(
+                getApplicationContext(),
+                Session.getCurrentOrder() + "/" + BuildConfig.SINGNATURE_FOLDER));
+
+        final File signatureFile = new File(Session.getCurrentSignatureFolder(), signatureFileName);
+        final Bitmap signatureBitmap = currentDrawingView.getDrawingCache();
+
+//        try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
+//            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+//            fileOutputStream.flush();
+//            fileOutputStream.close();
+//        } catch (IOException e) {
+//            if (BuildConfig.IS_LOGGING_ON)
+//                Session.addToSessionLog("ERROR writing: " + signatureFile + e.toString());
+//            Toast.makeText(getApplicationContext(), "Signature could not be saved", Toast.LENGTH_SHORT).show();
+//            currentToggleButton.setChecked(false);
+//        }
+
+
+//        currentDrawingView.setDrawingCacheEnabled(true);
+//        String signature = insertImage(
+//                getContentResolver(),
+//                currentDrawingView.getDrawingCache(),
+//                UUID.randomUUID().toString() + ".png",
+//                description
+//        );
+//
+//        if (signature == null) {
+//            Toast.makeText(getApplicationContext(), "Signatures could not be saved", Toast.LENGTH_SHORT).show();
+//            currentToggleButton.setChecked(false);
+//        }
+
 
         currentToggleButton.setChecked(true);
         currentDrawingView.destroyDrawingCache();

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -143,12 +144,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             drawPDFPage(page);
             orderPdfDocument.finishPage(page);
 
-            try {
-                orderPdfDocument.writeTo(new FileOutputStream(pdfFile));
-            } catch (IOException e) {
-                throw new RuntimeException("Error generating file", e);
-            } finally {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
+                orderPdfDocument.writeTo(fileOutputStream);
                 orderPdfDocument.close();
+                fileOutputStream.flush();
+                fileOutputStream.close();
+            } catch (IOException e) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());
             }
             return null;
         }
@@ -205,16 +208,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             mFileDescriptor = null;
         }
     }
-
-
-//    public File getPrivateDocumentsStorageDir(Context context, String pdfFolder) {
-//        File file = new File(context.getExternalFilesDir(
-//                Environment.DIRECTORY_DOCUMENTS), pdfFolder);
-//        if (!file.mkdirs()) {
-//            Log.e(getLocalClassName(), "Directory not created: " + file.toString());
-//        }
-//        return file;
-//    }
 
 }
 
