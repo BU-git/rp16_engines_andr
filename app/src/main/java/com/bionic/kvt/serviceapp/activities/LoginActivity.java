@@ -20,141 +20,129 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.api.User;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
+import butterknife.OnFocusChange;
+import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 
-/**
- * A login screen that offers login via email/password.
- */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
-
+public class LoginActivity extends BaseActivity implements
+        LoaderCallbacks<Cursor>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
 
     private final String TAG = this.getClass().getName();
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "user@kvt.nl:12345", "bar@example.com:world", "sasha.mylnikov@gmail.com:12345"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserLoginTask mAuthTask = null;
 
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-    private ImageView mImageView;
-    private ImageView mImageLogoView;
+    @Bind(R.id.connection_status)
+    TextView mConnectionStatusText;
+
+    @Bind(R.id.email)
+    AutoCompleteTextView mEmailView;
+
+    @Bind(R.id.password)
+    EditText mPasswordView;
+
+    @Bind(R.id.login_progress)
+    View mProgressView;
+
+    @Bind(R.id.login_form)
+    View mLoginFormView;
+
     private View mLoginLayout;
-    private TextView mHeaderTextView;
     private SharedPreferences userSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.bind(this);
+
+        DbUtils.dropDatabase();
+
+        DbUtils.createUserTableIfNotExist();
 
         //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+    }
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-
-        //Restore saved password, if any
-        mEmailView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
-                    if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
-                        mPasswordView.setText(userSharedPreferences.getString("password", ""));
-                    }
-                }
+    // Restore saved password, if any
+    @OnFocusChange(R.id.email)
+    public void onEmailFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {
+            userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
+            if (userSharedPreferences.getBoolean("isPasswordSaved", false)) {
+                mPasswordView.setText(userSharedPreferences.getString("password", ""));
             }
-        });
+        }
+    }
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    @OnEditorAction(R.id.password)
+    public boolean onPasswordEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+        if (id == R.id.login || id == EditorInfo.IME_NULL) {
+            attemptLogin();
+            return true;
+        }
+        return false;
+    }
 
+    @OnClick(R.id.email_sign_in_button)
+    public void onSingInClick(View view) {
+        attemptLogin();
+    }
 
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+    // Forget Password Button
+    @OnClick(R.id.forget_password_button)
+    public void onForgetPasswordClick(View v) {
+        if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+            requestNetworkStatePermission();
+        } else {
+            NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
+            if (!networkHelper.isNetworkConnected()) {
+                Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            } else {
+                //Start login activity
+                startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
+                //Disable animation
+                overridePendingTransition(0, 0);
             }
-        });
-
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-
-        //Forget Password Button
-        Button mForgetPassword = (Button) findViewById(R.id.forget_password_button);
-        mForgetPassword.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-                    requestNetworkStatePermission();
-                } else {
-                    NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
-                    if (!networkHelper.isNetworkConnected()) {
-                        Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    } else {
-                        //Start login activity
-                        startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
-                        //Disable animation
-                        overridePendingTransition(0, 0);
-                    }
-                }
-            }
-        });
-
+        }
     }
 
 
@@ -199,7 +187,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onResume() {
         super.onResume();
-        Session.getSession().clearSession();
+        Session.clearSession();
+        updateUserList();
     }
 
     /**
@@ -254,15 +243,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+        // Replace this with your own logic
         return email.contains("@");
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        //: Replace this with your own logic
+        return password.length() >= 4;
     }
 
     /**
@@ -376,25 +364,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
+            return DbUtils.isUserLoginValid(mEmail, mPassword);
         }
 
         @Override
@@ -407,7 +377,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
                 //Put session user to Singleton
-                Session.getSession().setEngineerId(mEmail);
+
+                DbUtils.setUserSession(mEmail);
 
                 if (mCheckBox.isChecked()) {
                     //Get shared preferences
@@ -437,5 +408,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-}
+    private void updateUserList() {
+        // Is device connected to network
+        if (!Utils.isConnected(getApplicationContext())) {
+            showConnectionMessage("No connection to network.");
+            return;
+        }
 
+        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Connecting to server: " + userListRequest.request());
+
+        userListRequest.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(final Call<List<User>> call,
+                                   final Response<List<User>> response) {
+                if (response.isSuccessful()) {
+
+                    if (response.body() == null || response.body().size() == 0) {
+                        showConnectionMessage("Connection successful. No users on server found.");
+                        DbUtils.resetUserTable();
+                        return;
+                    }
+
+                    int activeUsers = DbUtils.updateUserTableFromServer(response.body());
+                    if (activeUsers == 0) {
+                        showConnectionMessage("Connection successful. No active users on server.");
+                    } else {
+                        showConnectionMessage("Connection successful. Synchronised " + activeUsers + " user(s).");
+                    }
+
+                } else {
+                    showConnectionMessage("Error connecting to server: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(final Call<List<User>> call, final Throwable t) {
+                showConnectionMessage("User list request fail: " + t.toString());
+            }
+        });
+    }
+
+    private void showConnectionMessage(final String message) {
+        mConnectionStatusText.setText(message);
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(message);
+
+    }
+}

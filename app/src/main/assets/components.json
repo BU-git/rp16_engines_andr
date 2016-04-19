@@ -1,0 +1,906 @@
+[{
+	"NSA ruimte": [{
+		"Algemeen": {
+			"Vervuiling": 1,
+			"Ontbreking brandblusser": 1,
+			"Ontbreking verbandtrommel": 1,
+			"Te weinig werk ruimte": 1,
+			"Onveilige situatie": 1
+		}
+	}]
+}, {
+	"Motor": [{
+		"Algemeen": {
+			"Overmatig trillen": "E",
+			"Capaciteit vermindert": "E",
+			"Plaatselijke oververhitting ": "E",
+			"Capaciteit onvoldoende": "E",
+			"Geen service meer mogelijk": "E",
+			"Ontbrekende delen": "E",
+			"Corrosie": "S",
+			"Bovenmatig olieverbruik": "S",
+			"Beschermingsgraad onjuist/aanrakingsgevaar": "S",
+			"Onjuist gedimensioneerde componenten": "S",
+			"Overmatige warmteontwikkeling": "S",
+			"Geen vervangende onderdelen verkrijgbaar": "S",
+			"Asbest houdend": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Aantasting beschermlaag": "G",
+			"Vervuiling": "G",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G"
+		}
+	}, {
+		"Overspeed Beveiliging": {
+			"Defecten": 1
+		}
+	}, {
+		"Air shut off": {
+			"Defecten": 1
+		}
+	}, {
+		"Motorbeveiligingen": {
+			"Defecten": 1
+		}
+	}, {
+		"Startmotor": {
+			"Defecten": 1,
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": 1
+		}
+	}, {
+		"Koudstart": {
+			"Defecten": 1
+		}
+	}, {
+		"Smeerolie": {
+			"Niveau te hoog": "E",
+			"Niveau Onvoldoende": "S",
+			"Bovenmatig olieverbruik": "S",
+			"Slijtageverschijnselen": "S",
+			"Onjuiste type": "S",
+			"Functie vermindert": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Vervuiling": "G",
+			"Lekkage": "G"
+		}
+	}, {
+		"Brandstof": {
+			"Onjuiste type": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Vervuiling": "G",
+			"Lekkage": "G"
+		}
+	}, {
+		"Koelmiddel": {
+			"Niveau Onvoldoende": "S",
+			"Onjuiste type": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Lekkage": "G"
+		}
+	}]
+}, {
+	"Installatie": [{
+		"Totaal": {
+			"Overmatig trillen": "E",
+			"Capaciteit vermindert": "E",
+			"Verstorende invloed": "E",
+			"Aantasting materiaal intrinsiek": "E",
+			"Plaatselijke oververhitting ": "E",
+			"Aansluiting aangetast": "E",
+			"Isolatieweerstand onvoldoende": "E",
+			"Capaciteit onvoldoende": "E",
+			"Geen service meer mogelijk": "E",
+			"Kortsluitvastheid onvoldoende": "E",
+			"Corrosie": "S",
+			"Slijtageverschijnselen": "S",
+			"Beschermingsgraad onjuist/aanrakingsgevaar": "S",
+			"Verboden medium (PCB, R11, R12)": "S",
+			"Onterechte melding": "S",
+			"Beschadigde isolatie/onderdelen": "S",
+			"Beschadigde aansluitpunten": "S",
+			"Condens in behuizing": "S",
+			"Onjuist gedimensioneerde componenten": "S",
+			"Overmatige warmteontwikkeling": "S",
+			"Ontbreken van onderdelen": "S",
+			"Geen vervangende onderdelen verkrijgbaar": "S",
+			"Onvoldoende verlichtingssterkte": "S",
+			"Onjuiste aanleg": "S",
+			"Asbest houdend": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Aantasting beschermlaag": "G",
+			"Vervuiling": "G",
+			"Onjuiste instelling": "G",
+			"Defecte lampen": "G",
+			"Ontbreken logboek/keuring/tekening": "G",
+			"Onbereikbaar voor functie/onderhoud": "G",
+			"Vastzittende afsluiter": "G",
+			"Codering onjuist": "G",
+			"Loszittende isolatie": "G",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G",
+			"Doorgebogen leiding": "G",
+			"Loshangende leiding": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G",
+			"Algemene lekkages": 1
+		}
+	}]
+}, {
+	"Generator": [{
+		"Algemeen": {
+			"Vervuiling": 1
+		}
+	}, {
+		"Kabels": {
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": 1
+		}
+	}, {
+		"Spanningsregelaar": {
+			"Onjuiste spanning": 1
+		}
+	}]
+}, {
+	"Motorblok": [{
+		"Carterdeksel": {
+			"Lekkage": "G"
+		}
+	}, {
+		"Trillingdempers": {
+			"Deformatie van delen": "E",
+			"Aantasting materiaal intrinsiek": "E",
+			"Overmatig trillen": "S",
+			"Capaciteit vermindert": "S",
+			"Scheuren of gaten": "S",
+			"Uitdrogen rubber": "G",
+			"Corrosie": "G",
+			"Onjuiste instelling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Carterpan": {
+			"Scheuren of gaten": "E",
+			"Deformatie van delen": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Corrosie": "G",
+			"Lekkage": "G"
+		}
+	}, {
+		"Carterontluchting": {
+			"Defecten": "S",
+			"Uitdrogen rubber": "G",
+			"Vervuiling": "G",
+			"Lekkage": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Vliegwiel inclusief demper": {
+			"Overmatig trillen": "E",
+			"Defecten": "E",
+			"Deformatie van delen": "E",
+			"Aantasting materiaal intrinsiek": "E",
+			"Uitdrogen rubber": "S",
+			"Slijtageverschijnselen": "S",
+			"Corrosie": "G",
+			"Onjuiste montage": "G"
+		}
+	}]
+}, {
+	"Uitlaatsysteem": [{
+		"Turbo": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Deformatie van delen": "E",
+			"Aantasting materiaal intrinsiek": "S",
+			"Plaatselijke oververhitting ": "S",
+			"Vervuiling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Beschermingsgraad onjuist/aanrakingsgevaar": "G",
+			"Onjuiste montage": "G",
+			"Onjuiste Speling": 1
+		}
+	}, {
+		"Uitlaatsysteem": {
+			"Capaciteit vermindert": "E",
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Deformatie van delen": "E",
+			"Scheuren of gaten": "E",
+			"Aantasting materiaal intrinsiek": "E",
+			"Capaciteit onvoldoende": "E",
+			"Geluid productie": "S",
+			"Plaatselijke oververhitting ": "S",
+			"Onjuiste type": "S",
+			"Ontbrekende delen": "S",
+			"Onjuiste aanleg": "S",
+			"Asbest houdend": "S",
+			"Overmatig trillen": "G",
+			"Uitdrogen rubber": "G",
+			"Corrosie": "G",
+			"Beschermingsgraad onjuist/aanrakingsgevaar": "G",
+			"Deuken": "G",
+			"Beschadigde isolatie/onderdelen": "G",
+			"Condens in behuizing": "G",
+			"Vervuiling": "G",
+			"Doorgebogen leiding": "G",
+			"Loshangende leiding": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}]
+}, {
+	"Luchtinlaatsysteem": [{
+		"Luchtfilter": {
+			"Capaciteit vermindert": "E",
+			"Niveau Onvoldoende": "S",
+			"Defecten": "S",
+			"Lekkage brandstof": "S",
+			"Verstorende invloed": "S",
+			"Deformatie van delen": "S",
+			"Scheuren of gaten": "S",
+			"Vervuiling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Niveau te hoog": "G",
+			"Uitdrogen rubber": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Corrosie": "G",
+			"Ontbrekende delen": "G",
+			"Deuken": "G",
+			"Condens in behuizing": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Luchtinlaat": {
+			"Scheuren of gaten": "G",
+			"Uitdrogen rubber": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Corrosie": "G",
+			"Vervuiling": "G",
+			"Doorgebogen leiding": "G",
+			"Loshangende leiding": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Laadluchtkoeler": {
+			"Breuk van leidingen": "E",
+			"Capaciteit vermindert": "S",
+			"Lekkage brandstof": "S",
+			"Deformatie van delen": "S",
+			"Scheuren of gaten": "S",
+			"Vervuiling": "S",
+			"Lekkage koelmedium": "S",
+			"Defecte onderdelen": "S",
+			"Deuken": "S",
+			"Niveau Onvoldoende": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Corrosie": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Kleppen tuimellaar geleider stoterstangen": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Deformatie van delen": "E",
+			"Slijtageverschijnselen": "S",
+			"Vervuiling": "S",
+			"Onjuiste instelling": "S",
+			"Onjuiste speling": 1
+		}
+	}, {
+		"Kleppendeksel": {
+			"Scheuren of gaten": "S",
+			"Bros geworden delen": "S",
+			"Lekkage brandstof": "G",
+			"Deformatie van delen": "G",
+			"Uitdrogen rubber": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Corrosie": "G",
+			"Deuken": "G",
+			"Beschadigde aansluitpunten": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Kleppenregister lucht  in uit": {
+			"Defecten": 1,
+			"Vervuiling": 1
+		}
+	}, {
+		"Verstuivers Injectoren": {
+			"Capaciteit vermindert": "E",
+			"Defecten": "E",
+			"Slijtageverschijnselen": "E",
+			"Isolatieweerstand onvoldoende": "E",
+			"Lekkage brandstof": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Aansluiting aangetast": "S",
+			"Onjuiste type": "S",
+			"Onjuiste instelling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Beschadigde aansluitpunten": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Regulateur": {
+			"Defecten": "E",
+			"Onjuiste instelling": "E",
+			"Lekkage brandstof": "S",
+			"Aansluiting aangetast": "S",
+			"Slijtageverschijnselen": "S",
+			"Onjuiste type": "S",
+			"Ontbrekende delen": "S",
+			"Onjuiste montage": "S",
+			"Functie vermindert": "S",
+			"Corrosie": "G",
+			"Vervuiling": "G"
+		}
+	}]
+}, {
+	"Brandstofsysteem": [{
+		"HD brandstofleiding": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Overmatig trillen": "S",
+			"Corrosie": "S",
+			"Aansluiting aangetast": "S",
+			"Slechte verbindingen": "S",
+			"Deuken": "S",
+			"Beschadigde aansluitpunten": "S",
+			"Doorgebogen leiding": "G",
+			"Loshangende leiding": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"HD brandstofpomp": {
+			"Capaciteit vermindert": "E",
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Onjuiste instelling": "E",
+			"Uitdrogen rubber": "S",
+			"Aansluiting aangetast": "S",
+			"Slijtageverschijnselen": "S",
+			"Onjuiste type": "S",
+			"Vastzittende afsluiter": "S",
+			"Defecte onderdelen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Leidingen Slangen": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Breuk van leidingen": "E",
+			"Deformatie van delen": "S",
+			"Scheuren of gaten": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Aansluiting aangetast": "S",
+			"Onjuiste type": "S",
+			"Aantasting beschermlaag": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Beschadigde buitenmantel leidingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Filter": {
+			"Scheuren of gaten": "E",
+			"Capaciteit vermindert": "S",
+			"Defecten": "S",
+			"Lekkage brandstof": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Bros geworden delen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Deuken": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"VoorFilter": {
+			"Scheuren of gaten": 1,
+			"Capaciteit vermindert": 1,
+			"Defecten": 1,
+			"Lekkage brandstof": 1,
+			"Aantasting materiaal intrinsiek": 1,
+			"Bros geworden delen": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1,
+			"Corrosie": 1,
+			"Deuken": 1,
+			"Vervuiling": 1,
+			"Onjuiste montage": 1
+		}
+	}, {
+		"Koeler": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Capaciteit vermindert": "S",
+			"Deformatie van delen": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Vervuiling": "S",
+			"Uitdrogen rubber": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Deuken": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Mechanische opvoerpomp": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Capaciteit vermindert": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Slijtageverschijnselen": "S",
+			"Bros geworden delen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Handmatige opvoerpomp": {
+			"Defecten": 1,
+			"Lekkage vloeistof": 1,
+			"Scheuren of gaten": 1,
+			"Breuk van leidingen": 1,
+			"Capaciteit vermindert": 1,
+			"Uitdrogen rubber": 1,
+			"Aantasting materiaal intrinsiek": 1,
+			"Slijtageverschijnselen": 1,
+			"Bros geworden delen": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1,
+			"Corrosie": 1,
+			"Aansluiting aangetast": 1,
+			"Vervuiling": 1,
+			"Onjuiste montage": 1
+		}
+	}, {
+		"Waterafscheider": {
+			"Defecten": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Lekkage brandstof": "S",
+			"Niveau te hoog": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Bros geworden delen": "S",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Trimpomp": {
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Overmatig trillen": "S",
+			"Capaciteit vermindert": "S",
+			"Defecten": "S",
+			"Lekkage brandstof": "S",
+			"Deformatie van delen": "S",
+			"Plaatselijke oververhitting ": "S",
+			"Slijtageverschijnselen": "S",
+			"Isolatieweerstand onvoldoende": "S",
+			"Capaciteit onvoldoende": "S",
+			"Onjuiste type": "S",
+			"Geen service meer mogelijk": "S",
+			"Kortsluitvastheid onvoldoende": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Bros geworden delen": "G",
+			"Beschadigde aansluitpunten": "G",
+			"Vervuiling": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Dagtank": {
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Niveau Onvoldoende": "S",
+			"Deformatie van delen": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Uitdrogen rubber": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Capaciteit onvoldoende": "G",
+			"Ontbrekende delen": "G",
+			"Deuken": "G",
+			"Beschadigde aansluitpunten": "G",
+			"Condens in behuizing": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Grondtank": {
+			"Lekkage vloeistof": 1,
+			"Scheuren of gaten": 1,
+			"Breuk van leidingen": 1,
+			"Niveau Onvoldoende": 1,
+			"Deformatie van delen": 1,
+			"Aantasting materiaal intrinsiek": 1,
+			"Uitdrogen rubber": 1,
+			"Corrosie": 1,
+			"Aansluiting aangetast": 1,
+			"Capaciteit onvoldoende": 1,
+			"Ontbrekende delen": 1,
+			"Deuken": 1,
+			"Beschadigde aansluitpunten": 1,
+			"Condens in behuizing": 1,
+			"Vervuiling": 1,
+			"Onjuiste montage": 1
+		}
+	}]
+}, {
+	"Smeeroliesysteem": [{
+		"Leidingen": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Breuk van leidingen": "E",
+			"Deformatie van delen": "S",
+			"Scheuren of gaten": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Aansluiting aangetast": "S",
+			"Onjuiste type": "S",
+			"Aantasting beschermlaag": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Beschadigde buitenmantel leidingen": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Filter": {
+			"Scheuren of gaten": "E",
+			"Capaciteit vermindert": "S",
+			"Defecten": "S",
+			"Lekkage brandstof": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Bros geworden delen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Deuken": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Koeler": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Capaciteit vermindert": "S",
+			"Deformatie van delen": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Vervuiling": "S",
+			"Uitdrogen rubber": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Deuken": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Pomp": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Capaciteit vermindert": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Slijtageverschijnselen": "S",
+			"Bros geworden delen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}]
+}, {
+	"Koelcircuit": [{
+		"Slangen leidingen": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Deformatie van delen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Aansluiting aangetast": "S",
+			"Onjuiste type": "S",
+			"Vastzittende afsluiter": "S",
+			"Doorgebogen leiding": "S",
+			"Loshangende leiding": "S",
+			"Slechte verbindingen": "S",
+			"Onjuiste montage": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Overmatig trillen": "G",
+			"Corrosie": "G",
+			"Vervuiling": "G"
+		}
+	}, {
+		"Voorverwarming": {
+			"Defecten": 1
+		}
+	}, {
+		"Klep thermostaat": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Plaatselijke oververhitting ": "S",
+			"Aansluiting aangetast": "S",
+			"Bros geworden delen": "S",
+			"Onjuiste montage": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Vervuiling": "G"
+		}
+	}, {
+		"Radiateur": {
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Defecten": "S",
+			"Deformatie van delen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Corrosie": "S",
+			"Bros geworden delen": "S",
+			"Onjuiste type": "S",
+			"Geen service meer mogelijk": "S",
+			"Vervuiling": "S",
+			"Niveau Onvoldoende": "G",
+			"Capaciteit vermindert": "G",
+			"Niveau te hoog": "G",
+			"Aansluiting aangetast": "G",
+			"Deuken": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Radiateur Dop": {
+			"Beschadigingen": 1
+		}
+	}, {
+		"Dak Tafelkoeler": {
+			"Vervuiling": 1,
+			"Beschadigingen": 1
+		}
+	}, {
+		"Warmtewisselaar": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Niveau Onvoldoende": "S",
+			"Capaciteit vermindert": "S",
+			"Deformatie van delen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Plaatselijke oververhitting ": "S",
+			"Corrosie": "S",
+			"Bros geworden delen": "S",
+			"Onjuiste type": "S",
+			"Geen service meer mogelijk": "S",
+			"Vervuiling": "S",
+			"Aansluiting aangetast": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Expansievat": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Niveau Onvoldoende": "S",
+			"Deformatie van delen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Bros geworden delen": "S",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Deuken": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Koelwaterpomp (intern)": {
+			"Defecten": "E",
+			"Lekkage vloeistof": "E",
+			"Scheuren of gaten": "E",
+			"Breuk van leidingen": "E",
+			"Capaciteit vermindert": "S",
+			"Deformatie van delen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Corrosie": "G",
+			"Aansluiting aangetast": "G",
+			"Vervuiling": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Koelwaterpomp extern": {
+			"Defecten": 1,
+			"Lekkage vloeistof": 1,
+			"Scheuren of gaten": 1,
+			"Breuk van leidingen": 1,
+			"Capaciteit vermindert": 1,
+			"Deformatie van delen": 1,
+			"Uitdrogen rubber": 1,
+			"Aantasting materiaal intrinsiek": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1,
+			"Corrosie": 1,
+			"Aansluiting aangetast": 1,
+			"Vervuiling": 1,
+			"Onjuiste montage": 1
+		}
+	}, {
+		"Waterfilters": {
+			"Scheuren of gaten": 1,
+			"Capaciteit vermindert": 1,
+			"Defecten": 1,
+			"Lekkage brandstof": 1,
+			"Aantasting materiaal intrinsiek": 1,
+			"Bros geworden delen": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1,
+			"Corrosie": 1,
+			"Deuken": 1,
+			"Vervuiling": 1,
+			"Onjuiste montage": 1
+		}
+	}]
+}, {
+	"Distributie": [{
+		"Poellies": {
+			"Defecten": "E",
+			"Overmatig trillen": "S",
+			"Uitdrogen rubber": "S",
+			"Aantasting materiaal intrinsiek": "S",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "S",
+			"Corrosie": "G",
+			"Onjuiste montage": "G"
+		}
+	}]
+}, {
+	"Accus Startvoorziening": [{
+		"Accu bak": {
+			"Scheuren of gaten": "E",
+			"Corrosie": "S",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G"
+		}
+	}, {
+		"Kabels": {
+			"Slechte verbindingen": "S",
+			"Beschermingsleiding onderbroken": "S",
+			"Loshangende leiding": "G",
+			"Onjuiste montage": "G"
+		}
+	}, {
+		"Lader laadcircuit": {
+			"Defecte lampen": "S",
+			"Onjuiste montage": "G",
+			"Onjuiste instelling": 1
+		}
+	}, {
+		"Dynamo": {
+			"Codering onjuist": "G",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G",
+			"Onjuiste laadspanning": 1
+		}
+	}, {
+		"Dynamoriem": {
+			"Uitdrogen rubber": "G",
+			"Aantasting materiaal intrinsiek": "G",
+			"Onjuiste type": "G",
+			"Onjuiste spanning": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1
+		}
+	}, {
+		"Accu": {
+			"Gecorrodeerde klemmen accu": "S",
+			"Niveau medium te laag": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G"
+		}
+	}, {
+		"Klemmen": {
+			"Onjuiste spanning": 1,
+			"Vervuiling": 1
+		}
+	}, {
+		"Startbatterijen": {
+			"Defecten": 1,
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1
+		}
+	}, {
+		"PLC back up batterij": {
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1
+		}
+	}, {
+		"PLC back up accu": {
+			"50% - 75% van theoretische levensduur beginstadium": 1,
+			"> 75% theoretische levensduur middenstadium": 1
+		}
+	}]
+}, {
+	"Regelkast": [{
+		"Indicatie lampen": {
+			"Defecte lampen": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G"
+		}
+	}, {
+		"Netwachter": {
+			"Overmatige warmteontwikkeling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Ontbreken logboek/keuring/tekening": "G",
+			"Codering onjuist": "G",
+			"Defecten": 1
+		}
+	}, {
+		"Relais": {
+			"Overmatige warmteontwikkeling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Codering onjuist": "G",
+			"Defecten": 1
+		}
+	}, {
+		"Synchronisatiepaneel": {
+			"Defecten": "E",
+			"Deuken": "S",
+			"Overmatige warmteontwikkeling": "S",
+			"50% - 75% van theoretische levensduur beginstadium": "G",
+			"> 75% theoretische levensduur middenstadium": "G",
+			"Ontbreken logboek/keuring/tekening": "G",
+			"Codering onjuist": "G",
+			"Beschadigde en/of ontbrekende bevestigingsmiddelen": "G",
+			"Loshangende leiding": "G",
+			"Slechte verbindingen": "G",
+			"Onjuiste montage": "G",
+			"Vervuiling": 1
+		}
+	}]
+}]

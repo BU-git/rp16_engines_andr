@@ -2,118 +2,121 @@ package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
 
-import java.util.LinkedList;
+import com.bionic.kvt.serviceapp.api.ServiceConnection;
+import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.Utils;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * Implements session handling
- */
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class Session extends Application {
-
     private static Session currentUserSession;
+
+    private ServiceConnection serviceConnection;
+    private List<String> sessionLog;
+    private boolean isSyncingFromServer = false;
+
+    private String engineerName;
+    private String engineerEmail;
+    private String engineerId;
+    private long currentOrder;
+    private List<OrderOverview> orderOverviewList;
+
+    public static final int ORDER_STATUS_NOT_STARTED = 0;
+    public static final int ORDER_STATUS_IN_PROGRESS = 1;
+    public static final int ORDER_STATUS_COMPLETE = 2;
+
+    public static final int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
     @Override
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
+        sessionLog = new ArrayList<>();
+        orderOverviewList = new ArrayList<>();
+
+        final Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.BACK_OFFICE_HOST)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        serviceConnection = retrofit.create(ServiceConnection.class);
+
+        RealmConfiguration config = new RealmConfiguration.Builder(this)
+                .name(BuildConfig.DB_NAME)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
     }
 
-    public static Session getSession() {
-        return currentUserSession;
+    public static ServiceConnection getServiceConnection() {
+        return currentUserSession.serviceConnection;
     }
 
-    public static final List<String[]> ordersDataSet = new LinkedList<>();
-    public static int ordersDataSetColNumber;
-
-    static {
-        ordersDataSet.add(new String[]{"826547892", "29-06-2016", "Generator", "Repair", "Kiev", "Not started", "PDF"});
-        ordersDataSet.add(new String[]{"354323678", "19-03-2016", "Motor", "Check", "Lviv", "Not started", "PDF"});
-        ordersDataSet.add(new String[]{"308197851", "19-03-2016", "Motor", "Check", "Donetsk", "Not started", "PDF"});
-        ordersDataSet.add(new String[]{"354363467", "19-03-2016", "Motor", "Check", "Lviv", "In progress", "PDF"});
-        ordersDataSet.add(new String[]{"276836365", "19-03-2016", "Motor", "Check", "Kharkiv", "Not started", "PDF"});
-        ordersDataSet.add(new String[]{"375844315", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"354398595", "19-03-2016", "Generator", "Check", "Very looooong adresss ", "Not started", "PDF"});
-        ordersDataSet.add(new String[]{"256738589", "19-03-2016", "Motor", "Check", "Kharkiv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"354543622", "19-03-2016", "Generator", "Check", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"354267990", "19-03-2016", "Motor", "Repair", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"323566436", "19-03-2016", "Motor", "Check", "Kharkiv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"516665789", "19-03-2016", "Motor", "Repair", "Dnipro", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"851567939", "19-03-2016", "Generator", "Check", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"350954613", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"95153w508", "19-03-2016", "Generator", "Repair", "Odessa", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"154234525", "19-03-2016", "Motor", "Check", "Lviv", "Completed", "PDF"});
-        ordersDataSet.add(new String[]{"045767689", "02-11-2016", "Generator", "Repair", "Odessa", "Completed", "PDF"});
-
-        ordersDataSetColNumber = ordersDataSet.get(0).length;
+    public static void clearSession() {
+        currentUserSession.engineerName = null;
+        currentUserSession.engineerEmail = null;
+        currentUserSession.engineerId = null;
+        currentUserSession.currentOrder = 0L;
+        currentUserSession.orderOverviewList.clear();
     }
 
-    private String engineerName;
-    private String engineerId;
-    private Long orderNumber;
-    private String orderStatus;
-    private boolean checkBoxInstructions;
-    private boolean checkBoxLMRA;
-
-    public void clearSession() {
-        engineerName = null;
-        engineerId = null;
-        orderNumber = null;
-        orderStatus = null;
-        checkBoxInstructions = false;
-        checkBoxLMRA = false;
+    public static List<String> getSessionLog() {
+        return currentUserSession.sessionLog;
     }
 
-    public String getOrderStatus() {
-        return orderStatus;
+    public static void addToSessionLog(String message) {
+        String dateTime = new SimpleDateFormat("HH:mm:ss.SSSZ", Locale.GERMANY).format(Calendar.getInstance().getTime());
+        currentUserSession.sessionLog.add("[" + dateTime + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
+    public static boolean isSyncingFromServer() {
+        return currentUserSession.isSyncingFromServer;
     }
 
-    public void clearOrderNumber() {
-        orderNumber = null;
+    public static void setIsSyncingFromServer(boolean state) {
+        currentUserSession.isSyncingFromServer = state;
     }
 
-    public Long getOrderNumber() {
-        return orderNumber;
+    public static void setEngineerName(String engineerName) {
+        currentUserSession.engineerName = engineerName;
     }
 
-    public void setOrderNumber(Long orderNumber) {
-        checkBoxInstructions = false;
-        checkBoxLMRA = false;
-        this.orderNumber = orderNumber;
+    public static String getEngineerName() {
+        return currentUserSession.engineerName;
     }
 
-    public String getEngineerName() {
-        return engineerName;
+    public static void setEngineerEmail(String engineerEmail) {
+        currentUserSession.engineerEmail = engineerEmail;
+        currentUserSession.engineerId = Utils.getUserIdFromEmail(engineerEmail);
     }
 
-    public void setEngineerName(String engineerName) {
-        this.engineerName = engineerName;
+    public static String getEngineerEmail() {
+        return currentUserSession.engineerEmail;
     }
 
-    public String getEngineerId() {
-        return engineerId;
+    public static String getEngineerId() {
+        return currentUserSession.engineerId;
     }
 
-    public void setEngineerId(String engineerId) {
-        this.engineerId = engineerId;
+    public static void setCurrentOrder(long order) {
+        currentUserSession.currentOrder = order;
     }
 
-    public boolean isCheckBoxInstructions() {
-        return checkBoxInstructions;
+    public static long getCurrentOrder() {
+        return currentUserSession.currentOrder;
     }
 
-    public void setCheckBoxInstructions(boolean checkBoxInstructions) {
-        this.checkBoxInstructions = checkBoxInstructions;
-    }
-
-    public boolean isCheckBoxLMRA() {
-        return checkBoxLMRA;
-    }
-
-    public void setCheckBoxLMRA(boolean checkBoxLMRA) {
-        this.checkBoxLMRA = checkBoxLMRA;
+    public static List<OrderOverview> getOrderOverviewList() {
+        return currentUserSession.orderOverviewList;
     }
 }

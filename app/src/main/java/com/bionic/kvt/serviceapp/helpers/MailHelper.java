@@ -21,7 +21,7 @@ import javax.mail.internet.MimeMessage;
 
 public class MailHelper extends javax.mail.Authenticator {
 
-    private String TAG = MailHelper.class.getName();
+    private final String TAG = MailHelper.class.getName();
 
     private Properties props;
     private String recepient;

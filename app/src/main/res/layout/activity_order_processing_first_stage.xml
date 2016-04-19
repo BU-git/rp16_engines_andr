@@ -21,8 +21,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/job_description"
-            android:textStyle="bold"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -59,8 +59,8 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="Some Text?????"
-            android:textStyle="bold"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TableLayout
@@ -86,8 +86,7 @@
                     android:id="@+id/order_processing_first_stage_open_quotation_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/open_quotation"
-                    android:textColor="@color/colorMainText" />
+                    android:text="@string/open_quotation" />
             </TableRow>
 
 
@@ -185,8 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/register_dangerous_situation"
-                    android:textColor="@color/colorMainText" />
+                    android:text="@string/register_dangerous_situation" />
             </TableRow>
 
         </TableRow>
@@ -221,8 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:text="@string/next"
-                android:textColor="@color/colorMainText" />
+                android:text="@string/next" />
         </LinearLayout>
     </LinearLayout>
 

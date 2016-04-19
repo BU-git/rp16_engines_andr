@@ -18,6 +18,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/app_name"
@@ -27,32 +29,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.ForgetPasswordActivity"
-            android:parentActivityName=".activities.LoginActivity" />
+        <activity android:name=".activities.ForgetPasswordActivity" />
         <activity android:name=".activities.OrderPageActivity" />
-        <activity
-            android:name=".activities.OrderPageDetailActivity"
-            android:parentActivityName=".activities.OrderPageActivity" />
+        <activity android:name=".activities.OrderPageDetailActivity" />
         <activity android:name=".activities.PDFReportActivity" />
-        <activity
-            android:name=".activities.OrderProcessingFirstStageActivity"
-            android:parentActivityName=".activities.OrderPageDetailActivity" />
-        <activity
-            android:name=".activities.LMRAActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
+        <activity android:name=".activities.OrderProcessingFirstStageActivity" />
+        <activity android:name=".activities.LMRAActivity" />
+        <activity android:name=".activities.MeasurementsActivity" />
+        <activity android:name=".activities.NSAActivity" />
+
+        <!--
         <activity
             android:name=".activities.ComponentDefectsActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity" />
-        <activity
-            android:name=".activities.MeasurementsActivity"
-            android:parentActivityName=".activities.ComponentDefectsActivity" />
-        <activity
-            android:name=".activities.NSAActivity"
-            android:parentActivityName=".activities.MeasurementsActivity" />
+            android:parentActivityName=".activities.OrderProcessingFirstStageActivity">
+        </activity>
+        -->
+
         <activity
             android:name=".activities.InsertSignaturesActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity android:name=".activities.DebugActivity" />
+
+        <service android:name=".db.LocalService" />
             android:parentActivityName=".activities.NSAActivity" />
+
+        <activity
+            android:name=".activities.ComponentListActivity"
+            android:label="@string/title_component_list"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activities.OrderProcessingFirstStageActivity">
+        </activity>
+        <activity
+            android:name=".activities.ComponentDetailActivity"
+            android:label="@string/title_component_detail"
+            android:parentActivityName=".activities.ComponentListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ComponentListActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -9,20 +9,19 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.print.PrintAttributes;
 import android.print.pdf.PrintedPdfDocument;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -32,53 +31,56 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class PDFReportActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Void> {
-    File pdfFile;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
+    private File pdfFile;
+
+    @Bind(R.id.pdf_report_send_button)
     Button sendButton;
+
+    @Bind(R.id.pdf_report_header)
+    TextView pdfReportHeaderTextView;
+
+    @Bind(R.id.pdf_text_status)
+    TextView pdfTextLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
+        ButterKnife.bind(this);
 
         if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
-        if (!publicDocumentsStorageDir.exists()) {
-            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
+//        if (!publicDocumentsStorageDir.exists()) {
+//            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
-        Long orderNumber = Session.getSession().getOrderNumber();
-        if (orderNumber == null) {
+        if (Session.getCurrentOrder() == 0L) {
             Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Button doneButton = (Button) findViewById(R.id.pdf_button_done);
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        final long orderNumber = Session.getCurrentOrder();
+//        pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
-        pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
+        pdfFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), "Report_" + orderNumber + ".pdf");
+
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
-        ((TextView) findViewById(R.id.pdf_report_header)).setText(pdfReportHeader);
+        pdfReportHeaderTextView.setText(pdfReportHeader);
 
-        TextView pdfTextLog = ((TextView) findViewById(R.id.pdf_text_status));
         String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
                 + " Report_" + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFullPath);
-
-        sendButton = (Button) findViewById(R.id.pdf_report_send_button);
 
         getSupportLoaderManager().initLoader(1, null, this);
     }
@@ -94,15 +96,22 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
         showPDFReport(pdfFile);
     }
 
+    @OnClick(R.id.pdf_button_done)
+    public void onDoneClick(View v) {
+        Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
     @Override
     public void onLoaderReset(Loader<Void> loader) {
-
+        // NOOP
     }
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {
         private int pdfPageCount = 1;
-        private File pdfFile;
-        private Context context;
+        private final File pdfFile;
+        private final Context context;
 
         public GeneratePDFReportFile(Context context, File pdfFile) {
             super(context);
@@ -137,12 +146,16 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             drawPDFPage(page);
             orderPdfDocument.finishPage(page);
 
-            try {
-                orderPdfDocument.writeTo(new FileOutputStream(pdfFile));
-            } catch (IOException e) {
-                throw new RuntimeException("Error generating file", e);
-            } finally {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
+                orderPdfDocument.writeTo(fileOutputStream);
                 orderPdfDocument.close();
+                fileOutputStream.flush();
+                fileOutputStream.close();
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("PDF file saved: " + pdfFile);
+            } catch (IOException e) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());
             }
             return null;
         }
@@ -199,16 +212,6 @@ public class PDFReportActivity extends AppCompatActivity implements LoaderManage
             mFileDescriptor = null;
         }
     }
-
-
-//    public File getPrivateDocumentsStorageDir(Context context, String pdfFolder) {
-//        File file = new File(context.getExternalFilesDir(
-//                Environment.DIRECTORY_DOCUMENTS), pdfFolder);
-//        if (!file.mkdirs()) {
-//            Log.e(getLocalClassName(), "Directory not created: " + file.toString());
-//        }
-//        return file;
-//    }
 
 }
 

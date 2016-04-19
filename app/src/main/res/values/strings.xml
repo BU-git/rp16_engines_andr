@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KVT Service Application</string>
+    <string name="app_name">KVT Service</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -11,15 +11,15 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_remember_password">Remember password</string>
-    <string name="activity_logout">Log out</string>
+    <string name="logout">Log out</string>
     <string name="activity_forget">Forgot Password</string>
     <string name="no_connection">No connection detected</string>
-    <string name="service_engenieer">Service engineer:</string>
+    <string name="service_engineer">Service engineer:</string>
     <string name="orders">Orders</string>
-    <string name="order_number">Order number</string>
+    <string name="order_number">Order</string>
 
     <string name="date">Date</string>
-    <string name="device_type">Device type</string>
+    <string name="installation">Installation</string>
     <string name="task">Task</string>
     <string name="address">Address</string>
     <string name="status">Status</string>
@@ -28,8 +28,8 @@
     <string name="order_date">Order date</string>
     <string name="relation">Relation</string>
     <string name="reference">Reference</string>
-    <string name="place">Place</string>
-    <string name="telephone_number">Telephone number</string>
+    <string name="town">Town</string>
+    <string name="telephone">Telephone</string>
     <string name="place_2">Place 2</string>
     <string name="employee">Employee</string>
     <string name="working_hours">Working hours</string>
@@ -47,7 +47,7 @@
     <string name="lmra_executed">LMRA executed</string>
     <string name="register_dangerous_situation">Register dangerous situation</string>
     <string name="next">Next</string>
-    <string name="search_hint">Search order number</string>
+    <string name="search_hint">Order number</string>
 
     <!-- String related to LMRA -->
     <string name="button_delete">Delete</string>
@@ -87,6 +87,58 @@
     <string name="customer_material">Used customer material</string>
     <string name="material_from_bus">Used material from bus</string>
     <string name="repair_advice">Repair / Replacement advice</string>
+
+    <!-- Defects -->
+    <string name="problem_part">Part</string>
+    <string name="problem_element">Element</string>
+    <string name="problem_name">Problem</string>
+    <string name="problem_scope">Scope</string>
+    <string name="problem_intensity">Intensity</string>
+    <string name="problem_action">Action</string>
+    <string name="problem_resolved">Resolved</string>
+    <string name="problem_condition">Condition</string>
+    <string name="title_component_list">Components</string>
+    <string name="title_component_detail">Component Detail</string>
+
+    <!-- Defects -->
+    <string name="defects_next">Next</string>
+
+
+    <!-- Default template string arrays -->
+    <string name="omvang">Omvang</string>
+
+    <string-array name="Omvang">
+        <item>Incidenteel</item>
+        <item>Plaatselijk</item>
+        <item>Regelmatig</item>
+        <item>Aanzienlijk</item>
+        <item>Algemeen</item>
+    </string-array>
+
+    <string name="intensiteit">Intensiteit</string>
+
+    <string-array name="Intensiteit">
+        <item>Laag</item>
+        <item>Midden</item>
+        <item>Hoog</item>
+    </string-array>
+
+    <string name="oplegost">Oplegost?</string>
+
+    <string name="acties">Acties</string>
+
+    <string-array name="Acties">
+        <item>Gecontroleerd</item>
+        <item>Vervangen</item>
+        <item>Ververst</item>
+        <item>Gerevideerd</item>
+        <item>Gereinigd</item>
+        <item>Gedemonteerd</item>
+        <item>Vernieuwd</item>
+        <item>Afgesteld</item>
+        <item>-</item>
+    </string-array>
+
     <string name="clear">Clear</string>
 
     <!-- EMail fields -->

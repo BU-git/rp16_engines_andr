@@ -40,11 +40,18 @@
                 android:layout_alignParentTop="true"
                 android:background="@color/colorOrderListHeader"
                 android:orientation="vertical"
-                android:padding="48dp"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin">
+                android:paddingBottom="@dimen/activity_login_padding"
+                android:paddingLeft="@dimen/activity_login_padding"
+                android:paddingRight="@dimen/activity_login_padding"
+                android:paddingTop="@dimen/activity_login_padding_small">
+
+                <TextView
+                    android:id="@+id/connection_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/activity_login_padding_small"
+                    android:text="Connecting to server..."
+                    android:textColor="@color/colorSecondaryText" />
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -59,7 +66,7 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="user@kvt.nl" />
+                        android:text="rvrooy@kvt.nl" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -83,7 +90,7 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:singleLine="true"
-                        android:text="12345" />
+                        android:text="rvrooy@kvt.nl" />
 
                 </android.support.design.widget.TextInputLayout>
 

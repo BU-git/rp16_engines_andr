@@ -7,27 +7,38 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawingView extends View {
+    private static final double DRAWING_VIEW_PROPORTION = 2.8;
     private Long lastTime = 0L;
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private Canvas drawCanvas;
     private Bitmap canvasBitmap;
+    private boolean isEmpty = true;
+
+    public DrawingView(Context context) {
+        super(context);
+        setupDrawing();
+    }
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupDrawing();
     }
 
+    public DrawingView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        setupDrawing();
+    }
+
     public void clearCanvas() {
         drawCanvas.drawColor(0, PorterDuff.Mode.CLEAR);
         invalidate();
+        isEmpty = true;
     }
 
     private void setupDrawing() {
@@ -41,6 +52,25 @@ public class DrawingView extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
         canvasPaint = new Paint(Paint.DITHER_FLAG);
     }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    @Override
+    protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+//        final int mode = MeasureSpec.getMode(widthMeasureSpec);
+        final int width = MeasureSpec.getSize(widthMeasureSpec);
+        final int height = (int) (width / DRAWING_VIEW_PROPORTION);
+
+        if (width > 0) {
+            setMeasuredDimension(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+                    MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
+        }
+    }
+
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -56,8 +86,11 @@ public class DrawingView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        final int state = canvas.getSaveCount();
         canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
         canvas.drawPath(drawPath, drawPaint);
+        canvas.restoreToCount(state);
     }
 
     @Override
@@ -76,6 +109,7 @@ public class DrawingView extends View {
                 drawCanvas.drawPath(drawPath, drawPaint);
                 invalidate();
                 drawPath.reset();
+                isEmpty = false;
                 break;
             default:
                 return false;
@@ -88,22 +122,22 @@ public class DrawingView extends View {
         return true;
     }
 
-    @Override
-    public Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("superState", super.onSaveInstanceState());
-        bundle.putParcelable("canvasBitmap", canvasBitmap);
-        return bundle;
-    }
+//    @Override
+//    public Parcelable onSaveInstanceState() {
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("superState", super.onSaveInstanceState());
+//        bundle.putParcelable("canvasBitmap", canvasBitmap);
+//        return bundle;
+//    }
 
-    @Override
-    public void onRestoreInstanceState(Parcelable state) {
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle) state;
-            canvasBitmap = bundle.getParcelable("canvasBitmap");
-            state = bundle.getParcelable("superState");
-        }
-        super.onRestoreInstanceState(state);
-    }
+//    @Override
+//    public void onRestoreInstanceState(Parcelable state) {
+//        if (state instanceof Bundle) {
+//            Bundle bundle = (Bundle) state;
+//            canvasBitmap = bundle.getParcelable("canvasBitmap");
+//            state = bundle.getParcelable("superState");
+//        }
+//        super.onRestoreInstanceState(state);
+//    }
 
 }

@@ -5,7 +5,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class NetworkHelper {
-    Context mContext;
+    final Context mContext;
 
     public NetworkHelper(Context mContext) {
         this.mContext = mContext;

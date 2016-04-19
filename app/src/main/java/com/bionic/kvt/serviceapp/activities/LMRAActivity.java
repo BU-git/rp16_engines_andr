@@ -1,7 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,18 +13,16 @@ import com.bionic.kvt.serviceapp.models.LMRA;
 
 import java.util.ArrayList;
 
-public class LMRAActivity extends AppCompatActivity {
+public class LMRAActivity extends BaseActivity {
 
     private static final String LMRALISTNAME = "LMRA List";
 
-    public static ArrayList<LMRA> lmraList = new ArrayList<LMRA>();
+    public static ArrayList<LMRA> lmraList = new ArrayList<>();
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         outState.putParcelableArrayList(LMRALISTNAME, lmraList);
         super.onSaveInstanceState(outState);
-
     }
 
     //Add + as a menu button
