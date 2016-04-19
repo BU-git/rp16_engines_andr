@@ -91,9 +91,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         getSupportLoaderManager().initLoader(1, null, this);
 
-        File pdfTemlate = new File(getApplicationContext().getExternalFilesDir(""), "PDFBon.pdf");
+        File pdfTemlate = new File(getApplicationContext().getExternalFilesDir(""), "pdfTemplate_en.pdf");
 
-//        Utils.copyFile(pdfTemlate, pdfFile);
 
         try  {
             PdfReader pdfReader = new PdfReader(pdfTemlate.toString());
