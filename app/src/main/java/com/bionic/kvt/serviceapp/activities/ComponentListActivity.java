@@ -5,48 +5,25 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.Element;
-import com.bionic.kvt.serviceapp.models.Part;
-import com.bionic.kvt.serviceapp.models.Problem;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +37,7 @@ import java.util.Set;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class ComponentListActivity extends AppCompatActivity {
+public class ComponentListActivity extends BaseActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -100,8 +77,6 @@ public class ComponentListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
-
-
 
 
         View recyclerView = findViewById(R.id.component_list);
@@ -209,7 +184,8 @@ public class ComponentListActivity extends AppCompatActivity {
             }
         }
     }
-    private class JsonParser extends AsyncTask<Void,Void,Void> {
+
+    private class JsonParser extends AsyncTask<Void, Void, Void> {
 
         //String jsonComponent = new FileReader(new File(COMPONENTFILE));
 
@@ -219,7 +195,7 @@ public class ComponentListActivity extends AppCompatActivity {
             String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTFILE);
             com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
 
-            Log.d(TAG,"JSON Component:" + jsonComponent);
+            Log.d(TAG, "JSON Component:" + jsonComponent);
             if (!jsonComponent.isEmpty()) {
                 try {
                     JsonElement parent = parser.parse(jsonComponent);
@@ -227,34 +203,34 @@ public class ComponentListActivity extends AppCompatActivity {
                     //First level, e.g. Motor
                     JsonArray parentArray = parent.getAsJsonArray();
 
-                    for (int k = 0; k < parentArray.size(); k++){
-                        JsonObject secondObject =  parentArray.get(k).getAsJsonObject();
-                        Set<Map.Entry<String,JsonElement>> entrySet = secondObject.entrySet();
-                        for (Map.Entry<String,JsonElement> entry : entrySet){
+                    for (int k = 0; k < parentArray.size(); k++) {
+                        JsonObject secondObject = parentArray.get(k).getAsJsonObject();
+                        Set<Map.Entry<String, JsonElement>> entrySet = secondObject.entrySet();
+                        for (Map.Entry<String, JsonElement> entry : entrySet) {
                             JsonArray secondArray = entry.getValue().getAsJsonArray();
 
-                            Log.d(TAG,"Part: " + entry.getKey());
+                            Log.d(TAG, "Part: " + entry.getKey());
                             JsonArray thirdArray = entry.getValue().getAsJsonArray();
                             Map<String, JsonObject> elementMap = new HashMap<>();
                             for (int j = 0; j < thirdArray.size(); j++) {
-                                JsonObject thirdObject =  thirdArray.get(j).getAsJsonObject();
-                                Set<Map.Entry<String,JsonElement>> entrySetSecond = thirdObject.entrySet();
+                                JsonObject thirdObject = thirdArray.get(j).getAsJsonObject();
+                                Set<Map.Entry<String, JsonElement>> entrySetSecond = thirdObject.entrySet();
 
-                                for (Map.Entry<String,JsonElement> entrySecond : entrySetSecond){
+                                for (Map.Entry<String, JsonElement> entrySecond : entrySetSecond) {
                                     //elementMap.put(entrySecond.getKey(),null);
-                                    elementMap.put(entrySecond.getKey(),entrySecond.getValue().getAsJsonObject());
+                                    elementMap.put(entrySecond.getKey(), entrySecond.getValue().getAsJsonObject());
                                     //Log.d(TAG,"Element: " + entrySecond.getKey());
                                     //Log.d(TAG, "Problem: " + entrySecond.getValue());
 
                                 }
                             }
-                            partMap.put(entry.getKey(),elementMap);
+                            partMap.put(entry.getKey(), elementMap);
                         }
 
                         //Log.d(TAG,secondObject.entrySet().toString());
 
                     }
-                    Log.d(TAG,partMap.toString());
+                    Log.d(TAG, partMap.toString());
 
                     //Log.d(TAG,"First part: " + parentArray.get(0));
 

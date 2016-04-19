@@ -13,11 +13,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/component_element_layout"
-    android:orientation="vertical"
     style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="false"
+    android:orientation="vertical"
     android:padding="16dp"
     android:text="test"
-    android:focusable="false"
     tools:context=".activities.ComponentDetailFragment" />

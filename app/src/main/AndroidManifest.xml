@@ -51,18 +51,14 @@
         <activity android:name=".activities.DebugActivity" />
 
         <service android:name=".db.LocalService" />
-            android:parentActivityName=".activities.NSAActivity" />
 
         <activity
             android:name=".activities.ComponentListActivity"
             android:label="@string/title_component_list"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.ComponentDetailActivity"
             android:label="@string/title_component_detail"
-            android:parentActivityName=".activities.ComponentListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
