@@ -14,12 +14,9 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -81,5 +78,26 @@ public class Utils {
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public static File getPDFTemplateFile(Context context) {
+        File pdfTemplate = new File(context.getExternalFilesDir(""), "pdfTemplate_en.pdf");
+
+        if (pdfTemplate.exists()) return pdfTemplate;
+
+        try (InputStream inputStream = context.getAssets().open("pdfTemplate_en.pdf");
+             FileOutputStream outputStream = new FileOutputStream(pdfTemplate)) {
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = inputStream.read(buf)) > 0) {
+                outputStream.write(buf, 0, len);
+            }
+        } catch (IOException e) {
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR getting PDF template from assets: " + e.toString());
+            return null;
+        }
+        return pdfTemplate;
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
@@ -70,7 +71,10 @@ public class OrderPageDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) return;
+        if (Session.getCurrentOrder() == 0L) {
+            Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
