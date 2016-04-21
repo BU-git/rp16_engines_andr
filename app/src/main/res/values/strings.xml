@@ -25,7 +25,7 @@
     <string name="status">Status</string>
     <string name="pdf">PDF</string>
     <string name="order_data">Order data</string>
-    <string name="order_date">Order date</string>
+    <string name="order_date">Date</string>
     <string name="relation">Relation</string>
     <string name="reference">Reference</string>
     <string name="town">Town</string>

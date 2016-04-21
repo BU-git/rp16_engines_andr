@@ -85,7 +85,7 @@ public class LocalService extends Service {
         if (Session.isSyncingFromServer()) return;
 
         // Is device connected to network
-        if (!Utils.isConnected(getApplicationContext())) {
+        if (!Utils.isNetworkConnected(getApplicationContext())) {
             serviceLogging("No connection to network.");
             return;
         }

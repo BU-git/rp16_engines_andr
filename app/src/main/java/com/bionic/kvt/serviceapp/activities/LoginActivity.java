@@ -51,7 +51,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
-import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,8 +90,8 @@ public class LoginActivity extends BaseActivity implements
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        //TODO Update foe user handling logic
         DbUtils.dropDatabase();
-
         DbUtils.createUserTableIfNotExist();
 
         //Setting header for the app;
@@ -410,7 +409,7 @@ public class LoginActivity extends BaseActivity implements
 
     private void updateUserList() {
         // Is device connected to network
-        if (!Utils.isConnected(getApplicationContext())) {
+        if (!Utils.isNetworkConnected(getApplicationContext())) {
             showConnectionMessage("No connection to network.");
             return;
         }

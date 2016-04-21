@@ -8,8 +8,6 @@ import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.google.gson.Gson;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +15,10 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
 
 public class DbUtils {
 
@@ -167,7 +169,7 @@ public class DbUtils {
         }
 
         if (currentOrderInDB != null) { // Existing order
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_NOT_STARTED) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
                 realm.beginTransaction();
@@ -180,13 +182,13 @@ public class DbUtils {
                     Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
             }
 
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_IN_PROGRESS) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
                             + currentOrderInDB.getNumber());
             }
 
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_COMPLETE) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
                             + currentOrderInDB.getNumber());
@@ -266,7 +268,7 @@ public class DbUtils {
         newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
         newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
 
-        newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // TODO
+        newOrder.setOrderStatus(ORDER_STATUS_NOT_STARTED); // TODO
 
         newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
 
@@ -360,13 +362,14 @@ public class DbUtils {
     }
 
     @Nullable
-    public static int getOrderStatus(long orderNumber) {
+    public static void setOrderStatus(long orderNumber, int status) {
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Getting order from DB: " + orderNumber);
+            Session.addToSessionLog("Setting order status: " + orderNumber + " status: " + status);
 
         final Realm realm = Realm.getDefaultInstance();
-        final int orderStatus = realm.where(Order.class).equalTo("number", orderNumber).findFirst().getOrderStatus();
+        realm.beginTransaction();
+        realm.where(Order.class).equalTo("number", orderNumber).findFirst().setOrderStatus(status);
+        realm.commitTransaction();
         realm.close();
-        return orderStatus;
     }
 }

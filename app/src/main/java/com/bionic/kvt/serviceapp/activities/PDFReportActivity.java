@@ -3,15 +3,10 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.pdf.PdfDocument;
 import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.print.PrintAttributes;
-import android.print.pdf.PrintedPdfDocument;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -22,21 +17,42 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfStamper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
-    private File pdfFile;
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private File pdfReportFile;
+    private File pdfTemplate;
 
     @Bind(R.id.pdf_report_send_button)
     Button sendButton;
@@ -53,51 +69,75 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_pdf_report);
         ButterKnife.bind(this);
 
-        if (!Utils.isExternalStorageWritable()) {
-            Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-//        File publicDocumentsStorageDir = Utils.getPublicDirectoryStorageDir(Environment.DIRECTORY_DOCUMENTS, "KVTReports");
-//        if (!publicDocumentsStorageDir.exists()) {
-//            Toast.makeText(getApplicationContext(), "Can not create directory!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         final long orderNumber = Session.getCurrentOrder();
-//        pdfFile = new File(publicDocumentsStorageDir, "Report_" + orderNumber + ".pdf");
 
-        pdfFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), "Report_" + orderNumber + ".pdf");
-
+        // Exit if Session is empty
+        if (orderNumber == 0L) {
+            Toast.makeText(getApplicationContext(),
+                    "No order number to show PDF!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
         pdfReportHeaderTextView.setText(pdfReportHeader);
 
-        String pdfReportFullPath = getResources().getString(R.string.generating_pdf_document)
-                + " Report_" + orderNumber + ".pdf";
-        pdfTextLog.setText(pdfReportFullPath);
+        String pdfReportFileName = getResources().getString(R.string.generating_pdf_document)
+                + " " + PDF_REPORT_FILE_NAME + orderNumber + ".pdf";
+        pdfTextLog.setText(pdfReportFileName);
 
-        getSupportLoaderManager().initLoader(1, null, this);
+        pdfReportFile = Utils.getPDFReportFileName();
+        if (pdfReportFile.exists()) { // We have report.
+            showPDFReport(pdfReportFile);
+        } else { // No report. Generating...
+
+            if (!Utils.isExternalStorageWritable()) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Can not write report file to external storage!");
+                Toast.makeText(getApplicationContext(),
+                        "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            pdfTemplate = Utils.getPDFTemplateFile(getApplicationContext());
+            if (pdfTemplate == null || !pdfTemplate.exists()) {
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Can not get pdf template!");
+                Toast.makeText(getApplicationContext(),
+                        "ERROR: Can not get pdf template!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            getSupportLoaderManager().initLoader(1, null, this);
+        }
     }
 
     @Override
     public Loader<Void> onCreateLoader(int id, Bundle args) {
-        return new GeneratePDFReportFile(this, pdfFile);
+        return new GeneratePDFReportFile(this, pdfReportFile, pdfTemplate);
     }
 
     @Override
     public void onLoadFinished(Loader<Void> loader, Void data) {
-        sendButton.setEnabled(true);
-        showPDFReport(pdfFile);
+        showPDFReport(pdfReportFile);
     }
+
+    //TODO EMAIL & CLEAN
+    //EMAIL
+//        private void emailNote()
+//        {
+//            Intent email = new Intent(Intent.ACTION_SEND);
+//            email.putExtra(Intent.EXTRA_SUBJECT,mSubjectEditText.getText().toString());
+//            email.putExtra(Intent.EXTRA_TEXT, mBodyEditText.getText().toString());
+//            Uri uri = Uri.parse(myFile.getAbsolutePath());
+//            email.putExtra(Intent.EXTRA_STREAM, uri);
+//            email.setType("message/rfc822");
+//            startActivity(email);
+//        }
 
     @OnClick(R.id.pdf_button_done)
     public void onDoneClick(View v) {
+        DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
+
         Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
@@ -110,13 +150,13 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {
         private int pdfPageCount = 1;
-        private final File pdfFile;
-        private final Context context;
+        private final File pdfReportFile;
+        private final File pdfTemplate;
 
-        public GeneratePDFReportFile(Context context, File pdfFile) {
+        public GeneratePDFReportFile(Context context, File pdfReportFile, File pdfTemplate) {
             super(context);
-            this.context = context;
-            this.pdfFile = pdfFile;
+            this.pdfReportFile = pdfReportFile;
+            this.pdfTemplate = pdfTemplate;
         }
 
         @Override
@@ -127,89 +167,146 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         @Override
         public Void loadInBackground() {
-            PrintAttributes printAttrs = new PrintAttributes.Builder().
-                    setColorMode(PrintAttributes.COLOR_MODE_COLOR).
-                    setMediaSize(PrintAttributes.MediaSize.ISO_A4).
-                    setResolution(new PrintAttributes.Resolution("300DPI", PRINT_SERVICE, 300, 300)).
-                    setMinMargins(PrintAttributes.Margins.NO_MARGINS).
-                    build();
+            final long orderNumber = Session.getCurrentOrder();
+            final Realm realm = Realm.getDefaultInstance();
+            final Order currentOrder = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            if (currentOrder == null) return null;
 
-            PdfDocument orderPdfDocument = new PrintedPdfDocument(context, printAttrs);
+            // Getting Order data for pdf
+            String pdfOrderNumber = orderNumber + "\n";
+            String pdfRelation = currentOrder.getRelation().getName() + "\n";
+            String pdfRelationTown = currentOrder.getRelation().getTown() + "\n";
+            String pdfPerson = currentOrder.getRelation().getContactPerson() + "\n";
+            String pdfRelationTelephone = currentOrder.getRelation().getTelephone() + "\n";
+            String pdfEmployee = currentOrder.getEmployee().getName();
 
-            int pageHeight = printAttrs.getMediaSize().getHeightMils() / 1000 * 72;
-            int pageWidth = printAttrs.getMediaSize().getWidthMils() / 1000 * 72;
+            String pdfDate = simpleDateFormat.format(currentOrder.getDate()) + "\n";
+            String pdfReference = currentOrder.getReference() + "\n";
+            String pdfInstallation = currentOrder.getInstallation().getName() + "\n";
+            String pdfInstallationAddress = currentOrder.getInstallation().getAddress() + "\n";
+            String pdfInstallationTown = currentOrder.getInstallation().getTown() + "\n";
+            String pdfWorkingHours = "?????????????";
 
-            PdfDocument.PageInfo newPage =
-                    new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pdfPageCount).create();
+            String pdfTask = currentOrder.getTasks().first().getLtxa1();
 
-            PdfDocument.Page page = orderPdfDocument.startPage(newPage);
-            drawPDFPage(page);
-            orderPdfDocument.finishPage(page);
+            realm.close();
 
-            try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
-                orderPdfDocument.writeTo(fileOutputStream);
-                orderPdfDocument.close();
-                fileOutputStream.flush();
-                fileOutputStream.close();
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("PDF file saved: " + pdfFile);
+            try {
+                final PdfReader pdfReader = new PdfReader(pdfTemplate.toString());
+                final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
+                final Font font = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
+                final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
+                final ColumnText columnText = new ColumnText(contentByte);
+
+                Phrase orderText = new Phrase(pdfOrderNumber +
+                        pdfRelation +
+                        pdfRelationTown +
+                        pdfPerson +
+                        pdfRelationTelephone +
+                        pdfEmployee,
+                        font
+                );
+
+                int x = 160;
+                int y = 505;
+                columnText.setSimpleColumn(orderText, x, y, x + 180, y + 150, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+                orderText = new Phrase(pdfDate +
+                        pdfReference +
+                        pdfInstallation +
+                        pdfInstallationAddress +
+                        pdfInstallationTown +
+                        pdfWorkingHours,
+                        font
+                );
+                x = 415;
+                y = 505;
+                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 150, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+
+                orderText = new Phrase(pdfTask, font);
+                x = 150;
+                y = 483;
+                columnText.setSimpleColumn(orderText, x, y, x + 400, y + 25, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+                String signatureFileName = SIGNATURE_FILE_ENGINEER;
+                String signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
+                Image signatureEngineer = Image.getInstance(signaturePath);
+                signatureEngineer.setAbsolutePosition(330f, 135f);
+                signatureEngineer.scalePercent(15f);
+                contentByte.addImage(signatureEngineer);
+
+                signatureFileName = SIGNATURE_FILE_CLIENT;
+                signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
+                Image signatureClient = Image.getInstance(signaturePath);
+                signatureClient.setAbsolutePosition(105f, 135f);
+                signatureClient.scalePercent(15f);
+                contentByte.addImage(signatureClient);
+
+                orderText = new Phrase(pdfEmployee, font);
+                x = 355;
+                y = 113;
+                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+                orderText = new Phrase(pdfPerson, font);
+                x = 120;
+                y = 113;
+                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+
+                pdfStamper.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             } catch (IOException e) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("ERROR writing: " + pdfFile + e.toString());
+                e.printStackTrace();
+            } catch (DocumentException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
             }
+
+            //TODO EXEPTION REVISE
+            Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
+            Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
             return null;
         }
 
-        private void drawPDFPage(PdfDocument.Page page) {
-            Canvas canvas = page.getCanvas();
-
-            int titleBaseLine = 72;
-            int leftMargin = 54;
-
-            Paint paint = new Paint();
-            paint.setColor(Color.BLACK);
-            paint.setTextSize(40);
-            canvas.drawText("Test Print Document Page " + pdfPageCount, leftMargin, titleBaseLine, paint);
-
-            paint.setTextSize(14);
-            canvas.drawText("" + PrintAttributes.MediaSize.ISO_A4.getWidthMils() / 1000 * 72 * 2 + "/"
-                    + PrintAttributes.MediaSize.ISO_A4.getHeightMils() / 1000 * 72 * 2, leftMargin, titleBaseLine + 35, paint);
-
-            paint.setColor(Color.RED);
-            PdfDocument.PageInfo pageInfo = page.getInfo();
-            canvas.drawCircle(pageInfo.getPageWidth() / 2, pageInfo.getPageHeight() / 2, 150, paint);
-        }
     }
 
-    private void showPDFReport(File pdfReport) {
-        ParcelFileDescriptor mFileDescriptor = null;
-        try {
-            mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        PdfRenderer mPdfRenderer = null;
-        try {
-            mPdfRenderer = new PdfRenderer(mFileDescriptor);
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void showPDFReport(@NonNull final File pdfReport) {
+        if (!pdfReport.exists()) {
+            Toast.makeText(getApplicationContext(), "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReport);
+            return;
         }
 
-        PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
-        Bitmap bitmap = Bitmap.createBitmap(mCurrentPage.getWidth() * 2, mCurrentPage.getHeight() * 2, Bitmap.Config.ARGB_8888);
+        sendButton.setEnabled(true);
 
-        mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-
-        ImageView pdfView = (ImageView) findViewById(R.id.pdf_bitmap);
-        pdfView.setImageBitmap(bitmap);
-
-        mCurrentPage.close();
-        mPdfRenderer.close();
         try {
+            ParcelFileDescriptor mFileDescriptor = ParcelFileDescriptor.open(pdfReport, ParcelFileDescriptor.MODE_READ_ONLY);
+            PdfRenderer mPdfRenderer = new PdfRenderer(mFileDescriptor);
+            PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
+
+            int pageHeight = (int) (mCurrentPage.getHeight() * 2);
+            int pageWidth = (int) (mCurrentPage.getWidth() * 2);
+
+            Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
+            mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            ImageView pdfView = (ImageView) findViewById(R.id.pdf_bitmap);
+            pdfView.setImageBitmap(bitmap);
+
+            mCurrentPage.close();
+            mPdfRenderer.close();
             mFileDescriptor.close();
         } catch (IOException e) {
-            e.printStackTrace();
-            mFileDescriptor = null;
+            Toast.makeText(getApplicationContext(), "Some error during PDF file open", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
         }
     }
 

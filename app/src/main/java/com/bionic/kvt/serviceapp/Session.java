@@ -1,11 +1,13 @@
 package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
+import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ServiceConnection;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,17 +26,14 @@ public class Session extends Application {
     private List<String> sessionLog;
     private boolean isSyncingFromServer = false;
 
+    private File currentAppExternalPrivateDir;
+    private File currentOrderDir;
+
     private String engineerName;
     private String engineerEmail;
     private String engineerId;
     private long currentOrder;
     private List<OrderOverview> orderOverviewList;
-
-    public static final int ORDER_STATUS_NOT_STARTED = 0;
-    public static final int ORDER_STATUS_IN_PROGRESS = 1;
-    public static final int ORDER_STATUS_COMPLETE = 2;
-
-    public static final int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
     @Override
     public void onCreate() {
@@ -42,6 +41,7 @@ public class Session extends Application {
         currentUserSession = this;
         sessionLog = new ArrayList<>();
         orderOverviewList = new ArrayList<>();
+        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
 
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BACK_OFFICE_HOST)
@@ -68,6 +68,12 @@ public class Session extends Application {
         currentUserSession.engineerId = null;
         currentUserSession.currentOrder = 0L;
         currentUserSession.orderOverviewList.clear();
+        currentUserSession.currentOrderDir = null;
+    }
+
+    public static void clearCurrentOrder() {
+        currentUserSession.currentOrder = 0L;
+        currentUserSession.currentOrderDir = null;
     }
 
     public static List<String> getSessionLog() {
@@ -110,6 +116,9 @@ public class Session extends Application {
 
     public static void setCurrentOrder(long order) {
         currentUserSession.currentOrder = order;
+        currentUserSession.currentOrderDir =
+                new File(currentUserSession.currentAppExternalPrivateDir,
+                        "" + currentUserSession.currentOrder);
     }
 
     public static long getCurrentOrder() {
@@ -118,5 +127,15 @@ public class Session extends Application {
 
     public static List<OrderOverview> getOrderOverviewList() {
         return currentUserSession.orderOverviewList;
+    }
+
+    public static File getCurrentAppExternalPrivateDir() {
+        return currentUserSession.currentAppExternalPrivateDir;
+    }
+
+    // Do not use directly! Run Utils.getCurrentOrderDir() instead
+    @Nullable
+    public static File getCurrentOrderDir() {
+        return currentUserSession.currentOrderDir;
     }
 }

@@ -35,6 +35,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
+
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener,
@@ -125,11 +127,11 @@ public class OrderPageActivity extends BaseActivity implements
         // Configuring Recycler View
         ordersRecyclerView.setHasFixedSize(true);
         GridLayoutManager ordersLayoutManager =
-                new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT + 3);
+                new GridLayoutManager(this, ORDER_OVERVIEW_COLUMN_COUNT + 3);
         ordersLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                int cell = position % Session.ORDER_OVERVIEW_COLUMN_COUNT;
+                int cell = position % ORDER_OVERVIEW_COLUMN_COUNT;
                 if (cell == 2 || cell == 3 || cell == 4) return 2;
                 return 1;
             }
@@ -173,7 +175,7 @@ public class OrderPageActivity extends BaseActivity implements
         super.onStart();
         Intent intent = new Intent(this, LocalService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        Session.setCurrentOrder(0L);
+        Session.clearCurrentOrder();
     }
 
     @Override
@@ -189,7 +191,7 @@ public class OrderPageActivity extends BaseActivity implements
     public void OnOrderLineClicked(View view, int position) {
         // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
-                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+                get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
@@ -198,12 +200,12 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
-        // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
-                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+                get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
-        if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
+        //TODO Maybe we dont need this
+        if (Utils.isRequestWritePermissionNeeded(getApplicationContext(), this)) return;
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
         startActivity(intent);
@@ -214,7 +216,6 @@ public class OrderPageActivity extends BaseActivity implements
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //resume tasks needing this permission
                 Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
                 startActivity(intent);
             }

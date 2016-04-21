@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.Component;
 
 import butterknife.Bind;
@@ -32,6 +34,12 @@ public class OrderProcessingFirstStageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_processing_first_stage);
         ButterKnife.bind(this);
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() == 0L) {
+            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)

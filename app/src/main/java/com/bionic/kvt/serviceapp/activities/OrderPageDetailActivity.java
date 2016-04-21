@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
@@ -17,6 +18,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 
 public class OrderPageDetailActivity extends BaseActivity {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -70,14 +73,20 @@ public class OrderPageDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) return;
+        if (Session.getCurrentOrder() == 0L) {
+            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
                 realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
-        if (currentOrder == null) return;
+        if (currentOrder == null) {
+            Toast.makeText(getApplicationContext(), "No such order in database!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        if (currentOrder.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+        if (currentOrder.getOrderStatus() == ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);
@@ -85,6 +94,7 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         // Setting Order data to textView
+        //TODO PROPER NULL HANDLING
         try {
             orderNumber.setText(Long.toString(currentOrder.getNumber()));
             orderRelation.setText(currentOrder.getRelation().getName());
