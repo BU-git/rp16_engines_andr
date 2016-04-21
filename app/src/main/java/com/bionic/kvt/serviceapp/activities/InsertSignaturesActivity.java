@@ -11,6 +11,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 public class InsertSignaturesActivity extends BaseActivity {
     @Bind(R.id.draw_engineer_signature)
@@ -105,13 +108,13 @@ public class InsertSignaturesActivity extends BaseActivity {
             case ENGINEER_BUTTON:
                 currentDrawingView = engineerDrawingView;
                 currentToggleButton = buttonConfirmEngineer;
-                signatureFileName = "signature_engineer.png";
+                signatureFileName = SIGNATURE_FILE_ENGINEER;
                 break;
             case CLIENT_BUTTON:
             default:
                 currentDrawingView = clientDrawingView;
                 currentToggleButton = buttonConfirmClient;
-                signatureFileName = "signature_client.png";
+                signatureFileName = SIGNATURE_FILE_CLIENT;
                 break;
         }
 
@@ -127,7 +130,7 @@ public class InsertSignaturesActivity extends BaseActivity {
         final File signatureFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), signatureFileName);
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
-            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
             currentToggleButton.setChecked(true);

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
@@ -18,6 +19,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 public class OrderPageDetailActivity extends BaseActivity {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -81,7 +84,7 @@ public class OrderPageDetailActivity extends BaseActivity {
                 realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
         if (currentOrder == null) return;
 
-        if (currentOrder.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+        if (currentOrder.getOrderStatus() == ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);

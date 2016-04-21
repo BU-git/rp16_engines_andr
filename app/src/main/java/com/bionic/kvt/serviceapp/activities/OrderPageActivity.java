@@ -19,6 +19,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
@@ -34,6 +35,8 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -125,11 +128,11 @@ public class OrderPageActivity extends BaseActivity implements
         // Configuring Recycler View
         ordersRecyclerView.setHasFixedSize(true);
         GridLayoutManager ordersLayoutManager =
-                new GridLayoutManager(this, Session.ORDER_OVERVIEW_COLUMN_COUNT + 3);
+                new GridLayoutManager(this, ORDER_OVERVIEW_COLUMN_COUNT + 3);
         ordersLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                int cell = position % Session.ORDER_OVERVIEW_COLUMN_COUNT;
+                int cell = position % ORDER_OVERVIEW_COLUMN_COUNT;
                 if (cell == 2 || cell == 3 || cell == 4) return 2;
                 return 1;
             }
@@ -189,7 +192,7 @@ public class OrderPageActivity extends BaseActivity implements
     public void OnOrderLineClicked(View view, int position) {
         // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
-                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+                get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
         Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
@@ -200,7 +203,7 @@ public class OrderPageActivity extends BaseActivity implements
     public void OnPDFButtonClicked(View view, int position) {
         // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
-                get(position / Session.ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
+                get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
         if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;

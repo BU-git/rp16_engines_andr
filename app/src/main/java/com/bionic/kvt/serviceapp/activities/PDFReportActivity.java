@@ -20,7 +20,6 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -41,6 +40,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -85,13 +88,13 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         pdfReportHeaderTextView.setText(pdfReportHeader);
 
         String pdfReportFileName = getResources().getString(R.string.generating_pdf_document)
-                + " Report_" + orderNumber + ".pdf";
+                + PDF_REPORT_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
 
 
         pdfTemplate = Utils.getPDFTemplateFile(getApplicationContext());
         //TODO CHECK NULL
-        pdfFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), "Report_" + orderNumber + ".pdf");
+        pdfFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), PDF_REPORT_FILE_NAME + orderNumber + ".pdf");
 
         getSupportLoaderManager().initLoader(1, null, this);
 
@@ -181,7 +184,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             try {
                 final PdfReader pdfReader = new PdfReader(pdfTemplate.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfFile));
-                final Font font = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL, new BaseColor(0, 0, 0));
+                final Font font = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
                 final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
                 final ColumnText columnText = new ColumnText(contentByte);
 
@@ -219,14 +222,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 columnText.setSimpleColumn(orderText, x, y, x + 400, y + 25, 22, Element.ALIGN_LEFT);
                 columnText.go();
 
-                String signatureFileName = "signature_engineer.png";
+                String signatureFileName = SIGNATURE_FILE_ENGINEER;
                 String signaturePath = new File(Utils.getCurrentOrderFolder(context), signatureFileName).toString();
                 Image signatureEngineer = Image.getInstance(signaturePath);
                 signatureEngineer.setAbsolutePosition(320f, 135f);
                 signatureEngineer.scalePercent(16f);
                 contentByte.addImage(signatureEngineer);
 
-                signatureFileName = "signature_client.png";
+                signatureFileName = SIGNATURE_FILE_CLIENT;
                 signaturePath = new File(Utils.getCurrentOrderFolder(context), signatureFileName).toString();
                 Image signatureClient = Image.getInstance(signaturePath);
                 signatureClient.setAbsolutePosition(95f, 135f);

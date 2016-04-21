@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
@@ -66,8 +69,8 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public void onBindViewHolder(UserViewHolder holder, final int position) {
-        int row = position / Session.ORDER_OVERVIEW_COLUMN_COUNT;
-        int cell = position % Session.ORDER_OVERVIEW_COLUMN_COUNT;
+        int row = position / ORDER_OVERVIEW_COLUMN_COUNT;
+        int cell = position % ORDER_OVERVIEW_COLUMN_COUNT;
 //        int cell = position - row * Session.ORDER_OVERVIEW_COLUMN_COUNT;
 
         TextView textCell = (TextView) holder.oneCellView.findViewById(R.id.one_cell_text);
@@ -111,17 +114,17 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+                if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_COMPLETE) {
                     textCell.setText("Complete");
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorOK));
                 }
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+                if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_IN_PROGRESS) {
                     textCell.setText("In progress");
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorWarring));
                 }
 
-                if (orderOverviewList.get(row).getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+                if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_NOT_STARTED) {
                     textCell.setText("Not started");
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorError));
                 }
@@ -130,7 +133,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 6: // Column PDF Button
                 textCell.setVisibility(View.GONE);
                 buttonCell.setVisibility(View.VISIBLE);
-                if (orderOverviewList.get(row).getOrderStatus() != Session.ORDER_STATUS_COMPLETE)
+                if (orderOverviewList.get(row).getOrderStatus() != ORDER_STATUS_COMPLETE)
 //                    buttonCell.setEnabled(false);
                 break;
         }
@@ -152,6 +155,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
 
     @Override
     public int getItemCount() {
-        return orderOverviewList.size() * Session.ORDER_OVERVIEW_COLUMN_COUNT;
+        return orderOverviewList.size() * ORDER_OVERVIEW_COLUMN_COUNT;
     }
 }

@@ -30,12 +30,6 @@ public class Session extends Application {
     private long currentOrder;
     private List<OrderOverview> orderOverviewList;
 
-    public static final int ORDER_STATUS_NOT_STARTED = 0;
-    public static final int ORDER_STATUS_IN_PROGRESS = 1;
-    public static final int ORDER_STATUS_COMPLETE = 2;
-
-    public static final int ORDER_OVERVIEW_COLUMN_COUNT = 7;
-
     @Override
     public void onCreate() {
         super.onCreate();

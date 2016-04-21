@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.db;
 import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
@@ -17,6 +18,8 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 public class DbUtils {
 
@@ -167,7 +170,7 @@ public class DbUtils {
         }
 
         if (currentOrderInDB != null) { // Existing order
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_NOT_STARTED) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_NOT_STARTED) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
                 realm.beginTransaction();
@@ -180,13 +183,13 @@ public class DbUtils {
                     Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
             }
 
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_IN_PROGRESS) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_IN_PROGRESS) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
                             + currentOrderInDB.getNumber());
             }
 
-            if (currentOrderInDB.getOrderStatus() == Session.ORDER_STATUS_COMPLETE) {
+            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_COMPLETE) {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
                             + currentOrderInDB.getNumber());
@@ -266,7 +269,7 @@ public class DbUtils {
         newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
         newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
 
-        newOrder.setOrderStatus(Session.ORDER_STATUS_NOT_STARTED); // TODO
+        newOrder.setOrderStatus(ORDER_STATUS_NOT_STARTED); // TODO
 
         newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
 

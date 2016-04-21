@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
+import static com.bionic.kvt.serviceapp.GlobalConstants.*;
 
 public class Utils {
     public static final int REQUEST_WRITE_CODE = 1;
@@ -57,7 +58,7 @@ public class Utils {
 
     // Return Private Path to folder BuildConfig.ORDERS_FOLDER
     public static File getPrivateDocumentsStorageDir(Context context, String folder) {
-        File fileDir = new File(context.getExternalFilesDir(BuildConfig.ORDERS_FOLDER), folder);
+        File fileDir = new File(context.getExternalFilesDir(ORDERS_FOLDER), folder);
         if (!fileDir.exists()) {
             fileDir.mkdirs();
         }
@@ -81,11 +82,11 @@ public class Utils {
     }
 
     public static File getPDFTemplateFile(Context context) {
-        File pdfTemplate = new File(context.getExternalFilesDir(""), "pdfTemplate_en.pdf");
+        File pdfTemplate = new File(context.getExternalFilesDir(""), PDF_TEMPLATE_FILENAME_EN);
 
         if (pdfTemplate.exists()) return pdfTemplate;
 
-        try (InputStream inputStream = context.getAssets().open("pdfTemplate_en.pdf");
+        try (InputStream inputStream = context.getAssets().open(PDF_TEMPLATE_FILENAME_EN);
              FileOutputStream outputStream = new FileOutputStream(pdfTemplate)) {
 
             byte[] buf = new byte[1024];
