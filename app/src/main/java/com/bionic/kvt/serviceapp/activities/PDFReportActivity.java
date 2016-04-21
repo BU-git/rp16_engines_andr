@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ZoomControls;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
@@ -31,7 +32,6 @@ import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,6 +53,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private File pdfReportFile;
     private File pdfTemplate;
+    private int zoomFactor = 2;
 
     @Bind(R.id.pdf_report_send_button)
     Button sendButton;
@@ -62,6 +63,9 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     @Bind(R.id.pdf_text_status)
     TextView pdfTextLog;
+
+    @Bind(R.id.zoomControls)
+    ZoomControls zoomControls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,25 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                     "No order number to show PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (zoomFactor == 4) return;
+                zoomFactor++;
+                showPDFReport(pdfReportFile);
+            }
+        });
+
+        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (zoomFactor == 1) return;
+                zoomFactor--;
+                showPDFReport(pdfReportFile);
+            }
+        });
+
 
         String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
         pdfReportHeaderTextView.setText(pdfReportHeader);
@@ -236,14 +259,15 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 String signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
                 Image signatureEngineer = Image.getInstance(signaturePath);
                 signatureEngineer.setAbsolutePosition(330f, 135f);
-                signatureEngineer.scalePercent(15f);
+                signatureEngineer.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureEngineer);
 
                 signatureFileName = SIGNATURE_FILE_CLIENT;
                 signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
                 Image signatureClient = Image.getInstance(signaturePath);
-                signatureClient.setAbsolutePosition(105f, 135f);
-                signatureClient.scalePercent(15f);
+                signatureClient.setAbsolutePosition(102f, 135f);
+                signatureClient.scaleAbsolute(192, 74);
+                ;
                 contentByte.addImage(signatureClient);
 
                 orderText = new Phrase(pdfEmployee, font);
@@ -261,13 +285,13 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
                 pdfStamper.close();
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                Session.addToSessionLog("ERROR: 1" + e.toString());
             } catch (IOException e) {
-                e.printStackTrace();
+                Session.addToSessionLog("ERROR: 2" + e.toString());
             } catch (NullPointerException e) {
-
+                Session.addToSessionLog("ERROR: 3" + e.toString());
             } catch (DocumentException e) {
-                e.printStackTrace();
+                Session.addToSessionLog("ERROR: 4" + e.toString());
             }
 
             //TODO EXEPTION REVISE
@@ -293,8 +317,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             PdfRenderer mPdfRenderer = new PdfRenderer(mFileDescriptor);
             PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
 
-            int pageHeight = (int) (mCurrentPage.getHeight() * 2);
-            int pageWidth = (int) (mCurrentPage.getWidth() * 2);
+            int pageHeight = mCurrentPage.getHeight() * zoomFactor;
+            int pageWidth = mCurrentPage.getWidth() * zoomFactor;
 
             Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
             mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);

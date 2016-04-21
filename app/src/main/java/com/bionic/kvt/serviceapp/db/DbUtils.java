@@ -25,7 +25,9 @@ public class DbUtils {
     public static void dropDatabase() {
         final Realm realm = Realm.getDefaultInstance();
         try {
+            realm.beginTransaction();
             realm.deleteAll();
+            realm.commitTransaction();
             //Realm file has been deleted.
         } catch (Exception ex) {
             ex.printStackTrace();

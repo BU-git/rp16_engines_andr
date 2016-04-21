@@ -59,7 +59,6 @@ public class InsertSignaturesActivity extends BaseActivity {
             return;
         }
 
-        Utils.isRequestWritePermissionNeeded(getApplicationContext(), this);
     }
 
     @OnClick(R.id.button_clear_engineer)
@@ -102,6 +101,13 @@ public class InsertSignaturesActivity extends BaseActivity {
     }
 
     private void onConfirmClicked() {
+        if (Utils.isRequestWritePermissionNeeded(getApplicationContext(), this)) {
+            buttonConfirmEngineer.setChecked(false);
+            buttonConfirmClient.setChecked(false);
+            buttonComplete.setEnabled(false);
+            return;
+        }
+
         if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
             if (BuildConfig.IS_LOGGING_ON)
@@ -139,17 +145,17 @@ public class InsertSignaturesActivity extends BaseActivity {
         final File signatureFile = new File(Utils.getCurrentOrderDir(), signatureFileName);
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
-            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-            fileOutputStream.close();
+            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             currentToggleButton.setChecked(true);
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Signature file saved: " + signatureFile);
         } catch (IOException e) {
             currentToggleButton.setChecked(false);
             Toast.makeText(getApplicationContext(), "ERROR: Signature could not be saved", Toast.LENGTH_SHORT).show();
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("ERROR writing: " + signatureFile + e.toString());
         }
+
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Signature file saved: " + signatureFile);
 
         currentDrawingView.destroyDrawingCache();
         buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
@@ -159,16 +165,9 @@ public class InsertSignaturesActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        buttonConfirmEngineer.setChecked(false);
-        buttonConfirmClient.setChecked(false);
-        buttonComplete.setEnabled(false);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
-        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
+//        buttonConfirmEngineer.setChecked(false);
+//        buttonConfirmClient.setChecked(false);
+//        buttonComplete.setEnabled(false);
     }
 
     @Override
@@ -177,6 +176,7 @@ public class InsertSignaturesActivity extends BaseActivity {
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //NOOP
+                onConfirmClicked();
             }
         }
     }

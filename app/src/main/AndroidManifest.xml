@@ -38,13 +38,6 @@
         <activity android:name=".activities.MeasurementsActivity" />
         <activity android:name=".activities.NSAActivity" />
 
-        <!--
-        <activity
-            android:name=".activities.ComponentDefectsActivity"
-            android:parentActivityName=".activities.OrderProcessingFirstStageActivity">
-        </activity>
-        -->
-
         <activity
             android:name=".activities.InsertSignaturesActivity"
             android:screenOrientation="sensorPortrait" />

@@ -91,7 +91,7 @@ public class LoginActivity extends BaseActivity implements
         ButterKnife.bind(this);
 
         //TODO Update foe user handling logic
-        DbUtils.dropDatabase();
+//        DbUtils.dropDatabase();
         DbUtils.createUserTableIfNotExist();
 
         //Setting header for the app;
