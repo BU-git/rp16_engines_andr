@@ -17,21 +17,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.ColumnText;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfStamper;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfStamper;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
@@ -194,7 +194,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             try {
                 final PdfReader pdfReader = new PdfReader(pdfTemplate.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
-                final Font font = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
+                final Font font = new Font(Font.HELVETICA, 11, Font.NORMAL);
                 final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
                 final ColumnText columnText = new ColumnText(contentByte);
 
@@ -264,9 +264,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (NullPointerException e) {
+
             } catch (DocumentException e) {
                 e.printStackTrace();
-            } catch (NullPointerException e) {
             }
 
             //TODO EXEPTION REVISE
