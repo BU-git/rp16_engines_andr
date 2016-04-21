@@ -161,7 +161,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             String pdfOrderNumber = orderNumber + "\n";
             String pdfRelation = currentOrder.getRelation().getName() + "\n";
             String pdfRelationTown = currentOrder.getRelation().getTown() + "\n";
-            String pdfPerson = "??????????" + "\n";
+            String pdfPerson = currentOrder.getRelation().getContactPerson() + "\n";
             String pdfRelationTelephone = currentOrder.getRelation().getTelephone() + "\n";
             String pdfEmployee = currentOrder.getEmployee().getName();
 
@@ -233,9 +233,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 signatureClient.scalePercent(16f);
                 contentByte.addImage(signatureClient);
 
-
                 orderText = new Phrase(pdfEmployee, font);
                 x = 355;
+                y = 113;
+                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
+                columnText.go();
+
+                orderText = new Phrase(pdfPerson, font);
+                x = 120;
                 y = 113;
                 columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
                 columnText.go();
@@ -296,6 +301,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             e.printStackTrace();
             mFileDescriptor = null;
         }
+
+
     }
 
 }
