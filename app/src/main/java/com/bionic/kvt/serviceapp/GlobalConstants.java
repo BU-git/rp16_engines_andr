@@ -7,7 +7,8 @@ public interface GlobalConstants {
 
     int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
-    String ORDERS_FOLDER = "Orders";
+    double DRAWING_VIEW_PROPORTION = 2.6;
+
     String PDF_TEMPLATE_FILENAME_EN = "pdfTemplate_en.pdf";
     String PDF_REPORT_FILE_NAME = "Report_";
 

@@ -19,7 +19,6 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
@@ -36,7 +35,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -176,7 +175,7 @@ public class OrderPageActivity extends BaseActivity implements
         super.onStart();
         Intent intent = new Intent(this, LocalService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        Session.setCurrentOrder(0L);
+        Session.clearCurrentOrder();
     }
 
     @Override
@@ -201,12 +200,12 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
-        // Setting selected Order to current session
         final long currentOrderNumber = Session.getOrderOverviewList().
                 get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
-        if (Utils.needRequestWritePermission(getApplicationContext(), this)) return;
+        //TODO Maybe we dont need this
+        if (Utils.isRequestWritePermissionNeeded(getApplicationContext(), this)) return;
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
         startActivity(intent);
@@ -217,7 +216,6 @@ public class OrderPageActivity extends BaseActivity implements
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //resume tasks needing this permission
                 Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
                 startActivity(intent);
             }

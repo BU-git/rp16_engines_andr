@@ -11,8 +11,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.DRAWING_VIEW_PROPORTION;
+
 public class DrawingView extends View {
-    private static final double DRAWING_VIEW_PROPORTION = 2.8;
     private Long lastTime = 0L;
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
@@ -61,7 +62,6 @@ public class DrawingView extends View {
     protected void onMeasure(final int widthMeasureSpec, final int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-//        final int mode = MeasureSpec.getMode(widthMeasureSpec);
         final int width = MeasureSpec.getSize(widthMeasureSpec);
         final int height = (int) (width / DRAWING_VIEW_PROPORTION);
 
@@ -70,7 +70,6 @@ public class DrawingView extends View {
                     MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
         }
     }
-
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {

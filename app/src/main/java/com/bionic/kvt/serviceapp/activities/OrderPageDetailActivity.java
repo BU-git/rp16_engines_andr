@@ -8,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
@@ -20,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 
 public class OrderPageDetailActivity extends BaseActivity {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -75,14 +74,17 @@ public class OrderPageDetailActivity extends BaseActivity {
 
         // Exit if Session is empty
         if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number to create PDF!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
                 realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
-        if (currentOrder == null) return;
+        if (currentOrder == null) {
+            Toast.makeText(getApplicationContext(), "No such order in database!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         if (currentOrder.getOrderStatus() == ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
@@ -92,6 +94,7 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         // Setting Order data to textView
+        //TODO PROPER NULL HANDLING
         try {
             orderNumber.setText(Long.toString(currentOrder.getNumber()));
             orderRelation.setText(currentOrder.getRelation().getName());

@@ -3,14 +3,11 @@ package com.bionic.kvt.serviceapp.db;
 import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.google.gson.Gson;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +16,9 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
 
 public class DbUtils {
 
@@ -363,13 +362,14 @@ public class DbUtils {
     }
 
     @Nullable
-    public static int getOrderStatus(long orderNumber) {
+    public static void setOrderStatus(long orderNumber, int status) {
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Getting order from DB: " + orderNumber);
+            Session.addToSessionLog("Setting order status: " + orderNumber + " status: " + status);
 
         final Realm realm = Realm.getDefaultInstance();
-        final int orderStatus = realm.where(Order.class).equalTo("number", orderNumber).findFirst().getOrderStatus();
+        realm.beginTransaction();
+        realm.where(Order.class).equalTo("number", orderNumber).findFirst().setOrderStatus(status);
+        realm.commitTransaction();
         realm.close();
-        return orderStatus;
     }
 }

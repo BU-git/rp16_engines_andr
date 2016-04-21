@@ -11,7 +11,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -25,9 +24,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class InsertSignaturesActivity extends BaseActivity {
+    private static final int ENGINEER_BUTTON = 1;
+    private static final int CLIENT_BUTTON = 2;
+    private int currentButtonClicked;
+
     @Bind(R.id.draw_engineer_signature)
     DrawingView engineerDrawingView;
 
@@ -43,19 +47,25 @@ public class InsertSignaturesActivity extends BaseActivity {
     @Bind(R.id.button_confirm_client)
     ToggleButton buttonConfirmClient;
 
-    private final int ENGINEER_BUTTON = 1;
-    private final int CLIENT_BUTTON = 2;
-    private int currentButtonClicked;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_signatures);
         ButterKnife.bind(this);
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() == 0L) {
+            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Utils.isRequestWritePermissionNeeded(getApplicationContext(), this);
     }
 
     @OnClick(R.id.button_clear_engineer)
     public void onClearEngineerClick(View v) {
+        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
+
         engineerDrawingView.clearCanvas();
         buttonConfirmEngineer.setChecked(false);
         buttonComplete.setEnabled(false);
@@ -63,6 +73,8 @@ public class InsertSignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_clear_client)
     public void onClearClientClick(View v) {
+        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
+
         clientDrawingView.clearCanvas();
         buttonConfirmClient.setChecked(false);
         buttonComplete.setEnabled(false);
@@ -70,6 +82,9 @@ public class InsertSignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_complete)
     public void onCompleteClick(View v) {
+        final File pdfReportFile = Utils.getPDFReportFileName();
+        if (pdfReportFile.exists()) pdfReportFile.delete();
+
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
         startActivity(intent);
     }
@@ -87,13 +102,6 @@ public class InsertSignaturesActivity extends BaseActivity {
     }
 
     private void onConfirmClicked() {
-        if (Utils.needRequestWritePermission(getApplicationContext(), this)) {
-            buttonConfirmEngineer.setChecked(false);
-            buttonConfirmClient.setChecked(false);
-            buttonComplete.setEnabled(false);
-            return;
-        }
-
         if (!Utils.isExternalStorageWritable()) {
             Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
             if (BuildConfig.IS_LOGGING_ON)
@@ -125,13 +133,13 @@ public class InsertSignaturesActivity extends BaseActivity {
             return;
         }
 
+        Utils.cleanSignatureFile(signatureFileName);
         currentDrawingView.setDrawingCacheEnabled(true);
         final Bitmap signatureBitmap = currentDrawingView.getDrawingCache();
-        final File signatureFile = new File(Utils.getCurrentOrderFolder(getApplicationContext()), signatureFileName);
+        final File signatureFile = new File(Utils.getCurrentOrderDir(), signatureFileName);
 
         try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
             signatureBitmap.compress(Bitmap.CompressFormat.PNG, 90, fileOutputStream);
-            fileOutputStream.flush();
             fileOutputStream.close();
             currentToggleButton.setChecked(true);
             if (BuildConfig.IS_LOGGING_ON)
@@ -149,12 +157,26 @@ public class InsertSignaturesActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        buttonConfirmEngineer.setChecked(false);
+        buttonConfirmClient.setChecked(false);
+        buttonComplete.setEnabled(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
+        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //resume tasks needing this permission
-                onConfirmClicked();
+                //NOOP
             }
         }
     }
