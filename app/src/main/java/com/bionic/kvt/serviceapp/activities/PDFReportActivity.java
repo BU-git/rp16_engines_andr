@@ -391,7 +391,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private void sendEmailWithPDF(final String email) {
         mailHelper = new MailHelper();
         mailHelper.setRecipient(email);
-        mailHelper.setBody("This is a PDF report");
+        mailHelper.setMessageBody("This is a PDF report");
         mailHelper.setSubject("PDF_Report");
         mailHelper.setFullFileName(pdfReportFile.toString());
 

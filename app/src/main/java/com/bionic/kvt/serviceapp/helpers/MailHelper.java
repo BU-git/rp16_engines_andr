@@ -6,12 +6,10 @@ import android.support.v4.content.AsyncTaskLoader;
 import com.bionic.kvt.serviceapp.BuildConfig;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -26,10 +24,9 @@ import javax.mail.internet.MimeMultipart;
 import static com.bionic.kvt.serviceapp.Session.addToSessionLog;
 
 public class MailHelper extends javax.mail.Authenticator {
-    private Properties properties;
     private String recipient;
     private String subject;
-    private String body;
+    private String messageBody;
     private String fullFileName;
 
     public String getFullFileName() {
@@ -56,26 +53,26 @@ public class MailHelper extends javax.mail.Authenticator {
         this.subject = subject;
     }
 
-    public String getBody() {
-        return body;
+    public String getMessageBody() {
+        return messageBody;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
-
-    public MailHelper() {
-        properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.socketFactory.port", "465");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", "465");
-    }
-
 
     public boolean send() {
-        Session session = Session.getDefaultInstance(properties,
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+
+        // Setting 30 second timeout for network operations
+        properties.put("mail.smtp.connectiontimeout", "30000");
+        properties.put("mail.smtp.timeout", "30000");
+
+        Session session = Session.getInstance(properties,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(BuildConfig.EMAIL_FROM, BuildConfig.EMAIL_PASSWORD);
@@ -87,28 +84,32 @@ public class MailHelper extends javax.mail.Authenticator {
             message.setFrom(new InternetAddress(BuildConfig.EMAIL_FROM));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
+            message.setSentDate(new Date());
+
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setContent(messageBody, "text/html");
 
             Multipart multipart = new MimeMultipart();
-
-            BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(body);
-
             multipart.addBodyPart(messageBodyPart);
 
             if (fullFileName != null && !fullFileName.isEmpty()) {
-                messageBodyPart = new MimeBodyPart();
-                DataSource source = new FileDataSource(fullFileName);
-                messageBodyPart.setDataHandler(new DataHandler(source));
+                MimeBodyPart attachPart = new MimeBodyPart();
+                attachPart.attachFile(fullFileName);
                 String shortFileName = new File(fullFileName).getName();
-                messageBodyPart.setFileName(shortFileName);
-                multipart.addBodyPart(messageBodyPart);
+                attachPart.setFileName(shortFileName);
+                multipart.addBodyPart(attachPart);
             }
-
             message.setContent(multipart);
+
             Transport.send(message);
+
         } catch (MessagingException e) {
             if (BuildConfig.IS_LOGGING_ON)
                 addToSessionLog("ERROR during message sent: " + e.toString());
+            return false;
+        } catch (IOException e) {
+            if (BuildConfig.IS_LOGGING_ON)
+                addToSessionLog("ERROR with file during message sent: " + e.toString());
             return false;
         }
 

@@ -63,7 +63,7 @@ public class ForgetPasswordActivity extends BaseActivity implements
         } else {
             mailHelper = new MailHelper();
             mailHelper.setRecipient(email);
-            mailHelper.setBody(getText(R.string.forget_password_body).toString());
+            mailHelper.setMessageBody(getText(R.string.forget_password_body).toString());
             mailHelper.setSubject(getText(R.string.forget_password_subject).toString());
 
             getSupportLoaderManager().restartLoader(MAIL_LOADER_ID, null, this);
@@ -84,6 +84,7 @@ public class ForgetPasswordActivity extends BaseActivity implements
             Toast.makeText(getApplicationContext(),
                     getText(R.string.error_email_toast), Toast.LENGTH_SHORT).show();
         }
+        finish();
     }
 
     @Override
