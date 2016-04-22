@@ -249,7 +249,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                         font
                 );
 
-                int x = 160;
+                int x = 130;
                 int y = 505;
                 columnText.setSimpleColumn(orderText, x, y, x + 180, y + 150, 22, Element.ALIGN_LEFT);
                 columnText.go();
@@ -262,14 +262,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                         pdfWorkingHours,
                         font
                 );
-                x = 415;
+                x = 420;
                 y = 505;
                 columnText.setSimpleColumn(orderText, x, y, x + 150, y + 150, 22, Element.ALIGN_LEFT);
                 columnText.go();
 
 
                 orderText = new Phrase(pdfTask, font);
-                x = 150;
+                x = 130;
                 y = 483;
                 columnText.setSimpleColumn(orderText, x, y, x + 400, y + 25, 22, Element.ALIGN_LEFT);
                 columnText.go();
@@ -277,7 +277,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 String signatureFileName = SIGNATURE_FILE_ENGINEER;
                 String signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
                 Image signatureEngineer = Image.getInstance(signaturePath);
-                signatureEngineer.setAbsolutePosition(330f, 135f);
+                signatureEngineer.setAbsolutePosition(325f, 135f);
                 signatureEngineer.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureEngineer);
 
@@ -286,7 +286,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 Image signatureClient = Image.getInstance(signaturePath);
                 signatureClient.setAbsolutePosition(102f, 135f);
                 signatureClient.scaleAbsolute(192, 74);
-                ;
+
                 contentByte.addImage(signatureClient);
 
                 orderText = new Phrase(pdfEmployee, font);
