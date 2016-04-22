@@ -1,7 +1,8 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -10,14 +11,16 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ForgetPasswordActivity extends BaseActivity {
+public class ForgetPasswordActivity extends BaseActivity implements
+        LoaderManager.LoaderCallbacks<Boolean> {
+    private static final int MAIL_LOADER_ID = 2;
     private MailHelper mailHelper;
-    private boolean sentStatus;
 
     @Bind(R.id.email)
     AutoCompleteTextView mEmailView;
@@ -48,48 +51,44 @@ public class ForgetPasswordActivity extends BaseActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!Utils.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+            // There was an error; don't attempt login and focus the first form field with an error.
             focusView.requestFocus();
         } else {
             mailHelper = new MailHelper();
-            mailHelper.setRecepient(email);
+            mailHelper.setRecipient(email);
             mailHelper.setBody(getText(R.string.forget_password_body).toString());
             mailHelper.setSubject(getText(R.string.forget_password_subject).toString());
 
-            new SendMail().execute();
-            if (sentStatus) {
-                Toast.makeText(ForgetPasswordActivity.this, getText(R.string.success_email_toast), Toast.LENGTH_SHORT);
-            } else {
-                Toast.makeText(ForgetPasswordActivity.this, getText(R.string.no_connection), Toast.LENGTH_SHORT);
-            }
-
+            getSupportLoaderManager().restartLoader(MAIL_LOADER_ID, null, this);
         }
     }
 
-    private boolean isEmailValid(String email) {
-        //Email Contains @
-        return email.contains("@");
+    @Override
+    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+        return new MailHelper.SendMail(this, mailHelper);
     }
 
-    private class SendMail extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                mailHelper.send();
-                sentStatus = true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                sentStatus = false;
-            }
-            return null;
+    @Override
+    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+        if (data) {
+            Toast.makeText(getApplicationContext(),
+                    getText(R.string.success_email_toast), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(),
+                    getText(R.string.error_email_toast), Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onLoaderReset(Loader<Boolean> loader) {
+        // NOOP
+    }
+
 }

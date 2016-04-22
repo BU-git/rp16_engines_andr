@@ -1,6 +1,8 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
@@ -10,8 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +26,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -49,7 +54,10 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
-public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Void> {
+public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
+    private static final int PDF_LOADER_ID = 1;
+    private static final int MAIL_LOADER_ID = 2;
+    private MailHelper mailHelper;
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private File pdfReportFile;
     private File pdfTemplate;
@@ -101,10 +109,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         });
 
 
-        String pdfReportHeader = getResources().getString(R.string.pdf_report) + orderNumber;
+        String pdfReportHeader = getText(R.string.pdf_report).toString() + orderNumber;
         pdfReportHeaderTextView.setText(pdfReportHeader);
 
-        String pdfReportFileName = getResources().getString(R.string.generating_pdf_document)
+        String pdfReportFileName = getText(R.string.generating_pdf_document).toString()
                 + " " + PDF_REPORT_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
 
@@ -130,48 +138,44 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 return;
             }
 
-            getSupportLoaderManager().initLoader(1, null, this);
+            getSupportLoaderManager().initLoader(PDF_LOADER_ID, null, this);
+
         }
     }
 
     @Override
-    public Loader<Void> onCreateLoader(int id, Bundle args) {
-        return new GeneratePDFReportFile(this, pdfReportFile, pdfTemplate);
+    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
+        if (id == PDF_LOADER_ID)
+            return new GeneratePDFReportFile(this, pdfReportFile, pdfTemplate);
+        if (id == MAIL_LOADER_ID)
+            return new MailHelper.SendMail(this, mailHelper);
+        return null;
     }
 
     @Override
-    public void onLoadFinished(Loader<Void> loader, Void data) {
-        showPDFReport(pdfReportFile);
-    }
-
-    //TODO EMAIL & CLEAN
-    //EMAIL
-//        private void emailNote()
-//        {
-//            Intent email = new Intent(Intent.ACTION_SEND);
-//            email.putExtra(Intent.EXTRA_SUBJECT,mSubjectEditText.getText().toString());
-//            email.putExtra(Intent.EXTRA_TEXT, mBodyEditText.getText().toString());
-//            Uri uri = Uri.parse(myFile.getAbsolutePath());
-//            email.putExtra(Intent.EXTRA_STREAM, uri);
-//            email.setType("message/rfc822");
-//            startActivity(email);
-//        }
-
-    @OnClick(R.id.pdf_button_done)
-    public void onDoneClick(View v) {
-        DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
-
-        Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
+        switch (loader.getId()) {
+            case PDF_LOADER_ID:
+                showPDFReport(pdfReportFile);
+                break;
+            case MAIL_LOADER_ID:
+                if (data) {
+                    Toast.makeText(getApplicationContext(),
+                            getText(R.string.success_email_toast), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            getText(R.string.error_email_toast), Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<Void> loader) {
+    public void onLoaderReset(Loader<Boolean> loader) {
         // NOOP
     }
 
-    public static class GeneratePDFReportFile extends AsyncTaskLoader<Void> {
+    public static class GeneratePDFReportFile extends AsyncTaskLoader<Boolean> {
         private int pdfPageCount = 1;
         private final File pdfReportFile;
         private final File pdfTemplate;
@@ -183,13 +187,28 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         }
 
         @Override
+        public void forceLoad() {
+            super.forceLoad();
+        }
+
+        @Override
         protected void onStartLoading() {
             super.onStartLoading();
             forceLoad();
         }
 
         @Override
-        public Void loadInBackground() {
+        protected void onStopLoading() {
+            super.onStopLoading();
+        }
+
+        @Override
+        public void deliverResult(Boolean data) {
+            super.deliverResult(data);
+        }
+
+        @Override
+        public Boolean loadInBackground() {
             final long orderNumber = Session.getCurrentOrder();
             final Realm realm = Realm.getDefaultInstance();
             final Order currentOrder = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
@@ -297,7 +316,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             //TODO EXEPTION REVISE
             Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
             Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
-            return null;
+            return false;
         }
 
     }
@@ -335,6 +354,50 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         }
     }
 
+    @OnClick(R.id.pdf_button_done)
+    public void onDoneClick(View v) {
+        DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
+
+        Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.pdf_report_send_button)
+    public void onSendClick(View v) {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(getText(R.string.email_dialog_title));
+        final EditText emailEdit = new EditText(this);
+        emailEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        emailEdit.setText(Session.getEngineerEmail());
+        dialogBuilder.setView(emailEdit);
+
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendEmailWithPDF(emailEdit.getText().toString());
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialogBuilder.show();
+    }
+
+    private void sendEmailWithPDF(final String email) {
+        mailHelper = new MailHelper();
+        mailHelper.setRecipient(email);
+        mailHelper.setBody("This is a PDF report");
+        mailHelper.setSubject("PDF_Report");
+        mailHelper.setFullFileName(pdfReportFile.toString());
+
+        getSupportLoaderManager().restartLoader(MAIL_LOADER_ID, null, this);
+    }
 }
+
 
 

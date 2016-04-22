@@ -1,13 +1,11 @@
 package com.bionic.kvt.serviceapp.helpers;
 
-/**
-
- */
-
-import android.util.Log;
+import android.content.Context;
+import android.support.v4.content.AsyncTaskLoader;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 
+import java.io.File;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -25,30 +23,29 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import static com.bionic.kvt.serviceapp.Session.addToSessionLog;
 
 public class MailHelper extends javax.mail.Authenticator {
-
-    private final String TAG = MailHelper.class.getName();
-
-    private Properties props;
-    private String recepient;
+    private Properties properties;
+    private String recipient;
     private String subject;
-    private String filename;
+    private String body;
+    private String fullFileName;
 
-    public String getFilename() {
-        return filename;
+    public String getFullFileName() {
+        return fullFileName;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setFullFileName(String fullFileName) {
+        this.fullFileName = fullFileName;
     }
 
-    public String getRecepient() {
-        return recepient;
+    public String getRecipient() {
+        return recipient;
     }
 
-    public void setRecepient(String recepient) {
-        this.recepient = recepient;
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
     }
 
     public String getSubject() {
@@ -67,21 +64,18 @@ public class MailHelper extends javax.mail.Authenticator {
         this.body = body;
     }
 
-    private String body;
-
     public MailHelper() {
-        props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        properties = new Properties();
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.socketFactory.port", "465");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", "465");
     }
 
 
-    public void send() {
-        Session session = Session.getDefaultInstance(props,
+    public boolean send() {
+        Session session = Session.getDefaultInstance(properties,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(BuildConfig.EMAIL_FROM, BuildConfig.EMAIL_PASSWORD);
@@ -89,35 +83,73 @@ public class MailHelper extends javax.mail.Authenticator {
                 });
 
         try {
-
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(BuildConfig.EMAIL_FROM));
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(recepient));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
+
+            Multipart multipart = new MimeMultipart();
+
             BodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(body);
 
-            Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
 
-            if (filename != null && !filename.isEmpty()){
+            if (fullFileName != null && !fullFileName.isEmpty()) {
                 messageBodyPart = new MimeBodyPart();
-                DataSource source = new FileDataSource(filename);
+                DataSource source = new FileDataSource(fullFileName);
                 messageBodyPart.setDataHandler(new DataHandler(source));
-                messageBodyPart.setFileName(filename);
-
+                String shortFileName = new File(fullFileName).getName();
+                messageBodyPart.setFileName(shortFileName);
                 multipart.addBodyPart(messageBodyPart);
-
             }
+
             message.setContent(multipart);
-
             Transport.send(message);
-
-            Log.d(TAG, "The message was sent successfully to " + recepient);
-
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            if (BuildConfig.IS_LOGGING_ON)
+                addToSessionLog("ERROR during message sent: " + e.toString());
+            return false;
+        }
+
+        if (BuildConfig.IS_LOGGING_ON)
+            addToSessionLog("The message was sent successfully to " + recipient);
+        return true;
+    }
+
+    public static class SendMail extends AsyncTaskLoader<Boolean> {
+        private MailHelper mailHelper;
+
+        public SendMail(Context context, MailHelper mailHelper) {
+            super(context);
+            this.mailHelper = mailHelper;
+        }
+
+        @Override
+        public Boolean loadInBackground() {
+            return mailHelper != null && mailHelper.send();
+        }
+
+        @Override
+        public void forceLoad() {
+            super.forceLoad();
+        }
+
+        @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+            forceLoad();
+        }
+
+        @Override
+        protected void onStopLoading() {
+            super.onStopLoading();
+        }
+
+        @Override
+        public void deliverResult(Boolean data) {
+            super.deliverResult(data);
         }
     }
+
 }
