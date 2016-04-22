@@ -19,9 +19,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.activities.ComponentDetailActivity;
+import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
+import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
+import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +38,16 @@ Adapter for the Expandable Parts List
  */
 public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     String TAG = ElementExpandableListAdapter.class.getName();
+
+    public final static Integer layoutMagicNumber = 10000;
+    public final static Integer viewMagicNumber = 10;
+
+    public static Integer groupClickedPosition;
+
+
+    //Saving state
+
+
     private Context context;
     private HashMap<String, JsonObject> childMap;
 
@@ -61,39 +76,51 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     @SuppressWarnings("deprecation")
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final JsonObject childElement = (JsonObject) getChild(groupPosition, childPosition);
+
+        Log.d(TAG,"Current position: " + groupClickedPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = infalInflater.inflate(R.layout.component_element, null);
-
         }
-        LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
 
-        if (elementLayout.findViewById(groupPosition) == null){
+        LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
+        if (elementLayout.findViewById(groupClickedPosition) == null){
+
             final LinearLayout problemPlaceholderLayout = new LinearLayout(_context);
             problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             problemPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
-            problemPlaceholderLayout.setId(groupPosition);
+            problemPlaceholderLayout.setId(groupClickedPosition);
             elementLayout.addView(problemPlaceholderLayout);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
 
-
+            Integer position = 0;
             for (Map.Entry<String,JsonElement> child : childSet){
                 final CheckBox checkBox = new CheckBox(this._context);
+                final Integer id = Integer.valueOf(new StringBuilder()
+                        .append(String.valueOf(viewMagicNumber))
+                        .append(String.valueOf(groupClickedPosition))
+                        .append(String.valueOf(position))
+                        .toString());
+                checkBox.setId(id);
+
+                Log.d(TAG, "Actual checkbox Id" +  checkBox.getId());
 
                 final TextView textView = new TextView(this._context);
                 LinearLayout problemLayout = new LinearLayout(_context);
                 problemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                problemLayout.setId(100500 + groupClickedPosition);
 
                 LinearLayout problemDetailPlaceholderLayout = new LinearLayout(_context);
                 problemDetailPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
+                problemDetailPlaceholderLayout.setId(200500+groupClickedPosition);
 
 
                 textView.setText(child.getKey()+"\n");
@@ -128,11 +155,17 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupPosition,id);
                         if (checkBox.isChecked()){
                             problemDetailLayout.setVisibility(View.VISIBLE);
+                            if (!ComponentListActivity.defectStateList.contains(state)){
+                                ComponentListActivity.defectStateList.add(state);
+                            }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
+                            ComponentListActivity.defectStateList.remove(state);
                         }
+                        Log.d(TAG, "Saved state count is: " + ComponentListActivity.defectStateList.size());
                     }
                 });
 
@@ -140,7 +173,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 problemPlaceholderLayout.addView(problemDetailPlaceholderLayout);
 
-
+                position += 1;
+                //position += 1000;
             }
 
         } else {
@@ -178,6 +212,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
+
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

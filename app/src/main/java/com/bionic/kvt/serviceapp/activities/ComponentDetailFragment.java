@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
@@ -17,9 +18,12 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
+import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +38,10 @@ public class ComponentDetailFragment extends Fragment {
      * represents.
      */
     String TAG = ComponentDetailFragment.class.getName();
+
+
     public static final String ARG_ITEM_ID = "item_id";
+    public static String ARG_CURRENT;
 
     private int expanded = -1;
     private int collapsed = -2;
@@ -60,6 +67,7 @@ public class ComponentDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mItem = ComponentListActivity.partMap.get(getArguments().getString(ARG_ITEM_ID));
+            ARG_CURRENT = getArguments().getString(ARG_ITEM_ID);
             Log.d(TAG, "Map argument: " + getArguments().getString(ARG_ITEM_ID));
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -76,6 +84,7 @@ public class ComponentDetailFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.component_detail, container, false);
         rootView.setNestedScrollingEnabled(true);
+        rootView.setNestedScrollingEnabled(true);
 
         // Show the dummy content as text in a TextView.
         Log.d(TAG, ARG_ITEM_ID);
@@ -91,14 +100,42 @@ public class ComponentDetailFragment extends Fragment {
                 public void onGroupCollapse(int groupPosition) {
                     if (rootView.findViewById(groupPosition) != null) {
                         rootView.findViewById(groupPosition).setVisibility(View.GONE);
+                        Log.d(TAG, "Child is " + rootView.findViewById(groupPosition).getId());
                     }
                 }
             });
 
+
             list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
-                    for (int i = 0; i < listAdapter.getGroupCount(); i++){
+
+                    for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+                        for (DefectState d : ComponentListActivity.defectStateList) {
+                            Integer checkboxId = (Integer.valueOf(new StringBuilder()
+                                    .append(String.valueOf(ElementExpandableListAdapter.viewMagicNumber))
+                                    .append(String.valueOf(groupPosition))
+                                    .append(String.valueOf(i))
+                                    .toString()));
+
+
+                            //Log.d(TAG, "Id to restore: " + checkboxId);
+                            if (d.getPart().equals(ARG_CURRENT) && d.getGroupPosition() == groupPosition){
+                                Log.d(TAG, "Id to restore: " + checkboxId);
+                                //Log.d(TAG, "Root View: " + rootView);
+                                //Log.d(TAG,"Group position" + rootView.findViewById(groupPosition).getId());
+
+                                CheckBox checkBox = (CheckBox) list
+                                        .findViewById(groupPosition)
+                                        .findViewById(100500+groupPosition)
+                                        .findViewById(200500+groupPosition)
+                                        .findViewById(checkboxId);
+                                checkBox.setChecked(true);
+                                Log.d(TAG, "Part Name: " + d.getPart() + " Expected Part Name: " + ARG_CURRENT);
+                                Log.d(TAG, "Position: " + d.getGroupPosition() + " Expected Position: " + groupPosition);
+                                Log.d(TAG, "Expected Checkbox Id: " + checkboxId);
+                            }
+                        }
                         if (i != groupPosition){
                             if (list.isGroupExpanded(i)){
                                 list.collapseGroup(i);
@@ -115,6 +152,7 @@ public class ComponentDetailFragment extends Fragment {
             list.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+
                     //Disallow clicks on already expanded group
                     if (list.isGroupExpanded(groupPosition)){
                         return true;

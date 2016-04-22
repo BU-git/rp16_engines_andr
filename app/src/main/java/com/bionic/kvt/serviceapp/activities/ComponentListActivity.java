@@ -17,14 +17,19 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
+import com.bionic.kvt.serviceapp.api.Component;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
+import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.models.Element;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,9 +48,10 @@ public class ComponentListActivity extends BaseActivity {
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
+    public static List<DefectState> defectStateList = new ArrayList<>();
+
     private String TAG = ComponentListActivity.class.getName();
 
-    private List<Element> elementList;
     public static Map<String, Map<String, JsonObject>> partMap = new HashMap<>();
     //public Map<String, JsonObject> elementMap = new HashMap<>();
 
@@ -131,7 +137,7 @@ public class ComponentListActivity extends BaseActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = Arrays.asList(mValues.keySet().toArray()).get(position).toString();
             Log.d(TAG, "Item: " + holder.mItem);
             //final String id = mValues.get(position).keySet().toArray()[position].toString();
@@ -141,6 +147,7 @@ public class ComponentListActivity extends BaseActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ElementExpandableListAdapter.groupClickedPosition = position;
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem);
@@ -195,7 +202,7 @@ public class ComponentListActivity extends BaseActivity {
             String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTFILE);
             com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
 
-            Log.d(TAG, "JSON Component:" + jsonComponent);
+            //Log.d(TAG, "JSON Component:" + jsonComponent);
             if (!jsonComponent.isEmpty()) {
                 try {
                     JsonElement parent = parser.parse(jsonComponent);
@@ -210,6 +217,7 @@ public class ComponentListActivity extends BaseActivity {
                             JsonArray secondArray = entry.getValue().getAsJsonArray();
 
                             Log.d(TAG, "Part: " + entry.getKey());
+
                             JsonArray thirdArray = entry.getValue().getAsJsonArray();
                             Map<String, JsonObject> elementMap = new HashMap<>();
                             for (int j = 0; j < thirdArray.size(); j++) {
@@ -230,11 +238,8 @@ public class ComponentListActivity extends BaseActivity {
                         //Log.d(TAG,secondObject.entrySet().toString());
 
                     }
-                    Log.d(TAG, partMap.toString());
+                    //Log.d(TAG, partMap.toString());
 
-                    //Log.d(TAG,"First part: " + parentArray.get(0));
-
-                    //Log.d(TAG,"Part name: " + part.getPartName());
 
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
