@@ -10,13 +10,20 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 
 public class MailHelper extends javax.mail.Authenticator {
@@ -26,6 +33,15 @@ public class MailHelper extends javax.mail.Authenticator {
     private Properties props;
     private String recepient;
     private String subject;
+    private String filename;
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
     public String getRecepient() {
         return recepient;
@@ -79,7 +95,22 @@ public class MailHelper extends javax.mail.Authenticator {
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(recepient));
             message.setSubject(subject);
-            message.setText(body);
+            BodyPart messageBodyPart = new MimeBodyPart();
+            messageBodyPart.setText(body);
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messageBodyPart);
+
+            if (filename != null && !filename.isEmpty()){
+                messageBodyPart = new MimeBodyPart();
+                DataSource source = new FileDataSource(filename);
+                messageBodyPart.setDataHandler(new DataHandler(source));
+                messageBodyPart.setFileName(filename);
+
+                multipart.addBodyPart(messageBodyPart);
+
+            }
+            message.setContent(multipart);
 
             Transport.send(message);
 
