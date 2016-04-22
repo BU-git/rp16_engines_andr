@@ -171,32 +171,34 @@ public class DbUtils {
         }
 
         if (currentOrderInDB != null) { // Existing order
-            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_NOT_STARTED) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
-                realm.beginTransaction();
-                currentOrderInDB.removeFromRealm();
-                realm.commitTransaction(); // No logic if transaction fail!!!
-                createNewOrderInDb(serverOrder);
+            switch (currentOrderInDB.getOrderStatus()) {
+                case ORDER_STATUS_NOT_STARTED:
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
+                    realm.beginTransaction();
+                    currentOrderInDB.removeFromRealm();
+                    realm.commitTransaction(); // No logic if transaction fail!!!
+                    createNewOrderInDb(serverOrder);
+                    realm.close();
 
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
+                    break;
 
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
-            }
+                case ORDER_STATUS_IN_PROGRESS:
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
+                                + currentOrderInDB.getNumber());
+                    break;
 
-            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_IN_PROGRESS) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
-                            + currentOrderInDB.getNumber());
-            }
-
-            if (currentOrderInDB.getOrderStatus() == ORDER_STATUS_COMPLETE) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
-                            + currentOrderInDB.getNumber());
+                case ORDER_STATUS_COMPLETE:
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
+                                + currentOrderInDB.getNumber());
+                    break;
             }
         }
-        realm.close();
+
     }
 
     private static void createNewOrderInDb(com.bionic.kvt.serviceapp.api.Order serverOrder) {
