@@ -165,9 +165,9 @@ public class InsertSignaturesActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        buttonConfirmEngineer.setChecked(false);
-//        buttonConfirmClient.setChecked(false);
-//        buttonComplete.setEnabled(false);
+        buttonConfirmEngineer.setChecked(false);
+        buttonConfirmClient.setChecked(false);
+        buttonComplete.setEnabled(false);
     }
 
     @Override
