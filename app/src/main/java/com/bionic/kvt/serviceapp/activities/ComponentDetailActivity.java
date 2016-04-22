@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.bionic.kvt.serviceapp.R;
@@ -15,6 +16,8 @@ import com.bionic.kvt.serviceapp.R;
  * in a {@link ComponentListActivity}.
  */
 public class ComponentDetailActivity extends BaseActivity {
+    ComponentDetailFragment fragment;
+    private static final String TAG = ComponentDetailActivity.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class ComponentDetailActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
+        Log.i(TAG, "Activity recreated: " + TAG);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -46,11 +49,13 @@ public class ComponentDetailActivity extends BaseActivity {
             Bundle arguments = new Bundle();
             arguments.putString(ComponentDetailFragment.ARG_ITEM_ID,
                     getIntent().getStringExtra(ComponentDetailFragment.ARG_ITEM_ID));
-            ComponentDetailFragment fragment = new ComponentDetailFragment();
+            fragment = new ComponentDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.component_detail_container, fragment)
+                    .add(R.id.component_detail_container, fragment, "customtag")
                     .commit();
+        } else {
+            fragment = (ComponentDetailFragment) getSupportFragmentManager().findFragmentByTag("customtag");
         }
     }
 

@@ -43,6 +43,9 @@ public class ComponentDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
     public static String ARG_CURRENT;
 
+    private Integer layoutId = 0;
+    private Integer checkboxId = 0;
+
     private int expanded = -1;
     private int collapsed = -2;
 
@@ -80,7 +83,7 @@ public class ComponentDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 
         final View rootView = inflater.inflate(R.layout.component_detail, container, false);
         rootView.setNestedScrollingEnabled(true);
@@ -98,9 +101,16 @@ public class ComponentDetailFragment extends Fragment {
             list.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
-                    if (rootView.findViewById(groupPosition) != null) {
-                        rootView.findViewById(groupPosition).setVisibility(View.GONE);
-                        Log.d(TAG, "Child is " + rootView.findViewById(groupPosition).getId());
+
+                    layoutId = Integer.valueOf(new StringBuilder()
+                            .append(Integer.valueOf(ElementExpandableListAdapter.layoutMagicNumber))
+                            .append(Integer.valueOf(ElementExpandableListAdapter.groupClickedPosition))
+                            .append(groupPosition)
+                            .toString());
+
+                    if (rootView.findViewById(layoutId) != null) {
+                        rootView.findViewById(layoutId).setVisibility(View.GONE);
+                        Log.d(TAG, "Child is " + rootView.findViewById(layoutId).getId());
                     }
                 }
             });
@@ -109,40 +119,54 @@ public class ComponentDetailFragment extends Fragment {
             list.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
                 @Override
                 public void onGroupExpand(int groupPosition) {
+                    layoutId = Integer.valueOf(new StringBuilder()
+                            .append(Integer.valueOf(ElementExpandableListAdapter.layoutMagicNumber))
+                            .append(Integer.valueOf(ElementExpandableListAdapter.groupClickedPosition))
+                            .append(groupPosition)
+                            .toString());
+                    //
+                    for (DefectState d : ComponentListActivity.defectStateList) {
+                        if (d.getPart().equals(ARG_CURRENT) && d.getGroupPosition() == ElementExpandableListAdapter.groupClickedPosition){
 
-                    for (int i = 0; i < listAdapter.getGroupCount(); i++) {
-                        for (DefectState d : ComponentListActivity.defectStateList) {
-                            Integer checkboxId = (Integer.valueOf(new StringBuilder()
+                            checkboxId = (Integer.valueOf(new StringBuilder()
                                     .append(String.valueOf(ElementExpandableListAdapter.viewMagicNumber))
                                     .append(String.valueOf(groupPosition))
-                                    .append(String.valueOf(i))
+                                    .append(String.valueOf(ElementExpandableListAdapter.childClickedPosition))
                                     .toString()));
 
+                            if (list.findViewById(R.id.component_element_layout) != null && list.findViewById(R.id.component_element_layout).getClass().equals(LinearLayout.class)){
+                                LinearLayout first = (LinearLayout) list
+                                        .findViewById(R.id.component_element_layout);
+                                Log.d(TAG,"First Layout" + first.getId());
+                                LinearLayout second = (LinearLayout) first.getChildAt(0);
+                                Log.d(TAG,"Second Layout: " + second.getId());
+                                CheckBox ch = (CheckBox) second.getChildAt(0);
+                                Log.d(TAG,"Checkbox Id" + ch.getId());
 
-                            //Log.d(TAG, "Id to restore: " + checkboxId);
-                            if (d.getPart().equals(ARG_CURRENT) && d.getGroupPosition() == groupPosition){
-                                Log.d(TAG, "Id to restore: " + checkboxId);
-                                //Log.d(TAG, "Root View: " + rootView);
-                                //Log.d(TAG,"Group position" + rootView.findViewById(groupPosition).getId());
-
-                                CheckBox checkBox = (CheckBox) list
-                                        .findViewById(groupPosition)
-                                        .findViewById(100500+groupPosition)
-                                        .findViewById(200500+groupPosition)
-                                        .findViewById(checkboxId);
-                                checkBox.setChecked(true);
-                                Log.d(TAG, "Part Name: " + d.getPart() + " Expected Part Name: " + ARG_CURRENT);
-                                Log.d(TAG, "Position: " + d.getGroupPosition() + " Expected Position: " + groupPosition);
-                                Log.d(TAG, "Expected Checkbox Id: " + checkboxId);
+                                Log.d(TAG, "Is checkbox checked" + ch.isChecked());
                             }
+
+
+                            Log.d(TAG, "!!!Layout id to restore: " + layoutId);
+                            Log.d(TAG, "!!!Checkbox to resyore " + checkboxId);
                         }
+                    }
+                    //
+                    for (int i = 0; i < listAdapter.getGroupCount(); i++) {
+
+                        //Id of the view to Restore
+                        Integer id = Integer.valueOf(new StringBuilder()
+                                .append(Integer.valueOf(ElementExpandableListAdapter.layoutMagicNumber))
+                                .append(Integer.valueOf(ElementExpandableListAdapter.groupClickedPosition))
+                                .append(groupPosition)
+                                .toString());
                         if (i != groupPosition){
                             if (list.isGroupExpanded(i)){
                                 list.collapseGroup(i);
                             }
                         } else {
-                            if (rootView.findViewById(groupPosition) != null){
-                                rootView.findViewById(groupPosition).setVisibility(View.VISIBLE);
+                            if (rootView.findViewById(id) != null){
+                                rootView.findViewById(id).setVisibility(View.VISIBLE);
                             }
                         }
                     }

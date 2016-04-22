@@ -39,10 +39,11 @@ Adapter for the Expandable Parts List
 public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     String TAG = ElementExpandableListAdapter.class.getName();
 
-    public final static Integer layoutMagicNumber = 10000;
+    public final static Integer layoutMagicNumber = 1000;
     public final static Integer viewMagicNumber = 10;
 
     public static Integer groupClickedPosition;
+    public static Integer childClickedPosition;
 
 
     //Saving state
@@ -81,7 +82,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
         final JsonObject childElement = (JsonObject) getChild(groupPosition, childPosition);
 
-        Log.d(TAG,"Current position: " + groupClickedPosition);
+        Log.d(TAG,"Current position: " + groupPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -91,13 +92,20 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
-        if (elementLayout.findViewById(groupClickedPosition) == null){
+        if (elementLayout.findViewById(groupPosition) == null){
 
             final LinearLayout problemPlaceholderLayout = new LinearLayout(_context);
             problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             problemPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
-            problemPlaceholderLayout.setId(groupClickedPosition);
+            problemPlaceholderLayout.setId(groupPosition);
             elementLayout.addView(problemPlaceholderLayout);
+            Integer layoutId = Integer.valueOf(new StringBuilder()
+                    .append(Integer.valueOf(layoutMagicNumber))
+                    .append(Integer.valueOf(groupClickedPosition))
+                    .append(groupPosition)
+                    .toString());
+            problemPlaceholderLayout.setId(layoutId);
+            Log.d(TAG, "Actual Layout id: " + layoutId);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
 
@@ -106,41 +114,18 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 final CheckBox checkBox = new CheckBox(this._context);
                 final Integer id = Integer.valueOf(new StringBuilder()
                         .append(String.valueOf(viewMagicNumber))
-                        .append(String.valueOf(groupClickedPosition))
+                        .append(String.valueOf(groupPosition))
                         .append(String.valueOf(position))
                         .toString());
                 checkBox.setId(id);
 
+                childClickedPosition = position;
+
                 Log.d(TAG, "Actual checkbox Id" +  checkBox.getId());
 
-                final TextView textView = new TextView(this._context);
-                LinearLayout problemLayout = new LinearLayout(_context);
-                problemLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                problemLayout.setId(100500 + groupClickedPosition);
+                checkBox.setText(child.getKey()+"\n");
 
-                LinearLayout problemDetailPlaceholderLayout = new LinearLayout(_context);
-                problemDetailPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
-                problemDetailPlaceholderLayout.setId(200500+groupClickedPosition);
-
-
-                textView.setText(child.getKey()+"\n");
-                textView.setGravity(Gravity.FILL);
-
-
-                textView.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    textView.setTextColor(_context.getColor(R.color.colorTextField));
-                } else {
-                    textView.setTextColor(ColorStateList.valueOf(Color.BLACK));
-                }
-
-                textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                textView.setSingleLine(false);
-                //checkBox.setText(child.getKey());
-                problemLayout.addView(checkBox);
-                problemLayout.addView(textView);
-
-                problemDetailPlaceholderLayout.addView(problemLayout);
+                problemPlaceholderLayout.addView(checkBox);
 
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
 
@@ -149,17 +134,20 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 text.setText("Some Text");
 
+                problemDetailLayout.setId(groupPosition);
+
                 problemDetailLayout.addView(text);
                 problemDetailLayout.setVisibility(View.GONE);
 
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupPosition,id);
+                        DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
                         if (checkBox.isChecked()){
                             problemDetailLayout.setVisibility(View.VISIBLE);
                             if (!ComponentListActivity.defectStateList.contains(state)){
                                 ComponentListActivity.defectStateList.add(state);
+                                Log.d(TAG, "Added defect on " + state.getGroupPosition());
                             }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
@@ -169,16 +157,14 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     }
                 });
 
-                problemDetailPlaceholderLayout.addView(problemDetailLayout);
-
-                problemPlaceholderLayout.addView(problemDetailPlaceholderLayout);
+                problemPlaceholderLayout.addView(problemDetailLayout);
 
                 position += 1;
                 //position += 1000;
             }
 
         } else {
-            LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupPosition);
+            LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
 
         }
 
