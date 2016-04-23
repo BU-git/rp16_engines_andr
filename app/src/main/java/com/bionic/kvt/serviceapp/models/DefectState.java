@@ -12,6 +12,75 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
 
 
     private String part;
+    private Integer groupPosition;
+    private Integer checkboxPosition;
+
+    //Saving data for future logic
+    private String extent; // Omvang
+    private String intensity; // Intensiteit
+    private boolean fixed = false; // Opgelost
+    private String action; // Acties
+
+    //Saving data for state
+    private Integer extentId = 0;
+    private Integer intensityId = 0;
+    private Integer actionId = 0;
+
+    public Integer getExtentId() {
+        return extentId;
+    }
+
+    public void setExtentId(Integer extentId) {
+        this.extentId = extentId;
+    }
+
+    public Integer getIntensityId() {
+        return intensityId;
+    }
+
+    public void setIntensityId(Integer intensityId) {
+        this.intensityId = intensityId;
+    }
+
+    public Integer getActionId() {
+        return actionId;
+    }
+
+    public void setActionId(Integer actionId) {
+        this.actionId = actionId;
+    }
+
+    public String getExtent() {
+        return extent;
+    }
+
+    public void setExtent(String extent) {
+        this.extent = extent;
+    }
+
+    public String getIntensity() {
+        return intensity;
+    }
+
+    public void setIntensity(String intensity) {
+        this.intensity = intensity;
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
     public String getPart() {
         return part;
@@ -36,9 +105,6 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
     public void setCheckboxPosition(Integer checkboxPosition) {
         this.checkboxPosition = checkboxPosition;
     }
-
-    private Integer groupPosition;
-    private Integer checkboxPosition;
 
     public DefectState (String part, Integer groupPosition, Integer checkboxPosition){
         this.checkboxPosition = checkboxPosition;

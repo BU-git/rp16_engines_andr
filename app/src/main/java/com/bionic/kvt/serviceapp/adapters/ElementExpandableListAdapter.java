@@ -4,21 +4,20 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.activities.ComponentDetailActivity;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
 import com.bionic.kvt.serviceapp.models.DefectState;
@@ -26,7 +25,6 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -80,10 +78,10 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final JsonObject childElement = (JsonObject) getChild(groupPosition, childPosition);
+        LayoutInflater infalInflater = (LayoutInflater) this._context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             convertView = infalInflater.inflate(R.layout.component_element, null);
         }
@@ -122,23 +120,86 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 checkBox.setText(child.getKey()+"\n");
 
                 problemPlaceholderLayout.addView(checkBox);
+                problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
                 //Todo: Replace with actual default fields
                 TextView text = new TextView(_context);
-                text.setText("Some Text");
+                final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang,null);
+                final Spinner actiesSpinner = (Spinner)  infalInflater.inflate(R.layout.template_acties,null);
+                final Spinner intensitySpinner = (Spinner) infalInflater.inflate(R.layout.template_intensiteit, null);
+                //text.setText("Some Text");
+                problemDetailLayout.addView(omvangSpinner);
+                problemDetailLayout.addView(intensitySpinner);
+                problemDetailLayout.addView(actiesSpinner);
 
+                final Switch oplegostSwitch = new Switch(_context);
+                oplegostSwitch.setText(R.string.oplegost);
+                problemDetailLayout.addView(oplegostSwitch);
                 problemDetailLayout.setId(groupPosition);
 
                 problemDetailLayout.addView(text);
                 //Hiding default fields if checkbox is not selected;
                 problemDetailLayout.setVisibility(View.GONE);
+                omvangSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
 
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //Tracking state of the checkboxes
-                        DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
+                        final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
+
+                        //Setting default fields
+                        omvangSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                state.setExtentId(omvangSpinner.getSelectedItemPosition());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
+                        });
+                        intensitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                state.setIntensityId(intensitySpinner.getSelectedItemPosition());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
+                        });
+
+                        actiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                state.setActionId(actiesSpinner.getSelectedItemPosition());
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
+                        });
+
+                        oplegostSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                state.setFixed(oplegostSwitch.isChecked());
+                            }
+                        });
+
+
                         if (checkBox.isChecked()){
                             problemDetailLayout.setVisibility(View.VISIBLE);
                             if (!ComponentListActivity.defectStateList.contains(state)){
@@ -156,6 +217,11 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 for (DefectState d : ComponentListActivity.defectStateList) {
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition){
                                     if (checkBox.getId() == d.getCheckboxPosition()){
+                                        omvangSpinner.setSelection(d.getExtentId());
+                                        intensitySpinner.setSelection(d.getIntensityId());
+                                        actiesSpinner.setSelection(d.getActionId());
+                                        oplegostSwitch.setChecked(d.isFixed());
+
                                         checkBox.setChecked(true);
                                     }
                     }
