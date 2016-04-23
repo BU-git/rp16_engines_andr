@@ -1,7 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import android.support.annotation.Nullable;
-
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
@@ -86,8 +84,9 @@ public class DbUtils {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating Order Overview List");
 
         final Realm realm = Realm.getDefaultInstance();
-        final List<Order> allOrdersInDb =
+        final RealmResults<Order> allOrdersInDb =
                 realm.where(Order.class).equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
+        allOrdersInDb.sort("number");
 
         Session.getOrderOverviewList().clear();
         for (Order order : allOrdersInDb) {
@@ -365,14 +364,19 @@ public class DbUtils {
         realm.close();
     }
 
-    @Nullable
     public static void setOrderStatus(long orderNumber, int status) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Setting order status: " + orderNumber + " status: " + status);
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(Order.class).equalTo("number", orderNumber).findFirst().setOrderStatus(status);
+        Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        if (order != null) {
+            if (order.getOrderStatus() != status) {
+                order.setOrderStatus(status);
+                order.setLastAndroidChangeDate(new Date());
+            }
+        }
         realm.commitTransaction();
         realm.close();
     }
