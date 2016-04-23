@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import com.bionic.kvt.serviceapp.activities.ComponentDetailActivity;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
 import com.bionic.kvt.serviceapp.models.DefectState;
+import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -42,7 +42,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public final static Integer layoutMagicNumber = 1000;
     public final static Integer viewMagicNumber = 10;
 
-    public static Integer groupClickedPosition;
+    public static Integer groupClickedPosition = 0;
     public static Integer childClickedPosition;
 
 
@@ -60,7 +60,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public ElementExpandableListAdapter(Context context, Map<String, JsonObject> listChildData) {
         this._context = context;
         this._listDataHeader =  Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
-        Log.d(TAG, "Child Size is: " + _listDataHeader.size());
         this._listDataChild = listChildData;
     }
 
@@ -82,8 +81,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
         final JsonObject childElement = (JsonObject) getChild(groupPosition, childPosition);
 
-        Log.d(TAG,"Current position: " + groupPosition);
-
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -99,19 +96,20 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             problemPlaceholderLayout.setOrientation(LinearLayout.VERTICAL);
             problemPlaceholderLayout.setId(groupPosition);
             elementLayout.addView(problemPlaceholderLayout);
+            //Creating layout id as a concatenation of magic number, group clicked position and group position
             Integer layoutId = Integer.valueOf(new StringBuilder()
                     .append(Integer.valueOf(layoutMagicNumber))
                     .append(Integer.valueOf(groupClickedPosition))
                     .append(groupPosition)
                     .toString());
             problemPlaceholderLayout.setId(layoutId);
-            Log.d(TAG, "Actual Layout id: " + layoutId);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
 
-            Integer position = 0;
             for (Map.Entry<String,JsonElement> child : childSet){
+                Integer position = Utils.getSetIndex(childSet, child);
                 final CheckBox checkBox = new CheckBox(this._context);
+                //Creating checkbox id as a concatenation of magic number, group position and checkbox position
                 final Integer id = Integer.valueOf(new StringBuilder()
                         .append(String.valueOf(viewMagicNumber))
                         .append(String.valueOf(groupPosition))
@@ -121,46 +119,47 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 childClickedPosition = position;
 
-                Log.d(TAG, "Actual checkbox Id" +  checkBox.getId());
-
                 checkBox.setText(child.getKey()+"\n");
 
                 problemPlaceholderLayout.addView(checkBox);
 
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
-
+                //Todo: Replace with actual default fields
                 TextView text = new TextView(_context);
-                //Dummy inherited data
-
                 text.setText("Some Text");
 
                 problemDetailLayout.setId(groupPosition);
 
                 problemDetailLayout.addView(text);
+                //Hiding default fields if checkbox is not selected;
                 problemDetailLayout.setVisibility(View.GONE);
 
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        //Tracking state of the checkboxes
                         DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
                         if (checkBox.isChecked()){
                             problemDetailLayout.setVisibility(View.VISIBLE);
                             if (!ComponentListActivity.defectStateList.contains(state)){
                                 ComponentListActivity.defectStateList.add(state);
-                                Log.d(TAG, "Added defect on " + state.getGroupPosition());
                             }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
                             ComponentListActivity.defectStateList.remove(state);
                         }
-                        Log.d(TAG, "Saved state count is: " + ComponentListActivity.defectStateList.size());
                     }
                 });
 
                 problemPlaceholderLayout.addView(problemDetailLayout);
 
-                position += 1;
-                //position += 1000;
+                for (DefectState d : ComponentListActivity.defectStateList) {
+                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition){
+                                    if (checkBox.getId() == d.getCheckboxPosition()){
+                                        checkBox.setChecked(true);
+                                    }
+                    }
+                }
             }
 
         } else {
@@ -173,10 +172,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        //@// TODO: 4/15/2016 Replace with Object Array Size
         return 1;
-        //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsJsonArray().size();
-        //return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsInt();
     }
 
     @Override

@@ -14,8 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
+import com.google.gson.JsonElement;
 
 import java.io.File;
+import java.util.Map;
+import java.util.Set;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -128,6 +131,37 @@ public class Utils {
 //        }
 //        return storageDir;
 //    }
+
+    // Return Private Path to folder BuildConfig.ORDERS_FOLDER
+    public static File getPrivateDocumentsStorageDir(Context context, String folder) {
+        File fileDir = new File(context.getExternalFilesDir(BuildConfig.ORDERS_FOLDER), folder);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+        return fileDir;
+    }
+
+
+    public static File getCurrentOrderFolder(Context context) {
+        return getPrivateDocumentsStorageDir(context, "" + Session.getCurrentOrder());
+    }
+
+    public static int getSetIndex(Set<Map.Entry<String,JsonElement>> set, Map.Entry<String,JsonElement> value) {
+        int result = 0;
+        for (Object entry:set) {
+            if (entry.equals(value)) return result;
+            result++;
+        }
+        return -1;
+    }
+
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+}
 
 //    public static File getPrivateDocumentsStorageDir(Context context, String folder) {
 //        File fileDir = new File(context.getExternalFilesDir(ORDERS_FOLDER), folder);

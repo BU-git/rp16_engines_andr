@@ -32,7 +32,6 @@ public class ComponentDetailActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Log.i(TAG, "Activity recreated: " + TAG);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -51,6 +50,7 @@ public class ComponentDetailActivity extends BaseActivity {
                     getIntent().getStringExtra(ComponentDetailFragment.ARG_ITEM_ID));
             fragment = new ComponentDetailFragment();
             fragment.setArguments(arguments);
+            fragment.setRetainInstance(true);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.component_detail_container, fragment, "customtag")
                     .commit();
