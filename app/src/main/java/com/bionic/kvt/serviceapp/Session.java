@@ -8,11 +8,9 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -81,8 +79,7 @@ public class Session extends Application {
     }
 
     public static void addToSessionLog(String message) {
-        String dateTime = new SimpleDateFormat("HH:mm:ss.SSSZ", Locale.GERMANY).format(Calendar.getInstance().getTime());
-        currentUserSession.sessionLog.add("[" + dateTime + "](" + currentUserSession.engineerEmail + ") " + message);
+        currentUserSession.sessionLog.add("[" + Utils.getDateTimeStringFromDate(new Date()) + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 
     public static boolean isSyncingFromServer() {

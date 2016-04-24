@@ -152,4 +152,5 @@
 
     <!--EMail dialog-->
     <string name="email_dialog_title">Send email to:</string>
+    <string name="preparations">Preparations</string>
 </resources>

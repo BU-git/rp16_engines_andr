@@ -5,6 +5,9 @@ public interface GlobalConstants {
     int ORDER_STATUS_IN_PROGRESS = 1;
     int ORDER_STATUS_COMPLETE = 2;
 
+    int ORDER_MAINTENANCE_START_TIME = 1;
+    int ORDER_MAINTENANCE_END_TIME = 2;
+
     int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
     double DRAWING_VIEW_PROPORTION = 2.6;

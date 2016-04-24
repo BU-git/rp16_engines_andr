@@ -17,11 +17,14 @@ import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Set;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
@@ -29,6 +32,10 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
 
 public class Utils {
+    private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
+    private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
+//    private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.GERMANY);
+
     public static final int REQUEST_WRITE_CODE = 1;
 
     public static boolean isEmailValid(String email) {
@@ -70,6 +77,19 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnected();
     }
 
+    public static void cleanSignatureFile(final String signatureFileName) {
+        final File signatureFile = new File(getCurrentOrderDir(), signatureFileName);
+        if (signatureFile.exists()) signatureFile.delete();
+    }
+
+    public static String getDateStringFromDate(final Date date) {
+        return dateOnly.format(date);
+    }
+
+    public static String getDateTimeStringFromDate(final Date date) {
+        return dateAndTime.format(date);
+    }
+
     @Nullable
     public static File getCurrentOrderDir() {
         File currentDir = Session.getCurrentOrderDir();
@@ -84,16 +104,6 @@ public class Utils {
 
     public static String getUserIdFromEmail(@NonNull final String email) {
         return email.substring(0, email.indexOf('@'));
-    }
-
-//    public static void cleanCurrentReportFile(final Context context){
-//        final File reportFile = new File(Utils.getCurrentOrderFolder(context), signatureFileName);
-//        if (signatureFIle.exists()) signatureFIle.delete();
-//    }
-
-    public static void cleanSignatureFile(final String signatureFileName) {
-        final File signatureFile = new File(getCurrentOrderDir(), signatureFileName);
-        if (signatureFile.exists()) signatureFile.delete();
     }
 
     //TODO IMPLEMENT LANGUAGE SUPPORT
@@ -123,12 +133,17 @@ public class Utils {
         return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + Session.getCurrentOrder() + ".pdf");
     }
 
-    public static int getSetIndex(Set<Map.Entry<String,JsonElement>> set, Map.Entry<String,JsonElement> value) {
+    public static int getSetIndex(Set<Map.Entry<String, JsonElement>> set, Map.Entry<String, JsonElement> value) {
         int result = 0;
-        for (Object entry:set) {
+        for (Object entry : set) {
             if (entry.equals(value)) return result;
             result++;
         }
         return -1;
     }
 }
+
+//    public static void cleanCurrentReportFile(final Context context){
+//        final File reportFile = new File(Utils.getCurrentOrderFolder(context), signatureFileName);
+//        if (signatureFIle.exists()) signatureFIle.delete();
+//    }

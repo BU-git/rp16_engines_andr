@@ -10,20 +10,22 @@ import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 
 public class OrderPageDetailActivity extends BaseActivity {
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
     @Bind(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
 
@@ -101,7 +103,7 @@ public class OrderPageDetailActivity extends BaseActivity {
             orderTown.setText(currentOrder.getRelation().getTown());
             orderPhone.setText(currentOrder.getRelation().getTelephone());
             orderEmployee.setText(currentOrder.getEmployee().getName());
-            orderDate.setText(simpleDateFormat.format(currentOrder.getDate()));
+            orderDate.setText(Utils.getDateStringFromDate(currentOrder.getDate()));
             orderReference.setText(currentOrder.getReference());
             orderInstallation.setText(currentOrder.getInstallation().getName());
             orderInstallationTown.setText(currentOrder.getInstallation().getTown());
@@ -116,7 +118,10 @@ public class OrderPageDetailActivity extends BaseActivity {
 
     @OnClick(R.id.service_engenieer_start_button)
     public void onStartClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), OrderProcessingFirstStageActivity.class);
+        DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_START_TIME, new Date());
+        DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_IN_PROGRESS);
+
+        Intent intent = new Intent(getApplicationContext(), OrderWorkScreenActivity.class);
         startActivity(intent);
     }
 

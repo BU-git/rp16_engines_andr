@@ -42,13 +42,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
@@ -58,7 +59,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private static final int PDF_LOADER_ID = 1;
     private static final int MAIL_LOADER_ID = 2;
     private MailHelper mailHelper;
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private File pdfReportFile;
     private File pdfTemplate;
     private int zoomFactor = 2;
@@ -222,7 +222,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             String pdfRelationTelephone = currentOrder.getRelation().getTelephone() + "\n";
             String pdfEmployee = currentOrder.getEmployee().getName();
 
-            String pdfDate = simpleDateFormat.format(currentOrder.getDate()) + "\n";
+            String pdfDate = Utils.getDateStringFromDate(currentOrder.getDate()) + "\n";
             String pdfReference = currentOrder.getReference() + "\n";
             String pdfInstallation = currentOrder.getInstallation().getName() + "\n";
             String pdfInstallationAddress = currentOrder.getInstallation().getAddress() + "\n";
@@ -356,6 +356,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     @OnClick(R.id.pdf_button_done)
     public void onDoneClick(View v) {
+        DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
 
         Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);

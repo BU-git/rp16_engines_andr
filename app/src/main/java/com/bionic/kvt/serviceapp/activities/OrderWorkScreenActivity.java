@@ -10,13 +10,12 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.api.Component;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OrderProcessingFirstStageActivity extends BaseActivity {
+public class OrderWorkScreenActivity extends BaseActivity {
     @Bind(R.id.process_order_page_hint)
     TextView nextButtonHint;
 
@@ -32,7 +31,7 @@ public class OrderProcessingFirstStageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_processing_first_stage);
+        setContentView(R.layout.activity_order_work_screen);
         ButterKnife.bind(this);
 
         // Exit if Session is empty

@@ -6,7 +6,6 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-
 public class Order extends RealmObject {
     @PrimaryKey
     private long number;
@@ -24,12 +23,15 @@ public class Order extends RealmObject {
     private RealmList<Part> parts; //Onderdelen
     private RealmList<Info> extraInfo; //ExtraInfo
 
+    private int orderStatus;
+    private Date maintenanceStartTime;
+    private Date maintenanceEndTime;
+
     // Service fields
     private Date importDate;
     private Date lastServerChangeDate;
     private Date lastAndroidChangeDate;
-    private int orderStatus;
-    private String employeeEmail; // Copy of employee -> email for search optimisation
+    private String employeeEmail; // Copy of employee.email for search optimisation
 
     public long getNumber() {
         return number;
@@ -165,6 +167,22 @@ public class Order extends RealmObject {
 
     public void setEmployeeEmail(String employeeEmail) {
         this.employeeEmail = employeeEmail;
+    }
+
+    public Date getMaintenanceStartTime() {
+        return maintenanceStartTime;
+    }
+
+    public void setMaintenanceStartTime(Date maintenanceStartTime) {
+        this.maintenanceStartTime = maintenanceStartTime;
+    }
+
+    public Date getMaintenanceEndTime() {
+        return maintenanceEndTime;
+    }
+
+    public void setMaintenanceEndTime(Date maintenanceEndTime) {
+        this.maintenanceEndTime = maintenanceEndTime;
     }
 
     @Override

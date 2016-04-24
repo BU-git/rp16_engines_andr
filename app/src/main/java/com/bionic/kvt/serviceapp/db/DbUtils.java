@@ -4,6 +4,7 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -14,12 +15,15 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
 
 public class DbUtils {
 
+    // Completely erase all database
     public static void dropDatabase() {
         final Realm realm = Realm.getDefaultInstance();
         try {
@@ -112,8 +116,7 @@ public class DbUtils {
             Session.addToSessionLog("Added " + Session.getOrderOverviewList().size() + " orders to view.");
     }
 
-    public static List<OrderBrief> getOrdersToBeUpdated(
-            final List<OrderBrief> serverOrderBriefList) {
+    public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Looking for orders to be updated.");
 
@@ -139,7 +142,7 @@ public class DbUtils {
         return ordersToBeUpdated;
     }
 
-    private static boolean isOrderNewerOnServer(Order orderInDb, OrderBrief orderBrief) {
+    private static boolean isOrderNewerOnServer(final Order orderInDb, final OrderBrief orderBrief) {
         if (orderInDb.getImportDate()
                 .compareTo(new Date(orderBrief.getImportDate())) != 0)
             return true;
@@ -200,7 +203,7 @@ public class DbUtils {
 
     }
 
-    private static void createNewOrderInDb(com.bionic.kvt.serviceapp.api.Order serverOrder) {
+    private static void createNewOrderInDb(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
 
@@ -351,7 +354,7 @@ public class DbUtils {
         return res;
     }
 
-    public static void setUserSession(String email) {
+    public static void setUserSession(final String email) {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Setting user session: " + email);
 
         Session.clearSession();
@@ -364,13 +367,13 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void setOrderStatus(long orderNumber, int status) {
+    public static void setOrderStatus(final long orderNumber, final int status) {
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Setting order status: " + orderNumber + " status: " + status);
+            Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
         if (order != null) {
             if (order.getOrderStatus() != status) {
                 order.setOrderStatus(status);
@@ -380,4 +383,27 @@ public class DbUtils {
         realm.commitTransaction();
         realm.close();
     }
+
+    public static void setOrderMaintenanceTime(final long orderNumber, final int timeType, final Date time) {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        if (order != null) {
+            switch (timeType) {
+                case ORDER_MAINTENANCE_START_TIME:
+                    order.setMaintenanceStartTime(time);
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance start time: " + Utils.getDateTimeStringFromDate(time));
+                    break;
+                case ORDER_MAINTENANCE_END_TIME:
+                    order.setMaintenanceEndTime(time);
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance end time: " + Utils.getDateTimeStringFromDate(time));
+                    break;
+            }
+        }
+        realm.commitTransaction();
+        realm.close();
+    }
+
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.OrderProcessingFirstStageActivity">
+    tools:context=".activities.OrderWorkScreenActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Some Text?????"
+            android:text="@string/preparations"
             android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
     </LinearLayout>
