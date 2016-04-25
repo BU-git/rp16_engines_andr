@@ -156,7 +156,7 @@
     <string name="preparations">Preparations</string>
 
 
-    <string name="complete_order">Complete order</string>
+    <string name="finish_report">Finish service report</string>
     <string name="sign_report">Sign report</string>
     <string name="show_report">Show report</string>
 </resources>
