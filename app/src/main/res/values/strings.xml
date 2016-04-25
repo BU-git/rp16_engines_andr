@@ -38,7 +38,8 @@
     <string name="accepted">Accepted</string>
     <string name="start">Start</string>
 
-    <string name="pdf_report">PDF Report #</string>
+    <string name="pdf_report">PDF Report</string>
+    <string name="pdf_report_preview">PDF Report preview</string>
     <string name="send_pdf">Send in e-mail</string>
     <string name="accept_instructions">Please, accept instructions to start.</string>
     <string name="job_description">Job description</string>
@@ -66,7 +67,8 @@
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
     <string name="new_lmra_template">New Dangerous Situation</string>
-    <string name="generating_pdf_document">PDF Document:</string>
+    <string name="generating_pdf_document">PDF document:</string>
+    <string name="generating_pdf_preview_document">PDF document (preview):</string>
     <string name="open_file_for_preview">Open file for preview.</string>
     <string name="component_defects">Component defects</string>
     <string name="measurements">Measurements</string>
@@ -153,4 +155,5 @@
     <!--EMail dialog-->
     <string name="email_dialog_title">Send email to:</string>
     <string name="preparations">Preparations</string>
+    <string name="complete_order">Complete order</string>
 </resources>

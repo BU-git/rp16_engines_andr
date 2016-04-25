@@ -38,6 +38,7 @@
         <activity android:name=".activities.OrderPageActivity" />
         <activity android:name=".activities.OrderPageDetailActivity" />
         <activity android:name=".activities.PDFReportActivity" />
+        <activity android:name=".activities.PDFReportPreviewActivity" />
         <activity android:name=".activities.OrderWorkScreenActivity" />
         <activity android:name=".activities.LMRAActivity" />
         <activity android:name=".activities.MeasurementsActivity" />

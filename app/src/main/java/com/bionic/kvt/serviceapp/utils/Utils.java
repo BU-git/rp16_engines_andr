@@ -29,6 +29,7 @@ import java.util.Set;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
 
 public class Utils {
@@ -133,8 +134,12 @@ public class Utils {
         return pdfTemplate;
     }
 
-    public static File getPDFReportFileName() {
-        return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + Session.getCurrentOrder() + ".pdf");
+    public static File getPDFReportFileName(final boolean preview) {
+        if (preview) {
+            return new File(getCurrentOrderDir(), PDF_REPORT_PREVIEW_FILE_NAME + Session.getCurrentOrder() + ".pdf");
+        } else {
+            return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + Session.getCurrentOrder() + ".pdf");
+        }
     }
 
     public static int getSetIndex(Set<Map.Entry<String, JsonElement>> set, Map.Entry<String, JsonElement> value) {

@@ -35,9 +35,7 @@ public class JobRulesActivity extends BaseActivity {
 
     @OnClick(R.id.nsa_save_button)
     public void onSaveClick(View v) {
-        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
-        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
-        Intent intent = new Intent(getApplicationContext(), SignaturesActivity.class);
+        Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);
         startActivity(intent);
     }
 }

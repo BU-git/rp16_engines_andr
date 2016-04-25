@@ -83,7 +83,7 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_complete)
     public void onCompleteClick(View v) {
-        final File pdfReportFile = Utils.getPDFReportFileName();
+        final File pdfReportFile = Utils.getPDFReportFileName(false);
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
@@ -177,8 +177,7 @@ public class SignaturesActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //NOOP
-                onConfirmClicked();
+                // onConfirmClicked(); useless because of onResume
             }
         }
     }

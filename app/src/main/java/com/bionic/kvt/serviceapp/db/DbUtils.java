@@ -384,6 +384,18 @@ public class DbUtils {
         realm.close();
     }
 
+    // Return -1 if Order not found
+    public static int getOrderStatus(final long orderNumber) {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
+        int result = -1;
+        final Realm realm = Realm.getDefaultInstance();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        if (order != null) result = order.getOrderStatus();
+        realm.close();
+        return result;
+    }
+
     public static void setOrderMaintenanceTime(final long orderNumber, final int timeType, final Date time) {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
