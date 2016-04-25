@@ -9,21 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.*;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
 
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHolder> {
     private final Context context;
     private List<OrderOverview> orderOverviewList;
-    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     private OnOrderLineClickListener onOrderLineClickListener;
     private OnPDFButtonClickListener onPDFButtonClickListener;
@@ -88,7 +88,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 1: // Column Date
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
-                textCell.setText(simpleDateFormat.format(orderOverviewList.get(row).getDate()));
+                textCell.setText(Utils.getDateStringFromDate(orderOverviewList.get(row).getDate()));
                 break;
 
             case 2: // Column Installation

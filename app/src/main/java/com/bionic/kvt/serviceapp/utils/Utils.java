@@ -34,7 +34,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN
 public class Utils {
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
-//    private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSZ", Locale.GERMANY);
+    private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm", Locale.GERMANY);
 
     public static final int REQUEST_WRITE_CODE = 1;
 
@@ -88,6 +88,10 @@ public class Utils {
 
     public static String getDateTimeStringFromDate(final Date date) {
         return dateAndTime.format(date);
+    }
+
+    public static String getTimeStringFromDate(final Date date) {
+        return time.format(date);
     }
 
     @Nullable

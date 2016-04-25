@@ -176,7 +176,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     }
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Boolean> {
-        private int pdfPageCount = 1;
+        private final int pdfPageCount = 1;
         private final File pdfReportFile;
         private final File pdfTemplate;
 

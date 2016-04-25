@@ -240,8 +240,7 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Override
     public void updateUpdateStatus(String message) {
-        String time = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-        orderUpdateStatusText.setText("[" + time + "] " + message);
+        orderUpdateStatusText.setText("[" + Utils.getTimeStringFromDate(Calendar.getInstance().getTime()) + "] " + message);
     }
 
     @Override

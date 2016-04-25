@@ -119,7 +119,7 @@ public class MailHelper extends javax.mail.Authenticator {
     }
 
     public static class SendMail extends AsyncTaskLoader<Boolean> {
-        private MailHelper mailHelper;
+        private final MailHelper mailHelper;
 
         public SendMail(Context context, MailHelper mailHelper) {
             super(context);

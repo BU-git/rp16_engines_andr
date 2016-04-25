@@ -1,9 +1,5 @@
 package com.bionic.kvt.serviceapp.api;
 
-import android.support.annotation.Nullable;
-
-import java.util.Date;
-
 public class OrderBrief {
 
     /**
