@@ -183,7 +183,10 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
             // Getting Order data for pdf
             String pdfOrderNumber = orderNumber + "\n";
-            String pdfRelation = currentOrder.getRelation().getName() + "\n";
+            String pdfRelation = currentOrder.getRelation().getName();
+            // Temp solution - cutting to long string
+            pdfRelation = pdfRelation.length() > 25 ? pdfRelation.substring(0, 25) : pdfRelation;
+            pdfRelation += "\n";
             String pdfRelationTown = currentOrder.getRelation().getTown() + "\n";
             String pdfPerson = currentOrder.getRelation().getContactPerson() + "\n";
             String pdfRelationTelephone = currentOrder.getRelation().getTelephone() + "\n";
@@ -218,7 +221,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
                 int x = 130;
                 int y = 505;
-                columnText.setSimpleColumn(orderText, x, y, x + 180, y + 150, 22, Element.ALIGN_LEFT);
+                columnText.setSimpleColumn(orderText, x, y, x + 200, y + 150, 22, Element.ALIGN_LEFT);
                 columnText.go();
 
                 orderText = new Phrase(pdfDate +
