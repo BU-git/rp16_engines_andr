@@ -80,7 +80,6 @@
     <string name="signatures">Signatures</string>
     <string name="confirm">Confirm</string>
     <string name="saved">Saved</string>
-    <string name="order_complete">Order complete</string>
     <string name="done">Done</string>
     <string name="fuel_added">Fuel added</string>
     <string name="water_separators_drained">Water separators drained</string>
@@ -155,5 +154,9 @@
     <!--EMail dialog-->
     <string name="email_dialog_title">Send email to:</string>
     <string name="preparations">Preparations</string>
+
+
     <string name="complete_order">Complete order</string>
+    <string name="sing_report">Sign report</string>
+    <string name="show_report">Show report</string>
 </resources>
