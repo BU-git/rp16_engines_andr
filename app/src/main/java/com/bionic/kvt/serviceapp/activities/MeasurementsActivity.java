@@ -3,8 +3,10 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -16,11 +18,20 @@ public class MeasurementsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurements);
         ButterKnife.bind(this);
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() == 0L) {
+            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
     }
 
     @OnClick(R.id.measurements_next_button)
     public void onNextClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), NSAActivity.class);
+        Intent intent = new Intent(getApplicationContext(), JobRulesActivity.class);
         startActivity(intent);
     }
 }

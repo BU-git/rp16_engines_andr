@@ -1,5 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,9 @@ public class OrderWorkScreenActivity extends BaseActivity {
             Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_description));
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)

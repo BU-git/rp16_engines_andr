@@ -80,6 +80,9 @@ public class OrderPageDetailActivity extends BaseActivity {
             return;
         }
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.order_data));
+
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
                 realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -50,9 +51,6 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Bind(R.id.order_page_search_view)
     SearchView searchView;
-
-    @Bind(R.id.service_engineer_id)
-    TextView engineerId;
 
     @Bind(R.id.orders_recycler_view)
     RecyclerView ordersRecyclerView;
@@ -122,7 +120,10 @@ public class OrderPageActivity extends BaseActivity implements
         ).setTextSize(14);
 
         // Configuring engineer Id
-        engineerId.setText(Session.getEngineerName() + " (" + Session.getEngineerEmail() + ")");
+        ActionBar actionBar = getSupportActionBar();
+        String currentEngineer = getText(R.string.service_engineer) + " " + Session.getEngineerName() +
+                " (" + Session.getEngineerEmail() + ")";
+        if (actionBar != null) actionBar.setSubtitle(currentEngineer);
 
         // Configuring Recycler View
         ordersRecyclerView.setHasFixedSize(true);

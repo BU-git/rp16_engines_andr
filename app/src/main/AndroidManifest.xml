@@ -41,10 +41,10 @@
         <activity android:name=".activities.OrderWorkScreenActivity" />
         <activity android:name=".activities.LMRAActivity" />
         <activity android:name=".activities.MeasurementsActivity" />
-        <activity android:name=".activities.NSAActivity" />
+        <activity android:name=".activities.JobRulesActivity" />
 
         <activity
-            android:name=".activities.InsertSignaturesActivity"
+            android:name=".activities.SignaturesActivity"
             android:screenOrientation="sensorPortrait" />
         <activity android:name=".activities.DebugActivity" />
 

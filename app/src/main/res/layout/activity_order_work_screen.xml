@@ -9,25 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:minHeight="?listPreferredItemHeightSmall"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:textAppearance="?android:textAppearanceMedium">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="@string/job_description"
-            android:textColor="@color/colorSecondaryText"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:minHeight="?listPreferredItemHeightSmall"
         android:paddingBottom="@dimen/activity_horizontal_margin"

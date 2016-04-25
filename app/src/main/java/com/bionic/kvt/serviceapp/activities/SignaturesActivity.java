@@ -27,7 +27,7 @@ import butterknife.OnClick;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
-public class InsertSignaturesActivity extends BaseActivity {
+public class SignaturesActivity extends BaseActivity {
     private static final int ENGINEER_BUTTON = 1;
     private static final int CLIENT_BUTTON = 2;
     private int currentButtonClicked;
@@ -50,7 +50,7 @@ public class InsertSignaturesActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_insert_signatures);
+        setContentView(R.layout.activity_signatures);
         ButterKnife.bind(this);
 
         // Exit if Session is empty
@@ -59,6 +59,8 @@ public class InsertSignaturesActivity extends BaseActivity {
             return;
         }
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.signatures));
     }
 
     @OnClick(R.id.button_clear_engineer)
