@@ -3,14 +3,19 @@ package com.bionic.kvt.serviceapp.utils;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.pdf.PdfRenderer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
@@ -150,6 +155,40 @@ public class Utils {
         }
         return -1;
     }
+
+
+    public static void showPDFReport(@NonNull final Context context,
+                                     @NonNull final File pdfReportFile,
+                                     final int zoomFactor,
+                                     @NonNull final ImageView pdfView) {
+        if (!pdfReportFile.exists()) {
+            Toast.makeText(context, "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportFile);
+            return;
+        }
+
+        try (ParcelFileDescriptor mFileDescriptor =
+                     ParcelFileDescriptor.open(pdfReportFile, ParcelFileDescriptor.MODE_READ_ONLY)) {
+            final PdfRenderer mPdfRenderer = new PdfRenderer(mFileDescriptor);
+            final PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
+
+            final int pageHeight = mCurrentPage.getHeight() * zoomFactor;
+            final int pageWidth = mCurrentPage.getWidth() * zoomFactor;
+
+            final Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
+            mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            pdfView.setImageBitmap(bitmap);
+
+            mCurrentPage.close();
+            mPdfRenderer.close();
+        } catch (IOException e) {
+            Toast.makeText(context, "Some error during PDF file open", Toast.LENGTH_SHORT).show();
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
+        }
+    }
+
 }
 
 //    public static void cleanCurrentReportFile(final Context context){

@@ -12,6 +12,7 @@
         android:background="@color/colorPrimary"
         android:minHeight="?listPreferredItemHeightSmall"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:textAppearance="?android:textAppearanceMedium">
@@ -26,19 +27,19 @@
             android:textColor="@color/colorSecondaryText"
             android:textStyle="bold" />
 
+        <Button
+            android:id="@+id/pdf_report_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:text="@string/send_pdf" />
+
         <ZoomControls
             android:id="@+id/zoomControls"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_pdf_zoom" />
-
-        <Button
-            android:id="@+id/pdf_report_send_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:enabled="false"
-            android:text="@string/send_pdf" />
 
     </LinearLayout>
 

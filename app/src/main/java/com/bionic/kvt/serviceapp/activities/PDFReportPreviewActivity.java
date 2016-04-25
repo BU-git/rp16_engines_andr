@@ -2,11 +2,7 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.pdf.PdfRenderer;
 import android.os.Bundle;
-import android.os.ParcelFileDescriptor;
-import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -40,7 +36,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
@@ -56,6 +51,9 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
     @Bind(R.id.pdf_preview_zoomControls)
     ZoomControls zoomControls;
+
+    @Bind(R.id.pdf_preview_bitmap)
+    ImageView pdfView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +78,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             public void onClick(View v) {
                 if (zoomFactor == 4) return;
                 zoomFactor++;
-                showPDFReport(pdfReportPreviewFile);
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
             }
         });
 
@@ -89,7 +87,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             public void onClick(View v) {
                 if (zoomFactor == 1) return;
                 zoomFactor--;
-                showPDFReport(pdfReportPreviewFile);
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
             }
         });
 
@@ -134,7 +132,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
         switch (loader.getId()) {
             case PDF_LOADER_ID:
-                showPDFReport(pdfReportPreviewFile);
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
                 break;
         }
     }
@@ -271,37 +269,6 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             return false;
         }
 
-    }
-
-    private void showPDFReport(@NonNull final File pdfReportPreview) {
-        if (!pdfReportPreview.exists()) {
-            Toast.makeText(getApplicationContext(), "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportPreview);
-            return;
-        }
-
-        try {
-            ParcelFileDescriptor mFileDescriptor = ParcelFileDescriptor.open(pdfReportPreview, ParcelFileDescriptor.MODE_READ_ONLY);
-            PdfRenderer mPdfRenderer = new PdfRenderer(mFileDescriptor);
-            PdfRenderer.Page mCurrentPage = mPdfRenderer.openPage(0);
-
-            int pageHeight = mCurrentPage.getHeight() * zoomFactor;
-            int pageWidth = mCurrentPage.getWidth() * zoomFactor;
-
-            Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
-            mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-            ImageView pdfView = (ImageView) findViewById(R.id.pdf_preview_bitmap);
-            if (pdfView != null) pdfView.setImageBitmap(bitmap);
-
-            mCurrentPage.close();
-            mPdfRenderer.close();
-            mFileDescriptor.close();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Some error during PDF file open", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
-        }
     }
 
     @OnClick(R.id.pdf_preview_button_next)
