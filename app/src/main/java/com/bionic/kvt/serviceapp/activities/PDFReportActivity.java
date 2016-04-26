@@ -209,8 +209,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         @Override
         public Boolean loadInBackground() {
-            final long orderNumber = Session.getCurrentOrder();
-
             try {
                 final PdfReader pdfReader = new PdfReader(pdfReportPreviewFile.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
