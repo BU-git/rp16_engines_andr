@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorSecondaryBackground"
+    android:minHeight="?listPreferredItemHeightSmall"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/measurements_list_item_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft" />
+
+    <TextView
+        android:id="@+id/measurements_list_item_data"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/measurements_list_item_unit"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical" />
+
+</LinearLayout>
