@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.DrawingView;
 
@@ -23,6 +25,7 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
@@ -47,6 +50,12 @@ public class SignaturesActivity extends BaseActivity {
     @Bind(R.id.button_confirm_client)
     ToggleButton buttonConfirmClient;
 
+    @Bind(R.id.signature_engineer_name)
+    EditText engineerName;
+
+    @Bind(R.id.signature_client_name)
+    EditText clientName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +70,14 @@ public class SignaturesActivity extends BaseActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.signatures));
+
+        final Realm realm = Realm.getDefaultInstance();
+        final Order currentOrder = realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
+        if (currentOrder != null) {
+            clientName.setText(currentOrder.getRelation().getContactPerson());
+            engineerName.setText(currentOrder.getEmployee().getName());
+        }
+        realm.close();
     }
 
     @OnClick(R.id.button_clear_engineer)
@@ -87,6 +104,8 @@ public class SignaturesActivity extends BaseActivity {
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
+        intent.putExtra("ENGINEER_NAME", engineerName.getText().toString());
+        intent.putExtra("CLIENT_NAME", clientName.getText().toString());
         startActivity(intent);
     }
 

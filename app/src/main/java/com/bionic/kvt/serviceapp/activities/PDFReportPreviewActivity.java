@@ -16,6 +16,8 @@ import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
+import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -197,9 +199,25 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             String pdfInstallation = currentOrder.getInstallation().getName() + "\n";
             String pdfInstallationAddress = currentOrder.getInstallation().getAddress() + "\n";
             String pdfInstallationTown = currentOrder.getInstallation().getTown() + "\n";
-            String pdfWorkingHours = "?????????????";
+
+            String pdfWorkingHours = " ";
+            final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
+                    .equalTo("number", orderNumber).findFirst();
+            if (currentMeasurements != null)
+                pdfWorkingHours = currentMeasurements.getWorkingHours();
 
             String pdfTask = currentOrder.getTasks().first().getLtxa1();
+
+            String repairAdvice = "No";
+            String operationText = "";
+            String remarksText = "";
+            final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
+                    .equalTo("number", orderNumber).findFirst();
+            if (currentJobRules != null) {
+                repairAdvice = currentJobRules.isRepairAdvice() ? "Yes" : "No";
+                operationText = currentJobRules.getOperationsText();
+                remarksText = currentJobRules.getRemarksText();
+            }
 
             realm.close();
 
@@ -210,7 +228,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
                 final ColumnText columnText = new ColumnText(contentByte);
 
-                Phrase orderText = new Phrase(pdfOrderNumber +
+                Phrase orderText1 = new Phrase(pdfOrderNumber +
                         pdfRelation +
                         pdfRelationTown +
                         pdfPerson +
@@ -219,12 +237,12 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                         font
                 );
 
-                int x = 130;
-                int y = 505;
-                columnText.setSimpleColumn(orderText, x, y, x + 200, y + 150, 22, Element.ALIGN_LEFT);
+                int x = 125;
+                int y = 515;
+                columnText.setSimpleColumn(orderText1, x, y, x + 200, y + 150, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
-                orderText = new Phrase(pdfDate +
+                Phrase orderText2 = new Phrase(pdfDate +
                         pdfReference +
                         pdfInstallation +
                         pdfInstallationAddress +
@@ -232,30 +250,37 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                         pdfWorkingHours,
                         font
                 );
-                x = 420;
-                y = 505;
-                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 150, 22, Element.ALIGN_LEFT);
+                x = 425;
+                y = 515;
+                columnText.setSimpleColumn(orderText2, x, y, x + 150, y + 150, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
-
-                orderText = new Phrase(pdfTask, font);
-                x = 130;
-                y = 483;
-                columnText.setSimpleColumn(orderText, x, y, x + 400, y + 25, 22, Element.ALIGN_LEFT);
+                Phrase orderText3 = new Phrase(pdfTask, font);
+                x = 125;
+                y = 495;
+                columnText.setSimpleColumn(orderText3, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
-                orderText = new Phrase(pdfEmployee, font);
-                x = 355;
-                y = 113;
-                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
-                columnText.go();
+                Phrase orderText4 = new Phrase(operationText, font);
+                x = 60;
+                y = 325;
+                ColumnText columnText1 = new ColumnText(contentByte);
+                columnText1.setSimpleColumn(orderText4, x, y, x + 490, y + 150, 15f, Element.ALIGN_TOP);
+                columnText1.go();
 
-                orderText = new Phrase(pdfPerson, font);
-                x = 120;
-                y = 113;
-                columnText.setSimpleColumn(orderText, x, y, x + 150, y + 25, 22, Element.ALIGN_LEFT);
-                columnText.go();
+                Phrase orderText5 = new Phrase(repairAdvice, font);
+                x = 150;
+                y = 293;
+                ColumnText columnText2 = new ColumnText(contentByte);
+                columnText2.setSimpleColumn(orderText5, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
+                columnText2.go();
 
+                Phrase orderText6 = new Phrase(remarksText, font);
+                x = 60;
+                y = 178;
+                ColumnText columnText3 = new ColumnText(contentByte);
+                columnText3.setSimpleColumn(orderText6, x, y, x + 490, y + 100, 15f, Element.ALIGN_LEFT);
+                columnText3.go();
 
                 pdfStamper.close();
             } catch (FileNotFoundException e) {

@@ -77,6 +77,7 @@
 
     <string name="text_service_engineer">Service engineer</string>
     <string name="text_client">Client</string>
+    <string name="text_name">Name:</string>
     <string name="signatures">Signatures</string>
     <string name="confirm">Confirm</string>
     <string name="saved">Saved</string>
@@ -139,7 +140,7 @@
         <item>-</item>
     </string-array>
 
-    <string name="clear">Clear</string>
+    <string name="clear">Clear signature</string>
 
     <string-array name="MeasurementsHeader">
         <item>Motor: Compression test</item>

@@ -54,7 +54,7 @@ public class MeasurementsActivity extends BaseActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
 
-        prepareListData();
+        getMeasurementsData();
 
         listMotorAdapter = new MeasurementsExpListAdapter(this, listMotorDataHeader, listMotorDataChild);
         expMotorListView.setAdapter(listMotorAdapter);
@@ -108,6 +108,13 @@ public class MeasurementsActivity extends BaseActivity {
 
     @OnClick(R.id.measurements_next_button)
     public void onNextClick(View v) {
+        saveMeasurements();
+
+        Intent intent = new Intent(getApplicationContext(), JobRulesActivity.class);
+        startActivity(intent);
+    }
+
+    private void saveMeasurements() {
         OrderReportMeasurements currentMeasurements = new OrderReportMeasurements();
         currentMeasurements.setNumber(Session.getCurrentOrder());
         currentMeasurements.setMotorCompressionPressure(listMotorDataChild.get(listMotorDataHeader.get(0)).get(0).getItemValue());
@@ -138,12 +145,9 @@ public class MeasurementsActivity extends BaseActivity {
         currentMeasurements.setWorkingHours(listMotorDataChild.get(listMotorDataHeader.get(7)).get(0).getItemValue());
 
         DbUtils.setOrderReportMeasurements(currentMeasurements);
-
-        Intent intent = new Intent(getApplicationContext(), JobRulesActivity.class);
-        startActivity(intent);
     }
 
-    private void prepareListData() {
+    private void getMeasurementsData() {
         listMotorDataHeader = new ArrayList<>();
         listMotorDataChild = new HashMap<>();
 

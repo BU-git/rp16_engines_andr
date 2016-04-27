@@ -25,7 +25,11 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
 import com.lowagie.text.Image;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
@@ -54,6 +58,9 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private File pdfReportPreviewFile;
     private int zoomFactor = 2;
 
+    private String engineerName;
+    private String clientName;
+
     @Bind(R.id.pdf_report_send_button)
     Button sendButton;
 
@@ -74,6 +81,12 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
         ButterKnife.bind(this);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            engineerName = extras.getString("ENGINEER_NAME");
+            clientName = extras.getString("CLIENT_NAME");
+        }
 
         final long orderNumber = Session.getCurrentOrder();
 
@@ -110,42 +123,52 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         pdfTextLog.setText(pdfReportFileName);
 
 
+        pdfReportFile = Utils.getPDFReportFileName(false);
         if (DbUtils.getOrderStatus(orderNumber) == ORDER_STATUS_COMPLETE) {
             reportBottomLayout.setVisibility(View.GONE);
-        }
-
-        pdfReportFile = Utils.getPDFReportFileName(false);
-        if (pdfReportFile.exists()) { // We have report.
-            sendButton.setEnabled(true);
-            Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
-        } else { // No report. Generating...
-
-            if (!Utils.isExternalStorageWritable()) {
+            if (pdfReportFile.exists()) { // We have report.
+                sendButton.setEnabled(true);
+                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
+            } else {
                 if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Can not write report file to external storage!");
+                    Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
                 Toast.makeText(getApplicationContext(),
-                        "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
-                return;
+                        "ERROR: Can not fint PDF Report file!", Toast.LENGTH_SHORT).show();
             }
 
-            pdfReportPreviewFile = Utils.getPDFReportFileName(true);
-            if (!pdfReportPreviewFile.exists()) {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Can not get pdf preview file!");
-                Toast.makeText(getApplicationContext(),
-                        "ERROR: Can not get PDF preview file!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            getSupportLoaderManager().initLoader(PDF_LOADER_ID, null, this);
-
+            return;
         }
+
+        // Generating...
+        if (!Utils.isExternalStorageWritable()) {
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Can not write report file to external storage!");
+            Toast.makeText(getApplicationContext(),
+                    "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (pdfReportFile.exists()) { // Deleting old Report if exist
+            pdfReportFile.delete();
+        }
+
+        pdfReportPreviewFile = Utils.getPDFReportFileName(true);
+        if (!pdfReportPreviewFile.exists()) {
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("Can not get pdf preview file!");
+            Toast.makeText(getApplicationContext(),
+                    "ERROR: Can not get PDF preview file!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        getSupportLoaderManager().initLoader(PDF_LOADER_ID, null, this);
     }
+
 
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle args) {
         if (id == PDF_LOADER_ID)
-            return new GeneratePDFReportFile(this, pdfReportFile, pdfReportPreviewFile);
+            return new GeneratePDFReportFile(this, pdfReportFile, pdfReportPreviewFile, engineerName, clientName);
         if (id == MAIL_LOADER_ID)
             return new MailHelper.SendMail(this, mailHelper);
         return null;
@@ -179,11 +202,19 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         private final int pdfPageCount = 1;
         private final File pdfReportFile;
         private final File pdfReportPreviewFile;
+        private final String engineerName;
+        private final String clientName;
 
-        public GeneratePDFReportFile(Context context, File pdfReportFile, File pdfReportPreviewFile) {
+        public GeneratePDFReportFile(final Context context,
+                                     final File pdfReportFile,
+                                     final File pdfReportPreviewFile,
+                                     final String engineerName,
+                                     final String clientName) {
             super(context);
             this.pdfReportFile = pdfReportFile;
             this.pdfReportPreviewFile = pdfReportPreviewFile;
+            this.engineerName = engineerName;
+            this.clientName = clientName;
         }
 
         @Override
@@ -212,19 +243,34 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             try {
                 final PdfReader pdfReader = new PdfReader(pdfReportPreviewFile.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
+                final Font font = new Font(Font.HELVETICA, 11, Font.NORMAL);
                 final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
+                final ColumnText columnText = new ColumnText(contentByte);
+
+                Phrase orderText7 = new Phrase(engineerName, font);
+                int x = 355;
+                int y = 58;
+                columnText.setSimpleColumn(orderText7, x, y, x + 150, y + 25, 21.8f, Element.ALIGN_LEFT);
+                columnText.go();
+
+                Phrase orderText8 = new Phrase(clientName, font);
+                x = 120;
+                y = 58;
+                columnText.setSimpleColumn(orderText8, x, y, x + 150, y + 25, 21.8f, Element.ALIGN_LEFT);
+                columnText.go();
+
 
                 String signatureFileName = SIGNATURE_FILE_ENGINEER;
                 String signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
                 Image signatureEngineer = Image.getInstance(signaturePath);
-                signatureEngineer.setAbsolutePosition(325f, 135f);
+                signatureEngineer.setAbsolutePosition(325f, 80f);
                 signatureEngineer.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureEngineer);
 
                 signatureFileName = SIGNATURE_FILE_CLIENT;
                 signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
                 Image signatureClient = Image.getInstance(signaturePath);
-                signatureClient.setAbsolutePosition(102f, 135f);
+                signatureClient.setAbsolutePosition(102f, 80f);
                 signatureClient.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureClient);
 

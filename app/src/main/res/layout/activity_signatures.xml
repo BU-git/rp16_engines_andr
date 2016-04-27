@@ -34,16 +34,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="?listPreferredItemHeightSmall"
+                android:text="@string/text_name"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/signature_engineer_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="64dp"
+                android:layout_weight="1"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/button_clear_engineer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear" />
+                android:text="@string/clear" />
 
             <ToggleButton
                 android:id="@+id/button_confirm_engineer"
@@ -56,6 +72,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:gravity="center_vertical"
             android:minHeight="?listPreferredItemHeightSmall"
             android:text="@string/text_client"
@@ -71,10 +88,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:minHeight="?listPreferredItemHeightSmall"
+                android:text="@string/text_name"
+                android:textAppearance="?android:textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/signature_client_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="64dp"
+                android:layout_weight="1"
+                android:inputType="textPersonName"
+                android:maxLines="1" />
 
             <Button
                 android:id="@+id/button_clear_client"
