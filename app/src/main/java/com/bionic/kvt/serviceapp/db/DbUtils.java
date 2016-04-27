@@ -397,7 +397,7 @@ public class DbUtils {
     }
 
     public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Job Rules report");
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Job Rules");
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -407,6 +407,22 @@ public class DbUtils {
         if (currentJobRules != null) currentJobRules.removeFromRealm();
         // Save new
         realm.copyToRealm(jobRules);
+        realm.commitTransaction();
+        realm.close();
+    }
+
+
+    public static void setOrderReportMeasurements(final OrderReportMeasurements measurements) {
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Measurements");
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        // Remove if already exist
+        final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
+                .equalTo("number", measurements.getNumber()).findFirst();
+        if (currentMeasurements != null) currentMeasurements.removeFromRealm();
+        // Save new
+        realm.copyToRealm(measurements);
         realm.commitTransaction();
         realm.close();
     }

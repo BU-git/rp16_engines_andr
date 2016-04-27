@@ -7,32 +7,32 @@ public class OrderReportMeasurements extends RealmObject {
     @PrimaryKey
     private long number;
 
-    private float motorCompressionPressure; // Motor: Compression test [bar]
+    private String motorCompressionPressure; // Motor: Compression test [bar]
 
-    private float motorOilPressure; // Motor: Oil [bar]
-    private float motorOilTemperature; // Motor: Oil [C]
+    private String motorOilPressure; // Motor: Oil [bar]
+    private String motorOilTemperature; // Motor: Oil [C]
     private String motorOilType; // Motor: Oil
     private String motorOilManufacture; // Motor: Oil
 
-    private float motorCoolantTemperature; // Motor: Coolant [C]
-    private float motorCoolantAcidity; // Motor: Coolant [pH]
-    private float motorCoolantFrost; // Motor: Coolant [C]
+    private String motorCoolantTemperature; // Motor: Coolant [C]
+    private String motorCoolantAcidity; // Motor: Coolant [pH]
+    private String motorCoolantFrost; // Motor: Coolant [C]
 
-    private float installationEnvironmentTemperature; // Installation: Environment [C]
+    private String installationEnvironmentTemperature; // Installation: Environment [C]
 
-    private float installationTestVoltage; // Installation: Test run charge [Volt]
-    private float installationTestAmperePhase1; // Installation: Test run charge [Ampere]
-    private float installationTestAmperePhase2; // Installation: Test run charge [Ampere]
-    private float installationTestAmperePhase3; // Installation: Test run charge [Ampere]
-    private float installationTestPower; // Installation: Test run charge [kW]
-    private float installationTestFrequency; // Installation: Test run charge [Hz]
+    private String installationTestVoltage; // Installation: Test run charge [Volt]
+    private String installationTestAmperePhase1; // Installation: Test run charge [Ampere]
+    private String installationTestAmperePhase2; // Installation: Test run charge [Ampere]
+    private String installationTestAmperePhase3; // Installation: Test run charge [Ampere]
+    private String installationTestPower; // Installation: Test run charge [kW]
+    private String installationTestFrequency; // Installation: Test run charge [Hz]
 
-    private float installationTestNoLoadFrequency; // Installation: Test run without load [Hz]
+    private String installationTestNoLoadFrequency; // Installation: Test run without load [Hz]
 
-    private float exhaustGasesTemperature; // Exhaust: Exhaust gases [C]
-    private float exhaustGasesPressure; // Exhaust: Exhaust gases [Mbar]
+    private String exhaustGasesTemperature; // Exhaust: Exhaust gases [C]
+    private String exhaustGasesPressure; // Exhaust: Exhaust gases [Mbar]
 
-    private float workingHours; // Working hours [Hours]
+    private String workingHours; // Working hours [Hours]
 
     public long getNumber() {
         return number;
@@ -42,27 +42,27 @@ public class OrderReportMeasurements extends RealmObject {
         this.number = number;
     }
 
-    public float getMotorCompressionPressure() {
+    public String getMotorCompressionPressure() {
         return motorCompressionPressure;
     }
 
-    public void setMotorCompressionPressure(float motorCompressionPressure) {
+    public void setMotorCompressionPressure(String motorCompressionPressure) {
         this.motorCompressionPressure = motorCompressionPressure;
     }
 
-    public float getMotorOilPressure() {
+    public String getMotorOilPressure() {
         return motorOilPressure;
     }
 
-    public void setMotorOilPressure(float motorOilPressure) {
+    public void setMotorOilPressure(String motorOilPressure) {
         this.motorOilPressure = motorOilPressure;
     }
 
-    public float getMotorOilTemperature() {
+    public String getMotorOilTemperature() {
         return motorOilTemperature;
     }
 
-    public void setMotorOilTemperature(float motorOilTemperature) {
+    public void setMotorOilTemperature(String motorOilTemperature) {
         this.motorOilTemperature = motorOilTemperature;
     }
 
@@ -82,115 +82,115 @@ public class OrderReportMeasurements extends RealmObject {
         this.motorOilManufacture = motorOilManufacture;
     }
 
-    public float getMotorCoolantTemperature() {
+    public String getMotorCoolantTemperature() {
         return motorCoolantTemperature;
     }
 
-    public void setMotorCoolantTemperature(float motorCoolantTemperature) {
+    public void setMotorCoolantTemperature(String motorCoolantTemperature) {
         this.motorCoolantTemperature = motorCoolantTemperature;
     }
 
-    public float getMotorCoolantAcidity() {
+    public String getMotorCoolantAcidity() {
         return motorCoolantAcidity;
     }
 
-    public void setMotorCoolantAcidity(float motorCoolantAcidity) {
+    public void setMotorCoolantAcidity(String motorCoolantAcidity) {
         this.motorCoolantAcidity = motorCoolantAcidity;
     }
 
-    public float getMotorCoolantFrost() {
+    public String getMotorCoolantFrost() {
         return motorCoolantFrost;
     }
 
-    public void setMotorCoolantFrost(float motorCoolantFrost) {
+    public void setMotorCoolantFrost(String motorCoolantFrost) {
         this.motorCoolantFrost = motorCoolantFrost;
     }
 
-    public float getInstallationEnvironmentTemperature() {
+    public String getInstallationEnvironmentTemperature() {
         return installationEnvironmentTemperature;
     }
 
-    public void setInstallationEnvironmentTemperature(float installationEnvironmentTemperature) {
+    public void setInstallationEnvironmentTemperature(String installationEnvironmentTemperature) {
         this.installationEnvironmentTemperature = installationEnvironmentTemperature;
     }
 
-    public float getInstallationTestVoltage() {
+    public String getInstallationTestVoltage() {
         return installationTestVoltage;
     }
 
-    public void setInstallationTestVoltage(float installationTestVoltage) {
+    public void setInstallationTestVoltage(String installationTestVoltage) {
         this.installationTestVoltage = installationTestVoltage;
     }
 
-    public float getInstallationTestAmperePhase1() {
+    public String getInstallationTestAmperePhase1() {
         return installationTestAmperePhase1;
     }
 
-    public void setInstallationTestAmperePhase1(float installationTestAmperePhase1) {
+    public void setInstallationTestAmperePhase1(String installationTestAmperePhase1) {
         this.installationTestAmperePhase1 = installationTestAmperePhase1;
     }
 
-    public float getInstallationTestAmperePhase2() {
+    public String getInstallationTestAmperePhase2() {
         return installationTestAmperePhase2;
     }
 
-    public void setInstallationTestAmperePhase2(float installationTestAmperePhase2) {
+    public void setInstallationTestAmperePhase2(String installationTestAmperePhase2) {
         this.installationTestAmperePhase2 = installationTestAmperePhase2;
     }
 
-    public float getInstallationTestAmperePhase3() {
+    public String getInstallationTestAmperePhase3() {
         return installationTestAmperePhase3;
     }
 
-    public void setInstallationTestAmperePhase3(float installationTestAmperePhase3) {
+    public void setInstallationTestAmperePhase3(String installationTestAmperePhase3) {
         this.installationTestAmperePhase3 = installationTestAmperePhase3;
     }
 
-    public float getInstallationTestPower() {
+    public String getInstallationTestPower() {
         return installationTestPower;
     }
 
-    public void setInstallationTestPower(float installationTestPower) {
+    public void setInstallationTestPower(String installationTestPower) {
         this.installationTestPower = installationTestPower;
     }
 
-    public float getInstallationTestFrequency() {
+    public String getInstallationTestFrequency() {
         return installationTestFrequency;
     }
 
-    public void setInstallationTestFrequency(float installationTestFrequency) {
+    public void setInstallationTestFrequency(String installationTestFrequency) {
         this.installationTestFrequency = installationTestFrequency;
     }
 
-    public float getInstallationTestNoLoadFrequency() {
+    public String getInstallationTestNoLoadFrequency() {
         return installationTestNoLoadFrequency;
     }
 
-    public void setInstallationTestNoLoadFrequency(float installationTestNoLoadFrequency) {
+    public void setInstallationTestNoLoadFrequency(String installationTestNoLoadFrequency) {
         this.installationTestNoLoadFrequency = installationTestNoLoadFrequency;
     }
 
-    public float getExhaustGasesTemperature() {
+    public String getExhaustGasesTemperature() {
         return exhaustGasesTemperature;
     }
 
-    public void setExhaustGasesTemperature(float exhaustGasesTemperature) {
+    public void setExhaustGasesTemperature(String exhaustGasesTemperature) {
         this.exhaustGasesTemperature = exhaustGasesTemperature;
     }
 
-    public float getExhaustGasesPressure() {
+    public String getExhaustGasesPressure() {
         return exhaustGasesPressure;
     }
 
-    public void setExhaustGasesPressure(float exhaustGasesPressure) {
+    public void setExhaustGasesPressure(String exhaustGasesPressure) {
         this.exhaustGasesPressure = exhaustGasesPressure;
     }
 
-    public float getWorkingHours() {
+    public String getWorkingHours() {
         return workingHours;
     }
 
-    public void setWorkingHours(float workingHours) {
+    public void setWorkingHours(String workingHours) {
         this.workingHours = workingHours;
     }
 }
