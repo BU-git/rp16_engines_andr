@@ -5,8 +5,8 @@ import io.realm.RealmObject;
 public class User extends RealmObject {
     private String email;
     private String name;
-    private String password;
-    private boolean isOnServer;
+    private String passwordHash;
+    private String salt;
 
     public String getName() {
         return name;
@@ -24,20 +24,20 @@ public class User extends RealmObject {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
-    public boolean isOnServer() {
-        return isOnServer;
+    public String getSalt() {
+        return salt;
     }
 
-    public void setOnServer(boolean onServer) {
-        isOnServer = onServer;
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class User extends RealmObject {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("email='").append(email).append('\'');
         sb.append(", name='").append(name).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", isOnServer=").append(isOnServer);
+        sb.append(", passwordHash='").append(passwordHash).append('\'');
+        sb.append(", salt='").append(salt).append('\'');
         sb.append('}');
         return sb.toString();
     }

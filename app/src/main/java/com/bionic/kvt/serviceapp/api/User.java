@@ -3,7 +3,8 @@ package com.bionic.kvt.serviceapp.api;
 public class User {
     private String name;
     private String email;
-    private String password;
+    private String passwordHash;
+    private String salt;
 
     public User() {
     }
@@ -28,12 +29,20 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override
@@ -41,7 +50,8 @@ public class User {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("name='").append(name).append('\'');
         sb.append(", email='").append(email).append('\'');
-        sb.append(", password='").append(password).append('\'');
+        sb.append(", passwordHash='").append(passwordHash).append('\'');
+        sb.append(", salt='").append(salt).append('\'');
         sb.append('}');
         return sb.toString();
     }

@@ -7,11 +7,11 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ServiceConnection {
-    // Request list of all Users currently available in system
-    // URL format /users
+    // Request User data
+    // URL format /user/{userId}
     // Expecting JSON
-    @POST("users")
-    Call<List<User>> getAllUsers();
+    @POST("user/{userId}")
+    Call<User> getUser(@Path("userId") String userId);
 
     // Request list of all Orders currently available for {userId} in brief format
     // URL format /orders/brief/{userId}

@@ -49,8 +49,8 @@ public class DbUtils {
         User user = realm.createObject(User.class);
         user.setName("Demo User");
         user.setEmail("demo@kvt.nl");
-        user.setPassword("ae820b72d36942625b345ec26070073e82a6f0054b2b1d0320561147653d5abe");
-        user.setOnServer(true);
+        user.setPasswordHash("ae820b72d36942625b345ec26070073e82a6f0054b2b1d0320561147653d5abe");
+        user.setSalt("");
         realm.commitTransaction();
 
         realm.close();
@@ -81,6 +81,17 @@ public class DbUtils {
         if (realm.where(User.class).findAll().size() == 0) {
             resetUserTable();
         }
+        realm.close();
+    }
+
+    public static void deleteUser(final String email) {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final User user = realm.where(User.class).equalTo("email", email).findFirst();
+        if (user != null) {
+            user.removeFromRealm();
+        }
+        realm.commitTransaction();
         realm.close();
     }
 
@@ -286,49 +297,31 @@ public class DbUtils {
         realm.close();
     }
 
-    public static int updateUserTableFromServer(final List<com.bionic.kvt.serviceapp.api.User> serverUserList) {
+    public static boolean updateUserTableFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Updating User table from server data.");
 
         final Realm realm = Realm.getDefaultInstance();
+        // Searching for user in DB
+        final User userInDb = realm.where(User.class).equalTo("email", serverUser.getEmail()).findFirst();
 
-        // Set all current users in DB  flag not on server
-        final RealmResults<User> allCurrentUsers =
-                realm.where(User.class).notEqualTo("email", "demo@kvt.nl").findAll();
         realm.beginTransaction();
-        for (int i = allCurrentUsers.size() - 1; i >= 0; i--) {
-            allCurrentUsers.get(i).setOnServer(false);
+        if (userInDb != null) { // We have this user on DB, updating it
+            userInDb.setName(serverUser.getName());
+            userInDb.setEmail(serverUser.getEmail());
+            userInDb.setPasswordHash(serverUser.getPasswordHash());
+            userInDb.setSalt(serverUser.getSalt());
+        } else { // New user, creating it in DB
+            User newUser = realm.createObject(User.class);
+            newUser.setName(serverUser.getName());
+            newUser.setEmail(serverUser.getEmail());
+            newUser.setPasswordHash(serverUser.getPasswordHash());
+            newUser.setSalt(serverUser.getSalt());
         }
         realm.commitTransaction(); //No logic if transaction fail!!!
-
-        // Updating users in DB
-        realm.beginTransaction();
-        for (com.bionic.kvt.serviceapp.api.User userOnServer : serverUserList) {
-            // Searching for user in DB
-            RealmResults<User> getUserInDb = realm.where(User.class)
-                    .equalTo("email", userOnServer.getEmail())
-                    .findAll();
-
-            if (getUserInDb.size() == 1) { // We have this user on DB, updating it
-                User thisUser = getUserInDb.get(0);
-                thisUser.setName(userOnServer.getName());
-                thisUser.setPassword(userOnServer.getPassword());
-                thisUser.setOnServer(true);
-            } else { // New user, creating it in DB
-                User newUser = realm.createObject(User.class);
-                newUser.setName(userOnServer.getName());
-                newUser.setEmail(userOnServer.getEmail());
-                newUser.setPassword(userOnServer.getPassword());
-                newUser.setOnServer(true);
-            }
-        }
-        realm.commitTransaction(); //No logic if transaction fail!!!
-
-        // Returning active Users in DB;
-        final int count = realm.where(User.class).equalTo("isOnServer", true).
-                notEqualTo("email", "demo@kvt.nl").findAll().size();
         realm.close();
-        return count;
+
+        return true;
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
@@ -347,7 +340,7 @@ public class DbUtils {
         Realm realm = Realm.getDefaultInstance();
         boolean res = realm.where(User.class)
                 .equalTo("email", email)
-                .equalTo("password", password)
+                .equalTo("passwordHash", password)
                 .findAll()
                 .size() == 1;
         realm.close();
@@ -411,7 +404,6 @@ public class DbUtils {
         realm.close();
     }
 
-
     public static void setOrderReportMeasurements(final OrderReportMeasurements measurements) {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Measurements");
 
@@ -448,5 +440,4 @@ public class DbUtils {
         realm.commitTransaction();
         realm.close();
     }
-
 }

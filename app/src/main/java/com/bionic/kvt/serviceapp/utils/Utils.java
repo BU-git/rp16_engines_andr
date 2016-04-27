@@ -113,7 +113,7 @@ public class Utils {
     }
 
     public static String getUserIdFromEmail(@NonNull final String email) {
-        return email.substring(0, email.indexOf('@'));
+        return email.replace('.', '_');
     }
 
     //TODO IMPLEMENT LANGUAGE SUPPORT
@@ -190,8 +190,3 @@ public class Utils {
     }
 
 }
-
-//    public static void cleanCurrentReportFile(final Context context){
-//        final File reportFile = new File(Utils.getCurrentOrderFolder(context), signatureFileName);
-//        if (signatureFIle.exists()) signatureFIle.delete();
-//    }

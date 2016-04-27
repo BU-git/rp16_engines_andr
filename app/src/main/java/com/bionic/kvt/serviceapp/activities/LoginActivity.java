@@ -42,6 +42,7 @@ import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,6 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
@@ -144,7 +144,6 @@ public class LoginActivity extends BaseActivity implements
         }
     }
 
-
     //Requests network permissions, if needed
     private boolean requestNetworkStatePermission() {
         Log.i(TAG, "Entering Network Check State");
@@ -187,7 +186,7 @@ public class LoginActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         Session.clearSession();
-        updateUserList();
+//        updateUserList();
     }
 
     /**
@@ -353,6 +352,7 @@ public class LoginActivity extends BaseActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            getUserFromServer(mEmail);
             return DbUtils.isUserLoginValid(mEmail, mPassword);
         }
 
@@ -397,51 +397,41 @@ public class LoginActivity extends BaseActivity implements
 
     }
 
-    private void updateUserList() {
+    private void getUserFromServer(final String email) {
         // Is device connected to network
         if (!Utils.isNetworkConnected(getApplicationContext())) {
             showConnectionMessage("No connection to network.");
             return;
         }
 
-        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
+        final Call<User> userRequest =
+                Session.getServiceConnection().getUser(Utils.getUserIdFromEmail(email));
 
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Connecting to server: " + userListRequest.request());
+            Session.addToSessionLog("Connecting to server: " + userRequest.request());
 
-        userListRequest.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(final Call<List<User>> call,
-                                   final Response<List<User>> response) {
-                if (response.isSuccessful()) {
-
-                    if (response.body() == null || response.body().size() == 0) {
-                        showConnectionMessage("Connection successful. No users on server found.");
-                        DbUtils.resetUserTable();
-                        return;
-                    }
-
-                    int activeUsers = DbUtils.updateUserTableFromServer(response.body());
-                    if (activeUsers == 0) {
-                        showConnectionMessage("Connection successful. No active users on server.");
-                    } else {
-                        showConnectionMessage("Connection successful. Synchronised " + activeUsers + " user(s).");
-                    }
-
+        try {
+            Response<User> userResponse = userRequest.execute();
+            if (userResponse.isSuccessful()) {
+                if (userResponse.body() != null) {
+                    DbUtils.updateUserTableFromServer(userResponse.body());
+                    showConnectionMessage("Connection successful. User found.");
                 } else {
-                    showConnectionMessage("Error connecting to server: " + response.code());
+                    DbUtils.deleteUser(email);
+                    showConnectionMessage("Connection successful. No such user found.");
                 }
+            } else {
+                showConnectionMessage("Error connecting to server: " + userResponse.code());
             }
 
-            @Override
-            public void onFailure(final Call<List<User>> call, final Throwable t) {
-                showConnectionMessage("User list request fail: " + t.toString());
-            }
-        });
+        } catch (IOException e) {
+            showConnectionMessage("User request fail: " + e.toString());
+        }
+
     }
 
     private void showConnectionMessage(final String message) {
-        mConnectionStatusText.setText(message);
+//        mConnectionStatusText.setText(message);
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(message);
 
     }
