@@ -25,7 +25,7 @@ android {
         buildConfigField('String', 'DB_NAME', '"kvt.realm"')
         buildConfigField('String', 'PDF_PASSWORD', '"R+#+KSio2L[!FphG*R%w&Z;<6)5?0/|z8"')
         buildConfigField('boolean', 'IS_LOGGING_ON', 'true')
-        buildConfigField 'String', 'COMPONENTS_JSON', '"components.json"'
+        buildConfigField 'String', 'COMPONENTS_JSON', '"components_v2.json"'
     }
     buildTypes {
         release {
