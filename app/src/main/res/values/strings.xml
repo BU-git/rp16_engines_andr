@@ -141,6 +141,62 @@
 
     <string name="clear">Clear</string>
 
+    <string-array name="MeasurementsHeader">
+        <item>Motor: Compression test</item>
+        <item>Motor: Oil</item>
+        <item>Motor: Coolant</item>
+        <item>Installation: Environment</item>
+        <item>Installation: Test run charge</item>
+        <item>Installation: Test run without load</item>
+        <item>Exhaust: Exhaust gases</item>
+        <item>Working hours</item>
+    </string-array>
+
+    <string-array name="MeasurementsItemName">
+        <item>Pressure</item>
+        <item>Pressure</item>
+        <item>Temperature</item>
+        <item>Type</item>
+        <item>Manufacture</item>
+        <item>Temperature</item>
+        <item>Acidity</item>
+        <item>Frost protection</item>
+        <item>Temperature</item>
+        <item>Generator voltage</item>
+        <item>Ampere Phase 1</item>
+        <item>Ampere Phase 2</item>
+        <item>Ampere Phase 3</item>
+        <item>Power during test</item>
+        <item>Frequency charge</item>
+        <item>Frequency charge</item>
+        <item>Temperature</item>
+        <item>Pressure</item>
+        <item>Working hours</item>
+    </string-array>
+
+    <string-array name="MeasurementsItemUnit">
+        <item>bar</item>
+        <item>bar</item>
+        <item>\u00B0C</item>
+        <item> </item>
+        <item> </item>
+        <item>\u00B0C</item>
+        <item>pH</item>
+        <item>\u00B0C</item>
+        <item>\u00B0C</item>
+        <item>Volt</item>
+        <item>Ampere</item>
+        <item>Ampere</item>
+        <item>Ampere</item>
+        <item>kW</item>
+        <item>Hz</item>
+        <item>Hz</item>
+        <item>\u00B0C</item>
+        <item>Mbar</item>
+        <item>Hours</item>
+    </string-array>
+
+
     <!-- EMail fields -->
     <string name="forget_password_subject">Password Retrieval Email</string>
     <string name="forget_password_body">Your password is: $password</string>

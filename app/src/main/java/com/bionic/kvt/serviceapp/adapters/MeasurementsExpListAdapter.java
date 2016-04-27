@@ -12,12 +12,50 @@ import com.bionic.kvt.serviceapp.R;
 import java.util.HashMap;
 import java.util.List;
 
-public class MeasurementsExpandableListAdapter extends BaseExpandableListAdapter {
+public class MeasurementsExpListAdapter extends BaseExpandableListAdapter {
+    public static class MeasurementsItem {
+        private String itemName;
+        private String itemValue;
+        private String itemUnit;
+
+        public String getItemName() {
+            return itemName;
+        }
+
+        public void setItemName(String itemName) {
+            this.itemName = itemName;
+        }
+
+        public String getItemValue() {
+            return itemValue;
+        }
+
+        public void setItemValue(String itemValue) {
+            this.itemValue = itemValue;
+        }
+
+        public String getItemUnit() {
+            return itemUnit;
+        }
+
+        public void setItemUnit(String itemUnit) {
+            this.itemUnit = itemUnit;
+        }
+
+        public MeasurementsItem() {
+        }
+
+        public MeasurementsItem(String itemName, String itemUnit) {
+            this.itemName = itemName;
+            this.itemUnit = itemUnit;
+        }
+    }
+
     private Context context;
     private List<String> dataHeaderList;
-    private HashMap<String, List<String[]>> dataChildList;
+    private HashMap<String, List<MeasurementsItem>> dataChildList;
 
-    public MeasurementsExpandableListAdapter(Context context, List<String> dataHeaderList, HashMap<String, List<String[]>> dataChildList) {
+    public MeasurementsExpListAdapter(Context context, List<String> dataHeaderList, HashMap<String, List<MeasurementsItem>> dataChildList) {
         this.context = context;
         this.dataHeaderList = dataHeaderList;
         this.dataChildList = dataChildList;
@@ -65,29 +103,24 @@ public class MeasurementsExpandableListAdapter extends BaseExpandableListAdapter
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.measurements_list_group, null);
         }
-
-        TextView groupHeader = (TextView) convertView.findViewById(R.id.measurements_list_group_header);
+        final TextView groupHeader = (TextView) convertView.findViewById(R.id.measurements_list_group_header);
         groupHeader.setText(headerTitle);
-
         return convertView;
     }
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final String[] itemTextArray = (String[]) getChild(groupPosition, childPosition);
-
+        final MeasurementsItem itemTextArray = (MeasurementsItem) getChild(groupPosition, childPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.measurements_list_item, null);
         }
-
-        TextView itemName = (TextView) convertView.findViewById(R.id.measurements_list_item_name);
-        itemName.setText(itemTextArray[0]);
-        TextView itemData = (TextView) convertView.findViewById(R.id.measurements_list_item_data);
-        itemData.setText(itemTextArray[1]);
-        TextView itemUnit = (TextView) convertView.findViewById(R.id.measurements_list_item_unit);
-        itemUnit.setText(itemTextArray[2]);
-
+        final TextView itemName = (TextView) convertView.findViewById(R.id.measurements_list_item_name);
+        itemName.setText(itemTextArray.getItemName());
+        final TextView itemData = (TextView) convertView.findViewById(R.id.measurements_list_item_data);
+        itemData.setText(itemTextArray.getItemValue());
+        final TextView itemUnit = (TextView) convertView.findViewById(R.id.measurements_list_item_unit);
+        itemUnit.setText(itemTextArray.getItemUnit());
         return convertView;
     }
 

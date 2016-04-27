@@ -12,9 +12,10 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.adapters.MeasurementsExpandableListAdapter;
+import com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,13 +23,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter.*;
+
 public class MeasurementsActivity extends BaseActivity {
     @Bind(R.id.measurements_motor_exp_list_view)
     ExpandableListView expMotorListView;
 
-    private MeasurementsExpandableListAdapter listMotorAdapter;
+    private MeasurementsExpListAdapter listMotorAdapter;
     private List<String> listMotorDataHeader;
-    private HashMap<String, List<String[]>> listMotorDataChild;
+    private HashMap<String, List<MeasurementsItem>> listMotorDataChild;
 
     private int currentGroupPosition = -1;
     private int currentChildPosition = -1;
@@ -50,7 +53,7 @@ public class MeasurementsActivity extends BaseActivity {
 
         prepareListData();
 
-        listMotorAdapter = new MeasurementsExpandableListAdapter(this, listMotorDataHeader, listMotorDataChild);
+        listMotorAdapter = new MeasurementsExpListAdapter(this, listMotorDataHeader, listMotorDataChild);
         expMotorListView.setAdapter(listMotorAdapter);
 
         expMotorListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
@@ -58,13 +61,12 @@ public class MeasurementsActivity extends BaseActivity {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 currentGroupPosition = groupPosition;
                 currentChildPosition = childPosition;
-                String dialogTitle = listMotorDataChild.get(listMotorDataHeader.get(groupPosition)).get(childPosition)[0] + ":";
-                String currentValue = listMotorDataChild.get(listMotorDataHeader.get(groupPosition)).get(childPosition)[1];
+                String dialogTitle = listMotorDataChild.get(listMotorDataHeader.get(groupPosition)).get(childPosition).getItemName() + ":";
+                String currentValue = listMotorDataChild.get(listMotorDataHeader.get(groupPosition)).get(childPosition).getItemValue();
                 showInputDialog(dialogTitle, currentValue);
                 return false;
             }
         });
-
 
     }
 
@@ -96,11 +98,10 @@ public class MeasurementsActivity extends BaseActivity {
 
     private void putMeasurementValue(final String newMeasurement) {
         if (currentGroupPosition >= 0 && currentChildPosition >= 0) {
-            listMotorDataChild.get(listMotorDataHeader.get(currentGroupPosition)).get(currentChildPosition)[1] = newMeasurement;
+            listMotorDataChild.get(listMotorDataHeader.get(currentGroupPosition)).get(currentChildPosition).setItemValue(newMeasurement);
             listMotorAdapter.notifyDataSetChanged();
         }
     }
-
 
     @OnClick(R.id.measurements_next_button)
     public void onNextClick(View v) {
@@ -112,59 +113,55 @@ public class MeasurementsActivity extends BaseActivity {
         listMotorDataHeader = new ArrayList<>();
         listMotorDataChild = new HashMap<>();
 
-        // Adding child data
-        listMotorDataHeader.add("Motor: Compression test");
-        listMotorDataHeader.add("Motor: Oil");
-        listMotorDataHeader.add("Motor: Coolant");
-        listMotorDataHeader.add("Installation: Environment");
-        listMotorDataHeader.add("Installation: Test run charge");
-        listMotorDataHeader.add("Installation: Test run without load");
-        listMotorDataHeader.add("Exhaust: Exhaust gases");
-        listMotorDataHeader.add("Working hours");
+        // Adding head data
+        final String[] headerArray = getResources().getStringArray(R.array.MeasurementsHeader);
+        Collections.addAll(listMotorDataHeader, headerArray);
 
         // Adding child data
-        List<String[]> childMotor1 = new ArrayList<>();
-        childMotor1.add(new String[]{"Pressure", "5.11", "bar"});
+        final String[] itemsNameArray = getResources().getStringArray(R.array.MeasurementsItemName);
+        final String[] itemsUnitArray = getResources().getStringArray(R.array.MeasurementsItemUnit);
 
-        List<String[]> childMotor2 = new ArrayList<>();
-        childMotor2.add(new String[]{"Pressure", "6.671", "bar"});
-        childMotor2.add(new String[]{"Temperature", "36.6", "\u00B0C"});
-        childMotor2.add(new String[]{"Type", "Cool", ""});
-        childMotor2.add(new String[]{"Manufacture", "Motor Sich", ""});
+        List<MeasurementsItem> childMotor0 = new ArrayList<>();
+        childMotor0.add(new MeasurementsItem(itemsNameArray[0], itemsUnitArray[0]));
+        listMotorDataChild.put(listMotorDataHeader.get(0), childMotor0);
 
-        List<String[]> childMotor3 = new ArrayList<>();
-        childMotor3.add(new String[]{"Temperature", "3.89", "\u00B0C"});
-        childMotor3.add(new String[]{"Acidity", "12.0", "pH"});
-        childMotor3.add(new String[]{"Frost protection", "2.2", "\u00B0C"});
+        List<MeasurementsItem> childMotor1 = new ArrayList<>();
+        childMotor1.add(new MeasurementsItem(itemsNameArray[1], itemsUnitArray[1]));
+        childMotor1.add(new MeasurementsItem(itemsNameArray[2], itemsUnitArray[2]));
+        childMotor1.add(new MeasurementsItem(itemsNameArray[3], itemsUnitArray[3]));
+        childMotor1.add(new MeasurementsItem(itemsNameArray[4], itemsUnitArray[4]));
+        listMotorDataChild.put(listMotorDataHeader.get(1), childMotor1);
 
-        List<String[]> childInstallation1 = new ArrayList<>();
-        childInstallation1.add(new String[]{"Temperature", "45.7", "\u00B0C"});
+        List<MeasurementsItem> childMotor2 = new ArrayList<>();
+        childMotor2.add(new MeasurementsItem(itemsNameArray[6], itemsUnitArray[5]));
+        childMotor2.add(new MeasurementsItem(itemsNameArray[7], itemsUnitArray[6]));
+        childMotor2.add(new MeasurementsItem(itemsNameArray[7], itemsUnitArray[7]));
+        listMotorDataChild.put(listMotorDataHeader.get(2), childMotor2);
 
-        List<String[]> childInstallation2 = new ArrayList<>();
-        childInstallation2.add(new String[]{"Generator voltage", "233.8", "Volt"});
-        childInstallation2.add(new String[]{"Ampere Phase 1", "5.6", "Ampere"});
-        childInstallation2.add(new String[]{"Ampere Phase 2", "5.8", "Ampere"});
-        childInstallation2.add(new String[]{"Ampere Phase 3", "5.4", "Ampere"});
-        childInstallation2.add(new String[]{"Power during test", "14.67", "kW"});
-        childInstallation2.add(new String[]{"Frequency charge", "51.3", "Hz"});
+        List<MeasurementsItem> childInstallation3 = new ArrayList<>();
+        childInstallation3.add(new MeasurementsItem(itemsNameArray[8], itemsUnitArray[8]));
+        listMotorDataChild.put(listMotorDataHeader.get(3), childInstallation3);
 
-        List<String[]> childInstallation3 = new ArrayList<>();
-        childInstallation3.add(new String[]{"Frequency charge", "55.7", "Hz"});
+        List<MeasurementsItem> childInstallation4 = new ArrayList<>();
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[9], itemsUnitArray[9]));
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[10], itemsUnitArray[10]));
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[11], itemsUnitArray[11]));
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[12], itemsUnitArray[12]));
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[13], itemsUnitArray[13]));
+        childInstallation4.add(new MeasurementsItem(itemsNameArray[14], itemsUnitArray[14]));
+        listMotorDataChild.put(listMotorDataHeader.get(4), childInstallation4);
 
-        List<String[]> childExhaust1 = new ArrayList<>();
-        childExhaust1.add(new String[]{"Temperature", "76.7", "\u00B0C"});
-        childExhaust1.add(new String[]{"Pressure", "4.34", "Mbar"});
+        List<MeasurementsItem> childInstallation5 = new ArrayList<>();
+        childInstallation5.add(new MeasurementsItem(itemsNameArray[15], itemsUnitArray[15]));
+        listMotorDataChild.put(listMotorDataHeader.get(5), childInstallation5);
 
-        List<String[]> childWorkingHours = new ArrayList<>();
-        childWorkingHours.add(new String[]{"Working hours", "56.3", "Hours"});
+        List<MeasurementsItem> childExhaust6 = new ArrayList<>();
+        childExhaust6.add(new MeasurementsItem(itemsNameArray[16], itemsUnitArray[16]));
+        childExhaust6.add(new MeasurementsItem(itemsNameArray[17], itemsUnitArray[17]));
+        listMotorDataChild.put(listMotorDataHeader.get(6), childExhaust6);
 
-        listMotorDataChild.put(listMotorDataHeader.get(0), childMotor1);
-        listMotorDataChild.put(listMotorDataHeader.get(1), childMotor2);
-        listMotorDataChild.put(listMotorDataHeader.get(2), childMotor3);
-        listMotorDataChild.put(listMotorDataHeader.get(3), childInstallation1);
-        listMotorDataChild.put(listMotorDataHeader.get(4), childInstallation2);
-        listMotorDataChild.put(listMotorDataHeader.get(5), childInstallation3);
-        listMotorDataChild.put(listMotorDataHeader.get(6), childExhaust1);
-        listMotorDataChild.put(listMotorDataHeader.get(7), childWorkingHours);
+        List<MeasurementsItem> childWorkingHours7 = new ArrayList<>();
+        childWorkingHours7.add(new MeasurementsItem(itemsNameArray[18], itemsUnitArray[18]));
+        listMotorDataChild.put(listMotorDataHeader.get(7), childWorkingHours7);
     }
 }
