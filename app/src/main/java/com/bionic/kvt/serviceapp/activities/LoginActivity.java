@@ -344,6 +344,7 @@ public class LoginActivity extends BaseActivity implements
 
         private final String mEmail;
         private final String mPassword;
+        private String loginMessage;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -352,7 +353,7 @@ public class LoginActivity extends BaseActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            getUserFromServer(mEmail);
+            loginMessage = getUserFromServer(mEmail);
             return DbUtils.isUserLoginValid(mEmail, mPassword);
         }
 
@@ -360,13 +361,12 @@ public class LoginActivity extends BaseActivity implements
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
+            mConnectionStatusText.setText(loginMessage);
 
             if (success) {
-//                finish();
                 CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
                 //Put session user to Singleton
-
                 DbUtils.setUserSession(mEmail);
 
                 if (mCheckBox.isChecked()) {
@@ -397,11 +397,12 @@ public class LoginActivity extends BaseActivity implements
 
     }
 
-    private void getUserFromServer(final String email) {
+    private String getUserFromServer(final String email) {
         // Is device connected to network
         if (!Utils.isNetworkConnected(getApplicationContext())) {
-            showConnectionMessage("No connection to network.");
-            return;
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("No connection to network.");
+            return "No connection to network.";
         }
 
         final Call<User> userRequest =
@@ -414,25 +415,33 @@ public class LoginActivity extends BaseActivity implements
             Response<User> userResponse = userRequest.execute();
             if (userResponse.isSuccessful()) {
                 if (userResponse.body() != null) {
+                    if (userResponse.body().getEmail() == null) {
+                        DbUtils.deleteUser(email);
+                        if (BuildConfig.IS_LOGGING_ON)
+                            Session.addToSessionLog("Connection successful. No such user found.");
+                        return "Connection successful. No such user found.";
+                    }
+
                     DbUtils.updateUserTableFromServer(userResponse.body());
-                    showConnectionMessage("Connection successful. User found.");
-                } else {
-                    DbUtils.deleteUser(email);
-                    showConnectionMessage("Connection successful. No such user found.");
+                    if (BuildConfig.IS_LOGGING_ON)
+                        Session.addToSessionLog("Connection successful. User found.");
+                    return "Connection successful. User found.";
                 }
+
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Connection successful. Unknown response.");
+                return "Connection successful.Unknown response.";
+
             } else {
-                showConnectionMessage("Error connecting to server: " + userResponse.code());
+                if (BuildConfig.IS_LOGGING_ON)
+                    Session.addToSessionLog("Error connecting to server: " + userResponse.code());
+                return "Error connecting to server: " + userResponse.code();
             }
-
         } catch (IOException e) {
-            showConnectionMessage("User request fail: " + e.toString());
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("User request fail: " + e.toString());
+            return "User request fail: " + e.toString();
         }
-
     }
 
-    private void showConnectionMessage(final String message) {
-//        mConnectionStatusText.setText(message);
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog(message);
-
-    }
 }

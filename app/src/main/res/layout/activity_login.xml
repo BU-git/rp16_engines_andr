@@ -50,7 +50,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="@dimen/activity_login_padding_small"
-                    android:text="Connecting to server..."
                     android:textColor="@color/colorSecondaryText" />
 
                 <android.support.design.widget.TextInputLayout

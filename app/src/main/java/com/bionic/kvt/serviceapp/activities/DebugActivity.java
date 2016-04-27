@@ -83,31 +83,31 @@ public class DebugActivity extends BaseActivity {
     }
 
     private void getUserList() {
-        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
-
-        addLogMessage("Getting user list from " + userListRequest.request());
-
-        userListRequest.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(final Call<List<User>> call,
-                                   final Response<List<User>> response) {
-                if (response.isSuccessful()) {
-                    userListOnServer.clear();
-                    userListOnServer.addAll(response.body());
-                    addLogMessage("Request successful! Get " + userListOnServer.size() + " users.");
-                    for (User user : userListOnServer) {
-                        addLogMessage("User:" + user.toString());
-                    }
-                } else {
-                    addLogMessage("User request error: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(final Call<List<User>> call, final Throwable t) {
-                addLogMessage("User request fail: " + t.toString());
-            }
-        });
+//        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
+//
+//        addLogMessage("Getting user list from " + userListRequest.request());
+//
+//        userListRequest.enqueue(new Callback<List<User>>() {
+//            @Override
+//            public void onResponse(final Call<List<User>> call,
+//                                   final Response<List<User>> response) {
+//                if (response.isSuccessful()) {
+//                    userListOnServer.clear();
+//                    userListOnServer.addAll(response.body());
+//                    addLogMessage("Request successful! Get " + userListOnServer.size() + " users.");
+//                    for (User user : userListOnServer) {
+//                        addLogMessage("User:" + user.toString());
+//                    }
+//                } else {
+//                    addLogMessage("User request error: " + response.code());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(final Call<List<User>> call, final Throwable t) {
+//                addLogMessage("User request fail: " + t.toString());
+//            }
+//        });
     }
 
     private void getOrdersBriefList() {
