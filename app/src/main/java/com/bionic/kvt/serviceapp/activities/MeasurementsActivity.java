@@ -120,6 +120,7 @@ public class MeasurementsActivity extends BaseActivity {
         listMotorDataHeader.add("Installation: Test run charge");
         listMotorDataHeader.add("Installation: Test run without load");
         listMotorDataHeader.add("Exhaust: Exhaust gases");
+        listMotorDataHeader.add("Working hours");
 
         // Adding child data
         List<String[]> childMotor1 = new ArrayList<>();
@@ -154,6 +155,9 @@ public class MeasurementsActivity extends BaseActivity {
         childExhaust1.add(new String[]{"Temperature", "76.7", "\u00B0C"});
         childExhaust1.add(new String[]{"Pressure", "4.34", "Mbar"});
 
+        List<String[]> childWorkingHours = new ArrayList<>();
+        childWorkingHours.add(new String[]{"Working hours", "56.3", "Hours"});
+
         listMotorDataChild.put(listMotorDataHeader.get(0), childMotor1);
         listMotorDataChild.put(listMotorDataHeader.get(1), childMotor2);
         listMotorDataChild.put(listMotorDataHeader.get(2), childMotor3);
@@ -161,5 +165,6 @@ public class MeasurementsActivity extends BaseActivity {
         listMotorDataChild.put(listMotorDataHeader.get(4), childInstallation2);
         listMotorDataChild.put(listMotorDataHeader.get(5), childInstallation3);
         listMotorDataChild.put(listMotorDataHeader.get(6), childExhaust1);
+        listMotorDataChild.put(listMotorDataHeader.get(7), childWorkingHours);
     }
 }

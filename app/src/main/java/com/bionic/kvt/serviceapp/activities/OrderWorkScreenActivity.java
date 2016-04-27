@@ -41,7 +41,7 @@ public class OrderWorkScreenActivity extends BaseActivity {
         }
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_description));
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.preparations));
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)

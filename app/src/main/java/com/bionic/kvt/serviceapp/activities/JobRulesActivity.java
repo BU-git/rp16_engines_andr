@@ -7,13 +7,9 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class JobRulesActivity extends BaseActivity {
 
@@ -33,7 +29,7 @@ public class JobRulesActivity extends BaseActivity {
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_rules));
     }
 
-    @OnClick(R.id.nsa_save_button)
+    @OnClick(R.id.job_rules_save_button)
     public void onSaveClick(View v) {
         Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);
         startActivity(intent);
