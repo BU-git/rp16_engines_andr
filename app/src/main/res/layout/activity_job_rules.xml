@@ -53,7 +53,7 @@
                         android:layout_weight="0.5">
 
                         <CheckBox
-                            android:id="@+id/msa_fuel_added_checkbox"
+                            android:id="@+id/job_rules_fuel_added"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="false"
@@ -96,7 +96,7 @@
                         android:layout_weight="0.5">
 
                         <CheckBox
-                            android:id="@+id/nsa_water_separators_drained_checkbox"
+                            android:id="@+id/job_rules_water_separators_drained"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="false"
@@ -139,7 +139,7 @@
                         android:layout_weight="0.5">
 
                         <CheckBox
-                            android:id="@+id/nsa_leave_installation_checkbox"
+                            android:id="@+id/job_rules_leave_operational"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="false" />
@@ -190,7 +190,7 @@
                             android:text="@string/no" />
 
                         <Switch
-                            android:id="@+id/nsa_customer_material_switch"
+                            android:id="@+id/job_rules_customer_material"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:showText="false" />
@@ -248,7 +248,7 @@
                             android:text="@string/no" />
 
                         <Switch
-                            android:id="@+id/nsa_material_from_bus_switch"
+                            android:id="@+id/job_rules_material_from_bus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:showText="false" />
@@ -306,7 +306,7 @@
                             android:text="@string/no" />
 
                         <Switch
-                            android:id="@+id/nsa_repair_advice_switch"
+                            android:id="@+id/job_rules_repair_advice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:showText="false" />

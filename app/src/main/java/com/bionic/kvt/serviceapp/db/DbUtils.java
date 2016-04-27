@@ -396,6 +396,21 @@ public class DbUtils {
         return result;
     }
 
+    public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
+        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Job Rules report");
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        // Remove if already exist
+        final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
+                .equalTo("number", jobRules.getNumber()).findFirst();
+        if (currentJobRules != null) currentJobRules.removeFromRealm();
+        // Save new
+        realm.copyToRealm(jobRules);
+        realm.commitTransaction();
+        realm.close();
+    }
+
     public static void setOrderMaintenanceTime(final long orderNumber, final int timeType, final Date time) {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
