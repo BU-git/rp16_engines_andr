@@ -12,6 +12,33 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
 
 
     private String part;
+
+    @Override
+    public String toString() {
+        return "DefectState{" +
+                "part='" + part + '\'' +
+                ", element='" + element + '\'' +
+                ", groupPosition=" + groupPosition +
+                ", checkboxPosition=" + checkboxPosition +
+                ", extent='" + extent + '\'' +
+                ", intensity='" + intensity + '\'' +
+                ", fixed=" + fixed +
+                ", action='" + action + '\'' +
+                ", extentId=" + extentId +
+                ", intensityId=" + intensityId +
+                ", actionId=" + actionId +
+                '}';
+    }
+
+    public String getElement() {
+        return element;
+    }
+
+    public void setElement(String element) {
+        this.element = element;
+    }
+
+    private String element;
     private Integer groupPosition;
     private Integer checkboxPosition;
 

@@ -43,6 +43,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public static Integer groupClickedPosition = 0;
     public static Integer childClickedPosition;
 
+    public boolean isInitialSelect = true;
+
 
     //Saving state
 
@@ -128,7 +130,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang,null);
                 final Spinner actiesSpinner = (Spinner)  infalInflater.inflate(R.layout.template_acties,null);
                 final Spinner intensitySpinner = (Spinner) infalInflater.inflate(R.layout.template_intensiteit, null);
-                //text.setText("Some Text");
+
                 problemDetailLayout.addView(omvangSpinner);
                 problemDetailLayout.addView(intensitySpinner);
                 problemDetailLayout.addView(actiesSpinner);
@@ -141,39 +143,33 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemDetailLayout.addView(text);
                 //Hiding default fields if checkbox is not selected;
                 problemDetailLayout.setVisibility(View.GONE);
-                omvangSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
 
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //Tracking state of the checkboxes
                         final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
+                        state.setElement((String) getGroup(groupPosition));
 
                         //Setting default fields
+
                         omvangSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setExtentId(omvangSpinner.getSelectedItemPosition());
+                                state.setExtent((String) omvangSpinner.getSelectedItem());
                             }
 
                             @Override
                             public void onNothingSelected(AdapterView<?> parent) {
                             }
                         });
+
                         intensitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setIntensityId(intensitySpinner.getSelectedItemPosition());
+                                state.setIntensity((String) intensitySpinner.getSelectedItem());
                             }
 
                             @Override
@@ -184,7 +180,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         actiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                state.setActionId(actiesSpinner.getSelectedItemPosition());
+                                state.setActionId(position);
+                                state.setAction(actiesSpinner.getItemAtPosition(position).toString());
                             }
 
                             @Override
@@ -198,6 +195,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 state.setFixed(oplegostSwitch.isChecked());
                             }
                         });
+
+                        Log.d(TAG, "Object is: " + state.toString());
 
 
                         if (checkBox.isChecked()){
@@ -220,6 +219,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                         omvangSpinner.setSelection(d.getExtentId());
                                         intensitySpinner.setSelection(d.getIntensityId());
                                         actiesSpinner.setSelection(d.getActionId());
+                                        Log.d(TAG,"Object in Iteration: " + d.toString());
                                         oplegostSwitch.setChecked(d.isFixed());
 
                                         checkBox.setChecked(true);
