@@ -401,7 +401,7 @@ public class LoginActivity extends BaseActivity implements
         if (!Utils.isNetworkConnected(getApplicationContext())) {
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("No connection to network.");
-            return "No connection to network.";
+            return "No connection to network. Offline login only.";
         }
 
         final Call<User> userRequest =

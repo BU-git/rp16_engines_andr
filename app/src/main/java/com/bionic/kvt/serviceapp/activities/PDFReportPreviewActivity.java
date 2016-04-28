@@ -43,6 +43,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportPreviewActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
+    private static final String ROTATION_FLAG = "ROTATION_FLAG";
     private static final int PDF_LOADER_ID = 1;
     private File pdfReportPreviewFile;
     private File pdfTemplate;
@@ -97,11 +98,17 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 + " " + PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
 
+
         pdfReportPreviewFile = Utils.getPDFReportFileName(true);
-        if (pdfReportPreviewFile.exists()) { // We have old report preview
-            pdfReportPreviewFile.delete();
+
+        // Check rotation
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
+                // Device is rotated. No need to generate. Just show.
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
+                return;
+            }
         }
-        // Generating...
 
         if (!Utils.isExternalStorageWritable()) {
             if (BuildConfig.IS_LOGGING_ON)
@@ -111,6 +118,11 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             return;
         }
 
+        if (pdfReportPreviewFile.exists()) { // We have old report preview
+            pdfReportPreviewFile.delete();
+        }
+
+        // Generating...
         pdfTemplate = Utils.getPDFTemplateFile(getApplicationContext());
         if (pdfTemplate == null || !pdfTemplate.exists()) {
             if (BuildConfig.IS_LOGGING_ON)
@@ -142,6 +154,12 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     @Override
     public void onLoaderReset(Loader<Boolean> loader) {
         // NOOP
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ROTATION_FLAG, true);
     }
 
     public static class GeneratePDFReportFile extends AsyncTaskLoader<Boolean> {

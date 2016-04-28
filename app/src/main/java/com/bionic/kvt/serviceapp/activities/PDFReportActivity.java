@@ -51,6 +51,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
+    private static final String ROTATION_FLAG = "ROTATION_FLAG";
     private static final int PDF_LOADER_ID = 1;
     private static final int MAIL_LOADER_ID = 2;
     private MailHelper mailHelper;
@@ -133,10 +134,20 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
                 Toast.makeText(getApplicationContext(),
-                        "ERROR: Can not fint PDF Report file!", Toast.LENGTH_SHORT).show();
+                        "ERROR: Can not find PDF Report file!", Toast.LENGTH_SHORT).show();
             }
 
             return;
+        }
+
+        // Check rotation
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
+                // Device is rotated. No need to generate. Just show.
+                sendButton.setEnabled(true);
+                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
+                return;
+            }
         }
 
         // Generating...
@@ -163,7 +174,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         getSupportLoaderManager().initLoader(PDF_LOADER_ID, null, this);
     }
-
 
     @Override
     public Loader<Boolean> onCreateLoader(int id, Bundle args) {
@@ -293,11 +303,18 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ROTATION_FLAG, true);
+    }
+
     @OnClick(R.id.pdf_button_complete_order)
     public void onDoneClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
-        pdfReportPreviewFile.delete();
+        if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
 
         Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

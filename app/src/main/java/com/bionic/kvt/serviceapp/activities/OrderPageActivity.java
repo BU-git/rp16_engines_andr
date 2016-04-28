@@ -28,7 +28,6 @@ import com.bionic.kvt.serviceapp.db.LocalService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -177,6 +176,12 @@ public class OrderPageActivity extends BaseActivity implements
         Intent intent = new Intent(this, LocalService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         Session.clearCurrentOrder();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateOrderAdapter();
     }
 
     @Override
