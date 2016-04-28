@@ -186,7 +186,6 @@ public class LoginActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         Session.clearSession();
-//        updateUserList();
     }
 
     /**
@@ -418,19 +417,19 @@ public class LoginActivity extends BaseActivity implements
                     if (userResponse.body().getEmail() == null) {
                         DbUtils.deleteUser(email);
                         if (BuildConfig.IS_LOGGING_ON)
-                            Session.addToSessionLog("Connection successful. No such user found.");
-                        return "Connection successful. No such user found.";
+                            Session.addToSessionLog("Connection successful. No user found: " + email);
+                        return "The entered e-mail address is not known.\nIf you are sure, please call the administrator.";
                     }
 
                     DbUtils.updateUserTableFromServer(userResponse.body());
                     if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Connection successful. User found.");
+                        Session.addToSessionLog("Connection successful. User found: " + email);
                     return "Connection successful. User found.";
                 }
 
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("Connection successful. Unknown response.");
-                return "Connection successful.Unknown response.";
+                return "Connection successful. Unknown response.";
 
             } else {
                 if (BuildConfig.IS_LOGGING_ON)
