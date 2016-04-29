@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
+import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
@@ -35,20 +36,15 @@ import java.util.Set;
 Adapter for the Expandable Parts List
  */
 public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
-    String TAG = ElementExpandableListAdapter.class.getName();
-
     public final static Integer layoutMagicNumber = 1000;
     public final static Integer viewMagicNumber = 10;
-
     public static Integer groupClickedPosition = 0;
     public static Integer childClickedPosition;
-
     public boolean isInitialSelect = true;
+    String TAG = ElementExpandableListAdapter.class.getName();
 
 
     //Saving state
-
-
     private Context context;
     private HashMap<String, JsonObject> childMap;
 
@@ -106,7 +102,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
 
-            for (Map.Entry<String,JsonElement> child : childSet){
+            for (final Map.Entry<String,JsonElement> child : childSet){
                 Integer position = Utils.getSetIndex(childSet, child);
                 final CheckBox checkBox = new CheckBox(this._context);
                 //Creating checkbox id as a concatenation of magic number, group position and checkbox position
@@ -150,6 +146,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         //Tracking state of the checkboxes
                         final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
                         state.setElement((String) getGroup(groupPosition));
+                        state.setProblem(child.getKey());
 
                         //Setting default fields
 
@@ -158,6 +155,18 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setExtentId(omvangSpinner.getSelectedItemPosition());
                                 state.setExtent((String) omvangSpinner.getSelectedItem());
+
+                                state.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                        state.getExtentId(),
+                                        state.getIntensityId(),
+                                        child.getValue().getAsJsonArray().get(0).getAsString()
+                                ));
+
+                                state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
+                                if (state.getCondition() != null){
+                                    state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
+                                    state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
+                                }
                             }
 
                             @Override
@@ -170,6 +179,18 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setIntensityId(intensitySpinner.getSelectedItemPosition());
                                 state.setIntensity((String) intensitySpinner.getSelectedItem());
+
+                                state.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                        state.getExtentId(),
+                                        state.getIntensityId(),
+                                        child.getValue().getAsJsonArray().get(0).getAsString()
+                                ));
+
+                                state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
+                                if (state.getCondition() != null){
+                                    state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
+                                    state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
+                                }
                             }
 
                             @Override
@@ -180,8 +201,10 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         actiesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                state.setActionId(position);
-                                state.setAction(actiesSpinner.getItemAtPosition(position).toString());
+                                state.setActionId(actiesSpinner.getSelectedItemPosition());
+                                state.setAction((String) actiesSpinner.getSelectedItem());
+
+
                             }
 
                             @Override
@@ -195,6 +218,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 state.setFixed(oplegostSwitch.isChecked());
                             }
                         });
+
+
 
                         Log.d(TAG, "Object is: " + state.toString());
 
@@ -219,10 +244,23 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                         omvangSpinner.setSelection(d.getExtentId());
                                         intensitySpinner.setSelection(d.getIntensityId());
                                         actiesSpinner.setSelection(d.getActionId());
-                                        Log.d(TAG,"Object in Iteration: " + d.toString());
-                                        oplegostSwitch.setChecked(d.isFixed());
 
+                                        oplegostSwitch.setChecked(d.isFixed());
                                         checkBox.setChecked(true);
+
+                                        d.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                                d.getExtentId(),
+                                                d.getIntensityId(),
+                                                child.getValue().getAsJsonArray().get(0).getAsString()
+                                        ));
+
+                                        d.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
+                                        if (d.getCondition() != null){
+                                            d.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(d.getCondition()));
+                                            d.setCorrelatedScore(d.getCorrelation() * d.getInitialScore());
+                                        }
+
+                                        Log.d(TAG,"Object in Iteration: " + d.toString());
                                     }
                     }
                 }

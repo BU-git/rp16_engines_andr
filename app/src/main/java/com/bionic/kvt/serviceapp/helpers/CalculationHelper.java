@@ -4,19 +4,20 @@ import java.util.Arrays;
 import java.util.List;
 
 /** */
-public class CalculationHelper {
+public enum CalculationHelper {
+    INSTANCE;
     private static final Integer [] CALCULATIONARRAY = {1, 1, 1, 1, 2, 3, 4, 5, 6};
     private static final Double [] CONDITIONARRAY = {1d, 1d, 1.02, 1.1, 1.3, 1.7, 2d};
 
     private static final Integer ROWSIZE = 5;
 
-    public CalculationHelper() {}
+    CalculationHelper() {}
 
     public Integer [] getConditionArray(String defectType, Integer intensityPosition){
         Integer initialIndex;
-        if (defectType == "E") initialIndex = 2;
-        else if (defectType == "S") initialIndex = 1;
-        else if (defectType == "G") initialIndex = 0;
+        if (defectType.equals("E")) initialIndex = 2;
+        else if (defectType.equals("S")) initialIndex = 1;
+        else if (defectType.equals("G")) initialIndex = 0;
         else initialIndex = -1;
 
         return getArrayByIntensityPositionAndIndex(intensityPosition, initialIndex);

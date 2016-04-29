@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.models.DefectState;
 
 /**
  * An activity representing a single Component detail screen. This
@@ -42,6 +43,11 @@ public class ComponentDetailActivity extends BaseActivity {
         //
         // http://developer.android.com/guide/components/fragments.html
         //
+
+        for (DefectState d : ComponentListActivity.defectStateList) {
+            Log.d(TAG, "Activity screen object: " + d.toString());
+        }
+
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.

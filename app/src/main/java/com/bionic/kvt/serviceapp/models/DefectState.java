@@ -10,14 +10,59 @@ import java.util.Objects;
 public class DefectState implements Parcelable, Serializable, Comparable<DefectState> {
 
 
+    public static final Creator<DefectState> CREATOR = new Creator<DefectState>() {
+        @Override
+        public DefectState createFromParcel(Parcel in) {
+            return new DefectState(in);
+        }
 
+        @Override
+        public DefectState[] newArray(int size) {
+            return new DefectState[size];
+        }
+    };
     private String part;
+    private String element;
+    private String problem;
+    private Integer groupPosition;
+    private Integer checkboxPosition;
+    //Saving data for future logic
+    private String extent; // Omvang
+    private String intensity; // Intensiteit
+    private boolean fixed = false; // Opgelost
+    private String action; // Acties
+    //Saving data for state
+    private Integer extentId = 0;
+    private Integer intensityId = 0;
+    private Integer actionId = 0;
+    //Calculation Score
+    private Integer condition = 0;
+    private Integer initialScore = 0;
+    private Double correlation = 0d;
+    private Double correlatedScore = 0d;
+    public DefectState(String part, Integer groupPosition, Integer checkboxPosition) {
+        this.checkboxPosition = checkboxPosition;
+        this.groupPosition = groupPosition;
+        this.part = part;
+    }
+    protected DefectState(Parcel in) {
+        part = in.readString();
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
 
     @Override
     public String toString() {
         return "DefectState{" +
                 "part='" + part + '\'' +
                 ", element='" + element + '\'' +
+                ", problem='" + problem + '\'' +
                 ", groupPosition=" + groupPosition +
                 ", checkboxPosition=" + checkboxPosition +
                 ", extent='" + extent + '\'' +
@@ -27,7 +72,43 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
                 ", extentId=" + extentId +
                 ", intensityId=" + intensityId +
                 ", actionId=" + actionId +
+                ", condition=" + condition +
+                ", initialScore=" + initialScore +
+                ", correlation=" + correlation +
+                ", correlatedScore=" + correlatedScore +
                 '}';
+    }
+
+    public Integer getInitialScore() {
+        return initialScore;
+    }
+
+    public void setInitialScore(Integer initialScore) {
+        this.initialScore = initialScore;
+    }
+
+    public Double getCorrelation() {
+        return correlation;
+    }
+
+    public void setCorrelation(Double correlation) {
+        this.correlation = correlation;
+    }
+
+    public Double getCorrelatedScore() {
+        return correlatedScore;
+    }
+
+    public void setCorrelatedScore(Double correlatedScore) {
+        this.correlatedScore = correlatedScore;
+    }
+
+    public Integer getCondition() {
+        return condition;
+    }
+
+    public void setCondition(Integer condition) {
+        this.condition = condition;
     }
 
     public String getElement() {
@@ -37,21 +118,6 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
     public void setElement(String element) {
         this.element = element;
     }
-
-    private String element;
-    private Integer groupPosition;
-    private Integer checkboxPosition;
-
-    //Saving data for future logic
-    private String extent; // Omvang
-    private String intensity; // Intensiteit
-    private boolean fixed = false; // Opgelost
-    private String action; // Acties
-
-    //Saving data for state
-    private Integer extentId = 0;
-    private Integer intensityId = 0;
-    private Integer actionId = 0;
 
     public Integer getExtentId() {
         return extentId;
@@ -132,28 +198,6 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
     public void setCheckboxPosition(Integer checkboxPosition) {
         this.checkboxPosition = checkboxPosition;
     }
-
-    public DefectState (String part, Integer groupPosition, Integer checkboxPosition){
-        this.checkboxPosition = checkboxPosition;
-        this.groupPosition = groupPosition;
-        this.part = part;
-    }
-
-    protected DefectState(Parcel in) {
-        part = in.readString();
-    }
-
-    public static final Creator<DefectState> CREATOR = new Creator<DefectState>() {
-        @Override
-        public DefectState createFromParcel(Parcel in) {
-            return new DefectState(in);
-        }
-
-        @Override
-        public DefectState[] newArray(int size) {
-            return new DefectState[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {

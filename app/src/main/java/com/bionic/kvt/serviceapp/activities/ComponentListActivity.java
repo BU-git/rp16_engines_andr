@@ -77,7 +77,8 @@ public class ComponentListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_component_list);
+
+            setContentView(R.layout.activity_component_list);
 
         new JsonParser().execute();
 
@@ -100,6 +101,7 @@ public class ComponentListActivity extends BaseActivity {
             }
         });
         */
+
 
 
         if (findViewById(R.id.component_detail_container) != null) {
