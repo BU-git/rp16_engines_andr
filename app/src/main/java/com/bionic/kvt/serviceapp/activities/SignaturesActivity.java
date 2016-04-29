@@ -17,6 +17,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.DrawingView;
+import com.bionic.kvt.serviceapp.views.SignatureView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,10 +37,10 @@ public class SignaturesActivity extends BaseActivity {
     private int currentButtonClicked;
 
     @Bind(R.id.draw_engineer_signature)
-    DrawingView engineerDrawingView;
+    SignatureView engineerDrawingView;
 
     @Bind(R.id.draw_client_signature)
-    DrawingView clientDrawingView;
+    SignatureView clientDrawingView;
 
     @Bind(R.id.button_complete)
     Button buttonComplete;
@@ -84,7 +85,7 @@ public class SignaturesActivity extends BaseActivity {
     public void onClearEngineerClick(View v) {
         Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
 
-        engineerDrawingView.clearCanvas();
+        engineerDrawingView.clear();
         buttonConfirmEngineer.setChecked(false);
         buttonComplete.setEnabled(false);
     }
@@ -93,7 +94,7 @@ public class SignaturesActivity extends BaseActivity {
     public void onClearClientClick(View v) {
         Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
 
-        clientDrawingView.clearCanvas();
+        clientDrawingView.clear();
         buttonConfirmClient.setChecked(false);
         buttonComplete.setEnabled(false);
     }
@@ -136,7 +137,7 @@ public class SignaturesActivity extends BaseActivity {
             return;
         }
 
-        DrawingView currentDrawingView;
+        SignatureView currentDrawingView;
         ToggleButton currentToggleButton;
         String signatureFileName;
         switch (currentButtonClicked) {
