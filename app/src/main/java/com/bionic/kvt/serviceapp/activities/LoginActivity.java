@@ -4,48 +4,34 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
-import com.bionic.kvt.serviceapp.helpers.NetworkHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -56,10 +42,13 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
+import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
 
-public class LoginActivity extends BaseActivity implements
-        LoaderCallbacks<Cursor>,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+public class LoginActivity extends BaseActivity
+//        implements
+//        LoaderCallbacks<Cursor>,
+//        SharedPreferences.OnSharedPreferenceChangeListener
+{
 
     private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
 
@@ -84,13 +73,22 @@ public class LoginActivity extends BaseActivity implements
     private View mLoginLayout;
     private SharedPreferences userSharedPreferences;
 
+    private class UserRequestResult {
+        boolean isSuccessful;
+        String message;
+
+        public UserRequestResult(boolean isSuccessful, String message) {
+            this.isSuccessful = isSuccessful;
+            this.message = message;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();
     }
@@ -120,19 +118,14 @@ public class LoginActivity extends BaseActivity implements
         attemptLogin();
     }
 
-    // Forget Password Button
     @OnClick(R.id.forget_password_button)
     public void onForgetPasswordClick(View v) {
         if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
             requestNetworkStatePermission();
         } else {
-            NetworkHelper networkHelper = new NetworkHelper(LoginActivity.this);
-            if (!networkHelper.isNetworkConnected()) {
-                Toast toast = Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.show();
+            if (!Utils.isNetworkConnected(LoginActivity.this)) {
+                Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
             } else {
-                //Start login activity
                 startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
                 //Disable animation
                 overridePendingTransition(0, 0);
@@ -142,7 +135,6 @@ public class LoginActivity extends BaseActivity implements
 
     //Requests network permissions, if needed
     private boolean requestNetworkStatePermission() {
-        Log.i(TAG, "Entering Network Check State");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
         }
@@ -272,64 +264,64 @@ public class LoginActivity extends BaseActivity implements
         }
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//    @Override
+//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+//        return new CursorLoader(this,
+//                // Retrieve data rows for the device user's 'profile' contact.
+//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
+//                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
+//
+//                // Select only email addresses.
+//                ContactsContract.Contacts.Data.MIMETYPE +
+//                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
+//                .CONTENT_ITEM_TYPE},
+//
+//                // Show primary email addresses first. Note that there won't be
+//                // a primary email address if the user hasn't specified one.
+//                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+//        List<String> emails = new ArrayList<>();
+//        cursor.moveToFirst();
+//        while (!cursor.isAfterLast()) {
+//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
+//            cursor.moveToNext();
+//        }
+//
+//        addEmailsToAutoComplete(emails);
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
+//
+//    }
+//
+//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(LoginActivity.this,
+//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
+//        mEmailView.setAdapter(adapter);
+//    }
 
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
+//    @Override
+//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+//        Map<String, ?> all = sharedPreferences.getAll();
+//        Toast.makeText(getApplicationContext(), "name:" + all, Toast.LENGTH_SHORT).show();
+//    }
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Map<String, ?> all = sharedPreferences.getAll();
-        Toast.makeText(getApplicationContext(), "name:" + all, Toast.LENGTH_SHORT).show();
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
-    }
+//    private interface ProfileQuery {
+//        String[] PROJECTION = {
+//                ContactsContract.CommonDataKinds.Email.ADDRESS,
+//                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+//        };
+//
+//        int ADDRESS = 0;
+//        int IS_PRIMARY = 1;
+//    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -339,7 +331,7 @@ public class LoginActivity extends BaseActivity implements
 
         private final String mEmail;
         private final String mPassword;
-        private String loginMessage;
+        private UserRequestResult userRequestResult;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -348,7 +340,7 @@ public class LoginActivity extends BaseActivity implements
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            loginMessage = getUserFromServer(mEmail);
+            userRequestResult = getUserFromServer(mEmail);
             return DbUtils.isUserLoginValid(mEmail, mPassword);
         }
 
@@ -356,15 +348,12 @@ public class LoginActivity extends BaseActivity implements
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            mConnectionStatusText.setText(loginMessage);
+            mConnectionStatusText.setText(userRequestResult.message);
 
             if (success) {
-                CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
+                final CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
 
-                //Put session user to Singleton
-                DbUtils.setUserSession(mEmail);
-
-                if (mCheckBox.isChecked()) {
+                if (mCheckBox != null && mCheckBox.isChecked()) {
                     //Get shared preferences
                     userSharedPreferences = getSharedPreferences(mEmailView.getText().toString(), Context.MODE_PRIVATE);
                     SharedPreferences.Editor userEditor = userSharedPreferences.edit();
@@ -376,10 +365,13 @@ public class LoginActivity extends BaseActivity implements
                     userEditor.apply();
                 }
 
+                DbUtils.setUserSession(mEmail);
+
                 Intent orderPageIntent = new Intent(LoginActivity.this, OrderPageActivity.class);
                 startActivity(orderPageIntent);
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                if (userRequestResult.isSuccessful)
+                    mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
         }
@@ -392,51 +384,51 @@ public class LoginActivity extends BaseActivity implements
 
     }
 
-    private String getUserFromServer(final String email) {
-        // Is device connected to network
-        if (!Utils.isNetworkConnected(getApplicationContext())) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("No connection to network.");
-            return "No connection to network. Offline login only.";
+    private UserRequestResult getUserFromServer(final String email) {
+        if (!Utils.isNetworkConnected(LoginActivity.this)) {
+            if (IS_LOGGING_ON) Session.addToSessionLog("No connection to network.");
+            return new UserRequestResult(true, "No connection to network. Offline login only.");
         }
 
         final Call<User> userRequest =
                 Session.getServiceConnection().getUser(Utils.getUserIdFromEmail(email));
 
-        if (BuildConfig.IS_LOGGING_ON)
+        if (IS_LOGGING_ON)
             Session.addToSessionLog("Connecting to server: " + userRequest.request());
 
+        final Response<User> userResponse;
         try {
-            Response<User> userResponse = userRequest.execute();
-            if (userResponse.isSuccessful()) {
-                if (userResponse.body() != null) {
-                    if (userResponse.body().getEmail() == null) {
-                        DbUtils.deleteUser(email);
-                        if (BuildConfig.IS_LOGGING_ON)
-                            Session.addToSessionLog("Connection successful. No user found: " + email);
-                        return "The entered e-mail address is not known.\nIf you are sure, please call the administrator.";
-                    }
-
-                    DbUtils.updateUserTableFromServer(userResponse.body());
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Connection successful. User found: " + email);
-                    return "Connection successful. User found.";
-                }
-
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Connection successful. Unknown response.");
-                return "Connection successful. Unknown response.";
-
-            } else {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("Error connecting to server: " + userResponse.code());
-                return "Error connecting to server: " + userResponse.code();
-            }
+            userResponse = userRequest.execute();
         } catch (IOException e) {
-            if (BuildConfig.IS_LOGGING_ON)
+            if (IS_LOGGING_ON)
                 Session.addToSessionLog("User request fail: " + e.toString());
-            return "User request fail: " + e.toString();
+            return new UserRequestResult(true, "User request fail: " + e.toString());
         }
+
+        if (!userResponse.isSuccessful()) { // Request unsuccessful
+            if (IS_LOGGING_ON)
+                Session.addToSessionLog("Error connecting to server: " + userResponse.code());
+            return new UserRequestResult(true, "Error connecting to server: " + userResponse.code());
+        }
+
+        if (userResponse.body() == null) {
+            if (IS_LOGGING_ON)
+                Session.addToSessionLog("Connection successful. Empty response.");
+            return new UserRequestResult(true, "Connection successful. Empty response.");
+        }
+
+        if (userResponse.body().getEmail() == null) { // No such user on server
+            DbUtils.deleteUser(email); // Deleting if we have local user
+            if (IS_LOGGING_ON)
+                Session.addToSessionLog("Connection successful. No user found: " + email);
+            return new UserRequestResult(false, "The entered e-mail address is not known.\nIf you are sure, please call the administrator.");
+        }
+
+        // We have this user on server
+        DbUtils.updateUserFromServer(userResponse.body());
+        if (IS_LOGGING_ON)
+            Session.addToSessionLog("Connection successful. User found: " + email);
+        return new UserRequestResult(true, "Connection successful. User found.");
     }
 
 }

@@ -292,7 +292,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static boolean updateUserTableFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
+    public static boolean updateUserFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Updating User table from server data.");
 

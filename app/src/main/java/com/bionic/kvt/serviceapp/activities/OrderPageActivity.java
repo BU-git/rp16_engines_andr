@@ -19,12 +19,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
+import com.bionic.kvt.serviceapp.db.ConnectionService;
 import com.bionic.kvt.serviceapp.db.DbUtils;
-import com.bionic.kvt.serviceapp.db.LocalService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
@@ -35,15 +34,16 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener,
-        LocalService.Callbacks {
+        ConnectionService.Callbacks {
 
     private OrderAdapter ordersAdapter;
-    private LocalService connectionService;
+    private ConnectionService connectionService;
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -58,12 +58,11 @@ public class OrderPageActivity extends BaseActivity implements
 
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
-            LocalService.LocalBinder binder = (LocalService.LocalBinder) service;
+            ConnectionService.LocalBinder binder = (ConnectionService.LocalBinder) service;
             connectionService = binder.getService();
             connectionService.registerClient(OrderPageActivity.this);
 
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Order page service connected.");
+            if (IS_LOGGING_ON) Session.addToSessionLog("Order page service connected.");
 
             // Running service task
             connectionService.runTask();
@@ -73,8 +72,7 @@ public class OrderPageActivity extends BaseActivity implements
         public void onServiceDisconnected(ComponentName arg0) {
             OrderPageActivity.this.connectionService = null;
 
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Order page service disconnected.");
+            if (IS_LOGGING_ON) Session.addToSessionLog("Order page service disconnected.");
         }
     };
 
@@ -173,7 +171,7 @@ public class OrderPageActivity extends BaseActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(this, LocalService.class);
+        Intent intent = new Intent(this, ConnectionService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         Session.clearCurrentOrder();
     }
@@ -250,7 +248,7 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Override
     public void updateOrderAdapter() {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Update OrderAdapter data.");
+        if (IS_LOGGING_ON) Session.addToSessionLog("Update OrderAdapter data.");
         DbUtils.updateOrderOverviewList();
         ordersAdapter.setOrdersDataSet(Session.getOrderOverviewList());
         ordersAdapter.notifyDataSetChanged();

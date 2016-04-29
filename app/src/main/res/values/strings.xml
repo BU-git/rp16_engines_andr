@@ -13,7 +13,7 @@
     <string name="action_remember_password">Remember password</string>
     <string name="logout">Log out</string>
     <string name="activity_forget">Forgot Password</string>
-    <string name="no_connection">No connection detected</string>
+    <string name="no_connection">Internet connection required</string>
     <string name="service_engineer">Service engineer:</string>
     <string name="orders">Orders</string>
     <string name="order_number">Order</string>

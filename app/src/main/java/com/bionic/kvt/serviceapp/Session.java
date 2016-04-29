@@ -3,7 +3,7 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 import android.support.annotation.Nullable;
 
-import com.bionic.kvt.serviceapp.api.ServiceConnection;
+import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
@@ -14,13 +14,19 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Session extends Application {
     private static Session currentUserSession;
 
-    private ServiceConnection serviceConnection;
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+            .baseUrl(BuildConfig.BACK_OFFICE_HOST)
+            .addConverterFactory(GsonConverterFactory.create());
+
+    private ConnectionServiceAPI connectionServiceAPI;
     private List<String> sessionLog;
     private boolean isSyncingFromServer = false;
 
@@ -41,12 +47,8 @@ public class Session extends Application {
         orderOverviewList = new ArrayList<>();
         currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
 
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BACK_OFFICE_HOST)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        serviceConnection = retrofit.create(ServiceConnection.class);
+        Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
+        connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
 
         RealmConfiguration config = new RealmConfiguration.Builder(this)
                 .name(BuildConfig.DB_NAME)
@@ -56,8 +58,8 @@ public class Session extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
-    public static ServiceConnection getServiceConnection() {
-        return currentUserSession.serviceConnection;
+    public static ConnectionServiceAPI getServiceConnection() {
+        return currentUserSession.connectionServiceAPI;
     }
 
     public static void clearSession() {

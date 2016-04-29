@@ -52,7 +52,7 @@
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".activities.DebugActivity" />
 
-        <service android:name=".db.LocalService" />
+        <service android:name=".db.ConnectionService" />
 
         <activity
             android:name=".activities.ComponentListActivity"
