@@ -16,7 +16,6 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.bionic.kvt.serviceapp.views.DrawingView;
 import com.bionic.kvt.serviceapp.views.SignatureView;
 
 import java.io.File;
