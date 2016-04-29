@@ -1,9 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,9 +10,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.Order;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
-import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
-import com.bionic.kvt.serviceapp.helpers.MailHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +29,7 @@ public class DebugActivity extends BaseActivity {
 
     @Bind(R.id.connection_order_id)
     EditText orderIdInput;
-    
+
     @Bind(R.id.synchronisation_log)
     TextView synchronisationLog;
 
@@ -61,44 +56,6 @@ public class DebugActivity extends BaseActivity {
         showApplicationLog();
     }
 
-    @OnClick(R.id.send_log_by_email)
-    public void onRefreshLogClick(View v) {
-        sentLogByEmail();
-    }
-
-    private void sentLogByEmail() {
-        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle(getText(R.string.email_dialog_title));
-        final EditText emailEdit = new EditText(this);
-        emailEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        dialogBuilder.setView(emailEdit);
-
-        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sendEmailWithLog(emailEdit.getText().toString());
-            }
-        });
-        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        dialogBuilder.show();
-    }
-
-    private void sendEmailWithLog(String email) {
-        MailHelper mailHelper = new MailHelper();
-        mailHelper.setRecipient(email);
-        mailHelper.setMessageBody(Session.getSessionLog().toString());
-        mailHelper.setSubject("KVT Service Log");
-
-        new MailHelper.SendMail(this, mailHelper);
-    }
-
-
     @OnClick(R.id.connection_get_orders_brief)
     public void onGetOrdersBriefClick(View v) {
         getOrdersBriefList();
@@ -114,7 +71,7 @@ public class DebugActivity extends BaseActivity {
         }
         getOrderById(orderId);
     }
-    
+
     private void getOrdersBriefList() {
         final Call<List<OrderBrief>> userListRequest =
                 Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());

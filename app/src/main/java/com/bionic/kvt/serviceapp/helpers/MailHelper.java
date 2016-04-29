@@ -79,12 +79,15 @@ public class MailHelper extends javax.mail.Authenticator {
                     }
                 });
 
+//        session.setDebug(true);
+
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(BuildConfig.EMAIL_FROM));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
             message.setSentDate(new Date());
+
 
             MimeBodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setContent(messageBody, "text/html");

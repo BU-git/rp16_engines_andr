@@ -29,19 +29,14 @@
             android:id="@+id/reset_user_db"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset User DB"/>
+            android:text="Reset User DB" />
 
         <Button
             android:id="@+id/reset_order_db"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reset Order DB"/>
+            android:text="Reset Order DB" />
 
-        <Button
-            android:id="@+id/send_log_by_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EMAIL LOG" />
     </LinearLayout>
 
     <Space
