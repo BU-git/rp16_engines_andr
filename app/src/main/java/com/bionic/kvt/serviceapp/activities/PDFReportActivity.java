@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
@@ -57,7 +56,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private MailHelper mailHelper;
     private File pdfReportFile;
     private File pdfReportPreviewFile;
-    private int zoomFactor = 2;
 
     private String engineerName;
     private String clientName;
@@ -67,9 +65,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     @Bind(R.id.pdf_text_log)
     TextView pdfTextLog;
-
-    @Bind(R.id.zoomControls)
-    ZoomControls zoomControls;
 
     @Bind(R.id.pdf_report_bottom)
     LinearLayout reportBottomLayout;
@@ -101,24 +96,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report));
 
-        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (zoomFactor == 4) return;
-                zoomFactor++;
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
-            }
-        });
-
-        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (zoomFactor == 1) return;
-                zoomFactor--;
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
-            }
-        });
-
         String pdfReportFileName = getText(R.string.generating_pdf_document).toString()
                 + " " + PDF_REPORT_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
@@ -129,7 +106,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             reportBottomLayout.setVisibility(View.GONE);
             if (pdfReportFile.exists()) { // We have report.
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
+                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
             } else {
                 if (BuildConfig.IS_LOGGING_ON)
                     Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
@@ -145,7 +122,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
                 // Device is rotated. No need to generate. Just show.
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
+                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
                 return;
             }
         }
@@ -189,7 +166,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         switch (loader.getId()) {
             case PDF_LOADER_ID:
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, zoomFactor, pdfView);
+                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
                 break;
             case MAIL_LOADER_ID:
                 if (data) {

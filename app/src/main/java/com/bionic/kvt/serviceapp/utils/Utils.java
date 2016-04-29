@@ -31,6 +31,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
@@ -159,14 +161,16 @@ public class Utils {
 
     public static void showPDFReport(@NonNull final Context context,
                                      @NonNull final File pdfReportFile,
-                                     final int zoomFactor,
                                      @NonNull final ImageView pdfView) {
+
         if (!pdfReportFile.exists()) {
             Toast.makeText(context, "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportFile);
             return;
         }
+
+        final int zoomFactor = 3;
 
         try (ParcelFileDescriptor mFileDescriptor =
                      ParcelFileDescriptor.open(pdfReportFile, ParcelFileDescriptor.MODE_READ_ONLY)) {
@@ -177,9 +181,10 @@ public class Utils {
             final int pageWidth = mCurrentPage.getWidth() * zoomFactor;
 
             final Bitmap bitmap = Bitmap.createBitmap(pageWidth, pageHeight, Bitmap.Config.ARGB_8888);
-            mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+            mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT);
             pdfView.setImageBitmap(bitmap);
 
+            new PhotoViewAttacher(pdfView);
             mCurrentPage.close();
             mPdfRenderer.close();
         } catch (IOException e) {

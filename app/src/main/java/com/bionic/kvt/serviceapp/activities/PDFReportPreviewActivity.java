@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
@@ -47,13 +46,9 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     private static final int PDF_LOADER_ID = 1;
     private File pdfReportPreviewFile;
     private File pdfTemplate;
-    private int zoomFactor = 2;
 
     @Bind(R.id.pdf_preview_text_log)
     TextView pdfTextLog;
-
-    @Bind(R.id.pdf_preview_zoomControls)
-    ZoomControls zoomControls;
 
     @Bind(R.id.pdf_preview_bitmap)
     ImageView pdfView;
@@ -76,24 +71,6 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report_preview));
 
-        zoomControls.setOnZoomInClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (zoomFactor == 4) return;
-                zoomFactor++;
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
-            }
-        });
-
-        zoomControls.setOnZoomOutClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (zoomFactor == 1) return;
-                zoomFactor--;
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
-            }
-        });
-
         String pdfReportFileName = getText(R.string.generating_pdf_preview_document).toString()
                 + " " + PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
@@ -105,7 +82,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
                 // Device is rotated. No need to generate. Just show.
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, pdfView);
                 return;
             }
         }
@@ -146,7 +123,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
         switch (loader.getId()) {
             case PDF_LOADER_ID:
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, zoomFactor, pdfView);
+                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, pdfView);
                 break;
         }
     }

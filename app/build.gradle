@@ -41,5 +41,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.sun.mail:android-mail:1.5.5'
     compile 'com.sun.mail:android-activation:1.5.5'
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
     testCompile 'junit:junit:4.12'
 }
