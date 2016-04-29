@@ -90,10 +90,6 @@ public class LoginActivity extends BaseActivity implements
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
-        //TODO Update foe user handling logic
-//        DbUtils.dropDatabase();
-        DbUtils.createUserTableIfNotExist();
-
         //Setting header for the app;
         HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();

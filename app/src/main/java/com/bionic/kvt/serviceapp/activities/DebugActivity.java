@@ -1,6 +1,9 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +15,7 @@ import com.bionic.kvt.serviceapp.api.Order;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.helpers.MailHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +28,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DebugActivity extends BaseActivity {
-    private final List<User> userListOnServer = new ArrayList<>();
     private final List<OrderBrief> orderBriefList = new ArrayList<>();
     private Order order;
+    private static final int MAIL_LOADER_ID = 2;
 
     @Bind(R.id.connection_order_id)
     EditText orderIdInput;
+    
     @Bind(R.id.synchronisation_log)
     TextView synchronisationLog;
 
@@ -56,15 +61,43 @@ public class DebugActivity extends BaseActivity {
         showApplicationLog();
     }
 
-    @OnClick(R.id.refresh_log)
+    @OnClick(R.id.send_log_by_email)
     public void onRefreshLogClick(View v) {
-        showApplicationLog();
+        sentLogByEmail();
     }
 
-    @OnClick(R.id.connection_get_users)
-    public void onGetUsersClick(View v) {
-        getUserList();
+    private void sentLogByEmail() {
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle(getText(R.string.email_dialog_title));
+        final EditText emailEdit = new EditText(this);
+        emailEdit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        dialogBuilder.setView(emailEdit);
+
+        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendEmailWithLog(emailEdit.getText().toString());
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        dialogBuilder.show();
     }
+
+    private void sendEmailWithLog(String email) {
+        MailHelper mailHelper = new MailHelper();
+        mailHelper.setRecipient(email);
+        mailHelper.setMessageBody(Session.getSessionLog().toString());
+        mailHelper.setSubject("KVT Service Log");
+
+        new MailHelper.SendMail(this, mailHelper);
+    }
+
 
     @OnClick(R.id.connection_get_orders_brief)
     public void onGetOrdersBriefClick(View v) {
@@ -81,35 +114,7 @@ public class DebugActivity extends BaseActivity {
         }
         getOrderById(orderId);
     }
-
-    private void getUserList() {
-//        final Call<List<User>> userListRequest = Session.getServiceConnection().getAllUsers();
-//
-//        addLogMessage("Getting user list from " + userListRequest.request());
-//
-//        userListRequest.enqueue(new Callback<List<User>>() {
-//            @Override
-//            public void onResponse(final Call<List<User>> call,
-//                                   final Response<List<User>> response) {
-//                if (response.isSuccessful()) {
-//                    userListOnServer.clear();
-//                    userListOnServer.addAll(response.body());
-//                    addLogMessage("Request successful! Get " + userListOnServer.size() + " users.");
-//                    for (User user : userListOnServer) {
-//                        addLogMessage("User:" + user.toString());
-//                    }
-//                } else {
-//                    addLogMessage("User request error: " + response.code());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(final Call<List<User>> call, final Throwable t) {
-//                addLogMessage("User request fail: " + t.toString());
-//            }
-//        });
-    }
-
+    
     private void getOrdersBriefList() {
         final Call<List<OrderBrief>> userListRequest =
                 Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());

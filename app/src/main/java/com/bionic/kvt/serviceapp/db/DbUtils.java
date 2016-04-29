@@ -71,16 +71,11 @@ public class DbUtils {
         realm.clear(Part.class);
         realm.clear(Relation.class);
         realm.clear(Task.class);
+
+        realm.clear(OrderReportJobRules.class);
+        realm.clear(OrderReportMeasurements.class);
         realm.commitTransaction();
 
-        realm.close();
-    }
-
-    public static void createUserTableIfNotExist() {
-        final Realm realm = Realm.getDefaultInstance();
-        if (realm.where(User.class).findAll().size() == 0) {
-            resetUserTable();
-        }
         realm.close();
     }
 

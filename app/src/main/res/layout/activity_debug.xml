@@ -38,10 +38,10 @@
             android:text="Reset Order DB"/>
 
         <Button
-            android:id="@+id/refresh_log"
+            android:id="@+id/send_log_by_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Refresh log" />
+            android:text="EMAIL LOG" />
     </LinearLayout>
 
     <Space
@@ -65,12 +65,6 @@
             android:gravity="center_vertical"
             android:text="Test requests (no change to database)"
             android:textColor="@color/colorSecondaryText" />
-
-        <Button
-            android:id="@+id/connection_get_users"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get users" />
 
         <Button
             android:id="@+id/connection_get_orders_brief"
