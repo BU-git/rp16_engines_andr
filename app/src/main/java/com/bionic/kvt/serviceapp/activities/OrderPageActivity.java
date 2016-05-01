@@ -1,13 +1,12 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.annotation.NonNull;
+import android.os.Handler;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,17 +21,21 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
-import com.bionic.kvt.serviceapp.db.ConnectionService;
+import com.bionic.kvt.serviceapp.api.Order;
+import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
@@ -40,10 +43,14 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_CO
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener,
-        ConnectionService.Callbacks {
+        LoaderManager.LoaderCallbacks<OrderPageActivity.OrderUpdateResult> {
 
+    private static final int ORDERS_LOADER_ID = 3;
+    private static final long UPDATE_PERIOD = 60_000; // 60 sec
+    private List<OrderOverview> orderOverviewList = new ArrayList<>();
     private OrderAdapter ordersAdapter;
-    private ConnectionService connectionService;
+    Handler updateHandler = new Handler();
+    AsyncTaskLoader<OrderUpdateResult> updateLoader;
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -54,36 +61,21 @@ public class OrderPageActivity extends BaseActivity implements
     @Bind(R.id.orders_recycler_view)
     RecyclerView ordersRecyclerView;
 
-    private final ServiceConnection serviceConnection = new ServiceConnection() {
+    static class OrderUpdateResult {
+        int status;
+        String message;
 
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            ConnectionService.LocalBinder binder = (ConnectionService.LocalBinder) service;
-            connectionService = binder.getService();
-            connectionService.registerClient(OrderPageActivity.this);
-
-            if (IS_LOGGING_ON) Session.addToSessionLog("Order page service connected.");
-
-            // Running service task
-            connectionService.runTask();
+        public OrderUpdateResult(int status, String message) {
+            this.status = status;
+            this.message = message;
         }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            OrderPageActivity.this.connectionService = null;
-
-            if (IS_LOGGING_ON) Session.addToSessionLog("Order page service disconnected.");
-        }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
         ButterKnife.bind(this);
-
-        // Generating OrderOverviewList
-        DbUtils.updateOrderOverviewList();
 
         //Configuring Search view
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
@@ -137,10 +129,19 @@ public class OrderPageActivity extends BaseActivity implements
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         // Showing all orders
-        ordersAdapter = new OrderAdapter(getApplicationContext(), Session.getOrderOverviewList());
+        ordersAdapter = new OrderAdapter(getApplicationContext(), orderOverviewList);
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
+
+        getSupportLoaderManager().initLoader(ORDERS_LOADER_ID, null, OrderPageActivity.this);
     }
+
+    private Runnable orderUpdateTask = new Runnable() {
+        @Override
+        public void run() {
+            updateLoader.forceLoad();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -169,32 +170,21 @@ public class OrderPageActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, ConnectionService.class);
-        bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        Session.clearCurrentOrder();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        updateOrderAdapter();
+        Session.clearCurrentOrder();
+//        updateHandler.post(orderUpdateTask);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (connectionService != null) {
-            connectionService.stopTask();
-            unbindService(serviceConnection);
-        }
+    protected void onPause() {
+        super.onPause();
+        updateHandler.removeCallbacks(orderUpdateTask);
     }
 
     @Override
     public void OnOrderLineClicked(View view, int position) {
-        // Setting selected Order to current session
-        final long currentOrderNumber = Session.getOrderOverviewList().
+        final long currentOrderNumber = orderOverviewList.
                 get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
@@ -204,34 +194,20 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Override
     public void OnPDFButtonClicked(View view, int position) {
-        final long currentOrderNumber = Session.getOrderOverviewList().
+        final long currentOrderNumber = orderOverviewList.
                 get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
-
-        //TODO Maybe we dont need this
-        if (Utils.isRequestWritePermissionNeeded(getApplicationContext(), this)) return;
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
         startActivity(intent);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Utils.REQUEST_WRITE_CODE) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
-                startActivity(intent);
-            }
-        }
-    }
-
     private void doOrdersSearch(String query) {
         if ("".equals(query)) {
-            ordersAdapter.setOrdersDataSet(Session.getOrderOverviewList());
+            ordersAdapter.setOrdersDataSet(orderOverviewList);
         } else {
             List<OrderOverview> searchOrderOverview = new ArrayList<>();
-            for (OrderOverview oneOrder : Session.getOrderOverviewList()) {
+            for (OrderOverview oneOrder : orderOverviewList) {
                 if (oneOrder.getNumber().toString().contains(query)) {
                     searchOrderOverview.add(oneOrder);
                 }
@@ -241,16 +217,118 @@ public class OrderPageActivity extends BaseActivity implements
         ordersAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void updateUpdateStatus(String message) {
-        orderUpdateStatusText.setText("[" + Utils.getTimeStringFromDate(Calendar.getInstance().getTime()) + "] " + message);
+    public void updateOrderAdapter() {
+        DbUtils.updateOrderOverviewList(orderOverviewList);
+        if (IS_LOGGING_ON) Session.addToSessionLog("Setting OrderAdapter data.");
+        ordersAdapter.setOrdersDataSet(orderOverviewList);
+        ordersAdapter.notifyDataSetChanged();
+    }
+
+    public static class UpdateDataFromServer extends AsyncTaskLoader<OrderUpdateResult> {
+        private Context context;
+
+        public UpdateDataFromServer(Context context) {
+            super(context);
+            this.context = context;
+        }
+
+        @Override
+        public void forceLoad() {
+            super.forceLoad();
+        }
+
+        @Override
+        protected void onStartLoading() {
+            super.onStartLoading();
+            forceLoad();
+        }
+
+        @Override
+        protected void onStopLoading() {
+            super.onStopLoading();
+        }
+
+        @Override
+        public void deliverResult(OrderUpdateResult data) {
+            super.deliverResult(data);
+        }
+
+        @Override
+        public OrderUpdateResult loadInBackground() {
+            if (!Utils.isNetworkConnected(context))
+                return new OrderUpdateResult(1, "No connection to network. Canceling update.");
+
+            final Call<List<OrderBrief>> orderBriefListRequest =
+                    Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
+
+            if (IS_LOGGING_ON)
+                Session.addToSessionLog("Updating orders. Getting orders brief list from: " + orderBriefListRequest.request());
+
+            final Response<List<OrderBrief>> orderBriefListResponse;
+            try {
+                orderBriefListResponse = orderBriefListRequest.execute();
+            } catch (IOException e) {
+                return new OrderUpdateResult(1, "Orders brief list request fail: " + e.toString());
+            }
+
+            if (!orderBriefListResponse.isSuccessful())
+                return new OrderUpdateResult(1, "Orders brief list request error: " + orderBriefListResponse.code());
+
+            if (IS_LOGGING_ON)
+                Session.addToSessionLog("Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
+
+            final List<OrderBrief> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
+
+            if (ordersToBeUpdated.isEmpty())
+                return new OrderUpdateResult(0, "Nothing to update.");
+
+            for (OrderBrief orderBrief : ordersToBeUpdated) {
+                final Call<Order> orderRequest =
+                        Session.getServiceConnection().getOrder(orderBrief.getNumber(), Session.getEngineerId());
+
+                if (IS_LOGGING_ON)
+                    Session.addToSessionLog("Getting order from: " + orderRequest.request());
+
+                final Response<Order> orderResponse;
+                try {
+                    orderResponse = orderRequest.execute();
+                } catch (IOException e) {
+                    return new OrderUpdateResult(1, "Order request fail: " + e.toString());
+                }
+                if (!orderResponse.isSuccessful()) {
+                    return new OrderUpdateResult(1, "Order request error: " + orderResponse.code());
+                }
+
+                if (IS_LOGGING_ON) Session.addToSessionLog("Request successful!");
+
+                DbUtils.updateOrderFromServer(orderResponse.body());
+            }
+
+            return new OrderUpdateResult(0, "Update " + ordersToBeUpdated.size() + " orders.");
+        }
     }
 
     @Override
-    public void updateOrderAdapter() {
-        if (IS_LOGGING_ON) Session.addToSessionLog("Update OrderAdapter data.");
-        DbUtils.updateOrderOverviewList();
-        ordersAdapter.setOrdersDataSet(Session.getOrderOverviewList());
-        ordersAdapter.notifyDataSetChanged();
+    public Loader<OrderUpdateResult> onCreateLoader(int id, Bundle args) {
+        if (id == ORDERS_LOADER_ID) {
+            updateLoader = new UpdateDataFromServer(this);
+            return updateLoader;
+        }
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<OrderUpdateResult> loader, OrderUpdateResult data) {
+        if (loader.getId() == ORDERS_LOADER_ID) {
+            if (IS_LOGGING_ON) Session.addToSessionLog(data.message);
+            orderUpdateStatusText.setText("[" + Utils.getTimeStringFromDate(Calendar.getInstance().getTime()) + "] " + data.message);
+            updateOrderAdapter();
+            updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<OrderUpdateResult> loader) {
+        // NOOP
     }
 }

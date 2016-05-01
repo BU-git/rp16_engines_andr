@@ -90,7 +90,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void updateOrderOverviewList() {
+    public static void updateOrderOverviewList(List<OrderOverview> listToUpdate) {
         if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating Order Overview List");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -98,7 +98,7 @@ public class DbUtils {
                 realm.where(Order.class).equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
         allOrdersInDb.sort("number");
 
-        Session.getOrderOverviewList().clear();
+        listToUpdate.clear();
         for (Order order : allOrdersInDb) {
             final OrderOverview orderOverview = new OrderOverview();
             orderOverview.setNumber(order.getNumber());
@@ -114,12 +114,12 @@ public class DbUtils {
             orderOverview.setOrderStatus(order.getOrderStatus());
             orderOverview.setPdfString("PDF");
 
-            Session.getOrderOverviewList().add(orderOverview);
+            listToUpdate.add(orderOverview);
         }
 
         realm.close();
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Added " + Session.getOrderOverviewList().size() + " orders to view.");
+            Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
     }
 
     public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {

@@ -4,7 +4,6 @@ import android.app.Application;
 import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
-import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
@@ -28,7 +27,6 @@ public class Session extends Application {
 
     private ConnectionServiceAPI connectionServiceAPI;
     private List<String> sessionLog;
-    private boolean isSyncingFromServer = false;
 
     private File currentAppExternalPrivateDir;
     private File currentOrderDir;
@@ -37,14 +35,12 @@ public class Session extends Application {
     private String engineerEmail;
     private String engineerId;
     private long currentOrder;
-    private List<OrderOverview> orderOverviewList;
 
     @Override
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
         sessionLog = new ArrayList<>();
-        orderOverviewList = new ArrayList<>();
         currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
 
         Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
@@ -67,7 +63,6 @@ public class Session extends Application {
         currentUserSession.engineerEmail = null;
         currentUserSession.engineerId = null;
         currentUserSession.currentOrder = 0L;
-        currentUserSession.orderOverviewList.clear();
         currentUserSession.currentOrderDir = null;
     }
 
@@ -82,14 +77,6 @@ public class Session extends Application {
 
     public static void addToSessionLog(String message) {
         currentUserSession.sessionLog.add("[" + Utils.getDateTimeStringFromDate(new Date()) + "](" + currentUserSession.engineerEmail + ") " + message);
-    }
-
-    public static boolean isSyncingFromServer() {
-        return currentUserSession.isSyncingFromServer;
-    }
-
-    public static void setIsSyncingFromServer(boolean state) {
-        currentUserSession.isSyncingFromServer = state;
     }
 
     public static void setEngineerName(String engineerName) {
@@ -122,10 +109,6 @@ public class Session extends Application {
 
     public static long getCurrentOrder() {
         return currentUserSession.currentOrder;
-    }
-
-    public static List<OrderOverview> getOrderOverviewList() {
-        return currentUserSession.orderOverviewList;
     }
 
     public static File getCurrentAppExternalPrivateDir() {

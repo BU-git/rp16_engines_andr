@@ -50,9 +50,10 @@
             android:name=".activities.SignaturesActivity"
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".activities.DebugActivity" />
 
-        <service android:name=".db.ConnectionService" />
+        <activity
+            android:name=".activities.DebugActivity"
+            android:windowSoftInputMode="stateHidden" />
 
         <activity
             android:name=".activities.ComponentListActivity"
