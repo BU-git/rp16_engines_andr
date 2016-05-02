@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -20,7 +21,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Session extends Application {
     private static Session currentUserSession;
 
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS);
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(BuildConfig.BACK_OFFICE_HOST)
             .addConverterFactory(GsonConverterFactory.create());
