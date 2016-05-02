@@ -85,11 +85,6 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnected();
     }
 
-    public static void cleanSignatureFile(final String signatureFileName) {
-        final File signatureFile = new File(getCurrentOrderDir(), signatureFileName);
-        if (signatureFile.exists()) signatureFile.delete();
-    }
-
     public static String getDateStringFromDate(final Date date) {
         return dateOnly.format(date);
     }

@@ -1,40 +1,29 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.SignatureView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
-
 public class SignaturesActivity extends BaseActivity {
-    private static final int ENGINEER_BUTTON = 1;
-    private static final int CLIENT_BUTTON = 2;
-    private int currentButtonClicked;
-
     @Bind(R.id.draw_engineer_signature)
     SignatureView engineerDrawingView;
 
@@ -82,8 +71,6 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_clear_engineer)
     public void onClearEngineerClick(View v) {
-        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
-
         engineerDrawingView.clear();
         buttonConfirmEngineer.setChecked(false);
         buttonComplete.setEnabled(false);
@@ -91,8 +78,6 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_clear_client)
     public void onClearClientClick(View v) {
-        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
-
         clientDrawingView.clear();
         buttonConfirmClient.setChecked(false);
         buttonComplete.setEnabled(false);
@@ -111,76 +96,40 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_confirm_engineer)
     public void onConfirmEngineerClick(View v) {
-        currentButtonClicked = ENGINEER_BUTTON;
-        onConfirmClicked();
+        if (engineerDrawingView.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
+            buttonConfirmEngineer.setChecked(false);
+            return;
+        }
+
+        engineerDrawingView.setDrawingCacheEnabled(true);
+        final Bitmap signatureBitmap = engineerDrawingView.getDrawingCache();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        Session.setByteArrayEngineerSignature(byteArrayOutputStream.toByteArray());
+        engineerDrawingView.destroyDrawingCache();
+
+        buttonConfirmEngineer.setChecked(true);
+        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
     }
 
     @OnClick(R.id.button_confirm_client)
     public void onConfirmClientClick(View v) {
-        currentButtonClicked = CLIENT_BUTTON;
-        onConfirmClicked();
-    }
-
-    private void onConfirmClicked() {
-        if (Utils.isRequestWritePermissionNeeded(getApplicationContext(), this)) {
-            buttonConfirmEngineer.setChecked(false);
-            buttonConfirmClient.setChecked(false);
-            buttonComplete.setEnabled(false);
-            return;
-        }
-
-        if (!Utils.isExternalStorageWritable()) {
-            Toast.makeText(getApplicationContext(), "Can not write file to external storage!", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Signature: Can not write file to external storage!");
-            return;
-        }
-
-        SignatureView currentDrawingView;
-        ToggleButton currentToggleButton;
-        String signatureFileName;
-        switch (currentButtonClicked) {
-            case ENGINEER_BUTTON:
-                currentDrawingView = engineerDrawingView;
-                currentToggleButton = buttonConfirmEngineer;
-                signatureFileName = SIGNATURE_FILE_ENGINEER;
-                break;
-            case CLIENT_BUTTON:
-            default:
-                currentDrawingView = clientDrawingView;
-                currentToggleButton = buttonConfirmClient;
-                signatureFileName = SIGNATURE_FILE_CLIENT;
-                break;
-        }
-
-        if (currentDrawingView.isEmpty()) {
+        if (clientDrawingView.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
-            currentToggleButton.setChecked(false);
-            currentButtonClicked = 0;
+            buttonConfirmClient.setChecked(false);
             return;
         }
 
-        Utils.cleanSignatureFile(signatureFileName);
-        currentDrawingView.setDrawingCacheEnabled(true);
-        final Bitmap signatureBitmap = currentDrawingView.getDrawingCache();
-        final File signatureFile = new File(Utils.getCurrentOrderDir(), signatureFileName);
+        clientDrawingView.setDrawingCacheEnabled(true);
+        final Bitmap signatureBitmap = clientDrawingView.getDrawingCache();
+        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        Session.setByteArrayClientSignature(byteArrayOutputStream.toByteArray());
+        clientDrawingView.destroyDrawingCache();
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(signatureFile)) {
-            signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            currentToggleButton.setChecked(true);
-        } catch (IOException e) {
-            currentToggleButton.setChecked(false);
-            Toast.makeText(getApplicationContext(), "ERROR: Signature could not be saved", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR writing: " + signatureFile + e.toString());
-        }
-
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Signature file saved: " + signatureFile);
-
-        currentDrawingView.destroyDrawingCache();
+        buttonConfirmClient.setChecked(true);
         buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
-        currentButtonClicked = 0;
     }
 
     @Override
@@ -191,13 +140,4 @@ public class SignaturesActivity extends BaseActivity {
         buttonComplete.setEnabled(false);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == Utils.REQUEST_WRITE_CODE) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // onConfirmClicked(); useless because of onResume
-            }
-        }
-    }
 }

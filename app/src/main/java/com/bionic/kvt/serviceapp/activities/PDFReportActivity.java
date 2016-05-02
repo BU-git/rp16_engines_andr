@@ -46,8 +46,6 @@ import butterknife.OnClick;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
     private static final String ROTATION_FLAG = "ROTATION_FLAG";
@@ -246,17 +244,12 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 columnText.setSimpleColumn(orderText8, x, y, x + 150, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
-
-                String signatureFileName = SIGNATURE_FILE_ENGINEER;
-                String signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
-                Image signatureEngineer = Image.getInstance(signaturePath);
+                Image signatureEngineer = Image.getInstance(Session.getByteArrayEngineerSignature());
                 signatureEngineer.setAbsolutePosition(325f, 80f);
                 signatureEngineer.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureEngineer);
 
-                signatureFileName = SIGNATURE_FILE_CLIENT;
-                signaturePath = new File(Utils.getCurrentOrderDir(), signatureFileName).toString();
-                Image signatureClient = Image.getInstance(signaturePath);
+                Image signatureClient = Image.getInstance(Session.getByteArrayClientSignature());
                 signatureClient.setAbsolutePosition(102f, 80f);
                 signatureClient.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureClient);
@@ -266,20 +259,13 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 Session.addToSessionLog("ERROR: 1" + e.toString());
             } catch (IOException e) {
                 Session.addToSessionLog("ERROR: 2" + e.toString());
-            } catch (NullPointerException e) {
-                Session.addToSessionLog("ERROR: 3" + e.toString());
             } catch (DocumentException e) {
-                Session.addToSessionLog("ERROR: 4" + e.toString());
+                Session.addToSessionLog("ERROR: 3" + e.toString());
             }
 
-            //TODO EXEPTION REVISE
-            Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
-            Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
             return false;
         }
-
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {

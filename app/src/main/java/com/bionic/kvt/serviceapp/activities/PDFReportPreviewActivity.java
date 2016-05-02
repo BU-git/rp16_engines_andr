@@ -38,8 +38,6 @@ import butterknife.OnClick;
 import io.realm.Realm;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_CLIENT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_FILE_ENGINEER;
 
 public class PDFReportPreviewActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
     private static final String ROTATION_FLAG = "ROTATION_FLAG";
@@ -282,13 +280,10 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 Session.addToSessionLog("ERROR: 1" + e.toString());
             } catch (IOException e) {
                 Session.addToSessionLog("ERROR: 2" + e.toString());
-            } catch (NullPointerException e) {
-                Session.addToSessionLog("ERROR: 3" + e.toString());
             } catch (DocumentException e) {
-                Session.addToSessionLog("ERROR: 4" + e.toString());
+                Session.addToSessionLog("ERROR: 3" + e.toString());
             }
 
-            //TODO EXEPTION REVISE
             return false;
         }
 
@@ -296,9 +291,6 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
     @OnClick(R.id.pdf_preview_button_next)
     public void onDoneClick(View v) {
-        Utils.cleanSignatureFile(SIGNATURE_FILE_ENGINEER);
-        Utils.cleanSignatureFile(SIGNATURE_FILE_CLIENT);
-
         Intent intent = new Intent(getApplicationContext(), SignaturesActivity.class);
         startActivity(intent);
     }

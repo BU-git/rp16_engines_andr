@@ -35,6 +35,8 @@ public class Session extends Application {
     private String engineerEmail;
     private String engineerId;
     private long currentOrder;
+    private byte[] byteArrayEngineerSignature;
+    private byte[] byteArrayClientSignature;
 
     @Override
     public void onCreate() {
@@ -64,11 +66,15 @@ public class Session extends Application {
         currentUserSession.engineerId = null;
         currentUserSession.currentOrder = 0L;
         currentUserSession.currentOrderDir = null;
+        currentUserSession.byteArrayEngineerSignature = null;
+        currentUserSession.byteArrayClientSignature = null;
     }
 
     public static void clearCurrentOrder() {
         currentUserSession.currentOrder = 0L;
         currentUserSession.currentOrderDir = null;
+        currentUserSession.byteArrayEngineerSignature = null;
+        currentUserSession.byteArrayClientSignature = null;
     }
 
     public static List<String> getSessionLog() {
@@ -119,5 +125,21 @@ public class Session extends Application {
     @Nullable
     public static File getCurrentOrderDir() {
         return currentUserSession.currentOrderDir;
+    }
+
+    public static byte[] getByteArrayEngineerSignature() {
+        return currentUserSession.byteArrayEngineerSignature;
+    }
+
+    public static void setByteArrayEngineerSignature(byte[] byteArrayEngineerSignature) {
+        currentUserSession.byteArrayEngineerSignature = byteArrayEngineerSignature;
+    }
+
+    public static byte[] getByteArrayClientSignature() {
+        return currentUserSession.byteArrayClientSignature;
+    }
+
+    public static void setByteArrayClientSignature(byte[] byteArrayClientSignature) {
+        currentUserSession.byteArrayClientSignature = byteArrayClientSignature;
     }
 }
