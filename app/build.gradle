@@ -23,6 +23,7 @@ android {
         buildConfigField('String', 'EMAIL_PASSWORD', '"Bionic2016"')
         buildConfigField('String', 'BACK_OFFICE_HOST', '"http://128.0.169.5:9990/"')
         buildConfigField('String', 'DB_NAME', '"kvt.realm"')
+        buildConfigField('String', 'PDF_PASSWORD', '"R+#+KSio2L[!FphG*R%w&Z;<6)5?0/|z8"')
         buildConfigField('boolean', 'IS_LOGGING_ON', 'true')
         buildConfigField 'String', 'COMPONENTS_JSON', '"components.json"'
     }

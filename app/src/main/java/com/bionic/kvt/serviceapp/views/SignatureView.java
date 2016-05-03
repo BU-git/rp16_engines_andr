@@ -68,9 +68,7 @@ public class SignatureView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        final int state = canvas.getSaveCount();
         canvas.drawPath(path, paint);
-        canvas.restoreToCount(state);
     }
 
     @Override

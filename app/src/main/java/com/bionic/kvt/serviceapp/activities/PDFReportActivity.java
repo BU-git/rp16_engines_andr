@@ -32,6 +32,7 @@ import com.lowagie.text.pdf.ColumnText;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
+import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -228,6 +229,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             try {
                 final PdfReader pdfReader = new PdfReader(pdfReportPreviewFile.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
+                pdfStamper.setEncryption(null,
+                        BuildConfig.PDF_PASSWORD.getBytes(),
+                        PdfWriter.ALLOW_PRINTING,
+                        PdfWriter.STANDARD_ENCRYPTION_128);
                 final Font font = new Font(Font.HELVETICA, 11, Font.NORMAL);
                 final PdfContentByte contentByte = pdfStamper.getOverContent(pdfPageCount);
                 final ColumnText columnText = new ColumnText(contentByte);

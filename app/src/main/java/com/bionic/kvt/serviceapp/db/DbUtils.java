@@ -7,7 +7,6 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.Gson;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,7 +19,10 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TI
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_FOUND;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
+import static com.bionic.kvt.serviceapp.GlobalConstants.OrderMaintenanceType;
+import static com.bionic.kvt.serviceapp.GlobalConstants.OrderStatus;
 
 public class DbUtils {
 
@@ -356,7 +358,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void setOrderStatus(final long orderNumber, final int status) {
+    public static void setOrderStatus(final long orderNumber, @OrderStatus final int status) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
 
@@ -373,11 +375,10 @@ public class DbUtils {
         realm.close();
     }
 
-    // Return -1 if Order not found
-    public static int getOrderStatus(final long orderNumber) {
+    public static @OrderStatus int getOrderStatus(final long orderNumber) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
-        int result = -1;
+        int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();
         final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
         if (order != null) result = order.getOrderStatus();
@@ -415,7 +416,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void setOrderMaintenanceTime(final long orderNumber, final int timeType, final Date time) {
+    public static void setOrderMaintenanceTime(final long orderNumber, @OrderMaintenanceType final int timeType, final Date time) {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
