@@ -13,15 +13,21 @@ public interface ConnectionServiceAPI {
     @POST("user/{email}")
     Call<User> getUser(@Path("email") String email);
 
-    // Request list of all Orders currently available for {userId} in brief format
+    // Request list of all Orders currently available for {email} in brief format
     // URL format /orders/brief/{email}
     // Expecting JSON
     @POST("orders/brief/{email}")
     Call<List<OrderBrief>> getOrdersBrief(@Path("email") String email);
 
-    // Request one order with {number} for {userId}
-    // URL format /orders/{number}/{userId}
+    // Request one order with {number} for {email}
+    // URL format /orders/{number}/{email}
     // Expecting JSON
     @POST("orders/{number}/{email}")
     Call<Order> getOrder(@Path("number") long number, @Path("email") String email);
+
+    // Request one custom template with {customTemplateID} for {email}
+    // URL format /template/{customTemplateID}/{email}
+    // Expecting JSON
+    @POST("template/{customTemplateID}/{email}")
+    Call<CustomTemplate> getTemplate(@Path("customTemplateID") long customTemplateID, @Path("email") String email);
 }

@@ -25,14 +25,16 @@ public class Order extends RealmObject {
     private RealmList<Part> parts; //Onderdelen
     private RealmList<Info> extraInfo; //ExtraInfo
 
+    private Date importDate;
+    private Date lastServerChangeDate;
+    private Date lastAndroidChangeDate;
+
+    // Order processing fields
     private int orderStatus;
     private Date maintenanceStartTime;
     private Date maintenanceEndTime;
 
     // Service fields
-    private Date importDate;
-    private Date lastServerChangeDate;
-    private Date lastAndroidChangeDate;
     private String employeeEmail; // Copy of employee.email for search optimisation
 
     public long getNumber() {

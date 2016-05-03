@@ -8,7 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 public interface GlobalConstants {
     @IntDef({ORDER_STATUS_NOT_FOUND, ORDER_STATUS_NOT_STARTED, ORDER_STATUS_IN_PROGRESS, ORDER_STATUS_COMPLETE})
     @Retention(RetentionPolicy.SOURCE)
-    @interface OrderStatus {}
+    @interface OrderStatus {
+    }
 
     int ORDER_STATUS_NOT_FOUND = -1;
     int ORDER_STATUS_NOT_STARTED = 0;
@@ -18,13 +19,13 @@ public interface GlobalConstants {
 
     @IntDef({ORDER_MAINTENANCE_START_TIME, ORDER_MAINTENANCE_END_TIME})
     @Retention(RetentionPolicy.SOURCE)
-    @interface OrderMaintenanceType {}
+    @interface OrderMaintenanceType {
+    }
 
     int ORDER_MAINTENANCE_START_TIME = 1;
     int ORDER_MAINTENANCE_END_TIME = 2;
 
-
-
+    int PASSWORD_HASH_ITERATIONS = 3;
     int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
     double DRAWING_VIEW_PROPORTION = 2.6;

@@ -7,6 +7,8 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.Gson;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_FOUND;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PASSWORD_HASH_ITERATIONS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderMaintenanceType;
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderStatus;
 
@@ -324,25 +327,38 @@ public class DbUtils {
 
     public static boolean isUserLoginValid(final String email, final String password) {
         if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Validating user: " + email + " : " + password);
-
-//        String passwd = "";
-//        try {
-//            MessageDigest digester = MessageDigest.getInstance("SHA-256");
-//            digester.update((passwordFromUser+saltFromServer).getBytes());
-//            passwdFromServer = digester.digest().toString();
-//        } catch (NoSuchAlgorithmException e) {
-//        }
-
+            Session.addToSessionLog("Validating user: " + email);
 
         Realm realm = Realm.getDefaultInstance();
-        boolean res = realm.where(User.class)
-                .equalTo("email", email)
-                .equalTo("passwordHash", password)
-                .findAll()
-                .size() == 1;
+        final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
+        if (usersInDB.size() != 1) {
+            realm.close();
+            return false;
+        }
+
+        final MessageDigest digester;
+        try {
+            digester = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            if (BuildConfig.IS_LOGGING_ON)
+                Session.addToSessionLog("NoSuchAlgorithmException (SHA-256): " + e.toString());
+            realm.close();
+            return false;
+        }
+
+        final String saltInDB = usersInDB.first().getSalt();
+        final String passwordHashInDB = usersInDB.first().getPasswordHash();
         realm.close();
-        return res;
+
+        if (passwordHashInDB == null) return false;
+
+        byte[] hash = (password + saltInDB).getBytes();
+        for (int i = 0; i <= PASSWORD_HASH_ITERATIONS; i++) {
+            digester.update(hash);
+            hash = digester.digest();
+        }
+
+        return passwordHashInDB.equals(Utils.convertByteArrayToHexString(hash));
     }
 
     public static void setUserSession(final String email) {

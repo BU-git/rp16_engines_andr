@@ -24,7 +24,7 @@ public class Order {
     private List<Part> parts; //Onderdelen
     private List<Info> extraInfo; //ExtraInfo
 
-    // Service fields
+
 
     /**
      * This is time when this order was imported to BO Server.
@@ -52,9 +52,23 @@ public class Order {
     private long lastAndroidChangeDate;
 
     /**
+     * This is ID for custom template.
+     * If order use default temple customTemplateID == 0;
+     * If customTemplateID > 0 this mean that this order use non-default template
+     * If non-default template is assigned/changed on server than lastServerChangeDate has to be updated.
+     */
+    private long customTemplateID;
+
+
+    // Service fields
+
+    /**
      * Order is Done
      */
     private boolean done;
+
+    public Order() {
+    }
 
     public boolean isDone() {
         return done;
@@ -62,9 +76,6 @@ public class Order {
 
     public void setDone(boolean done) {
         this.done = done;
-    }
-
-    public Order() {
     }
 
     public long getNumber() {
