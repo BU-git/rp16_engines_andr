@@ -22,6 +22,16 @@ public interface GlobalConstants {
     @interface OrderMaintenanceType {
     }
 
+    @IntDef({CUSTOM_ELEMENT_LABEL, CUSTOM_ELEMENT_TEXT_FIELD, CUSTOM_ELEMENT_TEXT_AREA, CUSTOM_ELEMENT_CHECK_BOX})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface CustomElement {
+    }
+
+    int CUSTOM_ELEMENT_TEXT_FIELD = 1;
+    int CUSTOM_ELEMENT_CHECK_BOX = 2;
+    int CUSTOM_ELEMENT_TEXT_AREA = 3;
+    int CUSTOM_ELEMENT_LABEL = 4;
+
     int ORDER_MAINTENANCE_START_TIME = 1;
     int ORDER_MAINTENANCE_END_TIME = 2;
 

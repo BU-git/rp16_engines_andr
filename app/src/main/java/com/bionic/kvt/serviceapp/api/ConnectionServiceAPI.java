@@ -25,9 +25,9 @@ public interface ConnectionServiceAPI {
     @POST("orders/{number}/{email}")
     Call<Order> getOrder(@Path("number") long number, @Path("email") String email);
 
-    // Request one custom template with {customTemplateID} for {email}
-    // URL format /template/{customTemplateID}/{email}
+    // Request one custom template with {customTemplateID}
+    // URL format /template/{customTemplateID}
     // Expecting JSON
-    @POST("template/{customTemplateID}/{email}")
-    Call<CustomTemplate> getTemplate(@Path("customTemplateID") long customTemplateID, @Path("email") String email);
+    @POST("template/{customTemplateID}")
+    Call<CustomTemplate> getTemplate(@Path("customTemplateID") long customTemplateID);
 }
