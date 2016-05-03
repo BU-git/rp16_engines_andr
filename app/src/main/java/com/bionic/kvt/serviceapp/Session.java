@@ -37,7 +37,6 @@ public class Session extends Application {
 
     private String engineerName;
     private String engineerEmail;
-    private String engineerId;
     private long currentOrder;
     private byte[] byteArrayEngineerSignature;
     private byte[] byteArrayClientSignature;
@@ -67,7 +66,6 @@ public class Session extends Application {
     public static void clearSession() {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
-        currentUserSession.engineerId = null;
         currentUserSession.currentOrder = 0L;
         currentUserSession.currentOrderDir = null;
         currentUserSession.byteArrayEngineerSignature = null;
@@ -99,15 +97,10 @@ public class Session extends Application {
 
     public static void setEngineerEmail(String engineerEmail) {
         currentUserSession.engineerEmail = engineerEmail;
-        currentUserSession.engineerId = Utils.getUserIdFromEmail(engineerEmail);
     }
 
     public static String getEngineerEmail() {
         return currentUserSession.engineerEmail;
-    }
-
-    public static String getEngineerId() {
-        return currentUserSession.engineerId;
     }
 
     public static void setCurrentOrder(long order) {

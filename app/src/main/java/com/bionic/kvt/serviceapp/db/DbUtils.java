@@ -7,6 +7,7 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.Gson;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -326,8 +327,8 @@ public class DbUtils {
 //        String passwd = "";
 //        try {
 //            MessageDigest digester = MessageDigest.getInstance("SHA-256");
-//            digester.update(password.getBytes());
-//            passwd = digester.digest().toString();
+//            digester.update((passwordFromUser+saltFromServer).getBytes());
+//            passwdFromServer = digester.digest().toString();
 //        } catch (NoSuchAlgorithmException e) {
 //        }
 

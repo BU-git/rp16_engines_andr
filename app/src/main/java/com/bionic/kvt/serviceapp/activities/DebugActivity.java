@@ -74,7 +74,7 @@ public class DebugActivity extends BaseActivity {
 
     private void getOrdersBriefList() {
         final Call<List<OrderBrief>> userListRequest =
-                Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
+                Session.getServiceConnection().getOrdersBrief(Session.getEngineerEmail());
 
         addLogMessage("Getting orders brief list from " + userListRequest.request());
 
@@ -103,7 +103,7 @@ public class DebugActivity extends BaseActivity {
 
     private void getOrderById(long id) {
         final Call<Order> orderRequest =
-                Session.getServiceConnection().getOrder(id, Session.getEngineerId());
+                Session.getServiceConnection().getOrder(id, Session.getEngineerEmail());
 
         addLogMessage("Getting order from " + orderRequest.request());
 

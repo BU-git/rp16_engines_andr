@@ -391,7 +391,7 @@ public class LoginActivity extends BaseActivity
         }
 
         final Call<User> userRequest =
-                Session.getServiceConnection().getUser(Utils.getUserIdFromEmail(email));
+                Session.getServiceConnection().getUser(email);
 
         if (IS_LOGGING_ON)
             Session.addToSessionLog("Connecting to server: " + userRequest.request());

@@ -109,10 +109,6 @@ public class Utils {
         return null; //Directory is not exist and fail to create
     }
 
-    public static String getUserIdFromEmail(@NonNull final String email) {
-        return email.replace('.', '_');
-    }
-
     //TODO IMPLEMENT LANGUAGE SUPPORT
     @Nullable
     public static File getPDFTemplateFile(final Context context) {

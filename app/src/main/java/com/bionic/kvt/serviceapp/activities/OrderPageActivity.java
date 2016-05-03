@@ -259,7 +259,7 @@ public class OrderPageActivity extends BaseActivity implements
                 return new OrderUpdateResult(1, "No connection to network. Canceling update.");
 
             final Call<List<OrderBrief>> orderBriefListRequest =
-                    Session.getServiceConnection().getOrdersBrief(Session.getEngineerId());
+                    Session.getServiceConnection().getOrdersBrief(Session.getEngineerEmail());
 
             if (IS_LOGGING_ON)
                 Session.addToSessionLog("Updating orders. Getting orders brief list from: " + orderBriefListRequest.request());
@@ -284,7 +284,7 @@ public class OrderPageActivity extends BaseActivity implements
 
             for (OrderBrief orderBrief : ordersToBeUpdated) {
                 final Call<Order> orderRequest =
-                        Session.getServiceConnection().getOrder(orderBrief.getNumber(), Session.getEngineerId());
+                        Session.getServiceConnection().getOrder(orderBrief.getNumber(), Session.getEngineerEmail());
 
                 if (IS_LOGGING_ON)
                     Session.addToSessionLog("Getting order from: " + orderRequest.request());
