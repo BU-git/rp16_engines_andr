@@ -59,6 +59,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private String engineerName;
     private String clientName;
 
+    private AlertDialog enterEmailDialog;
+
     @Bind(R.id.pdf_report_send_button)
     Button sendButton;
 
@@ -278,6 +280,12 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         outState.putBoolean(ROTATION_FLAG, true);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (enterEmailDialog != null && enterEmailDialog.isShowing()) enterEmailDialog.dismiss();
+    }
+
     @OnClick(R.id.pdf_button_complete_order)
     public void onDoneClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
@@ -311,7 +319,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             }
         });
 
-        dialogBuilder.show();
+        enterEmailDialog = dialogBuilder.create();
+        enterEmailDialog.show();
     }
 
     private void sendEmailWithPDF(final String email) {

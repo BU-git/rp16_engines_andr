@@ -36,8 +36,11 @@ public class MeasurementsActivity extends BaseActivity {
     private List<String> listMotorDataHeader;
     private HashMap<String, List<MeasurementsItem>> listMotorDataChild;
 
+    private AlertDialog enterMeasurementsDialog;
+
     private int currentGroupPosition = -1;
     private int currentChildPosition = -1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,7 @@ public class MeasurementsActivity extends BaseActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 putMeasurementValue(measurementEdit.getText().toString());
+                dialog.dismiss();
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -96,7 +100,15 @@ public class MeasurementsActivity extends BaseActivity {
             }
         });
 
-        dialogBuilder.show();
+        enterMeasurementsDialog = dialogBuilder.create();
+        enterMeasurementsDialog.show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (enterMeasurementsDialog != null && enterMeasurementsDialog.isShowing())
+            enterMeasurementsDialog.dismiss();
     }
 
     private void putMeasurementValue(final String newMeasurement) {
