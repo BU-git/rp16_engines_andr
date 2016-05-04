@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -118,6 +119,8 @@ public class ComponentListActivity extends BaseActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final Map<String, Map<String, JsonObject>> mValues;
+        private int selectedItem = -1;
+
 
         public SimpleItemRecyclerViewAdapter(Map<String, Map<String, JsonObject>> items) {
             mValues = items;
@@ -136,9 +139,12 @@ public class ComponentListActivity extends BaseActivity {
             return new ViewHolder(view);
         }
 
+
+
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            holder.mItem = Arrays.asList(mValues.keySet().toArray()).get(position).toString();
+            List valuesList = Arrays.asList(mValues.keySet().toArray());
+            holder.mItem = valuesList.get(position).toString();
             Log.d(TAG, "Item: " + holder.mItem);
             //final String id = mValues.get(position).keySet().toArray()[position].toString();
             holder.mIdView.setText(mValues.keySet().toArray()[position].toString());
@@ -148,6 +154,9 @@ public class ComponentListActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     ElementExpandableListAdapter.groupClickedPosition = position;
+                    selectedItem = position;
+                    notifyDataSetChanged();
+
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
                         arguments.putString(ComponentDetailFragment.ARG_ITEM_ID, holder.mItem);
@@ -163,8 +172,15 @@ public class ComponentListActivity extends BaseActivity {
 
                         context.startActivity(intent);
                     }
+
                 }
             });
+            if (position == selectedItem){
+                holder.mView.setSelected(true);
+            } else {
+                holder.mView.setSelected(false);
+            }
+
         }
 
         @Override
@@ -172,7 +188,7 @@ public class ComponentListActivity extends BaseActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder{
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
