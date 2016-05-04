@@ -103,7 +103,7 @@
 
     <!-- Defects -->
     <string name="defects_next">Next</string>
-
+    <string name="score_text">Score</string>
 
     <!-- Default template string arrays -->
     <string name="omvang">Omvang</string>

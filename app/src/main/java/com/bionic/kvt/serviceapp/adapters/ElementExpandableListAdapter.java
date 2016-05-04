@@ -20,17 +20,23 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
+import com.bionic.kvt.serviceapp.api.Component;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static com.bionic.kvt.serviceapp.activities.ComponentListActivity.defectStateList;
 
 /**
 Adapter for the Expandable Parts List
@@ -40,8 +46,9 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public final static Integer viewMagicNumber = 10;
     public static Integer groupClickedPosition = 0;
     public static Integer childClickedPosition;
-    public boolean isInitialSelect = true;
     String TAG = ElementExpandableListAdapter.class.getName();
+
+    private Double score = 0d;
 
 
     //Saving state
@@ -101,6 +108,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             problemPlaceholderLayout.setId(layoutId);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
+            List<DefectState> partDefects = new ArrayList<>();
 
             for (final Map.Entry<String,JsonElement> child : childSet){
                 Integer position = Utils.getSetIndex(childSet, child);
@@ -238,7 +246,11 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 problemPlaceholderLayout.addView(problemDetailLayout);
 
+
                 for (DefectState d : ComponentListActivity.defectStateList) {
+                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT)){
+                        partDefects.add(d);
+                    }
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition){
                                     if (checkBox.getId() == d.getCheckboxPosition()){
                                         omvangSpinner.setSelection(d.getExtentId());
@@ -264,8 +276,24 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                     }
                     }
                 }
-            }
 
+
+            }
+            /*
+            score = Collections.max(partDefects, new Comparator<DefectState>() {
+                @Override
+                public int compare(DefectState lhs, DefectState rhs) {
+                    if (lhs.getCorrelatedScore() > rhs.getCorrelatedScore()) return 1;
+                    else if (lhs.getCorrelatedScore() < rhs.getCorrelatedScore()) return -1;
+                    else return 0;
+                }
+            }).getCorrelatedScore();
+            final TextView mScoreView = new TextView(this._context);
+            if (defectStateList != null && defectStateList.size() != 0) {
+                mScoreView.setText("Score is: " + score);
+            }
+            problemPlaceholderLayout.addView(mScoreView);
+            */
         } else {
             LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
 
