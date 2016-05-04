@@ -201,13 +201,13 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
             String pdfTask = currentOrder.getTasks().first().getLtxa1();
 
-            String repairAdvice = "No";
+            String remainingWork = "No";
             String operationText = "";
             String remarksText = "";
             final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
                     .equalTo("number", orderNumber).findFirst();
             if (currentJobRules != null) {
-                repairAdvice = currentJobRules.isRepairAdvice() ? "Yes" : "No";
+                remainingWork = currentJobRules.isRemainingWork() ? "Yes" : "No";
                 operationText = currentJobRules.getOperationsText();
                 remarksText = currentJobRules.getRemarksText();
             }
@@ -230,7 +230,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                         font
                 );
 
-                int x = 125;
+                int x = 140;
                 int y = 515;
                 columnText.setSimpleColumn(orderText1, x, y, x + 200, y + 150, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
@@ -261,7 +261,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText1.setSimpleColumn(orderText4, x, y, x + 490, y + 150, 15f, Element.ALIGN_TOP);
                 columnText1.go();
 
-                Phrase orderText5 = new Phrase(repairAdvice, font);
+                Phrase orderText5 = new Phrase(remainingWork, font);
                 x = 150;
                 y = 293;
                 ColumnText columnText2 = new ColumnText(contentByte);

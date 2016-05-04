@@ -32,7 +32,7 @@
     <string name="telephone">Telephone</string>
     <string name="place_2">Place 2</string>
     <string name="employee">Employee</string>
-    <string name="working_hours">Working hours</string>
+    <string name="running_hours">Running hours</string>
     <string name="instructions">Instructions</string>
     <string name="accept">Accept</string>
     <string name="accepted">Accepted</string>
@@ -150,7 +150,7 @@
         <item>Installation: Test run charge</item>
         <item>Installation: Test run without load</item>
         <item>Exhaust: Exhaust gases</item>
-        <item>Working hours</item>
+        <item>Running hours</item>
     </string-array>
 
     <string-array name="MeasurementsItemName">
@@ -172,7 +172,7 @@
         <item>Frequency charge</item>
         <item>Temperature</item>
         <item>Pressure</item>
-        <item>Working hours</item>
+        <item>Running hours</item>
     </string-array>
 
     <string-array name="MeasurementsItemUnit">
@@ -216,4 +216,5 @@
     <string name="finish_report">Finish service report</string>
     <string name="sign_report">Sign report</string>
     <string name="show_report">Show report</string>
+    <string name="remaining_work">Remaining work</string>
 </resources>

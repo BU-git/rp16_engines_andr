@@ -13,6 +13,7 @@ public class OrderReportJobRules extends RealmObject {
     private boolean useCustomerMaterial;
     private boolean useMaterialFromBus;
     private boolean repairAdvice;
+    private boolean remainingWork;
     private String operationsText;
     private String remarksText;
 
@@ -86,5 +87,13 @@ public class OrderReportJobRules extends RealmObject {
 
     public void setRemarksText(String remarksText) {
         this.remarksText = remarksText;
+    }
+
+    public boolean isRemainingWork() {
+        return remainingWork;
+    }
+
+    public void setRemainingWork(boolean remainingWork) {
+        this.remainingWork = remainingWork;
     }
 }

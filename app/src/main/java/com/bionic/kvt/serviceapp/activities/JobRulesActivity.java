@@ -38,6 +38,9 @@ public class JobRulesActivity extends BaseActivity {
     @Bind(R.id.job_rules_repair_advice)
     Switch repairAdvice;
 
+    @Bind(R.id.job_rules_remaining_work)
+    Switch remainingWork;
+
     @Bind(R.id.job_rules_text_operations)
     EditText operationsText;
 
@@ -92,6 +95,7 @@ public class JobRulesActivity extends BaseActivity {
             customerMaterial.setChecked(currentJobRules.isUseCustomerMaterial());
             materialFromBus.setChecked(currentJobRules.isUseMaterialFromBus());
             repairAdvice.setChecked(currentJobRules.isRepairAdvice());
+            remainingWork.setChecked(currentJobRules.isRemainingWork());
             operationsText.setText(currentJobRules.getOperationsText());
             remarksText.setText(currentJobRules.getRemarksText());
         }
@@ -109,6 +113,7 @@ public class JobRulesActivity extends BaseActivity {
         jobRules.setUseCustomerMaterial(customerMaterial.isChecked());
         jobRules.setUseMaterialFromBus(materialFromBus.isChecked());
         jobRules.setRepairAdvice(repairAdvice.isChecked());
+        jobRules.setRemainingWork(remainingWork.isChecked());
         jobRules.setOperationsText(operationsText.getText().toString());
         jobRules.setRemarksText(remarksText.getText().toString());
         DbUtils.setOrderReportJobRules(jobRules);

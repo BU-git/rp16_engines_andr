@@ -11,29 +11,6 @@
         android:layout_height="wrap_content"
         android:dividerPadding="@dimen/activity_orders_space">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/orders_processing_vertical_margin"
-            android:paddingLeft="@dimen/orders_table_vertical_margin"
-            android:paddingRight="@dimen/orders_table_vertical_margin"
-            android:paddingTop="@dimen/orders_processing_vertical_margin">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_column="0"
-                android:layout_weight="0.5">
-
-                <Button
-                    android:id="@+id/order_processing_first_stage_open_quotation_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/open_quotation" />
-            </TableRow>
-
-
-        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
