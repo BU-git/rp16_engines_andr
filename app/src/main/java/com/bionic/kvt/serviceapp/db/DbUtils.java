@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
@@ -20,6 +19,7 @@ import io.realm.RealmResults;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_FOUND;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
@@ -46,7 +46,7 @@ public class DbUtils {
 
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Resetting User table.");
+        Session.addToSessionLog("Resetting User table.");
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -64,7 +64,7 @@ public class DbUtils {
 
     // Completely erase Order Table and all sub tables
     public static void resetOrderTableWithSubTables() {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Resetting Order table.");
+        Session.addToSessionLog("Resetting Order table.");
 
         final Realm realm = Realm.getDefaultInstance();
 
@@ -97,7 +97,7 @@ public class DbUtils {
     }
 
     public static void updateOrderOverviewList(List<OrderOverview> listToUpdate) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Updating Order Overview List");
+        Session.addToSessionLog("Updating Order Overview List");
 
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Order> allOrdersInDb =
@@ -124,13 +124,11 @@ public class DbUtils {
         }
 
         realm.close();
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
+        Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
     }
 
     public static List<Long> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Looking for orders to be updated.");
+        Session.addToSessionLog("Looking for orders to be updated.");
 
         final List<Long> ordersToBeUpdated = new ArrayList<>();
         final Realm realm = Realm.getDefaultInstance();
@@ -150,14 +148,12 @@ public class DbUtils {
         }
 
         realm.close();
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Found " + ordersToBeUpdated.size() + " orders to be updated.");
+        Session.addToSessionLog("Found " + ordersToBeUpdated.size() + " orders to be updated.");
         return ordersToBeUpdated;
     }
 
     public static List<Long> getOrdersToBeUploaded() {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Looking for orders to be uploaded.");
+        Session.addToSessionLog("Looking for orders to be uploaded.");
 
         final List<Long> ordersToBeUploaded = new ArrayList<>();
         final Realm realm = Realm.getDefaultInstance();
@@ -172,8 +168,7 @@ public class DbUtils {
         }
 
         realm.close();
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
+        Session.addToSessionLog("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
         return ordersToBeUploaded;
     }
 
@@ -190,11 +185,9 @@ public class DbUtils {
     }
 
     public static void updateOrderFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Updating order from server order data: " + serverOrder.getNumber());
+        Session.addToSessionLog("Updating order from server order data: " + serverOrder.getNumber());
 
         final Realm realm = Realm.getDefaultInstance();
-
         final Order currentOrderInDB = realm
                 .where(Order.class)
                 .equalTo("number", serverOrder.getNumber())
@@ -202,45 +195,43 @@ public class DbUtils {
 
         if (currentOrderInDB == null) { // New order
             createNewOrderInDb(serverOrder);
-
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
+            Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
         }
 
         if (currentOrderInDB != null) { // Existing order
             switch (currentOrderInDB.getOrderStatus()) {
                 case ORDER_STATUS_NOT_STARTED:
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
+                    Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
                     realm.beginTransaction();
                     currentOrderInDB.removeFromRealm();
                     realm.commitTransaction(); // No logic if transaction fail!!!
                     createNewOrderInDb(serverOrder);
-                    realm.close();
-
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
+                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
                     break;
 
                 case ORDER_STATUS_IN_PROGRESS:
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
-                                + currentOrderInDB.getNumber());
+                    Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
+                            + currentOrderInDB.getNumber());
                     break;
 
                 case ORDER_STATUS_COMPLETE:
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
-                                + currentOrderInDB.getNumber());
+                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
+                            + currentOrderInDB.getNumber());
+                    break;
+                case ORDER_STATUS_COMPLETE_UPLOADED:
+                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE_UPLOADED. Order #"
+                            + currentOrderInDB.getNumber());
+                    break;
+                case ORDER_STATUS_NOT_FOUND:
                     break;
             }
         }
+        realm.close();
 
     }
 
     private static void createNewOrderInDb(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
+        Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
 
         final Realm realm = Realm.getDefaultInstance();
         final Gson gson = new Gson();
@@ -308,22 +299,21 @@ public class DbUtils {
         newOrder.setImportDate(new Date(serverOrder.getImportDate()));
         newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
         newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
+        newOrder.setCustomTemplateID(serverOrder.getCustomTemplateID());
+        newOrder.setOrderStatus(serverOrder.getOrderStatus());
 
-        newOrder.setOrderStatus(ORDER_STATUS_NOT_STARTED); // TODO
+        newOrder.setMaintenanceStartTime(new Date(0));
+        newOrder.setMaintenanceEndTime(new Date(0));
 
         newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
 
         realm.commitTransaction(); // No logic if transaction fail!!!
-
-
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog(newOrder.toString());
+        Session.addToSessionLog(newOrder.toString());
         realm.close();
     }
 
-    public static boolean updateUserFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Updating User table from server data.");
+    public static void updateUserFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
+        Session.addToSessionLog("Updating User table from server data.");
 
         final Realm realm = Realm.getDefaultInstance();
         // Searching for user in DB
@@ -344,13 +334,10 @@ public class DbUtils {
         }
         realm.commitTransaction(); //No logic if transaction fail!!!
         realm.close();
-
-        return true;
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Validating user: " + email);
+        Session.addToSessionLog("Validating user: " + email);
 
         Realm realm = Realm.getDefaultInstance();
         final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
@@ -363,8 +350,7 @@ public class DbUtils {
         try {
             digester = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("NoSuchAlgorithmException (SHA-256): " + e.toString());
+            Session.addToSessionLog("NoSuchAlgorithmException (SHA-256): " + e.toString());
             realm.close();
             return false;
         }
@@ -385,7 +371,7 @@ public class DbUtils {
     }
 
     public static void setUserSession(final String email) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Setting user session: " + email);
+        Session.addToSessionLog("Setting user session: " + email);
 
         Session.clearSession();
         final Realm realm = Realm.getDefaultInstance();
@@ -398,8 +384,7 @@ public class DbUtils {
     }
 
     public static void setOrderStatus(final long orderNumber, @OrderStatus final int status) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
+        Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -415,8 +400,7 @@ public class DbUtils {
     }
 
     public static @OrderStatus int getOrderStatus(final long orderNumber) {
-        if (BuildConfig.IS_LOGGING_ON)
-            Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
+        Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();
         final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
@@ -426,7 +410,7 @@ public class DbUtils {
     }
 
     public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Job Rules");
+        Session.addToSessionLog("Saving Job Rules");
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -441,7 +425,7 @@ public class DbUtils {
     }
 
     public static void setOrderReportMeasurements(final OrderReportMeasurements measurements) {
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Saving Measurements");
+        Session.addToSessionLog("Saving Measurements");
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -463,13 +447,11 @@ public class DbUtils {
             switch (timeType) {
                 case ORDER_MAINTENANCE_START_TIME:
                     order.setMaintenanceStartTime(time);
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance start time: " + Utils.getDateTimeStringFromDate(time));
+                    Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance start time: " + Utils.getDateTimeStringFromDate(time));
                     break;
                 case ORDER_MAINTENANCE_END_TIME:
                     order.setMaintenanceEndTime(time);
-                    if (BuildConfig.IS_LOGGING_ON)
-                        Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance end time: " + Utils.getDateTimeStringFromDate(time));
+                    Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance end time: " + Utils.getDateTimeStringFromDate(time));
                     break;
             }
         }

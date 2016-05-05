@@ -42,7 +42,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
-import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
 
 public class LoginActivity extends BaseActivity
 //        implements
@@ -386,48 +385,41 @@ public class LoginActivity extends BaseActivity
 
     private UserRequestResult getUserFromServer(final String email) {
         if (!Utils.isNetworkConnected(LoginActivity.this)) {
-            if (IS_LOGGING_ON) Session.addToSessionLog("No connection to network.");
+            Session.addToSessionLog("No connection to network.");
             return new UserRequestResult(true, "No connection to network. Offline login only.");
         }
 
-        final Call<User> userRequest =
-                Session.getServiceConnection().getUser(email);
+        final Call<User> userRequest = Session.getServiceConnection().getUser(email);
 
-        if (IS_LOGGING_ON)
-            Session.addToSessionLog("Connecting to server: " + userRequest.request());
+        Session.addToSessionLog("Connecting to server: " + userRequest.request());
 
         final Response<User> userResponse;
         try {
             userResponse = userRequest.execute();
         } catch (IOException e) {
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("User request fail: " + e.toString());
+            Session.addToSessionLog("User request fail: " + e.toString());
             return new UserRequestResult(true, "User request fail: " + e.toString());
         }
 
         if (!userResponse.isSuccessful()) { // Request unsuccessful
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("Error connecting to server: " + userResponse.code());
+            Session.addToSessionLog("Error connecting to server: " + userResponse.code());
             return new UserRequestResult(true, "Error connecting to server: " + userResponse.code());
         }
 
         if (userResponse.body() == null) {
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("Connection successful. Empty response.");
+            Session.addToSessionLog("Connection successful. Empty response.");
             return new UserRequestResult(true, "Connection successful. Empty response.");
         }
 
         if (userResponse.body().getEmail() == null) { // No such user on server
             DbUtils.deleteUser(email); // Deleting if we have local user
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("Connection successful. No user found: " + email);
+            Session.addToSessionLog("Connection successful. No user found: " + email);
             return new UserRequestResult(false, "The entered e-mail address is not known.\nIf you are sure, please call the administrator.");
         }
 
         // We have this user on server
         DbUtils.updateUserFromServer(userResponse.body());
-        if (IS_LOGGING_ON)
-            Session.addToSessionLog("Connection successful. User found: " + email);
+        Session.addToSessionLog("Connection successful. User found: " + email);
         return new UserRequestResult(true, "Connection successful. User found.");
     }
 

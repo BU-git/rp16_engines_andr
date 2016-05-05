@@ -1,12 +1,8 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,47 +17,34 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
-import com.bionic.kvt.serviceapp.api.Order;
-import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.db.UpdateService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
-import com.bionic.kvt.serviceapp.utils.Utils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Response;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
-import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_PDF_REPORT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_CUSTOM_REPORT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_DEFAULT_REPORT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_JOB_RULES;
-import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_MEASUREMENTS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.UploadFileType;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
-        OrderAdapter.OnPDFButtonClickListener,
-        LoaderManager.LoaderCallbacks<OrderPageActivity.OrderUpdateResult> {
+        OrderAdapter.OnPDFButtonClickListener {
 
-    private static final int ORDERS_LOADER_ID = 3;
     private static final long UPDATE_PERIOD = 60_000; // 60 sec
     private List<OrderOverview> orderOverviewList = new ArrayList<>();
     private OrderAdapter ordersAdapter;
-    Handler updateHandler = new Handler();
-    AsyncTaskLoader<OrderUpdateResult> updateLoader;
+    private final Handler updateHandler = new Handler();
+    private Intent updateService;
+    private Realm updateMonitorRealm;
+    private RealmChangeListener orderUpdateListener;
+    private RealmResults<Order> ordersInDB;
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -71,16 +54,6 @@ public class OrderPageActivity extends BaseActivity implements
 
     @Bind(R.id.orders_recycler_view)
     RecyclerView ordersRecyclerView;
-
-    static class OrderUpdateResult {
-        int status;
-        String message;
-
-        public OrderUpdateResult(int status, String message) {
-            this.status = status;
-            this.message = message;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,13 +117,25 @@ public class OrderPageActivity extends BaseActivity implements
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
 
-        getSupportLoaderManager().initLoader(ORDERS_LOADER_ID, null, OrderPageActivity.this);
+        // Creating Order callback
+        updateMonitorRealm = Realm.getDefaultInstance();
+        orderUpdateListener = new RealmChangeListener() {
+            @Override
+            public void onChange() {
+                updateOrderAdapter();
+            }
+        };
+
+        ordersInDB = updateMonitorRealm.where(Order.class)
+                .equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
+        ordersInDB.addChangeListener(orderUpdateListener);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
         @Override
         public void run() {
-            updateLoader.forceLoad();
+            startService(updateService);
+            updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
         }
     };
 
@@ -184,13 +169,22 @@ public class OrderPageActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         Session.clearCurrentOrder();
-//        updateHandler.post(orderUpdateTask);
+        updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+        updateHandler.post(orderUpdateTask);
+        updateOrderAdapter();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         updateHandler.removeCallbacks(orderUpdateTask);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ordersInDB.removeChangeListener(orderUpdateListener);
+        updateMonitorRealm.close();
     }
 
     @Override
@@ -228,174 +222,10 @@ public class OrderPageActivity extends BaseActivity implements
         ordersAdapter.notifyDataSetChanged();
     }
 
-    public void updateOrderAdapter() {
+    private void updateOrderAdapter() {
         DbUtils.updateOrderOverviewList(orderOverviewList);
-        if (IS_LOGGING_ON) Session.addToSessionLog("Setting OrderAdapter data.");
+        Session.addToSessionLog("Setting OrderAdapter data.");
         ordersAdapter.setOrdersDataSet(orderOverviewList);
         ordersAdapter.notifyDataSetChanged();
-    }
-
-    public static class UpdateDataFromServer extends AsyncTaskLoader<OrderUpdateResult> {
-        private Context context;
-
-        public UpdateDataFromServer(Context context) {
-            super(context);
-            this.context = context;
-        }
-
-        @Override
-        public void forceLoad() {
-            super.forceLoad();
-        }
-
-        @Override
-        protected void onStartLoading() {
-            super.onStartLoading();
-            forceLoad();
-        }
-
-        @Override
-        protected void onStopLoading() {
-            super.onStopLoading();
-        }
-
-        @Override
-        public void deliverResult(OrderUpdateResult data) {
-            super.deliverResult(data);
-        }
-
-        @Override
-        public OrderUpdateResult loadInBackground() {
-            if (!Utils.isNetworkConnected(context))
-                return new OrderUpdateResult(1, "No connection to network. Canceling update.");
-
-//            final List<Long> ordersToBeUploaded = DbUtils.getOrdersToBeUploaded();
-//            for (Long orderNumberToBeUpload : ordersToBeUploaded) {
-//                File fileName = Utils.getPDFReportFileName(orderNumberToBeUpload, false);
-//                uploadFile( FILE_TYPE_ORDER_PDF_REPORT, fileName);
-//            }
-
-
-            final Call<List<OrderBrief>> orderBriefListRequest =
-                    Session.getServiceConnection().getOrdersBrief(Session.getEngineerEmail());
-
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("Updating orders. Getting orders brief list from: " + orderBriefListRequest.request());
-
-            final Response<List<OrderBrief>> orderBriefListResponse;
-            try {
-                orderBriefListResponse = orderBriefListRequest.execute();
-            } catch (IOException e) {
-                return new OrderUpdateResult(1, "Orders brief list request fail: " + e.toString());
-            }
-
-            if (!orderBriefListResponse.isSuccessful())
-                return new OrderUpdateResult(1, "Orders brief list request error: " + orderBriefListResponse.code());
-
-            if (IS_LOGGING_ON)
-                Session.addToSessionLog("Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
-
-            final List<Long> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
-
-            if (ordersToBeUpdated.isEmpty())
-                return new OrderUpdateResult(0, "Nothing to update.");
-
-            for (Long orderNumber : ordersToBeUpdated) {
-                final Call<Order> orderRequest =
-                        Session.getServiceConnection().getOrder(orderNumber, Session.getEngineerEmail());
-
-                if (IS_LOGGING_ON)
-                    Session.addToSessionLog("Getting order from: " + orderRequest.request());
-
-                final Response<Order> orderResponse;
-                try {
-                    orderResponse = orderRequest.execute();
-                } catch (IOException e) {
-                    return new OrderUpdateResult(1, "Order request fail: " + e.toString());
-                }
-                if (!orderResponse.isSuccessful()) {
-                    return new OrderUpdateResult(1, "Order request error: " + orderResponse.code());
-                }
-
-                if (IS_LOGGING_ON) Session.addToSessionLog("Request successful!");
-
-                DbUtils.updateOrderFromServer(orderResponse.body());
-            }
-
-            return new OrderUpdateResult(0, "Update " + ordersToBeUpdated.size() + " orders.");
-        }
-    }
-
-    @Override
-    public Loader<OrderUpdateResult> onCreateLoader(int id, Bundle args) {
-        if (id == ORDERS_LOADER_ID) {
-            updateLoader = new UpdateDataFromServer(this);
-            return updateLoader;
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<OrderUpdateResult> loader, OrderUpdateResult data) {
-        if (loader.getId() == ORDERS_LOADER_ID) {
-            if (IS_LOGGING_ON) Session.addToSessionLog(data.message);
-            orderUpdateStatusText.setText("[" + Utils.getTimeStringFromDate(Calendar.getInstance().getTime()) + "] " + data.message);
-            updateOrderAdapter();
-            updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<OrderUpdateResult> loader) {
-        // NOOP
-    }
-
-    private static OrderUpdateResult uploadFile(@UploadFileType final int fileType, final File filename) {
-
-        // create RequestBody instance from file
-        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), filename);
-
-        String fileTypeString = "UNSET";
-        switch (fileType) {
-            case FILE_TYPE_ORDER_PDF_REPORT:
-                fileTypeString = "ORDER_PDF_REPORT";
-                break;
-            case FILE_TYPE_ORDER_XML_CUSTOM_REPORT:
-                fileTypeString = "ORDER_XML_CUSTOM_REPORT";
-                break;
-            case FILE_TYPE_ORDER_XML_DEFAULT_REPORT:
-                fileTypeString = "ORDER_XML_DEFAULT_REPORT";
-                break;
-            case FILE_TYPE_ORDER_XML_JOB_RULES:
-                fileTypeString = "ORDER_XML_JOB_RULES";
-                break;
-            case FILE_TYPE_ORDER_XML_MEASUREMENTS:
-                fileTypeString = "ORDER_XML_MEASUREMENTS";
-                break;
-        }
-
-        // MultipartBody.Part is used to send the actual file name and file type
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData(fileTypeString, filename.getName(), requestFile);
-
-        // add another part within the multipart request
-        String checksum = Utils.getFileMD5Sum(filename);
-        RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
-
-        // finally, execute the request
-        final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(Session.getCurrentOrder(), checksumBody, body);
-
-        final Response<ResponseBody> uploadFileResponse;
-        try {
-            uploadFileResponse = call.execute();
-        } catch (IOException e) {
-            return new OrderUpdateResult(1, "Upload fail: " + e.toString());
-        }
-
-        if (!uploadFileResponse.isSuccessful())
-            return new OrderUpdateResult(1, "Upload fail: " + uploadFileResponse.code());
-
-        return new OrderUpdateResult(0, "Upload successful: " + uploadFileResponse.code());
-
     }
 }

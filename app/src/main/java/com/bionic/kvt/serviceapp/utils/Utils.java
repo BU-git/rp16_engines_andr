@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
 
@@ -128,8 +127,7 @@ public class Utils {
                 outputStream.write(buf, 0, len);
             }
         } catch (IOException e) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR getting PDF template from assets: " + e.toString());
+            Session.addToSessionLog("ERROR getting PDF template from assets: " + e.toString());
             return null;
         }
         return pdfTemplate;
@@ -166,8 +164,7 @@ public class Utils {
 
         if (!pdfReportFile.exists()) {
             Toast.makeText(context, "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportFile);
+            Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportFile);
             return;
         }
 
@@ -190,8 +187,7 @@ public class Utils {
             mPdfRenderer.close();
         } catch (IOException e) {
             Toast.makeText(context, "Some error during PDF file open", Toast.LENGTH_SHORT).show();
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
+            Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
         }
     }
 

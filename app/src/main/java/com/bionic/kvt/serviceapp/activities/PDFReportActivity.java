@@ -89,8 +89,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         // Exit if Session is empty
         if (orderNumber == 0L) {
-            Toast.makeText(getApplicationContext(),
-                    "No order number to show PDF!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No order number to show PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -109,10 +108,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 sendButton.setEnabled(true);
                 Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
             } else {
-                if (BuildConfig.IS_LOGGING_ON)
-                    Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
-                Toast.makeText(getApplicationContext(),
-                        "ERROR: Can not find PDF Report file!", Toast.LENGTH_SHORT).show();
+                Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
+                Toast.makeText(getApplicationContext(), "ERROR: Can not find PDF Report file!", Toast.LENGTH_SHORT).show();
             }
 
             return;
@@ -130,10 +127,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         // Generating...
         if (!Utils.isExternalStorageWritable()) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Can not write report file to external storage!");
-            Toast.makeText(getApplicationContext(),
-                    "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
+            Session.addToSessionLog("Can not write report file to external storage!");
+            Toast.makeText(getApplicationContext(), "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -143,10 +138,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         pdfReportPreviewFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), true);
         if (!pdfReportPreviewFile.exists()) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Can not get pdf preview file!");
-            Toast.makeText(getApplicationContext(),
-                    "ERROR: Can not get PDF preview file!", Toast.LENGTH_SHORT).show();
+            Session.addToSessionLog("Can not get pdf preview file!");
+            Toast.makeText(getApplicationContext(), "ERROR: Can not get PDF preview file!", Toast.LENGTH_SHORT).show();
             return;
         }
 

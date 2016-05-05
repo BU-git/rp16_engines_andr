@@ -18,6 +18,8 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
+
 public class Session extends Application {
     private static Session currentUserSession;
 
@@ -84,6 +86,7 @@ public class Session extends Application {
     }
 
     public static void addToSessionLog(String message) {
+        if (!IS_LOGGING_ON) return;
         currentUserSession.sessionLog.add("[" + Utils.getDateTimeStringFromDate(new Date()) + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 

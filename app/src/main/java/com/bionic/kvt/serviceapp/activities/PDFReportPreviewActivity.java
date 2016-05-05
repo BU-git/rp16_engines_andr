@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
@@ -61,8 +60,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
         // Exit if Session is empty
         if (orderNumber == 0L) {
-            Toast.makeText(getApplicationContext(),
-                    "No order number to show PDF!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No order number to show PDF!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -86,10 +84,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         }
 
         if (!Utils.isExternalStorageWritable()) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Can not write report file to external storage!");
-            Toast.makeText(getApplicationContext(),
-                    "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
+            Session.addToSessionLog("Can not write report file to external storage!");
+            Toast.makeText(getApplicationContext(), "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -100,10 +96,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         // Generating...
         pdfTemplate = Utils.getPDFTemplateFile(getApplicationContext());
         if (pdfTemplate == null || !pdfTemplate.exists()) {
-            if (BuildConfig.IS_LOGGING_ON)
-                Session.addToSessionLog("Can not get pdf template!");
-            Toast.makeText(getApplicationContext(),
-                    "ERROR: Can not get pdf template!", Toast.LENGTH_SHORT).show();
+            Session.addToSessionLog("Can not get pdf template!");
+            Toast.makeText(getApplicationContext(), "ERROR: Can not get pdf template!", Toast.LENGTH_SHORT).show();
             return;
         }
 

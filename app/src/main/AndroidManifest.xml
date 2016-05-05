@@ -34,6 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".db.UpdateService"
+            android:exported="false" />
+
         <activity android:name=".activities.ForgetPasswordActivity" />
         <activity android:name=".activities.OrderPageActivity" />
         <activity android:name=".activities.OrderPageDetailActivity" />

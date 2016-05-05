@@ -107,17 +107,14 @@ public class MailHelper extends javax.mail.Authenticator {
             Transport.send(message);
 
         } catch (MessagingException e) {
-            if (BuildConfig.IS_LOGGING_ON)
-                addToSessionLog("ERROR during message sent: " + e.toString());
+            addToSessionLog("ERROR during message sent: " + e.toString());
             return false;
         } catch (IOException e) {
-            if (BuildConfig.IS_LOGGING_ON)
-                addToSessionLog("ERROR with file during message sent: " + e.toString());
+            addToSessionLog("ERROR with file during message sent: " + e.toString());
             return false;
         }
 
-        if (BuildConfig.IS_LOGGING_ON)
-            addToSessionLog("The message was sent successfully to " + recipient);
+        addToSessionLog("The message was sent successfully to " + recipient);
         return true;
     }
 
