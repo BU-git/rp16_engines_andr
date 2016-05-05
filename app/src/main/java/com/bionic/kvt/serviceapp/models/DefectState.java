@@ -36,7 +36,7 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
     private Integer intensityId = 0;
     private Integer actionId = 0;
     //Calculation Score
-    private Integer condition = 0;
+    private Integer condition = 1;
     private Integer initialScore = 0;
     private Double correlation = 0d;
     private Double correlatedScore = 0d;
@@ -44,6 +44,15 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
         this.checkboxPosition = checkboxPosition;
         this.groupPosition = groupPosition;
         this.part = part;
+
+        this.extentId = 0;
+        this.intensityId = 0;
+        this.actionId = 0;
+        //Calculation Score
+        this.condition = 1;
+        this.initialScore = 0;
+        this.correlation = 0d;
+        this.correlatedScore = 0d;
     }
     protected DefectState(Parcel in) {
         part = in.readString();

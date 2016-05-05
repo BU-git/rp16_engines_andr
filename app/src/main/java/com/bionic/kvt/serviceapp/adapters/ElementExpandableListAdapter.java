@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -46,10 +47,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public final static Integer viewMagicNumber = 10;
     public static Integer groupClickedPosition = 0;
     public static Integer childClickedPosition;
+    public static Integer score = 1;
     String TAG = ElementExpandableListAdapter.class.getName();
-
-    private Double score = 0d;
-
 
     //Saving state
     private Context context;
@@ -62,7 +61,11 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ElementExpandableListAdapter(Context context, Map<String, JsonObject> listChildData) {
         this._context = context;
-        this._listDataHeader =  Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
+        listChildData.put(context.getResources().getString(R.string.score_text), null);
+        List<String> listSortedChild = Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
+        Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
+        Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
+        this._listDataHeader =  listSortedChild;
         this._listDataChild = listChildData;
     }
 
@@ -108,7 +111,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             problemPlaceholderLayout.setId(layoutId);
 
             Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
-            List<DefectState> partDefects = new ArrayList<>();
 
             for (final Map.Entry<String,JsonElement> child : childSet){
                 Integer position = Utils.getSetIndex(childSet, child);
@@ -175,6 +177,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                     state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
                                     state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
                                 }
+                                notifyDataSetChanged();
                             }
 
                             @Override
@@ -199,6 +202,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                     state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
                                     state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
                                 }
+                                notifyDataSetChanged();
+
                             }
 
                             @Override
@@ -212,7 +217,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 state.setActionId(actiesSpinner.getSelectedItemPosition());
                                 state.setAction((String) actiesSpinner.getSelectedItem());
 
-
+                                notifyDataSetChanged();
                             }
 
                             @Override
@@ -224,6 +229,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 state.setFixed(oplegostSwitch.isChecked());
+                                notifyDataSetChanged();
                             }
                         });
 
@@ -241,6 +247,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             problemDetailLayout.setVisibility(View.GONE);
                             ComponentListActivity.defectStateList.remove(state);
                         }
+                        notifyDataSetChanged();
+
                     }
                 });
 
@@ -248,9 +256,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
 
                 for (DefectState d : ComponentListActivity.defectStateList) {
-                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT)){
-                        partDefects.add(d);
-                    }
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition){
                                     if (checkBox.getId() == d.getCheckboxPosition()){
                                         omvangSpinner.setSelection(d.getExtentId());
@@ -259,12 +264,11 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                                         oplegostSwitch.setChecked(d.isFixed());
                                         checkBox.setChecked(true);
-
-                                        d.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                        Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
                                                 d.getExtentId(),
                                                 d.getIntensityId(),
-                                                child.getValue().getAsJsonArray().get(0).getAsString()
-                                        ));
+                                                child.getValue().getAsJsonArray().get(0).getAsString());
+                                        if (tempCondition != null) d.setCondition(tempCondition);
 
                                         d.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
                                         if (d.getCondition() != null){
@@ -280,14 +284,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
             }
             /*
-            score = Collections.max(partDefects, new Comparator<DefectState>() {
-                @Override
-                public int compare(DefectState lhs, DefectState rhs) {
-                    if (lhs.getCorrelatedScore() > rhs.getCorrelatedScore()) return 1;
-                    else if (lhs.getCorrelatedScore() < rhs.getCorrelatedScore()) return -1;
-                    else return 0;
-                }
-            }).getCorrelatedScore();
+
             final TextView mScoreView = new TextView(this._context);
             if (defectStateList != null && defectStateList.size() != 0) {
                 mScoreView.setText("Score is: " + score);
@@ -333,9 +330,30 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.component_detail_text, null);
         }
+        View ind = convertView.findViewById(R.id.component_detail_image);
+        View mScoreView = convertView.findViewById(R.id.component_detail_score);
+        if (ind != null){
+            ImageView indicator = (ImageView) ind;
+            TextView scoreText = (TextView) mScoreView;
+            if ( groupPosition == 0 ) {
+                indicator.setVisibility( View.GONE );
+                scoreText.setVisibility(View.VISIBLE);
+                if (ComponentListActivity.defectStateList != null && ComponentListActivity.defectStateList.size() > 0){
+                    Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(ComponentListActivity.defectStateList, ComponentDetailFragment.ARG_CURRENT);
+                    if (partScore != null && partScore >= 1){
+                        score = partScore;
+                    }
+                }
+                scoreText.setText(String.valueOf(score));
+            } else {
+                indicator.setVisibility(View.VISIBLE);
+                scoreText.setVisibility(View.GONE);
+                indicator.setImageResource( isExpanded ? R.drawable.list_group_expanded : R.drawable.list_group_closed );
+            }
+        }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.component_detail_title);
-        lblListHeader.setText("\t\t" + headerTitle);
+        lblListHeader.setText(headerTitle);
         lblListHeader.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             lblListHeader.setTextColor(_context.getColor(R.color.colorTextField));

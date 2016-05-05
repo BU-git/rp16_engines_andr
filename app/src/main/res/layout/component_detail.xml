@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/component_detail"
     style="?android:attr/textAppearanceLarge"
+    android:groupIndicator="@android:color/transparent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusable="false"

@@ -1,6 +1,14 @@
 package com.bionic.kvt.serviceapp.helpers;
 
+import android.util.Log;
+
+import com.bionic.kvt.serviceapp.models.DefectState;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /** */
@@ -8,6 +16,8 @@ public enum CalculationHelper {
     INSTANCE;
     private static final Integer [] CALCULATIONARRAY = {1, 1, 1, 1, 2, 3, 4, 5, 6};
     private static final Double [] CONDITIONARRAY = {1d, 1d, 1.02, 1.1, 1.3, 1.7, 2d};
+
+    public static final String TAG = CalculationHelper.class.getName();
 
     private static final Integer ROWSIZE = 5;
 
@@ -40,5 +50,34 @@ public enum CalculationHelper {
 
     public Double getConditionFactor (Integer condition){
         return CONDITIONARRAY[condition];
+    }
+
+    public Integer getScoreByPart (List<DefectState> defectStateList, String part) {
+        Iterator<DefectState> defectStateIterator = defectStateList.iterator();
+        List<DefectState> partDefects = new ArrayList<>();
+        while (defectStateIterator.hasNext()) {
+            DefectState ds = defectStateIterator.next();
+            if (ds.getPart().equals(part)) {
+                partDefects.add(ds);
+            }
+        }
+        Integer score;
+        if (partDefects.size() > 1){
+            Log.d(TAG, Collections.max(partDefects, new Comparator<DefectState>() {
+                @Override
+                public int compare(DefectState lhs, DefectState rhs) {
+                    return lhs.getCondition() - rhs.getCondition();
+                }
+            }).toString());
+            return Collections.max(partDefects, new Comparator<DefectState>() {
+                @Override
+                public int compare(DefectState lhs, DefectState rhs) {
+                    return lhs.getCondition() - rhs.getCondition();
+                }
+            }).getCondition();
+        }
+
+        else if (partDefects.size() == 1) return partDefects.get(0).getCondition();
+        else return 1;
     }
 }

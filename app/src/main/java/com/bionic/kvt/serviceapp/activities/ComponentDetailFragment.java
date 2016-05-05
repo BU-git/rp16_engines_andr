@@ -1,29 +1,19 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.app.Activity;
-import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
-import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -139,7 +129,7 @@ public class ComponentDetailFragment extends Fragment {
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 
                     //Disallow clicks on already expanded group
-                    if (list.isGroupExpanded(groupPosition)) {
+                    if (list.isGroupExpanded(groupPosition) || groupPosition == 0) {
                         return true;
                     } else {
                         return false;
