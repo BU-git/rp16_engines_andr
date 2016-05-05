@@ -48,6 +48,30 @@ public interface GlobalConstants {
     int ORDER_MAINTENANCE_START_TIME = 1;
     int ORDER_MAINTENANCE_END_TIME = 2;
 
+
+    String UPDATE_SERVICE_MSG = "UPDATE_SERVICE_MSG";
+
+    @IntDef({UPDATE_ORDERS, PREPARE_FILES, UPLOAD_FILES})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ServiceMessage {
+    }
+
+    int UPDATE_ORDERS = 1;
+    int PREPARE_FILES = 2;
+    int UPLOAD_FILES = 3;
+
+
+    @IntDef({DEFAULT_XML, CUSTOM_XML, MEASUREMENTS_XML, JOB_RULES_XML})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface XMLReportType {
+    }
+
+    int DEFAULT_XML = 1;
+    int CUSTOM_XML = 2;
+    int MEASUREMENTS_XML = 3;
+    int JOB_RULES_XML = 4;
+
+
     int PASSWORD_HASH_ITERATIONS = 3;
     int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 

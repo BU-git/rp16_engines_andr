@@ -17,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
+import com.bionic.kvt.serviceapp.GlobalConstants.XMLReportType;
 import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
 
@@ -210,6 +212,11 @@ public class Utils {
         } catch (IOException e) {
             return "";
         }
+    }
+
+    public static String generateXMLReport(final long orderNumber, @XMLReportType final int XMLReportType){
+        //TODO XML GENERATION
+        return null;
     }
 
 }

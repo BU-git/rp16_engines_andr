@@ -4,6 +4,8 @@ package com.bionic.kvt.serviceapp.db;
 import android.app.IntentService;
 import android.content.Intent;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
+import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -11,37 +13,59 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import java.io.IOException;
 import java.util.List;
 
+import io.realm.Realm;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
+
 
 public class UpdateService extends IntentService {
+    private String currentTask = "";
+
     public UpdateService() {
         super("KVT Service: Update service");
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        serviceLog("Update service started.");
-    }
-
-    @Override
     protected void onHandleIntent(Intent intent) {
-        updateOrdersFromServer();
+        @ServiceMessage int serviceMessage = intent.getIntExtra(UPDATE_SERVICE_MSG, 0);
+        currentTask = "";
+        switch (serviceMessage) {
+            case UPDATE_ORDERS:
+                currentTask = "UPDATE_ORDERS";
+                updateOrdersFromServer();
+                break;
+            case PREPARE_FILES:
+                currentTask = "PREPARE_FILES";
+                prepareOrderFilesToUpload();
+                break;
+            case UPLOAD_FILES:
+                currentTask = "UPLOAD_FILES";
+                break;
+
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        serviceLog("Update service stopped.");
+        serviceLog("Service stopped.");
     }
 
     private void serviceLog(final String message) {
-        Session.addToSessionLog("UPDATE_SERVICE: " + message);
+        Session.addToSessionLog("UPDATE SERVICE [" + currentTask + "]: " + message);
     }
 
     private void updateOrdersFromServer() {
+        serviceLog("Service started.");
+
         if (!Utils.isNetworkConnected(getApplicationContext())) {
             serviceLog("No connection to network. Canceling update.");
             return;
@@ -99,6 +123,62 @@ public class UpdateService extends IntentService {
 
         serviceLog("Update " + ordersToBeUpdated.size() + " orders.");
     }
+
+    private void prepareOrderFilesToUpload() {
+        serviceLog("Service started.");
+        final List<Long> orderNumberToPrepare = DbUtils.getOrdersToBeUploaded();
+        final Realm realm = Realm.getDefaultInstance();
+
+        for (Long orderNumber : orderNumberToPrepare) {
+            serviceLog("Preparing files to upload for order: " + orderNumber);
+
+            OrderSynchronisation currentOrderSync =
+                    realm.where(OrderSynchronisation.class).equalTo("number", orderNumber).findFirst();
+            if (currentOrderSync != null) {
+                if (!currentOrderSync.isReadyForSync()) { // Task preparation is uncompleted
+                    realm.beginTransaction();
+                    currentOrderSync.removeFromRealm();
+                    realm.commitTransaction(); // No logic if transaction fail!!!
+                } else { // Task preparation is completed. Skipping.
+                    serviceLog("Files to upload already prepared: " + orderNumber);
+                    continue;
+                }
+            }
+
+            final OrderSynchronisation orderSync = new OrderSynchronisation();
+            orderSync.setNumber(orderNumber);
+
+            // Setting zipFileWithXMLs
+            orderSync.setOrderDefaultXMLReportFile(Utils.generateXMLReport(orderNumber, DEFAULT_XML));
+            orderSync.setOrderCustomXMLReportFile(Utils.generateXMLReport(orderNumber, CUSTOM_XML));
+            orderSync.setOrderMeasurementsXMLReportFile(Utils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
+            orderSync.setOrderJobRulesXMLReportFile(Utils.generateXMLReport(orderNumber, GlobalConstants.JOB_RULES_XML));
+
+            // TODO zipFileWithXMLs
+
+            orderSync.setZipFileWithXMLsSynced(false);
+
+            // Setting defaultPDFReportFile
+            orderSync.setDefaultPDFReportFile(Utils.getPDFReportFileName(orderNumber, false).toString());
+            orderSync.setDefaultPDFReportFileSynced(false);
+
+            // Setting listLMRAPhotos
+            // TODO LMRA LIST
+
+
+            orderSync.setReadyForSync(true);
+
+            realm.beginTransaction();
+            realm.copyToRealm(orderSync);
+            realm.commitTransaction(); // No logic if transaction fail!!!
+
+            serviceLog("Preparing files to upload done: " + orderSync.toString());
+        }
+
+        realm.close();
+    }
+
+
 }
 
 

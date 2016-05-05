@@ -158,11 +158,11 @@ public class Order extends RealmObject {
         this.lastAndroidChangeDate = lastAndroidChangeDate;
     }
 
-    public @GlobalConstants.OrderStatus int getOrderStatus() {
+    public  int getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(@GlobalConstants.OrderStatus int orderStatus) {
+    public void setOrderStatus(int orderStatus) {
         this.orderStatus = orderStatus;
     }
 

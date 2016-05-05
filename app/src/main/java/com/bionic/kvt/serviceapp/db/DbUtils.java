@@ -80,6 +80,8 @@ public class DbUtils {
 
         realm.clear(OrderReportJobRules.class);
         realm.clear(OrderReportMeasurements.class);
+        realm.clear(OrderSynchronisation.class);
+
         realm.commitTransaction();
 
         realm.close();
@@ -134,15 +136,18 @@ public class DbUtils {
         final Realm realm = Realm.getDefaultInstance();
 
         for (OrderBrief orderBrief : serverOrderBriefList) {
-            final Order orderInDb = realm
+            Order orderInDb = realm
                     .where(Order.class)
                     .equalTo("number", orderBrief.getNumber())
-                    .equalTo("orderStatus", ORDER_STATUS_NOT_STARTED)
                     .findFirst();
 
-            if (orderInDb == null // No such order in DB
-                    || isOrderNewerOnServer(orderInDb, orderBrief) // We have order in DB but it's outdated
-                    ) {
+            if (orderInDb == null) { // No such order in DB
+                ordersToBeUpdated.add(orderBrief.getNumber());
+                continue;
+            }
+
+            if (orderInDb.getOrderStatus() == ORDER_STATUS_NOT_STARTED
+                    && isOrderNewerOnServer(orderInDb, orderBrief)) { // We have order in DB but it's outdated
                 ordersToBeUpdated.add(orderBrief.getNumber());
             }
         }
@@ -184,6 +189,19 @@ public class DbUtils {
         return false;
     }
 
+    private static void removeOrderFromDB(final long orderNumber) {
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.where(Order.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
+        realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
+        realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
+
+        realm.commitTransaction(); // No logic if transaction fail!!!
+        realm.close();
+
+        //TODO Do we need to remove files?
+    }
+
     public static void updateOrderFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
         Session.addToSessionLog("Updating order from server order data: " + serverOrder.getNumber());
 
@@ -202,9 +220,7 @@ public class DbUtils {
             switch (currentOrderInDB.getOrderStatus()) {
                 case ORDER_STATUS_NOT_STARTED:
                     Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
-                    realm.beginTransaction();
-                    currentOrderInDB.removeFromRealm();
-                    realm.commitTransaction(); // No logic if transaction fail!!!
+                    removeOrderFromDB(currentOrderInDB.getNumber());
                     createNewOrderInDb(serverOrder);
                     Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
                     break;
@@ -399,7 +415,9 @@ public class DbUtils {
         realm.close();
     }
 
-    public static @OrderStatus int getOrderStatus(final long orderNumber) {
+    public static
+    @OrderStatus
+    int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();

@@ -32,6 +32,10 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -41,10 +45,13 @@ public class OrderPageActivity extends BaseActivity implements
     private List<OrderOverview> orderOverviewList = new ArrayList<>();
     private OrderAdapter ordersAdapter;
     private final Handler updateHandler = new Handler();
-    private Intent updateService;
-    private Realm updateMonitorRealm;
+
+    private Realm monitorRealm;
     private RealmChangeListener orderUpdateListener;
     private RealmResults<Order> ordersInDB;
+    private Realm monitorCompleteRealm;
+    private RealmChangeListener ordersCompleteListener;
+    private RealmResults<Order> ordersCompleteInDB;
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -117,8 +124,8 @@ public class OrderPageActivity extends BaseActivity implements
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
 
-        // Creating Order callback
-        updateMonitorRealm = Realm.getDefaultInstance();
+        // Creating Order update callback
+        monitorRealm = Realm.getDefaultInstance();
         orderUpdateListener = new RealmChangeListener() {
             @Override
             public void onChange() {
@@ -126,15 +133,42 @@ public class OrderPageActivity extends BaseActivity implements
             }
         };
 
-        ordersInDB = updateMonitorRealm.where(Order.class)
+        ordersInDB = monitorRealm.where(Order.class)
                 .equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
-        ordersInDB.addChangeListener(orderUpdateListener);
+
+
+        // Creating Order complete callback
+//        ordersCompleteListener = new RealmChangeListener() {
+//            @Override
+//            public void onChange() {
+//                Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+//                updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
+//                startService(updateService);
+//            }
+//        };
+//
+//        ordersCompleteInDB = monitorRealm.where(Order.class)
+//                .equalTo("orderStatus", ORDER_STATUS_COMPLETE).findAll();
+//        ordersCompleteInDB.addChangeListener(ordersCompleteListener);
+//
+//        Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+//        updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
+//        startService(updateService);
+
     }
 
     private Runnable orderUpdateTask = new Runnable() {
         @Override
         public void run() {
+            Session.clearCurrentOrder();
+            Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+            updateService.putExtra(UPDATE_SERVICE_MSG, UPDATE_ORDERS);
             startService(updateService);
+
+            Intent updateCompleteService = new Intent(OrderPageActivity.this, UpdateService.class);
+            updateCompleteService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
+            startService(updateCompleteService);
+
             updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
         }
     };
@@ -169,22 +203,27 @@ public class OrderPageActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         Session.clearCurrentOrder();
-        updateService = new Intent(OrderPageActivity.this, UpdateService.class);
         updateHandler.post(orderUpdateTask);
         updateOrderAdapter();
+
+        ordersInDB.addChangeListener(orderUpdateListener);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         updateHandler.removeCallbacks(orderUpdateTask);
+
+        ordersInDB.removeChangeListener(orderUpdateListener);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ordersInDB.removeChangeListener(orderUpdateListener);
-        updateMonitorRealm.close();
+//        ordersCompleteInDB.removeChangeListener(ordersCompleteListener);
+        monitorRealm.close();
     }
 
     @Override
