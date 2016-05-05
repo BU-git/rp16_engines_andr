@@ -35,7 +35,6 @@ public class Session extends Application {
     private List<String> sessionLog;
 
     private File currentAppExternalPrivateDir;
-    private File currentOrderDir;
 
     private String engineerName;
     private String engineerEmail;
@@ -69,14 +68,12 @@ public class Session extends Application {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
         currentUserSession.currentOrder = 0L;
-        currentUserSession.currentOrderDir = null;
         currentUserSession.byteArrayEngineerSignature = null;
         currentUserSession.byteArrayClientSignature = null;
     }
 
     public static void clearCurrentOrder() {
         currentUserSession.currentOrder = 0L;
-        currentUserSession.currentOrderDir = null;
         currentUserSession.byteArrayEngineerSignature = null;
         currentUserSession.byteArrayClientSignature = null;
     }
@@ -108,9 +105,6 @@ public class Session extends Application {
 
     public static void setCurrentOrder(long order) {
         currentUserSession.currentOrder = order;
-        currentUserSession.currentOrderDir =
-                new File(currentUserSession.currentAppExternalPrivateDir,
-                        "" + currentUserSession.currentOrder);
     }
 
     public static long getCurrentOrder() {
@@ -119,12 +113,6 @@ public class Session extends Application {
 
     public static File getCurrentAppExternalPrivateDir() {
         return currentUserSession.currentAppExternalPrivateDir;
-    }
-
-    // Do not use directly! Run Utils.getCurrentOrderDir() instead
-    @Nullable
-    public static File getCurrentOrderDir() {
-        return currentUserSession.currentOrderDir;
     }
 
     public static byte[] getByteArrayEngineerSignature() {

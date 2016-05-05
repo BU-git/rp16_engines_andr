@@ -51,7 +51,7 @@ public class DbUtils {
         final Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        realm.clear(User.class);
+        realm.delete(User.class);
         User user = realm.createObject(User.class);
         user.setName("Demo User");
         user.setEmail("demo@kvt.nl");
@@ -69,18 +69,18 @@ public class DbUtils {
         final Realm realm = Realm.getDefaultInstance();
 
         realm.beginTransaction();
-        realm.clear(Order.class);
-        realm.clear(Component.class);
-        realm.clear(Employee.class);
-        realm.clear(Info.class);
-        realm.clear(Installation.class);
-        realm.clear(Part.class);
-        realm.clear(Relation.class);
-        realm.clear(Task.class);
+        realm.delete(Order.class);
+        realm.delete(Component.class);
+        realm.delete(Employee.class);
+        realm.delete(Info.class);
+        realm.delete(Installation.class);
+        realm.delete(Part.class);
+        realm.delete(Relation.class);
+        realm.delete(Task.class);
 
-        realm.clear(OrderReportJobRules.class);
-        realm.clear(OrderReportMeasurements.class);
-        realm.clear(OrderSynchronisation.class);
+        realm.delete(OrderReportJobRules.class);
+        realm.delete(OrderReportMeasurements.class);
+        realm.delete(OrderSynchronisation.class);
 
         realm.commitTransaction();
 
@@ -92,7 +92,7 @@ public class DbUtils {
         realm.beginTransaction();
         final User user = realm.where(User.class).equalTo("email", email).findFirst();
         if (user != null) {
-            user.removeFromRealm();
+            user.deleteFromRealm();
         }
         realm.commitTransaction();
         realm.close();
@@ -104,10 +104,10 @@ public class DbUtils {
         final Realm realm = Realm.getDefaultInstance();
         final RealmResults<Order> allOrdersInDb =
                 realm.where(Order.class).equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
-        allOrdersInDb.sort("number");
+        final RealmResults<Order> allOrdersInDbSorted = allOrdersInDb.sort("number");
 
         listToUpdate.clear();
-        for (Order order : allOrdersInDb) {
+        for (Order order : allOrdersInDbSorted) {
             final OrderOverview orderOverview = new OrderOverview();
             orderOverview.setNumber(order.getNumber());
             orderOverview.setDate(order.getDate());
@@ -192,9 +192,9 @@ public class DbUtils {
     private static void removeOrderFromDB(final long orderNumber) {
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        realm.where(Order.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
-        realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
-        realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst().removeFromRealm();
+        realm.where(Order.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
+        realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
+        realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
 
         realm.commitTransaction(); // No logic if transaction fail!!!
         realm.close();
@@ -415,9 +415,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static
-    @OrderStatus
-    int getOrderStatus(final long orderNumber) {
+    public static @OrderStatus int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();
@@ -435,7 +433,7 @@ public class DbUtils {
         // Remove if already exist
         final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
                 .equalTo("number", jobRules.getNumber()).findFirst();
-        if (currentJobRules != null) currentJobRules.removeFromRealm();
+        if (currentJobRules != null) currentJobRules.deleteFromRealm();
         // Save new
         realm.copyToRealm(jobRules);
         realm.commitTransaction();
@@ -450,7 +448,7 @@ public class DbUtils {
         // Remove if already exist
         final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
                 .equalTo("number", measurements.getNumber()).findFirst();
-        if (currentMeasurements != null) currentMeasurements.removeFromRealm();
+        if (currentMeasurements != null) currentMeasurements.deleteFromRealm();
         // Save new
         realm.copyToRealm(measurements);
         realm.commitTransaction();

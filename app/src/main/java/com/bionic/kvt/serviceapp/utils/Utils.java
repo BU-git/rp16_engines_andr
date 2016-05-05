@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.GlobalConstants.XMLReportType;
 import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
@@ -102,12 +101,11 @@ public class Utils {
     }
 
     @Nullable
-    public static File getCurrentOrderDir() {
-        File currentDir = Session.getCurrentOrderDir();
-        if (currentDir == null) return null;
+    public static File getOrderDir(final long orderNumber) {
+        final File dir = new File(Session.getCurrentAppExternalPrivateDir(), "" + orderNumber);
 
-        if (currentDir.exists() || currentDir.mkdirs()) {
-            return Session.getCurrentOrderDir();
+        if (dir.exists() || dir.mkdirs()) {
+            return dir;
         }
 
         return null; //Directory is not exist and fail to create
@@ -137,9 +135,9 @@ public class Utils {
 
     public static File getPDFReportFileName(final long orderNumber, final boolean preview) {
         if (preview) {
-            return new File(getCurrentOrderDir(), PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf");
+            return new File(getOrderDir(orderNumber), PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf");
         } else {
-            return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + orderNumber + ".pdf");
+            return new File(getOrderDir(orderNumber), PDF_REPORT_FILE_NAME + orderNumber + ".pdf");
         }
     }
 
@@ -214,7 +212,7 @@ public class Utils {
         }
     }
 
-    public static String generateXMLReport(final long orderNumber, @XMLReportType final int XMLReportType){
+    public static String generateXMLReport(final long orderNumber, @XMLReportType final int XMLReportType) {
         //TODO XML GENERATION
         return null;
     }

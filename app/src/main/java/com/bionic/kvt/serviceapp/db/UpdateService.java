@@ -10,10 +10,16 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -48,6 +54,7 @@ public class UpdateService extends IntentService {
                 break;
             case UPLOAD_FILES:
                 currentTask = "UPLOAD_FILES";
+                uploadOrderFiles();
                 break;
 
         }
@@ -137,7 +144,7 @@ public class UpdateService extends IntentService {
             if (currentOrderSync != null) {
                 if (!currentOrderSync.isReadyForSync()) { // Task preparation is uncompleted
                     realm.beginTransaction();
-                    currentOrderSync.removeFromRealm();
+                    currentOrderSync.deleteFromRealm();
                     realm.commitTransaction(); // No logic if transaction fail!!!
                 } else { // Task preparation is completed. Skipping.
                     serviceLog("Files to upload already prepared: " + orderNumber);
@@ -178,62 +185,68 @@ public class UpdateService extends IntentService {
         realm.close();
     }
 
+    private void uploadOrderFiles() {
+        serviceLog("Service started.");
+
+        final Realm realm = Realm.getDefaultInstance();
+
+        RealmResults<OrderSynchronisation> currentOrderToSyncList =
+                realm.where(OrderSynchronisation.class).equalTo("isReadyForSync", true).findAll();
+
+        for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
+            serviceLog(orderToSync.toString());
+
+            if (orderToSync.getZipFileWithXMLs() != null &&
+                    !orderToSync.isZipFileWithXMLsSynced()) {
+                // TODO Upload file
+            }
+
+            if (orderToSync.getDefaultPDFReportFile() != null &&
+                    !orderToSync.isDefaultPDFReportFileSynced()) {
+                final File fileName = new File(orderToSync.getDefaultPDFReportFile());
+                // create RequestBody instance from file
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileName);
+
+                // MultipartBody.Part is used to send the actual file name and file type
+                MultipartBody.Part body =
+                        MultipartBody.Part.createFormData("DEFAULT_PDF_REPORT", fileName.getName(), requestFile);
+
+                // add another part within the multipart request
+                String checksum = Utils.getFileMD5Sum(fileName);
+                RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
+
+                // finally, execute the request
+                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(Session.getCurrentOrder(), checksumBody, body);
+
+                final Response<ResponseBody> uploadFileResponse;
+                try {
+                    uploadFileResponse = call.execute();
+                } catch (IOException e) {
+                    serviceLog("Upload fail: " + e.toString());
+                    continue;
+                }
+
+                if (!uploadFileResponse.isSuccessful()) {
+                    serviceLog("Upload fail: " + uploadFileResponse.code());
+                    continue;
+                }
+
+                serviceLog("Upload successful: " + uploadFileResponse.code());
+
+                realm.beginTransaction();
+                orderToSync.setDefaultPDFReportFileSynced(true);
+                realm.commitTransaction();
+
+            }
+
+            if (orderToSync.getListLMRAPhotos() != null
+                    && orderToSync.getListLMRAPhotos().size() >= 0) {
+                // TODO Upload files
+            }
+
+        }
+
+        realm.close();
+    }
 
 }
-
-
-//            final List<Long> ordersToBeUploaded = DbUtils.getOrdersToBeUploaded();
-//            for (Long orderNumberToBeUpload : ordersToBeUploaded) {
-//                File fileName = Utils.getPDFReportFileName(orderNumberToBeUpload, false);
-//                uploadFile( FILE_TYPE_ORDER_PDF_REPORT, fileName);
-//            }
-
-
-//    private static OrderUpdateResult uploadFile(@UploadFileType final int fileType, final File filename) {
-//
-//        // create RequestBody instance from file
-//        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), filename);
-//
-//        String fileTypeString = "UNSET";
-//        switch (fileType) {
-//            case FILE_TYPE_ORDER_PDF_REPORT:
-//                fileTypeString = "ORDER_PDF_REPORT";
-//                break;
-//            case FILE_TYPE_ORDER_XML_CUSTOM_REPORT:
-//                fileTypeString = "ORDER_XML_CUSTOM_REPORT";
-//                break;
-//            case FILE_TYPE_ORDER_XML_DEFAULT_REPORT:
-//                fileTypeString = "ORDER_XML_DEFAULT_REPORT";
-//                break;
-//            case FILE_TYPE_ORDER_XML_JOB_RULES:
-//                fileTypeString = "ORDER_XML_JOB_RULES";
-//                break;
-//            case FILE_TYPE_ORDER_XML_MEASUREMENTS:
-//                fileTypeString = "ORDER_XML_MEASUREMENTS";
-//                break;
-//        }
-//
-//        // MultipartBody.Part is used to send the actual file name and file type
-//        MultipartBody.Part body =
-//                MultipartBody.Part.createFormData(fileTypeString, filename.getName(), requestFile);
-//
-//        // add another part within the multipart request
-//        String checksum = Utils.getFileMD5Sum(filename);
-//        RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
-//
-//        // finally, execute the request
-//        final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(Session.getCurrentOrder(), checksumBody, body);
-//
-//        final Response<ResponseBody> uploadFileResponse;
-//        try {
-//            uploadFileResponse = call.execute();
-//        } catch (IOException e) {
-//            return new OrderUpdateResult(1, "Upload fail: " + e.toString());
-//        }
-//
-//        if (!uploadFileResponse.isSuccessful())
-//            return new OrderUpdateResult(1, "Upload fail: " + uploadFileResponse.code());
-//
-//        return new OrderUpdateResult(0, "Upload successful: " + uploadFileResponse.code());
-//
-//    }

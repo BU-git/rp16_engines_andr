@@ -14,11 +14,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
 import com.bionic.kvt.serviceapp.db.UpdateService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 
@@ -36,6 +38,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -47,11 +50,13 @@ public class OrderPageActivity extends BaseActivity implements
     private final Handler updateHandler = new Handler();
 
     private Realm monitorRealm;
-    private RealmChangeListener orderUpdateListener;
+    private RealmChangeListener<RealmResults<Order>> orderUpdateListener;
     private RealmResults<Order> ordersInDB;
-    private Realm monitorCompleteRealm;
-    private RealmChangeListener ordersCompleteListener;
+    private RealmChangeListener<RealmResults<Order>> ordersCompleteListener;
     private RealmResults<Order> ordersCompleteInDB;
+    private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationListener;
+    private RealmResults<OrderSynchronisation> ordersToSynchroniseInDB;
+
 
     @Bind(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -126,9 +131,9 @@ public class OrderPageActivity extends BaseActivity implements
 
         // Creating Order update callback
         monitorRealm = Realm.getDefaultInstance();
-        orderUpdateListener = new RealmChangeListener() {
+        orderUpdateListener = new RealmChangeListener<RealmResults<Order>>() {
             @Override
-            public void onChange() {
+            public void onChange(RealmResults<Order> orders) {
                 updateOrderAdapter();
             }
         };
@@ -138,23 +143,34 @@ public class OrderPageActivity extends BaseActivity implements
 
 
         // Creating Order complete callback
-//        ordersCompleteListener = new RealmChangeListener() {
-//            @Override
-//            public void onChange() {
-//                Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
-//                updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
-//                startService(updateService);
-//            }
-//        };
-//
-//        ordersCompleteInDB = monitorRealm.where(Order.class)
-//                .equalTo("orderStatus", ORDER_STATUS_COMPLETE).findAll();
-//        ordersCompleteInDB.addChangeListener(ordersCompleteListener);
-//
-//        Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
-//        updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
-//        startService(updateService);
+        ordersCompleteListener = new RealmChangeListener<RealmResults<Order>>() {
+            @Override
+            public void onChange(RealmResults<Order> orders) {
+                if (orders.size() == 0) return;
+                Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+                updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
+                startService(updateService);
+            }
+        };
 
+        ordersCompleteInDB = monitorRealm.where(Order.class)
+                .equalTo("orderStatus", ORDER_STATUS_COMPLETE).findAll();
+        ordersCompleteInDB.addChangeListener(ordersCompleteListener);
+
+        // Creating OrderSynchronisation readyForSync callback
+        ordersSynchronisationListener = new RealmChangeListener<RealmResults<OrderSynchronisation>>() {
+            @Override
+            public void onChange(RealmResults<OrderSynchronisation> orders) {
+                if (orders.size() == 0) return;
+                Intent updateUploadService = new Intent(OrderPageActivity.this, UpdateService.class);
+                updateUploadService.putExtra(UPDATE_SERVICE_MSG, UPLOAD_FILES);
+                startService(updateUploadService);
+            }
+        };
+
+        ordersToSynchroniseInDB = monitorRealm.where(OrderSynchronisation.class)
+                .equalTo("isReadyForSync", true).equalTo("isSyncComplete", false).findAll();
+        ordersToSynchroniseInDB.addChangeListener(ordersSynchronisationListener);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
@@ -164,10 +180,6 @@ public class OrderPageActivity extends BaseActivity implements
             Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
             updateService.putExtra(UPDATE_SERVICE_MSG, UPDATE_ORDERS);
             startService(updateService);
-
-            Intent updateCompleteService = new Intent(OrderPageActivity.this, UpdateService.class);
-            updateCompleteService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
-            startService(updateCompleteService);
 
             updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
         }
@@ -207,7 +219,6 @@ public class OrderPageActivity extends BaseActivity implements
         updateOrderAdapter();
 
         ordersInDB.addChangeListener(orderUpdateListener);
-
     }
 
     @Override
@@ -216,13 +227,13 @@ public class OrderPageActivity extends BaseActivity implements
         updateHandler.removeCallbacks(orderUpdateTask);
 
         ordersInDB.removeChangeListener(orderUpdateListener);
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        ordersCompleteInDB.removeChangeListener(ordersCompleteListener);
+        ordersCompleteInDB.removeChangeListener(ordersCompleteListener);
+        ordersToSynchroniseInDB.removeChangeListener(ordersSynchronisationListener);
         monitorRealm.close();
     }
 
