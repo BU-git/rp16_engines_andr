@@ -23,9 +23,9 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_FOUND;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
-import static com.bionic.kvt.serviceapp.GlobalConstants.PASSWORD_HASH_ITERATIONS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderMaintenanceType;
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderStatus;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PASSWORD_HASH_ITERATIONS;
 
 public class DbUtils {
 
@@ -128,23 +128,24 @@ public class DbUtils {
             Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
     }
 
-    public static List<OrderBrief> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
+    public static List<Long> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Looking for orders to be updated.");
 
-        final List<OrderBrief> ordersToBeUpdated = new ArrayList<>();
+        final List<Long> ordersToBeUpdated = new ArrayList<>();
         final Realm realm = Realm.getDefaultInstance();
 
         for (OrderBrief orderBrief : serverOrderBriefList) {
             final Order orderInDb = realm
                     .where(Order.class)
                     .equalTo("number", orderBrief.getNumber())
+                    .equalTo("orderStatus", ORDER_STATUS_NOT_STARTED)
                     .findFirst();
 
             if (orderInDb == null // No such order in DB
                     || isOrderNewerOnServer(orderInDb, orderBrief) // We have order in DB but it's outdated
                     ) {
-                ordersToBeUpdated.add(orderBrief);
+                ordersToBeUpdated.add(orderBrief.getNumber());
             }
         }
 
@@ -152,6 +153,28 @@ public class DbUtils {
         if (BuildConfig.IS_LOGGING_ON)
             Session.addToSessionLog("Found " + ordersToBeUpdated.size() + " orders to be updated.");
         return ordersToBeUpdated;
+    }
+
+    public static List<Long> getOrdersToBeUploaded() {
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Looking for orders to be uploaded.");
+
+        final List<Long> ordersToBeUploaded = new ArrayList<>();
+        final Realm realm = Realm.getDefaultInstance();
+
+        final RealmResults<Order> completeOrdersInDb = realm
+                .where(Order.class)
+                .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
+                .findAll();
+
+        for (Order order : completeOrdersInDb) {
+            ordersToBeUploaded.add(order.getNumber());
+        }
+
+        realm.close();
+        if (BuildConfig.IS_LOGGING_ON)
+            Session.addToSessionLog("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
+        return ordersToBeUploaded;
     }
 
     private static boolean isOrderNewerOnServer(final Order orderInDb, final OrderBrief orderBrief) {
@@ -162,7 +185,7 @@ public class DbUtils {
         if (orderInDb.getLastServerChangeDate()
                 .compareTo(new Date(orderBrief.getLastServerChangeDate())) != 0)
             return true;
-//TODO WHAT WITH DONE STATUS ?
+
         return false;
     }
 

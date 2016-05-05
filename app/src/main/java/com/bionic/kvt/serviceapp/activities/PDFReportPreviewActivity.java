@@ -74,7 +74,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         pdfTextLog.setText(pdfReportFileName);
 
 
-        pdfReportPreviewFile = Utils.getPDFReportFileName(true);
+        pdfReportPreviewFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), true);
 
         // Check rotation
         if (savedInstanceState != null) {

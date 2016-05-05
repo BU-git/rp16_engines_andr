@@ -22,9 +22,12 @@ import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -132,11 +135,11 @@ public class Utils {
         return pdfTemplate;
     }
 
-    public static File getPDFReportFileName(final boolean preview) {
+    public static File getPDFReportFileName(final long orderNumber, final boolean preview) {
         if (preview) {
-            return new File(getCurrentOrderDir(), PDF_REPORT_PREVIEW_FILE_NAME + Session.getCurrentOrder() + ".pdf");
+            return new File(getCurrentOrderDir(), PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf");
         } else {
-            return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + Session.getCurrentOrder() + ".pdf");
+            return new File(getCurrentOrderDir(), PDF_REPORT_FILE_NAME + orderNumber + ".pdf");
         }
     }
 
@@ -149,7 +152,7 @@ public class Utils {
         return -1;
     }
 
-    public static String convertByteArrayToHexString(@NonNull  byte[] arrayBytes) {
+    public static String convertByteArrayToHexString(@NonNull byte[] arrayBytes) {
         StringBuilder stringBuilder = new StringBuilder();
         for (byte arrayByte : arrayBytes) {
             stringBuilder.append(Integer.toString((arrayByte & 0xff) + 0x100, 16).substring(1));
@@ -189,6 +192,27 @@ public class Utils {
             Toast.makeText(context, "Some error during PDF file open", Toast.LENGTH_SHORT).show();
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
+        }
+    }
+
+    public static String getFileMD5Sum(final File file) {
+        final MessageDigest messageDigestMD5;
+        try {
+            messageDigestMD5 = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+            return "";
+        }
+
+        byte[] buffer = new byte[8192];
+        int read;
+        try (InputStream is = new FileInputStream(file)) {
+            while ((read = is.read(buffer)) > 0) {
+                messageDigestMD5.update(buffer, 0, read);
+            }
+
+            return convertByteArrayToHexString(messageDigestMD5.digest());
+        } catch (IOException e) {
+            return "";
         }
     }
 

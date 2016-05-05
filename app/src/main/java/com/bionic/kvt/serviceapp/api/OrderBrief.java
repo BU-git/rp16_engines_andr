@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.api;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
+
 public class OrderBrief {
 
     /**
@@ -31,6 +33,10 @@ public class OrderBrief {
      */
     private long lastAndroidChangeDate;
 
+    /**
+     * Order status
+     */
+    private int orderStatus;
 
     public OrderBrief() {
     }
@@ -67,6 +73,14 @@ public class OrderBrief {
         this.number = number;
     }
 
+    public @GlobalConstants.OrderStatus int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(@GlobalConstants.OrderStatus int orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("OrderBrief{");
@@ -74,6 +88,7 @@ public class OrderBrief {
         sb.append(", importDate=").append(importDate);
         sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
         sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
+        sb.append(", orderStatus=").append(orderStatus);
         sb.append('}');
         return sb.toString();
     }

@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.api;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
+
 import java.util.List;
 
 public class Order {
@@ -23,8 +25,6 @@ public class Order {
     private List<Component> components; //Componenten
     private List<Part> parts; //Onderdelen
     private List<Info> extraInfo; //ExtraInfo
-
-
 
     /**
      * This is time when this order was imported to BO Server.
@@ -59,23 +59,28 @@ public class Order {
      */
     private long customTemplateID;
 
-
-    // Service fields
-
     /**
-     * Order is Done
+     * Order status
      */
-    private boolean done;
+    private int orderStatus;
 
     public Order() {
     }
 
-    public boolean isDone() {
-        return done;
+    public long getCustomTemplateID() {
+        return customTemplateID;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void setCustomTemplateID(long customTemplateID) {
+        this.customTemplateID = customTemplateID;
+    }
+
+    public @GlobalConstants.OrderStatus int getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(@GlobalConstants.OrderStatus int orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public long getNumber() {
@@ -216,6 +221,8 @@ public class Order {
         sb.append(", importDate=").append(importDate);
         sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
         sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
+        sb.append(", customTemplateID=").append(customTemplateID);
+        sb.append(", orderStatus=").append(orderStatus);
         sb.append('}');
         return sb.toString();
     }

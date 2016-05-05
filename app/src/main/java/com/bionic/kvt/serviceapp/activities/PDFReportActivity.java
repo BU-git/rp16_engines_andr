@@ -102,7 +102,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         pdfTextLog.setText(pdfReportFileName);
 
 
-        pdfReportFile = Utils.getPDFReportFileName(false);
+        pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
         if (DbUtils.getOrderStatus(orderNumber) == ORDER_STATUS_COMPLETE) {
             reportBottomLayout.setVisibility(View.GONE);
             if (pdfReportFile.exists()) { // We have report.
@@ -141,7 +141,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             pdfReportFile.delete();
         }
 
-        pdfReportPreviewFile = Utils.getPDFReportFileName(true);
+        pdfReportPreviewFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), true);
         if (!pdfReportPreviewFile.exists()) {
             if (BuildConfig.IS_LOGGING_ON)
                 Session.addToSessionLog("Can not get pdf preview file!");

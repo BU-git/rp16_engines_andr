@@ -85,7 +85,7 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_complete)
     public void onCompleteClick(View v) {
-        final File pdfReportFile = Utils.getPDFReportFileName(false);
+        final File pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(),  false);
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);

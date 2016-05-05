@@ -27,6 +27,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,11 +35,21 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
+import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_PDF_REPORT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_CUSTOM_REPORT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_DEFAULT_REPORT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_JOB_RULES;
+import static com.bionic.kvt.serviceapp.GlobalConstants.FILE_TYPE_ORDER_XML_MEASUREMENTS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UploadFileType;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -258,6 +269,13 @@ public class OrderPageActivity extends BaseActivity implements
             if (!Utils.isNetworkConnected(context))
                 return new OrderUpdateResult(1, "No connection to network. Canceling update.");
 
+//            final List<Long> ordersToBeUploaded = DbUtils.getOrdersToBeUploaded();
+//            for (Long orderNumberToBeUpload : ordersToBeUploaded) {
+//                File fileName = Utils.getPDFReportFileName(orderNumberToBeUpload, false);
+//                uploadFile( FILE_TYPE_ORDER_PDF_REPORT, fileName);
+//            }
+
+
             final Call<List<OrderBrief>> orderBriefListRequest =
                     Session.getServiceConnection().getOrdersBrief(Session.getEngineerEmail());
 
@@ -277,14 +295,14 @@ public class OrderPageActivity extends BaseActivity implements
             if (IS_LOGGING_ON)
                 Session.addToSessionLog("Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
 
-            final List<OrderBrief> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
+            final List<Long> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
 
             if (ordersToBeUpdated.isEmpty())
                 return new OrderUpdateResult(0, "Nothing to update.");
 
-            for (OrderBrief orderBrief : ordersToBeUpdated) {
+            for (Long orderNumber : ordersToBeUpdated) {
                 final Call<Order> orderRequest =
-                        Session.getServiceConnection().getOrder(orderBrief.getNumber(), Session.getEngineerEmail());
+                        Session.getServiceConnection().getOrder(orderNumber, Session.getEngineerEmail());
 
                 if (IS_LOGGING_ON)
                     Session.addToSessionLog("Getting order from: " + orderRequest.request());
@@ -330,5 +348,54 @@ public class OrderPageActivity extends BaseActivity implements
     @Override
     public void onLoaderReset(Loader<OrderUpdateResult> loader) {
         // NOOP
+    }
+
+    private static OrderUpdateResult uploadFile(@UploadFileType final int fileType, final File filename) {
+
+        // create RequestBody instance from file
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), filename);
+
+        String fileTypeString = "UNSET";
+        switch (fileType) {
+            case FILE_TYPE_ORDER_PDF_REPORT:
+                fileTypeString = "ORDER_PDF_REPORT";
+                break;
+            case FILE_TYPE_ORDER_XML_CUSTOM_REPORT:
+                fileTypeString = "ORDER_XML_CUSTOM_REPORT";
+                break;
+            case FILE_TYPE_ORDER_XML_DEFAULT_REPORT:
+                fileTypeString = "ORDER_XML_DEFAULT_REPORT";
+                break;
+            case FILE_TYPE_ORDER_XML_JOB_RULES:
+                fileTypeString = "ORDER_XML_JOB_RULES";
+                break;
+            case FILE_TYPE_ORDER_XML_MEASUREMENTS:
+                fileTypeString = "ORDER_XML_MEASUREMENTS";
+                break;
+        }
+
+        // MultipartBody.Part is used to send the actual file name and file type
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData(fileTypeString, filename.getName(), requestFile);
+
+        // add another part within the multipart request
+        String checksum = Utils.getFileMD5Sum(filename);
+        RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
+
+        // finally, execute the request
+        final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(Session.getCurrentOrder(), checksumBody, body);
+
+        final Response<ResponseBody> uploadFileResponse;
+        try {
+            uploadFileResponse = call.execute();
+        } catch (IOException e) {
+            return new OrderUpdateResult(1, "Upload fail: " + e.toString());
+        }
+
+        if (!uploadFileResponse.isSuccessful())
+            return new OrderUpdateResult(1, "Upload fail: " + uploadFileResponse.code());
+
+        return new OrderUpdateResult(0, "Upload successful: " + uploadFileResponse.code());
+
     }
 }

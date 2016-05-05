@@ -28,9 +28,10 @@ public class Order extends RealmObject {
     private Date importDate;
     private Date lastServerChangeDate;
     private Date lastAndroidChangeDate;
+    private long customTemplateID;
+    private int orderStatus;
 
     // Order processing fields
-    private int orderStatus;
     private Date maintenanceStartTime;
     private Date maintenanceEndTime;
 
@@ -189,27 +190,11 @@ public class Order extends RealmObject {
         this.maintenanceEndTime = maintenanceEndTime;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("number=").append(number);
-        sb.append(", orderType='").append(orderType).append('\'');
-        sb.append(", date=").append(date);
-        sb.append(", reference='").append(reference).append('\'');
-        sb.append(", note='").append(note).append('\'');
-        sb.append(", relation=").append(relation);
-        sb.append(", employee=").append(employee);
-        sb.append(", installation=").append(installation);
-        sb.append(", tasks=").append(tasks);
-        sb.append(", components=").append(components);
-        sb.append(", parts=").append(parts);
-        sb.append(", extraInfo=").append(extraInfo);
-        sb.append(", importDate=").append(importDate);
-        sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
-        sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
-        sb.append(", orderStatus=").append(orderStatus);
-        sb.append(", employeeEmail='").append(employeeEmail).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public long getCustomTemplateID() {
+        return customTemplateID;
+    }
+
+    public void setCustomTemplateID(long customTemplateID) {
+        this.customTemplateID = customTemplateID;
     }
 }
