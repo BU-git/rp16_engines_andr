@@ -14,7 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
+import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
@@ -146,10 +146,7 @@ public class OrderPageActivity extends BaseActivity implements
         ordersCompleteListener = new RealmChangeListener<RealmResults<Order>>() {
             @Override
             public void onChange(RealmResults<Order> orders) {
-                if (orders.size() == 0) return;
-                Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
-                updateService.putExtra(UPDATE_SERVICE_MSG, PREPARE_FILES);
-                startService(updateService);
+                if (orders.size() > 0) runIntent(PREPARE_FILES);
             }
         };
 
@@ -161,26 +158,29 @@ public class OrderPageActivity extends BaseActivity implements
         ordersSynchronisationListener = new RealmChangeListener<RealmResults<OrderSynchronisation>>() {
             @Override
             public void onChange(RealmResults<OrderSynchronisation> orders) {
-                if (orders.size() == 0) return;
-                Intent updateUploadService = new Intent(OrderPageActivity.this, UpdateService.class);
-                updateUploadService.putExtra(UPDATE_SERVICE_MSG, UPLOAD_FILES);
-                startService(updateUploadService);
+                if (orders.size() > 0) runIntent(UPLOAD_FILES);
             }
         };
 
         ordersToSynchroniseInDB = monitorRealm.where(OrderSynchronisation.class)
                 .equalTo("isReadyForSync", true).equalTo("isSyncComplete", false).findAll();
         ordersToSynchroniseInDB.addChangeListener(ordersSynchronisationListener);
+
+
+        runIntent(PREPARE_FILES);
+        runIntent(UPLOAD_FILES);
+    }
+
+    private void runIntent(@ServiceMessage final int intentType) {
+        Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
+        updateService.putExtra(UPDATE_SERVICE_MSG, intentType);
+        startService(updateService);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
         @Override
         public void run() {
-            Session.clearCurrentOrder();
-            Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
-            updateService.putExtra(UPDATE_SERVICE_MSG, UPDATE_ORDERS);
-            startService(updateService);
-
+            runIntent(UPDATE_ORDERS);
             updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
         }
     };

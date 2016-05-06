@@ -216,7 +216,8 @@ public class UpdateService extends IntentService {
                 RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
 
                 // finally, execute the request
-                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(Session.getCurrentOrder(), checksumBody, body);
+                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), checksumBody, body);
+                serviceLog("UPLOAD REQUEST: " + call.request());
 
                 final Response<ResponseBody> uploadFileResponse;
                 try {

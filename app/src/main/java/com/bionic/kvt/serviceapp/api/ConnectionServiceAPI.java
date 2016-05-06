@@ -52,7 +52,8 @@ public interface ConnectionServiceAPI {
 
 
     // Upload file for order {number}
-    //
+    // {checksum} - md5 sum for file
+    // MultipartBody.Part consist of file Name and file Data
     @Multipart
     @POST("upload/{number}")
     Call<ResponseBody> uploadFile(@Path("number") long number,
