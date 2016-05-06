@@ -58,8 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.4"
-            android:textAppearance="?android:textAppearanceMedium"
             android:text="@string/problem_action"
+            android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/colorTextField" />
 
         <Spinner
@@ -81,10 +81,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_weight="0.4"
             android:text="@string/problem_resolved"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/colorTextField"
-            android:layout_weight="0.4" />
+            android:textColor="@color/colorTextField" />
 
         <Switch
             android:layout_width="match_parent"

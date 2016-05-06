@@ -10,12 +10,12 @@
     android:text="test"
     tools:context=".activities.ComponentDetailFragment" />
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/component_detail_image"
@@ -32,11 +32,11 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:focusable="false"
         android:padding="16dp"
-        android:textColor="@color/colorTextFieldBlack"
         android:text="test"
-        android:layout_weight="1"
+        android:textColor="@color/colorTextFieldBlack"
         tools:context=".activities.ComponentDetailFragment" />
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -45,11 +45,11 @@
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_weight="6"
         android:focusable="false"
         android:padding="16dp"
-        android:textColor="@color/colorTextFieldBlack"
         android:text="test"
-        android:layout_weight="6"
+        android:textColor="@color/colorTextFieldBlack"
         tools:context=".activities.ComponentDetailFragment" />
 
 </LinearLayout>

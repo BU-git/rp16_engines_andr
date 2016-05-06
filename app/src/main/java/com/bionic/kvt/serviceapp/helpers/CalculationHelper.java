@@ -66,8 +66,6 @@ public enum CalculationHelper {
             return Collections.max(partDefects, new Comparator<DefectState>() {
                 @Override
                 public int compare(DefectState lhs, DefectState rhs) {
-                    Log.d(TAG, "First Object: " + lhs.toString());
-                    Log.d(TAG, "Second Object: " + rhs.toString());
                     return lhs.getCondition() - rhs.getCondition();
                 }
             }).getCondition();

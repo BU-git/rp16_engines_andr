@@ -40,7 +40,7 @@ import java.util.Set;
 import static com.bionic.kvt.serviceapp.activities.ComponentListActivity.defectStateList;
 
 /**
-Adapter for the Expandable Parts List
+ * Adapter for the Expandable Parts List
  */
 public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public final static Integer layoutMagicNumber = 1000;
@@ -65,7 +65,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         List<String> listSortedChild = Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
         Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
         Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
-        this._listDataHeader =  listSortedChild;
+        this._listDataHeader = listSortedChild;
         this._listDataChild = listChildData;
     }
 
@@ -95,7 +95,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         LinearLayout elementLayout = (LinearLayout) convertView.findViewById(R.id.component_element_layout);
-        if (elementLayout.findViewById(groupPosition) == null){
+        if (elementLayout.findViewById(groupPosition) == null) {
 
             final LinearLayout problemPlaceholderLayout = new LinearLayout(_context);
             problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -110,9 +110,9 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     .toString());
             problemPlaceholderLayout.setId(layoutId);
 
-            Set<Map.Entry<String,JsonElement>> childSet = childElement.entrySet();
+            Set<Map.Entry<String, JsonElement>> childSet = childElement.entrySet();
 
-            for (final Map.Entry<String,JsonElement> child : childSet){
+            for (final Map.Entry<String, JsonElement> child : childSet) {
                 Integer position = Utils.getSetIndex(childSet, child);
                 final CheckBox checkBox = new CheckBox(this._context);
                 //Creating checkbox id as a concatenation of magic number, group position and checkbox position
@@ -125,7 +125,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 childClickedPosition = position;
 
-                checkBox.setText(child.getKey()+"\n");
+                checkBox.setText(child.getKey() + "\n");
 
                 problemPlaceholderLayout.addView(checkBox);
                 problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -133,8 +133,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
                 //Todo: Replace with actual default fields
                 TextView text = new TextView(_context);
-                final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang,null);
-                final Spinner actiesSpinner = (Spinner)  infalInflater.inflate(R.layout.template_acties,null);
+                final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang, null);
+                final Spinner actiesSpinner = (Spinner) infalInflater.inflate(R.layout.template_acties, null);
                 final Spinner intensitySpinner = (Spinner) infalInflater.inflate(R.layout.template_intensiteit, null);
 
                 problemDetailLayout.addView(omvangSpinner);
@@ -154,7 +154,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //Tracking state of the checkboxes
-                        final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT,groupClickedPosition,id);
+                        final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT, groupClickedPosition, id);
                         state.setElement((String) getGroup(groupPosition));
                         state.setProblem(child.getKey());
 
@@ -169,7 +169,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                         state.getExtentId(),
                                         state.getIntensityId(),
                                         child.getValue().getAsJsonArray().get(0).getAsString());
-                                if (tempCondition != null){
+                                if (tempCondition != null) {
                                     state.setCondition(CalculationHelper.INSTANCE.getCondition(
                                             state.getExtentId(),
                                             state.getIntensityId(),
@@ -178,7 +178,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 }
 
                                 state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
-                                if (state.getCondition() != null){
+                                if (state.getCondition() != null) {
                                     state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
                                     state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
                                 }
@@ -204,7 +204,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 if (tempCondition != null) state.setCondition(tempCondition);
 
                                 state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
-                                if (state.getCondition() != null){
+                                if (state.getCondition() != null) {
                                     state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
                                     state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
                                 }
@@ -240,13 +240,12 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         });
 
 
+                        //Log.d(TAG, "Object is: " + state.toString());
 
-                        Log.d(TAG, "Object is: " + state.toString());
 
-
-                        if (checkBox.isChecked()){
+                        if (checkBox.isChecked()) {
                             problemDetailLayout.setVisibility(View.VISIBLE);
-                            if (!ComponentListActivity.defectStateList.contains(state)){
+                            if (!ComponentListActivity.defectStateList.contains(state)) {
                                 ComponentListActivity.defectStateList.add(state);
                             }
                         } else {
@@ -262,41 +261,33 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
 
                 for (DefectState d : ComponentListActivity.defectStateList) {
-                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition){
-                                    if (checkBox.getId() == d.getCheckboxPosition()){
-                                        omvangSpinner.setSelection(d.getExtentId());
-                                        intensitySpinner.setSelection(d.getIntensityId());
-                                        actiesSpinner.setSelection(d.getActionId());
+                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition) {
+                        if (checkBox.getId() == d.getCheckboxPosition()) {
+                            omvangSpinner.setSelection(d.getExtentId());
+                            intensitySpinner.setSelection(d.getIntensityId());
+                            actiesSpinner.setSelection(d.getActionId());
 
-                                        oplegostSwitch.setChecked(d.isFixed());
-                                        checkBox.setChecked(true);
-                                        Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
-                                                d.getExtentId(),
-                                                d.getIntensityId(),
-                                                child.getValue().getAsJsonArray().get(0).getAsString());
-                                        if (tempCondition != null) d.setCondition(tempCondition);
+                            oplegostSwitch.setChecked(d.isFixed());
+                            checkBox.setChecked(true);
+                            Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
+                                    d.getExtentId(),
+                                    d.getIntensityId(),
+                                    child.getValue().getAsJsonArray().get(0).getAsString());
+                            if (tempCondition != null) d.setCondition(tempCondition);
 
-                                        d.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
-                                        if (d.getCondition() != null){
-                                            d.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(d.getCondition()));
-                                            d.setCorrelatedScore(d.getCorrelation() * d.getInitialScore());
-                                        }
+                            d.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
+                            if (d.getCondition() != null) {
+                                d.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(d.getCondition()));
+                                d.setCorrelatedScore(d.getCorrelation() * d.getInitialScore());
+                            }
 
-                                        Log.d(TAG,"Object in Iteration: " + d.toString());
-                                    }
+                            //Log.d(TAG, "Object in Iteration: " + d.toString());
+                        }
                     }
                 }
 
 
             }
-            /*
-
-            final TextView mScoreView = new TextView(this._context);
-            if (defectStateList != null && defectStateList.size() != 0) {
-                mScoreView.setText("Score is: " + score);
-            }
-            problemPlaceholderLayout.addView(mScoreView);
-            */
         } else {
             LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
 
@@ -338,15 +329,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         }
         View ind = convertView.findViewById(R.id.component_detail_image);
         View mScoreView = convertView.findViewById(R.id.component_detail_score);
-        if (ind != null){
+        if (ind != null) {
             ImageView indicator = (ImageView) ind;
             TextView scoreText = (TextView) mScoreView;
-            if ( groupPosition == 0 ) {
-                indicator.setVisibility( View.GONE );
+            if (groupPosition == 0) {
+                indicator.setVisibility(View.GONE);
                 scoreText.setVisibility(View.VISIBLE);
-                if (ComponentListActivity.defectStateList != null && ComponentListActivity.defectStateList.size() > 0){
+                if (ComponentListActivity.defectStateList != null && ComponentListActivity.defectStateList.size() > 0) {
                     Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(ComponentListActivity.defectStateList, ComponentDetailFragment.ARG_CURRENT);
-                    if (partScore != null && partScore >= 1){
+                    if (partScore != null && partScore >= 1) {
                         score = partScore;
                     }
                 }
@@ -354,13 +345,13 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             } else {
                 indicator.setVisibility(View.VISIBLE);
                 scoreText.setVisibility(View.GONE);
-                indicator.setImageResource( isExpanded ? R.drawable.list_group_expanded : R.drawable.list_group_closed );
+                indicator.setImageResource(isExpanded ? R.drawable.list_group_expanded : R.drawable.list_group_closed);
             }
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.component_detail_title);
         lblListHeader.setText(headerTitle);
-        lblListHeader.setTextAppearance(_context,android.R.style.TextAppearance_Medium);
+        lblListHeader.setTextAppearance(_context, android.R.style.TextAppearance_Medium);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             lblListHeader.setTextColor(_context.getColor(R.color.colorTextField));
         } else {
