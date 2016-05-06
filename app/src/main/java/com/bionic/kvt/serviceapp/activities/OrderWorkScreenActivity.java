@@ -11,21 +11,21 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OrderWorkScreenActivity extends BaseActivity {
-    @Bind(R.id.process_order_page_hint)
+    @BindView(R.id.process_order_page_hint)
     TextView nextButtonHint;
 
-    @Bind(R.id.order_processing_first_stage_next_button)
+    @BindView(R.id.order_processing_first_stage_next_button)
     Button nextButton;
 
-    @Bind(R.id.order_processing_first_stage_instructions_checkbox)
+    @BindView(R.id.order_processing_first_stage_instructions_checkbox)
     CheckBox checkBoxInstructions;
 
-    @Bind(R.id.order_processing_first_stage_lmra_checkbox)
+    @BindView(R.id.order_processing_first_stage_lmra_checkbox)
     CheckBox checkBoxLMRA;
 
     @Override

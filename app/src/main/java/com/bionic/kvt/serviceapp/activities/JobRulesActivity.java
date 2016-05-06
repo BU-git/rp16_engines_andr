@@ -14,37 +14,37 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
 public class JobRulesActivity extends BaseActivity {
-    @Bind(R.id.job_rules_fuel_added)
+    @BindView(R.id.job_rules_fuel_added)
     CheckBox fuelAdded;
 
-    @Bind(R.id.job_rules_water_separators_drained)
+    @BindView(R.id.job_rules_water_separators_drained)
     CheckBox waterSeparatorsDrained;
 
-    @Bind(R.id.job_rules_leave_operational)
+    @BindView(R.id.job_rules_leave_operational)
     CheckBox leaveOperational;
 
-    @Bind(R.id.job_rules_customer_material)
+    @BindView(R.id.job_rules_customer_material)
     Switch customerMaterial;
 
-    @Bind(R.id.job_rules_material_from_bus)
+    @BindView(R.id.job_rules_material_from_bus)
     Switch materialFromBus;
 
-    @Bind(R.id.job_rules_repair_advice)
+    @BindView(R.id.job_rules_repair_advice)
     Switch repairAdvice;
 
-    @Bind(R.id.job_rules_remaining_work)
+    @BindView(R.id.job_rules_remaining_work)
     Switch remainingWork;
 
-    @Bind(R.id.job_rules_text_operations)
+    @BindView(R.id.job_rules_text_operations)
     EditText operationsText;
 
-    @Bind(R.id.job_rules_text_remarks)
+    @BindView(R.id.job_rules_text_remarks)
     EditText remarksText;
 
     @Override

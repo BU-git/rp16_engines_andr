@@ -16,7 +16,7 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -26,46 +26,46 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 
 public class OrderPageDetailActivity extends BaseActivity {
-    @Bind(R.id.service_engenieer_accept_toggleButton)
+    @BindView(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
 
-    @Bind(R.id.service_engenieer_start_button)
+    @BindView(R.id.service_engenieer_start_button)
     Button startButton;
 
-    @Bind(R.id.process_order_page_accept_instructions)
+    @BindView(R.id.process_order_page_accept_instructions)
     TextView orderAcceptInstructions;
 
-    @Bind(R.id.process_order_page_order_complete)
+    @BindView(R.id.process_order_page_order_complete)
     TextView orderIsComplete;
 
-    @Bind(R.id.process_order_page_detail_order_number)
+    @BindView(R.id.process_order_page_detail_order_number)
     TextView orderNumber;
 
-    @Bind(R.id.process_order_page_detail_relation)
+    @BindView(R.id.process_order_page_detail_relation)
     TextView orderRelation;
 
-    @Bind(R.id.process_order_page_detail_town)
+    @BindView(R.id.process_order_page_detail_town)
     TextView orderTown;
 
-    @Bind(R.id.process_order_page_detail_telephone)
+    @BindView(R.id.process_order_page_detail_telephone)
     TextView orderPhone;
 
-    @Bind(R.id.process_order_page_detail_employee)
+    @BindView(R.id.process_order_page_detail_employee)
     TextView orderEmployee;
 
-    @Bind(R.id.process_order_page_detail_order_date)
+    @BindView(R.id.process_order_page_detail_order_date)
     TextView orderDate;
 
-    @Bind(R.id.process_order_page_detail_reference)
+    @BindView(R.id.process_order_page_detail_reference)
     TextView orderReference;
 
-    @Bind(R.id.process_order_page_detail_installation)
+    @BindView(R.id.process_order_page_detail_installation)
     TextView orderInstallation;
 
-    @Bind(R.id.process_order_page1_device_town)
+    @BindView(R.id.process_order_page1_device_town)
     TextView orderInstallationTown;
 
-    @Bind(R.id.instructions_text)
+    @BindView(R.id.instructions_text)
     TextView orderInstuctions;
 
     @Override

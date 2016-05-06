@@ -15,7 +15,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.Call;
@@ -27,10 +27,10 @@ public class DebugActivity extends BaseActivity {
     private Order order;
     private static final int MAIL_LOADER_ID = 2;
 
-    @Bind(R.id.connection_order_id)
+    @BindView(R.id.connection_order_id)
     EditText orderIdInput;
 
-    @Bind(R.id.synchronisation_log)
+    @BindView(R.id.synchronisation_log)
     TextView synchronisationLog;
 
     @Override

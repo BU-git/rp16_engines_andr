@@ -27,7 +27,7 @@ import com.bionic.kvt.serviceapp.models.OrderOverview;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -58,13 +58,13 @@ public class OrderPageActivity extends BaseActivity implements
     private RealmResults<OrderSynchronisation> ordersToSynchroniseInDB;
 
 
-    @Bind(R.id.order_update_status)
+    @BindView(R.id.order_update_status)
     TextView orderUpdateStatusText;
 
-    @Bind(R.id.order_page_search_view)
+    @BindView(R.id.order_page_search_view)
     SearchView searchView;
 
-    @Bind(R.id.orders_recycler_view)
+    @BindView(R.id.orders_recycler_view)
     RecyclerView ordersRecyclerView;
 
     @Override

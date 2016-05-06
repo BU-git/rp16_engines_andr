@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -29,7 +29,7 @@ import io.realm.Realm;
 import static com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter.MeasurementsItem;
 
 public class MeasurementsActivity extends BaseActivity {
-    @Bind(R.id.measurements_motor_exp_list_view)
+    @BindView(R.id.measurements_motor_exp_list_view)
     ExpandableListView expMotorListView;
 
     private MeasurementsExpListAdapter listMotorAdapter;

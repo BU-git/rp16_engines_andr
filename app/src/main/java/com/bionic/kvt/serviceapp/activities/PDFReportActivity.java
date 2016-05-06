@@ -40,7 +40,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -61,16 +61,16 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     private AlertDialog enterEmailDialog;
 
-    @Bind(R.id.pdf_report_send_button)
+    @BindView(R.id.pdf_report_send_button)
     Button sendButton;
 
-    @Bind(R.id.pdf_text_log)
+    @BindView(R.id.pdf_text_log)
     TextView pdfTextLog;
 
-    @Bind(R.id.pdf_report_bottom)
+    @BindView(R.id.pdf_report_bottom)
     LinearLayout reportBottomLayout;
 
-    @Bind(R.id.pdf_bitmap)
+    @BindView(R.id.pdf_bitmap)
     ImageView pdfView;
 
     @Override

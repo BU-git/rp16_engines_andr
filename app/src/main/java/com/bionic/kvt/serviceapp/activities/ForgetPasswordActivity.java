@@ -13,7 +13,7 @@ import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -22,7 +22,7 @@ public class ForgetPasswordActivity extends BaseActivity implements
     private static final int MAIL_LOADER_ID = 2;
     private MailHelper mailHelper;
 
-    @Bind(R.id.email)
+    @BindView(R.id.email)
     AutoCompleteTextView mEmailView;
 
     @Override

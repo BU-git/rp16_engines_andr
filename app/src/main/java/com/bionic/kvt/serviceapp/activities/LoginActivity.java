@@ -33,7 +33,7 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
@@ -54,19 +54,19 @@ public class LoginActivity extends BaseActivity
     private final String TAG = this.getClass().getName();
     private UserLoginTask mAuthTask = null;
 
-    @Bind(R.id.connection_status)
+    @BindView(R.id.connection_status)
     TextView mConnectionStatusText;
 
-    @Bind(R.id.email)
+    @BindView(R.id.email)
     AutoCompleteTextView mEmailView;
 
-    @Bind(R.id.password)
+    @BindView(R.id.password)
     EditText mPasswordView;
 
-    @Bind(R.id.login_progress)
+    @BindView(R.id.login_progress)
     View mProgressView;
 
-    @Bind(R.id.login_form)
+    @BindView(R.id.login_form)
     View mLoginFormView;
 
     private View mLoginLayout;

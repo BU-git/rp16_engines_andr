@@ -18,31 +18,31 @@ import com.bionic.kvt.serviceapp.views.SignatureView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
 public class SignaturesActivity extends BaseActivity {
-    @Bind(R.id.draw_engineer_signature)
+    @BindView(R.id.draw_engineer_signature)
     SignatureView engineerDrawingView;
 
-    @Bind(R.id.draw_client_signature)
+    @BindView(R.id.draw_client_signature)
     SignatureView clientDrawingView;
 
-    @Bind(R.id.button_complete)
+    @BindView(R.id.button_complete)
     Button buttonComplete;
 
-    @Bind(R.id.button_confirm_engineer)
+    @BindView(R.id.button_confirm_engineer)
     ToggleButton buttonConfirmEngineer;
 
-    @Bind(R.id.button_confirm_client)
+    @BindView(R.id.button_confirm_client)
     ToggleButton buttonConfirmClient;
 
-    @Bind(R.id.signature_engineer_name)
+    @BindView(R.id.signature_engineer_name)
     EditText engineerName;
 
-    @Bind(R.id.signature_client_name)
+    @BindView(R.id.signature_client_name)
     EditText clientName;
 
     @Override
@@ -85,7 +85,7 @@ public class SignaturesActivity extends BaseActivity {
 
     @OnClick(R.id.button_complete)
     public void onCompleteClick(View v) {
-        final File pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(),  false);
+        final File pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
         Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);

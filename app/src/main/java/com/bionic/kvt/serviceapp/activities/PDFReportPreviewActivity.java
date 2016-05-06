@@ -31,7 +31,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
@@ -44,10 +44,10 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     private File pdfReportPreviewFile;
     private File pdfTemplate;
 
-    @Bind(R.id.pdf_preview_text_log)
+    @BindView(R.id.pdf_preview_text_log)
     TextView pdfTextLog;
 
-    @Bind(R.id.pdf_preview_bitmap)
+    @BindView(R.id.pdf_preview_bitmap)
     ImageView pdfView;
 
     @Override
