@@ -165,12 +165,17 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setExtentId(omvangSpinner.getSelectedItemPosition());
                                 state.setExtent((String) omvangSpinner.getSelectedItem());
-
-                                state.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
                                         state.getExtentId(),
                                         state.getIntensityId(),
-                                        child.getValue().getAsJsonArray().get(0).getAsString()
-                                ));
+                                        child.getValue().getAsJsonArray().get(0).getAsString());
+                                if (tempCondition != null){
+                                    state.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                            state.getExtentId(),
+                                            state.getIntensityId(),
+                                            child.getValue().getAsJsonArray().get(0).getAsString()
+                                    ));
+                                }
 
                                 state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
                                 if (state.getCondition() != null){
@@ -178,6 +183,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                     state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
                                 }
                                 notifyDataSetChanged();
+
                             }
 
                             @Override
@@ -190,12 +196,12 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setIntensityId(intensitySpinner.getSelectedItemPosition());
                                 state.setIntensity((String) intensitySpinner.getSelectedItem());
-
-                                state.setCondition(CalculationHelper.INSTANCE.getCondition(
+                                Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
                                         state.getExtentId(),
                                         state.getIntensityId(),
                                         child.getValue().getAsJsonArray().get(0).getAsString()
-                                ));
+                                );
+                                if (tempCondition != null) state.setCondition(tempCondition);
 
                                 state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
                                 if (state.getCondition() != null){

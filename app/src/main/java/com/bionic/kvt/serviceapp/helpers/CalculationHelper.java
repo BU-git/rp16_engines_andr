@@ -63,15 +63,11 @@ public enum CalculationHelper {
         }
         Integer score;
         if (partDefects.size() > 1){
-            Log.d(TAG, Collections.max(partDefects, new Comparator<DefectState>() {
-                @Override
-                public int compare(DefectState lhs, DefectState rhs) {
-                    return lhs.getCondition() - rhs.getCondition();
-                }
-            }).toString());
             return Collections.max(partDefects, new Comparator<DefectState>() {
                 @Override
                 public int compare(DefectState lhs, DefectState rhs) {
+                    Log.d(TAG, "First Object: " + lhs.toString());
+                    Log.d(TAG, "Second Object: " + rhs.toString());
                     return lhs.getCondition() - rhs.getCondition();
                 }
             }).getCondition();
