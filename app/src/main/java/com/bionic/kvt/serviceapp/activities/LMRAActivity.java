@@ -18,6 +18,8 @@ public class LMRAActivity extends BaseActivity {
     private static final String LMRALISTNAME = "LMRA List";
 
     public static ArrayList<LMRA> lmraList = new ArrayList<>();
+    public static LMRAAdapter lmraAdapter = null;
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -59,7 +61,7 @@ public class LMRAActivity extends BaseActivity {
             //Prepopulate data from DB, if needed
         }
 
-        final LMRAAdapter lmraAdapter = new LMRAAdapter(this, lmraList);
+        lmraAdapter = new LMRAAdapter(this, lmraList);
         final ListView listView = (ListView) findViewById(R.id.lmra_list);
         listView.setAdapter(lmraAdapter);
 

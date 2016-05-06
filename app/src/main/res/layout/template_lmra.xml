@@ -33,13 +33,14 @@
                 android:text="@string/lmra_text_sample"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textStyle="bold" />
-
+            <!-- The button has no sense
             <Button
                 android:id="@+id/button_lmra_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="@string/button_save" />
+            -->
         </RelativeLayout>
 
         <LinearLayout
@@ -59,7 +60,8 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textStyle="italic" />
 
-            <ImageSwitcher
+            <ImageButton
+                android:id="@+id/button_lmra_camera"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".3"

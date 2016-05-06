@@ -38,6 +38,7 @@ public class LMRADialog extends AppCompatDialogFragment {
 
                         LMRA lmraNew = new LMRA(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
                         LMRAActivity.lmraList.add(lmraNew);
+                        LMRAActivity.lmraAdapter.notifyDataSetChanged();
 
                     }
 
