@@ -3,7 +3,6 @@ package com.bionic.kvt.serviceapp.api;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -57,8 +56,7 @@ public interface ConnectionServiceAPI {
     @Multipart
     @POST("upload/{number}")
     Call<ResponseBody> uploadFile(@Path("number") long number,
-                                  @Part("checksum") RequestBody checksum,
-                                  @Part MultipartBody.Part filePart);
+                                  @Part("fileData") MultipartBody requestBody);
 
 
 }

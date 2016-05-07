@@ -16,6 +16,7 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -186,6 +187,10 @@ public class UpdateService extends IntentService {
     }
 
     private void uploadOrderFiles() {
+
+        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
+
         serviceLog("Service started.");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -203,20 +208,19 @@ public class UpdateService extends IntentService {
 
             if (orderToSync.getDefaultPDFReportFile() != null &&
                     !orderToSync.isDefaultPDFReportFileSynced()) {
+
                 final File fileName = new File(orderToSync.getDefaultPDFReportFile());
-                // create RequestBody instance from file
-                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), fileName);
+                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_PDF, fileName);
+                final String checksum = Utils.getFileMD5Sum(fileName);
 
-                // MultipartBody.Part is used to send the actual file name and file type
-                MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("DEFAULT_PDF_REPORT", fileName.getName(), requestFile);
+                final MultipartBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("type", "DEFAULT_PDF_REPORT")
+                        .addFormDataPart("checksum", checksum)
+                        .addFormDataPart("file", fileName.getName(), requestFile)
+                        .build();
 
-                // add another part within the multipart request
-                String checksum = Utils.getFileMD5Sum(fileName);
-                RequestBody checksumBody = RequestBody.create(MediaType.parse("multipart/form-data"), checksum);
-
-                // finally, execute the request
-                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), checksumBody, body);
+                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
                 serviceLog("UPLOAD REQUEST: " + call.request());
 
                 final Response<ResponseBody> uploadFileResponse;
