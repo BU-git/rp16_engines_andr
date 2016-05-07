@@ -4,31 +4,22 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
-import io.realm.internal.Util;
 
 /** */
 public enum CameraHelper {
     INSTANCE;
 
-    CameraHelper() {}
+    CameraHelper() {
+    }
 
     String mCurrentPhotoPath;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -72,8 +63,7 @@ public enum CameraHelper {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }

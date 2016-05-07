@@ -2,8 +2,6 @@ package com.bionic.kvt.serviceapp.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,13 +22,13 @@ import java.util.ArrayList;
  * LMRA Adapter
  */
 public class LMRAAdapter extends ArrayAdapter<LMRA> {
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+//    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private static class LMRAViewHolder {
-        TextView lmraName;
-        TextView lmraDescription;
-        Button lmraDeleteButton;
-        ImageButton lmraCameraButton;
+        private TextView lmraName;
+        private TextView lmraDescription;
+        private Button lmraDeleteButton;
+        private ImageButton lmraCameraButton;
 
     }
 

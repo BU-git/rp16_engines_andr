@@ -48,14 +48,14 @@ public class MeasurementsActivity extends BaseActivity {
         setContentView(R.layout.activity_measurements);
         ButterKnife.bind(this);
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
+
         // Exit if Session is empty
         if (Session.getCurrentOrder() == 0L) {
             Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
 
         getMeasurementsData();
 

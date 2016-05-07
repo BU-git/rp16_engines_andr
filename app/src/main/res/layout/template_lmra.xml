@@ -1,71 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/activity_horizontal_margin"
     android:background="@color/colorSecondaryBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title_lmra"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_lmra_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_delete" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+        <TextView
+            android:id="@+id/description_lmra"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textAppearance="?android:textAppearanceMedium" />
 
-            <Button
-                android:id="@+id/button_lmra_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:text="@string/button_delete" />
-
-            <TextView
-                android:id="@+id/title_lmra"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:text="@string/lmra_text_sample"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textStyle="bold" />
-            <!-- The button has no sense
-            <Button
-                android:id="@+id/button_lmra_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="@string/button_save" />
-            -->
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/button_lmra_camera"
+            android:layout_width="180dp"
             android:layout_height="180dp"
-            android:layout_gravity="bottom"
-            android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/description_lmra"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_weight=".7"
-                android:textAppearance="?android:textAppearanceMedium"
-                android:textStyle="italic" />
-
-            <ImageButton
-                android:id="@+id/button_lmra_camera"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".3"
-                android:background="@android:drawable/ic_menu_camera" />
-        </LinearLayout>
+            android:background="@drawable/ic_lmra_camera_24dp"
+            android:contentDescription="@string/make_lmra_photo" />
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>
