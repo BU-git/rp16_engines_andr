@@ -2,10 +2,12 @@ package com.bionic.kvt.serviceapp.db;
 
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -98,7 +100,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void updateOrderOverviewList(List<OrderOverview> listToUpdate) {
+    public static void updateOrderOverviewList(final List<OrderOverview> listToUpdate) {
         Session.addToSessionLog("Updating Order Overview List");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -127,6 +129,40 @@ public class DbUtils {
 
         realm.close();
         Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
+    }
+
+    public static void updateLMRAList(final List<LMRAModel> listToUpdate) {
+        Session.addToSessionLog("Updating LMRA Model List");
+
+        final Realm realm = Realm.getDefaultInstance();
+        final RealmResults<LMRAItem> allLMRAItemsInDb =
+                realm.where(LMRAItem.class).equalTo("number", Session.getCurrentOrder()).findAll();
+        final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
+
+        listToUpdate.clear();
+        for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
+            final LMRAModel lmraModel = new LMRAModel();
+            lmraModel.setLmraId(lmraItem.getLmraId());
+            lmraModel.setLmraName(lmraItem.getLmraName());
+            lmraModel.setLmraDescription(lmraItem.getLmraDescription());
+
+            List<File> listLMRAPhotos = null;
+
+            final RealmList<LMRAPhoto> listLMRAPhotosInBD = lmraItem.getListLMRAPhotos();
+            if (listLMRAPhotosInBD.size() > 0) {
+                listLMRAPhotos = new ArrayList<>();
+                for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
+                    listLMRAPhotos.add(new File(lmraPhoto.toString()));
+                }
+            }
+
+            lmraModel.setListLMRAPhotos(listLMRAPhotos);
+
+            listToUpdate.add(lmraModel);
+        }
+
+        realm.close();
+        Session.addToSessionLog("Added " + listToUpdate.size() + " LMRAs to list.");
     }
 
     public static List<Long> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
@@ -328,6 +364,47 @@ public class DbUtils {
         realm.close();
     }
 
+    public static void createNewLMRAInDb(final String lmraName, final String lmraDescription) {
+        Session.addToSessionLog("Creating new LMRA.");
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final LMRAItem newLMRAItem = realm.createObject(LMRAItem.class);
+
+        newLMRAItem.setLmraId(System.currentTimeMillis());
+        newLMRAItem.setNumber(Session.getCurrentOrder());
+        newLMRAItem.setLmraName(lmraName);
+        newLMRAItem.setLmraDescription(lmraDescription);
+        newLMRAItem.setListLMRAPhotos(null);
+
+        realm.commitTransaction(); // No logic if transaction fail!!!
+        Session.addToSessionLog("New LMRA: " + newLMRAItem.toString());
+        realm.close();
+
+    }
+
+    public static void removeLMRAFromDb(final long lmraId) {
+        Session.addToSessionLog("Deleting LMRA: " + lmraId);
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
+                .equalTo("number", Session.getCurrentOrder())
+                .equalTo("lmraId", lmraId)
+                .findFirst();
+
+        if (currentLMRAItem != null) {
+            currentLMRAItem.deleteFromRealm();
+            realm.commitTransaction(); // No logic if transaction fail!!!
+            Session.addToSessionLog("Deleted.");
+        } else {
+            realm.commitTransaction(); // No logic if transaction fail!!!
+            Session.addToSessionLog("**** ERROR **** No such LMRA found.");
+        }
+
+        realm.close();
+    }
+
     public static void updateUserFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
         Session.addToSessionLog("Updating User table from server data.");
 
@@ -415,7 +492,9 @@ public class DbUtils {
         realm.close();
     }
 
-    public static @OrderStatus int getOrderStatus(final long orderNumber) {
+    public static
+    @OrderStatus
+    int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();

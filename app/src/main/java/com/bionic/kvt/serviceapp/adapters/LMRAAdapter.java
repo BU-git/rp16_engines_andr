@@ -13,42 +13,45 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.models.LMRA;
+import com.bionic.kvt.serviceapp.activities.LMRAActivity;
+import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LMRA Adapter
  */
-public class LMRAAdapter extends ArrayAdapter<LMRA> {
+public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
     private static final int REQUEST_TAKE_PHOTO = 1;
+
+    private Context context;
 
     private static class LMRAViewHolder {
         private TextView lmraName;
         private TextView lmraDescription;
         private Button lmraDeleteButton;
         private ImageButton lmraCameraButton;
-
     }
 
-    public LMRAAdapter(Context context, ArrayList<LMRA> lmraList) {
-        super(context, R.layout.template_lmra, lmraList);
+    public LMRAAdapter(Context context, List<LMRAModel> lmraModelList) {
+        super(context, R.layout.template_lmra, lmraModelList);
+        this.context = context;
     }
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        final LMRA lmra = getItem(position);
+        final LMRAModel lmraModel = getItem(position);
         final LMRAViewHolder lmraViewHolder;
 
         if (convertView == null) {
             lmraViewHolder = new LMRAViewHolder();
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
             convertView = layoutInflater.inflate(R.layout.template_lmra, parent, false);
             lmraViewHolder.lmraName = (TextView) convertView.findViewById(R.id.title_lmra);
             lmraViewHolder.lmraDescription = (TextView) convertView.findViewById(R.id.description_lmra);
@@ -59,13 +62,14 @@ public class LMRAAdapter extends ArrayAdapter<LMRA> {
         } else {
             lmraViewHolder = (LMRAViewHolder) convertView.getTag();
         }
-        lmraViewHolder.lmraName.setText(lmra.getLmraName());
-        lmraViewHolder.lmraDescription.setText(lmra.getLmraDescription());
+
+        lmraViewHolder.lmraName.setText(lmraModel.getLmraName());
+        lmraViewHolder.lmraDescription.setText(lmraModel.getLmraDescription());
         lmraViewHolder.lmraDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), String.valueOf(getItem(position).getLmraName()), Toast.LENGTH_SHORT).show();
-                remove(getItem(position));
+                DbUtils.removeLMRAFromDb(lmraModel.getLmraId());
+                DbUtils.updateLMRAList(LMRAActivity.lmraList);
                 notifyDataSetChanged();
             }
         });
@@ -73,7 +77,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRA> {
         lmraViewHolder.lmraCameraButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Activity activity = (Activity) getContext();
+                final Activity activity = (Activity) context;
                 final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                 // Ensure that there's a camera activity to handle the intent

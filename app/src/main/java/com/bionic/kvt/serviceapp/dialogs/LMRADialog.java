@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.activities.LMRAActivity;
-import com.bionic.kvt.serviceapp.models.LMRA;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 
 /*
 LMRA Dialog to show by clicking the plus
@@ -36,8 +36,9 @@ public class LMRADialog extends AppCompatDialogFragment {
                         EditText mLmraNameView = (EditText) view.findViewById(R.id.title_lmra_add);
                         EditText mLmraDescriptionView = (EditText) view.findViewById(R.id.description_lmra_add);
 
-                        LMRA lmraNew = new LMRA(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
-                        LMRAActivity.lmraList.add(lmraNew);
+                        DbUtils.createNewLMRAInDb(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
+
+                        DbUtils.updateLMRAList(LMRAActivity.lmraList);
                         LMRAActivity.lmraAdapter.notifyDataSetChanged();
                     }
 

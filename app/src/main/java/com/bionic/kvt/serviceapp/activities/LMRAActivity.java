@@ -10,21 +10,21 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.LMRAAdapter;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
-import com.bionic.kvt.serviceapp.models.LMRA;
+import com.bionic.kvt.serviceapp.models.LMRAModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LMRAActivity extends BaseActivity {
-    private static final String LMRALISTNAME = "LMRA List";
-
     @BindView(R.id.activity_lmra_list)
     ListView listViewLMRA;
 
-    public static ArrayList<LMRA> lmraList = new ArrayList<>();
+    public static List<LMRAModel> lmraList = new ArrayList<>();
     public static LMRAAdapter lmraAdapter;
 
     @Override
@@ -42,22 +42,9 @@ public class LMRAActivity extends BaseActivity {
             return;
         }
 
-        //Saving session for the screen orientation
-        if (savedInstanceState != null) {
-            lmraList = savedInstanceState.getParcelableArrayList(LMRALISTNAME);
-        } else {
-            //Prepopulate data from DB, if needed
-        }
-
+        DbUtils.updateLMRAList(lmraList);
         lmraAdapter = new LMRAAdapter(this, lmraList);
         listViewLMRA.setAdapter(lmraAdapter);
-
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(LMRALISTNAME, lmraList);
-        super.onSaveInstanceState(outState);
     }
 
     //Add + as a menu button

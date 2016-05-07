@@ -1,7 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import java.util.ArrayList;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -20,7 +18,7 @@ public class OrderSynchronisation extends RealmObject {
     private String defaultPDFReportFile;
     private boolean defaultPDFReportFileSynced;
 
-    private RealmList<LMRAPhotos> listLMRAPhotos;
+    private RealmList<LMRAItem> listLMRAPhotos;
 
     // Service fields
     private String orderDefaultXMLReportFile;
@@ -84,11 +82,11 @@ public class OrderSynchronisation extends RealmObject {
         this.defaultPDFReportFileSynced = defaultPDFReportFileSynced;
     }
 
-    public RealmList<LMRAPhotos> getListLMRAPhotos() {
+    public RealmList<LMRAItem> getListLMRAPhotos() {
         return listLMRAPhotos;
     }
 
-    public void setListLMRAPhotos(RealmList<LMRAPhotos> listLMRAPhotos) {
+    public void setListLMRAPhotos(RealmList<LMRAItem> listLMRAPhotos) {
         this.listLMRAPhotos = listLMRAPhotos;
     }
 
