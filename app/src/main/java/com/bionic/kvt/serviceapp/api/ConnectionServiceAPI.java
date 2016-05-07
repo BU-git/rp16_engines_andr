@@ -5,11 +5,10 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface ConnectionServiceAPI {
@@ -51,12 +50,13 @@ public interface ConnectionServiceAPI {
 
 
     // Upload file for order {number}
-    // {checksum} - md5 sum for file
-    // MultipartBody.Part consist of file Name and file Data
-    @Multipart
+    // Fields in MultipartBody:
+    // {type} - <String> type of file [DEFAULT_PDF_REPORT, CUSTOM_PDF_REPORT, LMRA_PHOTO, XML_ZIP]
+    // {checksum} - <String> md5 sum for file
+    // {file} - <String> file name and <image/png, application/pdf, application/octet-stream> file content
     @POST("upload/{number}")
     Call<ResponseBody> uploadFile(@Path("number") long number,
-                                  @Part("fileData") MultipartBody requestBody);
+                                  @Body MultipartBody requestBody);
 
 
 }

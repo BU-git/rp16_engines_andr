@@ -16,7 +16,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -190,6 +189,7 @@ public class UpdateService extends IntentService {
 
         final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
         final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
+        final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
 
         serviceLog("Service started.");
 
