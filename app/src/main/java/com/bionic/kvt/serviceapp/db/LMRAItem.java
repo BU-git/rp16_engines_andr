@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -13,7 +12,6 @@ public class LMRAItem extends RealmObject {
 
     private String lmraName;
     private String lmraDescription;
-    private RealmList<LMRAPhoto> listLMRAPhotos;
 
     public long getLmraId() {
         return lmraId;
@@ -47,13 +45,6 @@ public class LMRAItem extends RealmObject {
         this.lmraDescription = lmraDescription;
     }
 
-    public RealmList<LMRAPhoto> getListLMRAPhotos() {
-        return listLMRAPhotos;
-    }
-
-    public void setListLMRAPhotos(RealmList<LMRAPhoto> listLMRAPhotos) {
-        this.listLMRAPhotos = listLMRAPhotos;
-    }
 
     @Override
     public String toString() {
@@ -62,7 +53,6 @@ public class LMRAItem extends RealmObject {
         sb.append(", number=").append(number);
         sb.append(", lmraName='").append(lmraName).append('\'');
         sb.append(", lmraDescription='").append(lmraDescription).append('\'');
-        sb.append(", listLMRAPhotos=").append(listLMRAPhotos);
         sb.append('}');
         return sb.toString();
     }

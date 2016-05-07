@@ -1,15 +1,10 @@
 package com.bionic.kvt.serviceapp.db;
 
-import java.io.File;
-
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
 
 public class LMRAPhoto extends RealmObject {
 
-    @PrimaryKey
     private long lmraId; // Copy of LMRAItem -> lmraID
-
     private long number; // Order number
 
     private String lmraPhotoFile;

@@ -33,6 +33,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
     private Context context;
 
     private static class LMRAViewHolder {
+        private long lmraId;
         private TextView lmraName;
         private TextView lmraDescription;
         private Button lmraDeleteButton;
@@ -63,12 +64,13 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             lmraViewHolder = (LMRAViewHolder) convertView.getTag();
         }
 
+        lmraViewHolder.lmraId = lmraModel.getLmraId();
         lmraViewHolder.lmraName.setText(lmraModel.getLmraName());
         lmraViewHolder.lmraDescription.setText(lmraModel.getLmraDescription());
         lmraViewHolder.lmraDeleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbUtils.removeLMRAFromDb(lmraModel.getLmraId());
+                DbUtils.removeLMRAFromDB(lmraModel.getLmraId());
                 DbUtils.updateLMRAList(LMRAActivity.lmraList);
                 notifyDataSetChanged();
             }
@@ -79,6 +81,8 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             public void onClick(View v) {
                 final Activity activity = (Activity) context;
                 final Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                LMRAActivity.currentLMRAID = 0;
+                LMRAActivity.currentLMRAProtoFile = null;
 
                 // Ensure that there's a camera activity to handle the intent
                 if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
@@ -86,6 +90,8 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                     final File photoFile = Utils.createImageFile(Session.getCurrentOrder());
                     // Continue only if the File was successfully created
                     if (photoFile != null) {
+                        LMRAActivity.currentLMRAID = lmraViewHolder.lmraId;
+                        LMRAActivity.currentLMRAProtoFile = photoFile;
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                         activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                     }
@@ -95,4 +101,5 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
 
         return convertView;
     }
+
 }

@@ -36,7 +36,7 @@ public class LMRADialog extends AppCompatDialogFragment {
                         EditText mLmraNameView = (EditText) view.findViewById(R.id.title_lmra_add);
                         EditText mLmraDescriptionView = (EditText) view.findViewById(R.id.description_lmra_add);
 
-                        DbUtils.createNewLMRAInDb(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
+                        DbUtils.createNewLMRAInDB(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
 
                         DbUtils.updateLMRAList(LMRAActivity.lmraList);
                         LMRAActivity.lmraAdapter.notifyDataSetChanged();

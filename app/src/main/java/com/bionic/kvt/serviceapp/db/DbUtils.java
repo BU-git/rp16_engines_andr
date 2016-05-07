@@ -148,7 +148,12 @@ public class DbUtils {
 
             List<File> listLMRAPhotos = null;
 
-            final RealmList<LMRAPhoto> listLMRAPhotosInBD = lmraItem.getListLMRAPhotos();
+            final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                    realm.where(LMRAPhoto.class)
+                            .equalTo("number", Session.getCurrentOrder())
+                            .equalTo("lmraId", lmraItem.getLmraId())
+                            .findAll();
+
             if (listLMRAPhotosInBD.size() > 0) {
                 listLMRAPhotos = new ArrayList<>();
                 for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
@@ -364,7 +369,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static void createNewLMRAInDb(final String lmraName, final String lmraDescription) {
+    public static void createNewLMRAInDB(final String lmraName, final String lmraDescription) {
         Session.addToSessionLog("Creating new LMRA.");
 
         final Realm realm = Realm.getDefaultInstance();
@@ -375,7 +380,6 @@ public class DbUtils {
         newLMRAItem.setNumber(Session.getCurrentOrder());
         newLMRAItem.setLmraName(lmraName);
         newLMRAItem.setLmraDescription(lmraDescription);
-        newLMRAItem.setListLMRAPhotos(null);
 
         realm.commitTransaction(); // No logic if transaction fail!!!
         Session.addToSessionLog("New LMRA: " + newLMRAItem.toString());
@@ -383,24 +387,59 @@ public class DbUtils {
 
     }
 
-    public static void removeLMRAFromDb(final long lmraId) {
+    public static void removeLMRAFromDB(final long lmraId) {
         Session.addToSessionLog("Deleting LMRA: " + lmraId);
 
         final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
+
         final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
                 .equalTo("number", Session.getCurrentOrder())
                 .equalTo("lmraId", lmraId)
                 .findFirst();
 
         if (currentLMRAItem != null) {
+            realm.beginTransaction();
             currentLMRAItem.deleteFromRealm();
             realm.commitTransaction(); // No logic if transaction fail!!!
             Session.addToSessionLog("Deleted.");
         } else {
-            realm.commitTransaction(); // No logic if transaction fail!!!
             Session.addToSessionLog("**** ERROR **** No such LMRA found.");
         }
+
+        removeLMRAPhotoFromDB(lmraId);
+
+        realm.close();
+    }
+
+    public static void saveLMRAPhotoInDB(final long lmraId, final File lmraPhotoFile) {
+        Session.addToSessionLog("Saving LMRA photo: " + lmraId + "File: " + lmraPhotoFile);
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final LMRAPhoto newLMRAPhoto = realm.createObject(LMRAPhoto.class);
+
+        newLMRAPhoto.setLmraId(lmraId);
+        newLMRAPhoto.setNumber(Session.getCurrentOrder());
+        newLMRAPhoto.setLmraPhotoFile(lmraPhotoFile.toString());
+        newLMRAPhoto.setLmraPhotoFileSynced(false);
+        realm.commitTransaction(); // No logic if transaction fail!!!
+        realm.close();
+    }
+
+    private static void removeLMRAPhotoFromDB(final long lmraId) {
+        Session.addToSessionLog("Deleting photos for LMRA: " + lmraId);
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        final RealmResults<LMRAPhoto> allLMRAPhotosForLMRAID =
+                realm.where(LMRAPhoto.class)
+                        .equalTo("number", Session.getCurrentOrder())
+                        .equalTo("lmraId", lmraId)
+                        .findAll();
+
+        allLMRAPhotosForLMRAID.deleteAllFromRealm();
+        realm.commitTransaction(); // No logic if transaction fail!!!
+        Session.addToSessionLog("Deleted.");
 
         realm.close();
     }

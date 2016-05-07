@@ -1,5 +1,6 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +23,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LMRAActivity extends BaseActivity {
+    private static final int REQUEST_TAKE_PHOTO = 1;
+
     @BindView(R.id.activity_lmra_list)
     ListView listViewLMRA;
 
     public static List<LMRAModel> lmraList = new ArrayList<>();
     public static LMRAAdapter lmraAdapter;
+
+    public static long currentLMRAID; // Need for onActivityResult
+    public static File currentLMRAProtoFile; // Need for onActivityResult
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,23 @@ public class LMRAActivity extends BaseActivity {
                 lmraDialog.show(getSupportFragmentManager(), "New LMRA");
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                if (currentLMRAID != 0 && currentLMRAProtoFile != null) {
+                    DbUtils.saveLMRAPhotoInDB(currentLMRAID, currentLMRAProtoFile);
+
+                    DbUtils.updateLMRAList(lmraList);
+                    lmraAdapter.notifyDataSetChanged();
+                }
+            } else {
+                LMRAActivity.currentLMRAID = 0;
+                LMRAActivity.currentLMRAProtoFile = null;
+            }
         }
     }
 }
