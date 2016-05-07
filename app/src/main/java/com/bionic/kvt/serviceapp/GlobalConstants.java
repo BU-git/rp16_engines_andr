@@ -80,4 +80,5 @@ public interface GlobalConstants {
     String PDF_TEMPLATE_FILENAME_EN = "pdfTemplate_en.pdf";
     String PDF_REPORT_FILE_NAME = "Report_";
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
+    String LMRA_PHOTO_FILE_NAME = "LMRA_Photo_";
 }

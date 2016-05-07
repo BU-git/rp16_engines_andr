@@ -38,6 +38,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.support.v4.content.ContextCompat.checkSelfPermission;
+import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_PHOTO_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
@@ -46,6 +47,7 @@ public class Utils {
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
+    private final static SimpleDateFormat imageTimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.GERMANY);
 
     public static final int REQUEST_WRITE_CODE = 1;
 
@@ -209,6 +211,17 @@ public class Utils {
             return convertByteArrayToHexString(messageDigestMD5.digest());
         } catch (IOException e) {
             return "";
+        }
+    }
+
+    @Nullable
+    public static File createImageFile(final long orderNumber) {
+        final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_" + imageTimeStamp.format(new Date());
+        try {
+            return File.createTempFile(imageFileName, ".jpg", getOrderDir(orderNumber));
+        } catch (IOException e) {
+            Session.addToSessionLog("Error on creating LMRA file: " + e.toString());
+            return null;
         }
     }
 
