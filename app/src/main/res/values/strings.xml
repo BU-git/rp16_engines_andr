@@ -51,7 +51,7 @@
     <string name="search_hint">Order number</string>
 
     <!-- String related to LMRA -->
-    <string name="button_delete">Delete</string>
+    <string name="button_delete">Delete this LMRA</string>
     <string name="button_save">Save</string>
     <string name="lmra_button_add">Add Item</string>
     <string name="lmra_text_sample">Text Sample</string>

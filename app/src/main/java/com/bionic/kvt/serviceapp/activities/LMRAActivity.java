@@ -84,6 +84,7 @@ public class LMRAActivity extends BaseActivity {
 
                     DbUtils.updateLMRAList(lmraList);
                     lmraAdapter.notifyDataSetChanged();
+
                 }
             } else {
                 LMRAActivity.currentLMRAID = 0;

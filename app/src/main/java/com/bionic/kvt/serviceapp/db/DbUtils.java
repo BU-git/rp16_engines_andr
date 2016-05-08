@@ -157,7 +157,7 @@ public class DbUtils {
             if (listLMRAPhotosInBD.size() > 0) {
                 listLMRAPhotos = new ArrayList<>();
                 for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
-                    listLMRAPhotos.add(new File(lmraPhoto.toString()));
+                    listLMRAPhotos.add(new File(lmraPhoto.getLmraPhotoFile()));
                 }
             }
 
@@ -406,7 +406,7 @@ public class DbUtils {
             Session.addToSessionLog("**** ERROR **** No such LMRA found.");
         }
 
-        removeLMRAPhoto(lmraId);
+        removeLMRAPhoto(lmraId, "");
 
         realm.close();
     }
@@ -426,16 +426,24 @@ public class DbUtils {
         realm.close();
     }
 
-    private static void removeLMRAPhoto(final long lmraId) {
+    public static void removeLMRAPhoto(final long lmraId, final String lmraPhotoFile) {
         Session.addToSessionLog("Deleting photos for LMRA: " + lmraId);
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        final RealmResults<LMRAPhoto> allLMRAPhotosForLMRAID =
-                realm.where(LMRAPhoto.class)
-                        .equalTo("number", Session.getCurrentOrder())
-                        .equalTo("lmraId", lmraId)
-                        .findAll();
+        RealmResults<LMRAPhoto> allLMRAPhotosForLMRAID;
+        if ("".equals(lmraPhotoFile)) {
+            allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .equalTo("lmraId", lmraId)
+                    .findAll();
+        } else {
+            allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .equalTo("lmraId", lmraId)
+                    .equalTo("lmraPhotoFile", lmraPhotoFile)
+                    .findAll();
+        }
 
         // Deleting photo files
         for (LMRAPhoto lmraPhoto : allLMRAPhotosForLMRAID) {
