@@ -59,6 +59,8 @@
     <string name="lmra_hint_description">Description of the dangerous situation</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="lmra_edit">Edit</string>
+    <string name="none"></string>
     <!--<string name="error_lmra_name">LMRA name is required</string>-->
 
     <!-- Test strings -->

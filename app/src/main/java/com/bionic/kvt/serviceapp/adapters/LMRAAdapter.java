@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +27,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.activities.LMRAActivity;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
@@ -178,6 +182,20 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             }
         });
 
+        lmraViewHolder.lmraName.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerChange(lmraModel);
+            }
+        });
+
+        lmraViewHolder.lmraDescription.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                triggerChange(lmraModel);
+            }
+        });
+
         lmraViewHolder.lmraCameraButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,7 +232,18 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             }
         });
 
+
+
         return convertView;
+    }
+
+    private void triggerChange(LMRAModel lmraModel) {
+        LMRADialog lmraDialog = new LMRADialog();
+        lmraDialog.setTitleId(R.string.none);
+        lmraDialog.setEdit(true);
+        LMRAActivity.currentLMRAID = lmraModel.getLmraId();
+        lmraDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "Modified dialog");
+        notifyDataSetChanged();
     }
 
 }

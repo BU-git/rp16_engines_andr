@@ -384,7 +384,46 @@ public class DbUtils {
         realm.commitTransaction(); // No logic if transaction fail!!!
         Session.addToSessionLog("New LMRA: " + newLMRAItem.toString());
         realm.close();
+    }
 
+    public static void updateLMRAInDB(final long lmraId, final String lmraName, final String lmraDescription) {
+        Session.addToSessionLog("Updating LMRA: " + lmraId);
+        final Realm realm = Realm.getDefaultInstance();
+
+        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
+                .equalTo("number", Session.getCurrentOrder())
+                .equalTo("lmraId", lmraId)
+                .findFirst();
+
+
+        if (currentLMRAItem != null) { // We have this LMRA
+            realm.beginTransaction();
+            currentLMRAItem.setLmraName(lmraName);
+            currentLMRAItem.setLmraDescription(lmraDescription);
+            realm.commitTransaction();
+            Session.addToSessionLog("Modified.");
+        } else {
+            Session.addToSessionLog("Error. No such LMRA");
+        }
+
+        realm.close();
+    }
+
+    public static LMRAItem getLMRAfromDB(final long lmraId) {
+        Session.addToSessionLog("Updating LMRA: " + lmraId);
+        final Realm realm = Realm.getDefaultInstance();
+
+        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
+                .equalTo("number", Session.getCurrentOrder())
+                .equalTo("lmraId", lmraId)
+                .findFirst();
+
+
+        if (currentLMRAItem == null) { // We have this LMRA
+            Session.addToSessionLog("Error. No such LMRA");
+        }
+        realm.close();
+        return currentLMRAItem;
     }
 
     public static void removeLMRAFromDB(final long lmraId) {
