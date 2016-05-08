@@ -406,7 +406,7 @@ public class DbUtils {
             Session.addToSessionLog("**** ERROR **** No such LMRA found.");
         }
 
-        removeLMRAPhotoFromDB(lmraId);
+        removeLMRAPhoto(lmraId);
 
         realm.close();
     }
@@ -426,7 +426,7 @@ public class DbUtils {
         realm.close();
     }
 
-    private static void removeLMRAPhotoFromDB(final long lmraId) {
+    private static void removeLMRAPhoto(final long lmraId) {
         Session.addToSessionLog("Deleting photos for LMRA: " + lmraId);
 
         final Realm realm = Realm.getDefaultInstance();
@@ -436,6 +436,12 @@ public class DbUtils {
                         .equalTo("number", Session.getCurrentOrder())
                         .equalTo("lmraId", lmraId)
                         .findAll();
+
+        // Deleting photo files
+        for (LMRAPhoto lmraPhoto : allLMRAPhotosForLMRAID) {
+            final File lmraFile = new File(lmraPhoto.getLmraPhotoFile());
+            if (lmraFile.exists()) lmraFile.delete();
+        }
 
         allLMRAPhotosForLMRAID.deleteAllFromRealm();
         realm.commitTransaction(); // No logic if transaction fail!!!

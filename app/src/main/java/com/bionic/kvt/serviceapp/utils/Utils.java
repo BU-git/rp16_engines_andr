@@ -47,7 +47,6 @@ public class Utils {
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
-    private final static SimpleDateFormat imageTimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.GERMANY);
 
     public static final int REQUEST_WRITE_CODE = 1;
 
@@ -216,7 +215,7 @@ public class Utils {
 
     @Nullable
     public static File createImageFile(final long orderNumber) {
-        final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_" + imageTimeStamp.format(new Date());
+        final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_";
         try {
             return File.createTempFile(imageFileName, ".jpg", getOrderDir(orderNumber));
         } catch (IOException e) {
