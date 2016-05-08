@@ -205,10 +205,12 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         lmraViewHolder.lmraDeletePhotoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DbUtils.removeLMRAPhoto(lmraViewHolder.lmraId,
-                        lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition).toString());
-                DbUtils.updateLMRAList(LMRAActivity.lmraList);
-                notifyDataSetChanged();
+                if (lmraViewHolder.listLMRAPhotos != null && lmraViewHolder.listLMRAPhotos.size() > 0){
+                    DbUtils.removeLMRAPhoto(lmraViewHolder.lmraId,
+                            lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition).toString());
+                    DbUtils.updateLMRAList(LMRAActivity.lmraList);
+                    notifyDataSetChanged();
+                }
             }
         });
 
