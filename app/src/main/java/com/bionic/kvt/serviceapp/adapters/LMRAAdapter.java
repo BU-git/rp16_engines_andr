@@ -243,7 +243,6 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         lmraDialog.setEdit(true);
         LMRAActivity.currentLMRAID = lmraModel.getLmraId();
         lmraDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "Modified dialog");
-        notifyDataSetChanged();
     }
 
 }

@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -91,5 +92,13 @@ public class LMRAActivity extends BaseActivity {
                 LMRAActivity.currentLMRAProtoFile = null;
             }
         }
+    }
+
+    @Nullable
+    public static LMRAModel getLMRAModelByID(final long lmraId) {
+        for (LMRAModel lmraModel : lmraList) {
+            if (lmraModel.getLmraId() == lmraId) return lmraModel;
+        }
+        return null;
     }
 }

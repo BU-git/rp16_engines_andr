@@ -409,23 +409,6 @@ public class DbUtils {
         realm.close();
     }
 
-    public static LMRAItem getLMRAfromDB(final long lmraId) {
-        Session.addToSessionLog("Updating LMRA: " + lmraId);
-        final Realm realm = Realm.getDefaultInstance();
-
-        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
-                .equalTo("number", Session.getCurrentOrder())
-                .equalTo("lmraId", lmraId)
-                .findFirst();
-
-
-        if (currentLMRAItem == null) { // We have this LMRA
-            Session.addToSessionLog("Error. No such LMRA");
-        }
-        realm.close();
-        return currentLMRAItem;
-    }
-
     public static void removeLMRAFromDB(final long lmraId) {
         Session.addToSessionLog("Deleting LMRA: " + lmraId);
 
@@ -584,9 +567,7 @@ public class DbUtils {
         realm.close();
     }
 
-    public static
-    @OrderStatus
-    int getOrderStatus(final long orderNumber) {
+    public static @OrderStatus int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();
