@@ -44,7 +44,7 @@ public class LMRADialog extends AppCompatDialogFragment {
         view = inflater.inflate(R.layout.dialog_lmra, null);
 
         builder.setView(view)
-                .setTitle(R.string.new_lmra_template)
+                .setTitle(isEdit ? R.string.edit_lmra_template : R.string.new_lmra_template)
                 .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
 
                     //boolean cancel = false;

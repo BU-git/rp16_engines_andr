@@ -239,7 +239,6 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
 
     private void triggerChange(LMRAModel lmraModel) {
         LMRADialog lmraDialog = new LMRADialog();
-        lmraDialog.setTitleId(R.string.none);
         lmraDialog.setEdit(true);
         LMRAActivity.currentLMRAID = lmraModel.getLmraId();
         lmraDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "Modified dialog");
