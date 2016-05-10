@@ -156,10 +156,10 @@ public class UpdateService extends IntentService {
             orderSync.setNumber(orderNumber);
 
             // Setting zipFileWithXMLs
-            orderSync.setOrderDefaultXMLReportFile(Utils.generateXMLReport(orderNumber, DEFAULT_XML));
-            orderSync.setOrderCustomXMLReportFile(Utils.generateXMLReport(orderNumber, CUSTOM_XML));
-            orderSync.setOrderMeasurementsXMLReportFile(Utils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
-            orderSync.setOrderJobRulesXMLReportFile(Utils.generateXMLReport(orderNumber, GlobalConstants.JOB_RULES_XML));
+            orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
+            orderSync.setOrderCustomXMLReportFile(DbUtils.generateXMLReport(orderNumber, CUSTOM_XML));
+            orderSync.setOrderMeasurementsXMLReportFile(DbUtils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
+            orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, GlobalConstants.JOB_RULES_XML));
 
             // TODO zipFileWithXMLs
 

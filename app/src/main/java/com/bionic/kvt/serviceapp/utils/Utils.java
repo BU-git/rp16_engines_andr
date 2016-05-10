@@ -1,23 +1,22 @@
 package com.bionic.kvt.serviceapp.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.GlobalConstants.XMLReportType;
 import com.bionic.kvt.serviceapp.Session;
 import com.google.gson.JsonElement;
 
@@ -26,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -36,8 +36,6 @@ import java.util.Set;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.support.v4.content.ContextCompat.checkSelfPermission;
 import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_PHOTO_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
@@ -58,28 +56,14 @@ public class Utils {
         return password.length() >= 4;
     }
 
-    public static boolean isStoragePermissionGranted(final Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(context, WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isRequestWritePermissionNeeded(final Context context,
-                                                         final AppCompatActivity activity) {
-        if (!Utils.isStoragePermissionGranted(context)) {
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Utils.REQUEST_WRITE_CODE);
-            return true;
-        }
-        return false;
-    }
-
     public static boolean isExternalStorageWritable() {
         return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+    public static void requestWritePermissionsIfNeeded(final Activity activity) {
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Utils.REQUEST_WRITE_CODE);
+        }
     }
 
     public static boolean isNetworkConnected(final Context context) {
@@ -103,19 +87,19 @@ public class Utils {
 
     @Nullable
     public static File getOrderDir(final long orderNumber) {
-        final File dir = new File(Session.getCurrentAppExternalPrivateDir(), "" + orderNumber);
+        final File dir = new File(Session.getCurrentAppDir(), "" + orderNumber);
 
         if (dir.exists() || dir.mkdirs()) {
             return dir;
         }
-
+        Session.addToSessionLog("**** ERROR **** Problem with creating order dir: " + dir.toString());
         return null; //Directory is not exist and fail to create
     }
 
     //TODO IMPLEMENT LANGUAGE SUPPORT
     @Nullable
     public static File getPDFTemplateFile(final Context context) {
-        final File pdfTemplate = new File(Session.getCurrentAppExternalPrivateDir(), PDF_TEMPLATE_FILENAME_EN);
+        final File pdfTemplate = new File(Session.getCurrentAppDir(), PDF_TEMPLATE_FILENAME_EN);
 
         if (pdfTemplate.exists()) return pdfTemplate;
 
@@ -216,17 +200,24 @@ public class Utils {
     @Nullable
     public static File createImageFile(final long orderNumber) {
         final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_";
+        final File publicDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        if (publicDirectory == null) return null;
         try {
-            return File.createTempFile(imageFileName, ".jpg", getOrderDir(orderNumber));
+            return File.createTempFile(imageFileName, ".jpg", publicDirectory);
         } catch (IOException e) {
             Session.addToSessionLog("Error on creating LMRA file: " + e.toString());
             return null;
         }
     }
 
-    public static String generateXMLReport(final long orderNumber, @XMLReportType final int XMLReportType) {
-        //TODO XML GENERATION
-        return null;
+    public static void copyFile(final File srcFile, final File destFile) {
+        try (FileChannel inChannel = new FileInputStream(srcFile).getChannel();
+             FileChannel outChannel = new FileOutputStream(destFile).getChannel();
+        ) {
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+        } catch (IOException e) {
+            Session.addToSessionLog("Error on copy file: " + e.toString());
+        }
     }
 
 }

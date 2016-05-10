@@ -34,7 +34,8 @@ public class Session extends Application {
     private ConnectionServiceAPI connectionServiceAPI;
     private List<String> sessionLog;
 
-    private File currentAppExternalPrivateDir;
+//    private File currentAppExternalPrivateDir;
+    private File currentAppInternalPrivateDir;
 
     private String engineerName;
     private String engineerEmail;
@@ -47,7 +48,8 @@ public class Session extends Application {
         super.onCreate();
         currentUserSession = this;
         sessionLog = new ArrayList<>();
-        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
+        currentAppInternalPrivateDir = getFilesDir();
+//        getApplicationContext().getExternalFilesDir("");
 
         Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
         connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
@@ -111,8 +113,8 @@ public class Session extends Application {
         return currentUserSession.currentOrder;
     }
 
-    public static File getCurrentAppExternalPrivateDir() {
-        return currentUserSession.currentAppExternalPrivateDir;
+    public static File getCurrentAppDir() {
+        return currentUserSession.currentAppInternalPrivateDir;
     }
 
     public static byte[] getByteArrayEngineerSignature() {

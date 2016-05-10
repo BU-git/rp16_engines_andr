@@ -83,12 +83,6 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             }
         }
 
-        if (!Utils.isExternalStorageWritable()) {
-            Session.addToSessionLog("Can not write report file to external storage!");
-            Toast.makeText(getApplicationContext(), "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (pdfReportPreviewFile.exists()) { // We have old report preview
             pdfReportPreviewFile.delete();
         }

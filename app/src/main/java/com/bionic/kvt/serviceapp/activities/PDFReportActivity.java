@@ -126,12 +126,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         }
 
         // Generating...
-        if (!Utils.isExternalStorageWritable()) {
-            Session.addToSessionLog("Can not write report file to external storage!");
-            Toast.makeText(getApplicationContext(), "ERROR: Can not write report file to external storage!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         if (pdfReportFile.exists()) { // Deleting old Report if exist
             pdfReportFile.delete();
         }

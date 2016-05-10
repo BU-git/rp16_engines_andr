@@ -1,5 +1,6 @@
 package com.bionic.kvt.serviceapp.db;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
@@ -434,7 +435,7 @@ public class DbUtils {
     }
 
     public static void saveLMRAPhotoInDB(final long lmraId, final File lmraPhotoFile) {
-        Session.addToSessionLog("Saving LMRA photo: " + lmraId + "File: " + lmraPhotoFile);
+        Session.addToSessionLog("Saving LMRA [" + lmraId + "] photo file to DB: " + lmraPhotoFile);
 
         final Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
@@ -625,5 +626,11 @@ public class DbUtils {
         }
         realm.commitTransaction();
         realm.close();
+    }
+
+    public static String generateXMLReport(final long orderNumber, @GlobalConstants.XMLReportType final int XMLReportType) {
+        //TODO XML GENERATION TO FILE
+        // returns full XML file path as String!
+        return null;
     }
 }

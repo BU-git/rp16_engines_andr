@@ -203,17 +203,19 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                 LMRAActivity.currentLMRAProtoFile = null;
 
                 // Ensure that there's a camera activity to handle the intent
-                if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                    // Create the File where the photo should go
-                    final File photoFile = Utils.createImageFile(Session.getCurrentOrder());
-                    // Continue only if the File was successfully created
-                    if (photoFile != null) {
-                        LMRAActivity.currentLMRAID = lmraViewHolder.lmraId;
-                        LMRAActivity.currentLMRAProtoFile = photoFile;
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                        activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                    }
+                if (takePictureIntent.resolveActivity(activity.getPackageManager()) == null) return;
+
+                final File photoFile = Utils.createImageFile(Session.getCurrentOrder());
+                if (photoFile == null) {
+                    Session.addToSessionLog("**** ERROR **** Can not create image file.");
+                    return;
                 }
+
+                LMRAActivity.currentLMRAID = lmraViewHolder.lmraId;
+                LMRAActivity.currentLMRAProtoFile = photoFile;
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                activity.startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
             }
         });
 
@@ -221,7 +223,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         lmraViewHolder.lmraDeletePhotoButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (lmraViewHolder.listLMRAPhotos != null && lmraViewHolder.listLMRAPhotos.size() > 0){
+                if (lmraViewHolder.listLMRAPhotos != null && lmraViewHolder.listLMRAPhotos.size() > 0) {
                     DbUtils.removeLMRAPhoto(lmraViewHolder.lmraId,
                             lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition).toString());
                     DbUtils.updateLMRAList(LMRAActivity.lmraList);
@@ -231,7 +233,6 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         });
 
 
-
         return convertView;
     }
 
@@ -239,7 +240,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         LMRADialog lmraDialog = new LMRADialog();
         lmraDialog.setEdit(true);
         LMRAActivity.currentLMRAID = lmraModel.getLmraId();
-        lmraDialog.show(((FragmentActivity)context).getSupportFragmentManager(), "Modified dialog");
+        lmraDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "Modified dialog");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
@@ -15,6 +16,7 @@ import com.bionic.kvt.serviceapp.adapters.LMRAAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,6 +52,14 @@ public class LMRAActivity extends BaseActivity {
             return;
         }
 
+        if (!Utils.isExternalStorageWritable()) {
+            Session.addToSessionLog("Can not write photos file to external storage!");
+            Toast.makeText(getApplicationContext(), "ERROR: Can not write photos to external storage!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Utils.requestWritePermissionsIfNeeded(this);
+
         DbUtils.updateLMRAList(lmraList);
         lmraAdapter = new LMRAAdapter(this, lmraList);
         listViewLMRA.setAdapter(lmraAdapter);
@@ -81,13 +91,22 @@ public class LMRAActivity extends BaseActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == RESULT_OK) {
                 if (currentLMRAID != 0 && currentLMRAProtoFile != null) {
-                    DbUtils.saveLMRAPhotoInDB(currentLMRAID, currentLMRAProtoFile);
+                    final File privatePhotoFile = new File(Utils.getOrderDir(Session.getCurrentOrder()), currentLMRAProtoFile.getName());
+                    Utils.copyFile(currentLMRAProtoFile, privatePhotoFile);
+                    currentLMRAProtoFile.delete();
 
+                    if (!privatePhotoFile.exists()) {
+                        LMRAActivity.currentLMRAID = 0;
+                        LMRAActivity.currentLMRAProtoFile = null;
+                        return;
+                    }
+
+                    DbUtils.saveLMRAPhotoInDB(currentLMRAID, privatePhotoFile);
                     DbUtils.updateLMRAList(lmraList);
                     lmraAdapter.notifyDataSetChanged();
-
                 }
             } else {
+
                 LMRAActivity.currentLMRAID = 0;
                 LMRAActivity.currentLMRAProtoFile = null;
             }
@@ -100,5 +119,21 @@ public class LMRAActivity extends BaseActivity {
             if (lmraModel.getLmraId() == lmraId) return lmraModel;
         }
         return null;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == Utils.REQUEST_WRITE_CODE) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted
+            } else {
+                // permission denied
+                Session.addToSessionLog("ERROR: Partitions not granted!");
+                Toast.makeText(getApplicationContext(), "Please grant partitions!", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 }
