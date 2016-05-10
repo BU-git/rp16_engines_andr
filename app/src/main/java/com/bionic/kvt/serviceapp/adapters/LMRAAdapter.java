@@ -4,17 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
@@ -30,6 +26,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
@@ -50,7 +47,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         private List<File> listLMRAPhotos;
         private Button lmraDeleteButton;
 
-        private ImageSwitcher lmraImageSwitcher;
+        private ImageView lmraImageView;
         private Button lmraPrevButton;
         private TextView lmra_photo_count;
         private Button lmraNetxButton;
@@ -65,7 +62,12 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                 currentPhotoPosition++;
                 if (currentPhotoPosition > listLMRAPhotos.size() - 1) currentPhotoPosition = 0;
 
-                lmraImageSwitcher.setImageURI(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)));
+                Picasso.with(context)
+                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
+                        .resize(200, 200)
+                        .centerCrop()
+                        .into(lmraImageView);
+
                 lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
             } else {
                 lmra_photo_count.setText("0 of 0");
@@ -77,11 +79,16 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                 currentPhotoPosition--;
                 if (currentPhotoPosition < 0) currentPhotoPosition = listLMRAPhotos.size() - 1;
 
-                lmraImageSwitcher.setImageURI(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)));
+                Picasso.with(context)
+                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
+                        .resize(200, 200)
+                        .centerCrop()
+                        .into(lmraImageView);
+
                 lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
             } else {
                 lmra_photo_count.setText("0 of 0");
-                lmraImageSwitcher.setImageDrawable(
+                lmraImageView.setImageDrawable(
                         ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
             }
         }
@@ -92,7 +99,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                 setNextPhoto();
             } else {
                 lmra_photo_count.setText("0 of 0");
-                lmraImageSwitcher.setImageDrawable(
+                lmraImageView.setImageDrawable(
                         ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
             }
         }
@@ -129,16 +136,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             lmraViewHolder.lmraName = (TextView) convertView.findViewById(R.id.title_lmra);
             lmraViewHolder.lmraDescription = (TextView) convertView.findViewById(R.id.description_lmra);
             lmraViewHolder.lmraDeleteButton = (Button) convertView.findViewById(R.id.button_lmra_delete);
-
-            lmraViewHolder.lmraImageSwitcher = (ImageSwitcher) convertView.findViewById(R.id.lmra_imageSwitcher);
-
-            lmraViewHolder.lmraImageSwitcher.setFactory(lmraViewHolder);
-            Animation inAnimation = new AlphaAnimation(0, 1);
-            inAnimation.setDuration(500);
-            Animation outAnimation = new AlphaAnimation(1, 0);
-            outAnimation.setDuration(500);
-            lmraViewHolder.lmraImageSwitcher.setInAnimation(inAnimation);
-            lmraViewHolder.lmraImageSwitcher.setOutAnimation(outAnimation);
+            lmraViewHolder.lmraImageView = (ImageView) convertView.findViewById(R.id.lmra_imageSwitcher);
 
             lmraViewHolder.lmraPrevButton = (Button) convertView.findViewById(R.id.lmra_button_prev);
             lmraViewHolder.lmra_photo_count = (TextView) convertView.findViewById(R.id.lmra_photo_count);
