@@ -59,4 +59,11 @@ public interface ConnectionServiceAPI {
                                   @Body MultipartBody requestBody);
 
 
+
+    // Request user password reset
+    @FormUrlEncoded
+    @POST("user/reset")
+    Call<ResponseBody> passwordReset(@Field("email") String email,
+                                     @Field("key") String key);
+
 }
