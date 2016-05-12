@@ -12,7 +12,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_remember_password">Remember password</string>
     <string name="logout">Log out</string>
-    <string name="activity_forget">Forgot Password</string>
+    <string name="request_new_password">Request new password</string>
+    <string name="forgot_password">Forgot password</string>
     <string name="no_connection">Internet connection required</string>
     <string name="service_engineer">Service engineer:</string>
     <string name="orders">Orders</string>

@@ -1,5 +1,7 @@
 package com.bionic.kvt.serviceapp.db;
 
+import android.support.annotation.Nullable;
+
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
@@ -552,6 +554,20 @@ public class DbUtils {
         realm.close();
     }
 
+    @Nullable
+    public static String getUserHash(final String email) {
+        final Realm realm = Realm.getDefaultInstance();
+        final User userInDB = realm.where(User.class).equalTo("email", email).findFirst();
+        if (userInDB == null) {
+            realm.close();
+            return null;
+        }
+
+        final String result = userInDB.getPasswordHash();
+        realm.close();
+        return result;
+    }
+
     public static void setOrderStatus(final long orderNumber, @OrderStatus final int status) {
         Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
 
@@ -568,7 +584,9 @@ public class DbUtils {
         realm.close();
     }
 
-    public static @OrderStatus int getOrderStatus(final long orderNumber) {
+    public static
+    @OrderStatus
+    int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();

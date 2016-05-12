@@ -41,11 +41,11 @@ public class JobRulesActivity extends BaseActivity {
     @BindView(R.id.job_rules_remaining_work)
     Switch remainingWork;
 
-    @BindView(R.id.job_rules_text_operations)
-    EditText operationsText;
+    @BindView(R.id.job_rules_text_internal_remarks)
+    EditText internalRemarksText;
 
-    @BindView(R.id.job_rules_text_remarks)
-    EditText remarksText;
+    @BindView(R.id.job_rules_text_external_remarks)
+    EditText externalRemarksText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +57,18 @@ public class JobRulesActivity extends BaseActivity {
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_rules));
 
         // Limit lines number to 15
-        operationsText.setOnKeyListener(new View.OnKeyListener() {
+        internalRemarksText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    if (((EditText) v).getLineCount() >= 15) return true;
+                    if (((EditText) v).getLineCount() >= 10) return true;
                 }
                 return false;
             }
         });
 
         // Limit lines number to 5
-        remarksText.setOnKeyListener(new View.OnKeyListener() {
+        externalRemarksText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -96,8 +96,8 @@ public class JobRulesActivity extends BaseActivity {
             materialFromBus.setChecked(currentJobRules.isUseMaterialFromBus());
             repairAdvice.setChecked(currentJobRules.isRepairAdvice());
             remainingWork.setChecked(currentJobRules.isRemainingWork());
-            operationsText.setText(currentJobRules.getOperationsText());
-            remarksText.setText(currentJobRules.getRemarksText());
+            internalRemarksText.setText(currentJobRules.getInternalRemarksText());
+            externalRemarksText.setText(currentJobRules.getExternalRemarksText());
         }
         realm.close();
 
@@ -114,8 +114,8 @@ public class JobRulesActivity extends BaseActivity {
         jobRules.setUseMaterialFromBus(materialFromBus.isChecked());
         jobRules.setRepairAdvice(repairAdvice.isChecked());
         jobRules.setRemainingWork(remainingWork.isChecked());
-        jobRules.setOperationsText(operationsText.getText().toString());
-        jobRules.setRemarksText(remarksText.getText().toString());
+        jobRules.setInternalRemarksText(internalRemarksText.getText().toString());
+        jobRules.setExternalRemarksText(externalRemarksText.getText().toString());
         DbUtils.setOrderReportJobRules(jobRules);
 
         Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);

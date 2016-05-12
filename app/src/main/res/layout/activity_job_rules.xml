@@ -393,18 +393,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_horizontal_margin"
-                android:text="Operations:" />
+                android:text="Internal remarks:" />
 
             <EditText
-                android:id="@+id/job_rules_text_operations"
+                android:id="@+id/job_rules_text_internal_remarks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:background="@color/colorSecondaryBackground"
                 android:gravity="left|top"
                 android:inputType="textMultiLine"
-                android:lines="10"
-                android:maxLines="15"
+                android:lines="5"
+                android:maxLines="10"
                 android:scrollbars="vertical" />
 
 
@@ -413,10 +413,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_horizontal_margin"
-                android:text="Remarks:" />
+                android:text="External remarks:" />
 
             <EditText
-                android:id="@+id/job_rules_text_remarks"
+                android:id="@+id/job_rules_text_external_remarks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/activity_horizontal_margin"

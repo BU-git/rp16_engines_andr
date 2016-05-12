@@ -191,13 +191,12 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
             String remainingWork = "No";
             String operationText = "";
-            String remarksText = "";
+            String externalRemarksText = "";
             final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
                     .equalTo("number", orderNumber).findFirst();
             if (currentJobRules != null) {
                 remainingWork = currentJobRules.isRemainingWork() ? "Yes" : "No";
-                operationText = currentJobRules.getOperationsText();
-                remarksText = currentJobRules.getRemarksText();
+                externalRemarksText = currentJobRules.getExternalRemarksText();
             }
 
             realm.close();
@@ -256,7 +255,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText2.setSimpleColumn(orderText5, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText2.go();
 
-                Phrase orderText6 = new Phrase(remarksText, font);
+                Phrase orderText6 = new Phrase(externalRemarksText, font);
                 x = 60;
                 y = 178;
                 ColumnText columnText3 = new ColumnText(contentByte);

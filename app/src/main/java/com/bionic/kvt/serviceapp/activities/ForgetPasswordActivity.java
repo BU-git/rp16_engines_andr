@@ -1,29 +1,28 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
-import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ForgetPasswordActivity extends BaseActivity implements
-        LoaderManager.LoaderCallbacks<Boolean> {
-    private static final int MAIL_LOADER_ID = 2;
-    private MailHelper mailHelper;
+public class ForgetPasswordActivity extends BaseActivity {
 
     @BindView(R.id.email)
     AutoCompleteTextView mEmailView;
+
+    @BindView(R.id.password_reset_status)
+    TextView passwordResetStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,38 +57,46 @@ public class ForgetPasswordActivity extends BaseActivity implements
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first form field with an error.
+            // There was an error. Focus the first form field with an error.
             focusView.requestFocus();
         } else {
-            mailHelper = new MailHelper();
-            mailHelper.setRecipient(email);
-            mailHelper.setMessageBody(getText(R.string.forget_password_body).toString());
-            mailHelper.setSubject(getText(R.string.forget_password_subject).toString());
 
-            getSupportLoaderManager().restartLoader(MAIL_LOADER_ID, null, this);
+            PasswordResetTask passwordResetTask = new PasswordResetTask(email);
+            passwordResetTask.execute((Void) null);
         }
     }
 
-    @Override
-    public Loader<Boolean> onCreateLoader(int id, Bundle args) {
-        return new MailHelper.SendMail(this, mailHelper);
-    }
 
-    @Override
-    public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
-        if (data) {
-            Toast.makeText(getApplicationContext(),
-                    getText(R.string.success_email_toast), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    getText(R.string.error_email_toast), Toast.LENGTH_SHORT).show();
+    public class PasswordResetTask extends AsyncTask<Void, Void, Void> {
+
+        private final String mEmail;
+        private Utils.ServerRequestResult serverRequestResult;
+
+        PasswordResetTask(String email) {
+            mEmail = email;
         }
-        finish();
-    }
 
-    @Override
-    public void onLoaderReset(Loader<Boolean> loader) {
-        // NOOP
+        @Override
+        protected Void doInBackground(Void... params) {
+            if (!Utils.isNetworkConnected(ForgetPasswordActivity.this)) {
+                Session.addToSessionLog("No connection to network.  Cannot request new password.");
+                serverRequestResult = new Utils.ServerRequestResult(false, "No connection to network. Cannot request new password.");
+                return null;
+            }
+
+            serverRequestResult = Utils.getUserFromServer(mEmail);
+            if (!serverRequestResult.isSuccessful()) return null;
+
+            serverRequestResult = Utils.requestPasswordReset(mEmail);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(final Void success) {
+            passwordResetStatus.setText(serverRequestResult.getMessage());
+        }
+
     }
 
 }

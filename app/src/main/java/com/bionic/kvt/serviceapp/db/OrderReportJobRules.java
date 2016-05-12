@@ -14,8 +14,8 @@ public class OrderReportJobRules extends RealmObject {
     private boolean useMaterialFromBus;
     private boolean repairAdvice;
     private boolean remainingWork;
-    private String operationsText;
-    private String remarksText;
+    private String internalRemarksText;
+    private String externalRemarksText;
 
     public long getNumber() {
         return number;
@@ -73,20 +73,20 @@ public class OrderReportJobRules extends RealmObject {
         this.repairAdvice = repairAdvice;
     }
 
-    public String getOperationsText() {
-        return operationsText;
+    public String getInternalRemarksText() {
+        return internalRemarksText;
     }
 
-    public void setOperationsText(String operationsText) {
-        this.operationsText = operationsText;
+    public void setInternalRemarksText(String internalRemarksText) {
+        this.internalRemarksText = internalRemarksText;
     }
 
-    public String getRemarksText() {
-        return remarksText;
+    public String getExternalRemarksText() {
+        return externalRemarksText;
     }
 
-    public void setRemarksText(String remarksText) {
-        this.remarksText = remarksText;
+    public void setExternalRemarksText(String externalRemarksText) {
+        this.externalRemarksText = externalRemarksText;
     }
 
     public boolean isRemainingWork() {

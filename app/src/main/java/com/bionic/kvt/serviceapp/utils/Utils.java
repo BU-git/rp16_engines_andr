@@ -18,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.api.User;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.google.gson.JsonElement;
 
 import java.io.File;
@@ -34,6 +36,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_PHOTO_FILE_NAME;
@@ -45,6 +50,32 @@ public class Utils {
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
+
+    public static class ServerRequestResult {
+        private boolean isSuccessful;
+        private String message;
+
+        public ServerRequestResult(boolean isSuccessful, String message) {
+            this.isSuccessful = isSuccessful;
+            this.message = message;
+        }
+
+        public boolean isSuccessful() {
+            return isSuccessful;
+        }
+
+        public void setSuccessful(boolean successful) {
+            isSuccessful = successful;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+    }
 
     public static final int REQUEST_WRITE_CODE = 1;
 
@@ -220,4 +251,64 @@ public class Utils {
         }
     }
 
+    public static ServerRequestResult getUserFromServer(final String email) {
+        final Call<User> userRequest = Session.getServiceConnection().getUser(email);
+        Session.addToSessionLog("Connecting to server: " + userRequest.request());
+
+        final Response<User> userResponse;
+        try {
+            userResponse = userRequest.execute();
+        } catch (IOException e) {
+            Session.addToSessionLog("User request fail: " + e.toString());
+            return new ServerRequestResult(false, "User request fail: " + e.toString());
+        }
+
+        if (!userResponse.isSuccessful()) { // Request unsuccessful
+            Session.addToSessionLog("Error connecting to server: " + userResponse.code());
+            return new ServerRequestResult(false, "Error connecting to server: " + userResponse.code());
+        }
+
+        if (userResponse.body() == null) {
+            Session.addToSessionLog("Connection successful. Empty response.");
+            return new ServerRequestResult(false, "Connection successful. Empty response.");
+        }
+
+        if (userResponse.body().getEmail() == null) { // No such user on server
+            DbUtils.deleteUser(email); // Deleting if we have local user
+            Session.addToSessionLog("Connection successful. No user found: " + email);
+            return new ServerRequestResult(false, "The entered e-mail address is not known.\nIf you are sure, please call the administrator.");
+        }
+
+        // We have this user on server
+        DbUtils.updateUserFromServer(userResponse.body());
+        Session.addToSessionLog("Connection successful. User found: " + email);
+        return new ServerRequestResult(true, "Connection successful. User found.");
+    }
+
+    public static ServerRequestResult requestPasswordReset(final String email) {
+        final String userHash = DbUtils.getUserHash(email);
+        if (userHash == null) {
+            Session.addToSessionLog("Password reset. No such user found!");
+            return new ServerRequestResult(false, "ERROR. No such user found. Please, call administrator.");
+        }
+
+        final Call<ResponseBody> resetPasswordRequest = Session.getServiceConnection().passwordReset(email, userHash);
+        Session.addToSessionLog("Connecting to server: " + resetPasswordRequest.request());
+
+        final Response<ResponseBody> resetPasswordResponse;
+        try {
+            resetPasswordResponse = resetPasswordRequest.execute();
+        } catch (IOException e) {
+            Session.addToSessionLog("Reset password request fail: " + e.toString());
+            return new ServerRequestResult(false, "Reset password request fail: " + e.toString());
+        }
+
+        if (!resetPasswordResponse.isSuccessful()) { // Request unsuccessful
+            Session.addToSessionLog("Error connecting to server: " + resetPasswordResponse.code());
+            return new ServerRequestResult(false, "Error connecting to server: " + resetPasswordResponse.code());
+        }
+
+        Session.addToSessionLog("New password request send. Check email <" + email + "> for new password.");
+        return new ServerRequestResult(true, "New password request send. Check email <" + email + "> for new password.");
+    }
 }

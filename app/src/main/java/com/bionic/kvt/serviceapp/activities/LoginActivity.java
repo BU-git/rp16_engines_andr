@@ -1,19 +1,14 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,32 +21,17 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
-
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
-import retrofit2.Call;
-import retrofit2.Response;
 
-import static android.Manifest.permission.ACCESS_NETWORK_STATE;
-
-public class LoginActivity extends BaseActivity
-//        implements
-//        LoaderCallbacks<Cursor>,
-//        SharedPreferences.OnSharedPreferenceChangeListener
-{
-
-    private static final int REQUEST_ACCESS_NETWORK_STATE = 0;
-
-    private final String TAG = this.getClass().getName();
+public class LoginActivity extends BaseActivity {
     private UserLoginTask mAuthTask = null;
 
     @BindView(R.id.connection_status)
@@ -69,18 +49,8 @@ public class LoginActivity extends BaseActivity
     @BindView(R.id.login_form)
     View mLoginFormView;
 
-    private View mLoginLayout;
     private SharedPreferences userSharedPreferences;
 
-    private class UserRequestResult {
-        boolean isSuccessful;
-        String message;
-
-        public UserRequestResult(boolean isSuccessful, String message) {
-            this.isSuccessful = isSuccessful;
-            this.message = message;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,54 +89,14 @@ public class LoginActivity extends BaseActivity
 
     @OnClick(R.id.forget_password_button)
     public void onForgetPasswordClick(View v) {
-        if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestNetworkStatePermission();
-        } else {
-            if (!Utils.isNetworkConnected(LoginActivity.this)) {
-                Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
-            } else {
-                startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
-                //Disable animation
-                overridePendingTransition(0, 0);
-            }
+        if (!Utils.isNetworkConnected(LoginActivity.this)) {
+            Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    //Requests network permissions, if needed
-    private boolean requestNetworkStatePermission() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(ACCESS_NETWORK_STATE)) {
-            Snackbar.make(mLoginLayout, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{ACCESS_NETWORK_STATE}, REQUEST_ACCESS_NETWORK_STATE);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, REQUEST_ACCESS_NETWORK_STATE);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        if (requestCode == REQUEST_ACCESS_NETWORK_STATE) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Stub for network check
-            }
-        }
+        startActivity(new Intent(v.getContext(), ForgetPasswordActivity.class));
+        //Disable animation
+        overridePendingTransition(0, 0);
     }
 
     @Override
@@ -227,9 +157,7 @@ public class LoginActivity extends BaseActivity
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -330,7 +258,7 @@ public class LoginActivity extends BaseActivity
 
         private final String mEmail;
         private final String mPassword;
-        private UserRequestResult userRequestResult;
+        private Utils.ServerRequestResult serverRequestResult;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -339,7 +267,13 @@ public class LoginActivity extends BaseActivity
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            userRequestResult = getUserFromServer(mEmail);
+            if (!Utils.isNetworkConnected(LoginActivity.this)) {
+                Session.addToSessionLog("No connection to network.");
+                serverRequestResult = new Utils.ServerRequestResult(true, "No connection to network. Offline login only.");
+            } else {
+                serverRequestResult = Utils.getUserFromServer(mEmail);
+            }
+
             return DbUtils.isUserLoginValid(mEmail, mPassword);
         }
 
@@ -347,7 +281,7 @@ public class LoginActivity extends BaseActivity
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
-            mConnectionStatusText.setText(userRequestResult.message);
+            mConnectionStatusText.setText(serverRequestResult.getMessage());
 
             if (success) {
                 final CheckBox mCheckBox = (CheckBox) findViewById(R.id.login_checkbox);
@@ -365,11 +299,9 @@ public class LoginActivity extends BaseActivity
                 }
 
                 DbUtils.setUserSession(mEmail);
-
-                Intent orderPageIntent = new Intent(LoginActivity.this, OrderPageActivity.class);
-                startActivity(orderPageIntent);
+                startActivity(new Intent(LoginActivity.this, OrderPageActivity.class));
             } else {
-                if (userRequestResult.isSuccessful)
+                if (serverRequestResult.isSuccessful())
                     mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
@@ -381,46 +313,6 @@ public class LoginActivity extends BaseActivity
             showProgress(false);
         }
 
-    }
-
-    private UserRequestResult getUserFromServer(final String email) {
-        if (!Utils.isNetworkConnected(LoginActivity.this)) {
-            Session.addToSessionLog("No connection to network.");
-            return new UserRequestResult(true, "No connection to network. Offline login only.");
-        }
-
-        final Call<User> userRequest = Session.getServiceConnection().getUser(email);
-
-        Session.addToSessionLog("Connecting to server: " + userRequest.request());
-
-        final Response<User> userResponse;
-        try {
-            userResponse = userRequest.execute();
-        } catch (IOException e) {
-            Session.addToSessionLog("User request fail: " + e.toString());
-            return new UserRequestResult(true, "User request fail: " + e.toString());
-        }
-
-        if (!userResponse.isSuccessful()) { // Request unsuccessful
-            Session.addToSessionLog("Error connecting to server: " + userResponse.code());
-            return new UserRequestResult(true, "Error connecting to server: " + userResponse.code());
-        }
-
-        if (userResponse.body() == null) {
-            Session.addToSessionLog("Connection successful. Empty response.");
-            return new UserRequestResult(true, "Connection successful. Empty response.");
-        }
-
-        if (userResponse.body().getEmail() == null) { // No such user on server
-            DbUtils.deleteUser(email); // Deleting if we have local user
-            Session.addToSessionLog("Connection successful. No user found: " + email);
-            return new UserRequestResult(false, "The entered e-mail address is not known.\nIf you are sure, please call the administrator.");
-        }
-
-        // We have this user on server
-        DbUtils.updateUserFromServer(userResponse.body());
-        Session.addToSessionLog("Connection successful. User found: " + email);
-        return new UserRequestResult(true, "Connection successful. User found.");
     }
 
 }
