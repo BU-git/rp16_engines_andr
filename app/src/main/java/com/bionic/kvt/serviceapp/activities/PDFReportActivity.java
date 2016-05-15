@@ -297,6 +297,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 sendEmailWithPDF(emailEdit.getText().toString());
+                dialog.dismiss();
             }
         });
         dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -310,7 +311,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         enterEmailDialog.show();
     }
 
-    private void sendEmailWithPDF(final String email) {
+
+    public void sendEmailWithPDF(final String email) {
         mailHelper = new MailHelper();
         mailHelper.setRecipient(email);
         mailHelper.setMessageBody("This is a PDF report");
