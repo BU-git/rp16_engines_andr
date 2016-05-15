@@ -1,0 +1,2626 @@
+[
+  {
+    "Installatie algemeen": [
+      {
+        "Installatie algemeen": {
+          "Overmatig trillen": [
+            "E",
+            50
+          ],
+          "Geen service meer mogelijk": [
+            "E",
+            50
+          ],
+          "Kortsluitvastheid onvoldoende": [
+            "E",
+            50
+          ],
+          "Verboden/gevaarlijke stoffen (Bijvoorbeeld PCB, R11, R12)": [
+            "E",
+            50
+          ],
+          "Corrosie": [
+            "S",
+            50
+          ],
+          "Beschadigde aansluitpunten": [
+            "S",
+            50
+          ],
+          "Condens/water (in behuizing)": [
+            "S",
+            50
+          ],
+          "Geen vervangende onderdelen verkrijgbaar": [
+            "S",
+            50
+          ],
+          "Onjuiste aanleg": [
+            "S",
+            50
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ],
+          "Ontbrekenen van logboek": [
+            "G",
+            50
+          ],
+          "Ontbreken van technische tekeningen": [
+            "G",
+            50
+          ],
+          "Onbereikbaar voor functie/onderhoud": [
+            "G",
+            50
+          ],
+          "Codering onjuist": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Bulktank": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Breuk van leidingen": [
+            "E",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            50
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            50
+          ],
+          "Loshangende leiding": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Vervorming": [
+            "G",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ],
+          "Condens/water (in behuizing)": [
+            "G",
+            50
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Dagtank": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Breuk van leidingen": [
+            "E",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            50
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            50
+          ],
+          "Loshangende leiding": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Vervorming": [
+            "G",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ],
+          "Condens/water (in behuizing)": [
+            "G",
+            50
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Frametank": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Breuk van leidingen": [
+            "E",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            50
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            50
+          ],
+          "Loshangende leiding": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Vervorming": [
+            "G",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ],
+          "Condens/water (in behuizing)": [
+            "G",
+            50
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Brandstof": {
+          "Onjuist type": [
+            "E",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Smeerolie": {
+          "Vermindering functionaliteit": [
+            "S",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Niveau medium te hoog": [
+            "S",
+            50
+          ],
+          "Bovenmatig olieverbruik": [
+            "S",
+            50
+          ],
+          "Onjuist type": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Koelmiddel": {
+          "Veroudering": [
+            "S",
+            50
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Onjuist type": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ],
+          "Lekkage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Extern koelsysteem": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Breuk van leidingen": [
+            "E",
+            50
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            50
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            50
+          ],
+          "Vervorming": [
+            "S",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "S",
+            50
+          ],
+          "Bros geworden delen": [
+            "S",
+            50
+          ],
+          "Geen service meer mogelijk": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            50
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            50
+          ],
+          "Loshangende leiding": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            50
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Kleppenregister": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            50
+          ],
+          "Verstorende invloed": [
+            "S",
+            50
+          ],
+          "Onjuist gedimensioneerde componenten": [
+            "S",
+            50
+          ],
+          "Onjuiste aanleg": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Servomotor": {
+          "Defecten": [
+            "E",
+            50
+          ]
+        }
+      },
+      {
+        "Trillingsdempers": {
+          "Vervorming": [
+            "E",
+            50
+          ],
+          "Overmatig trillen": [
+            "S",
+            50
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            50
+          ],
+          "Scheuren of gaten": [
+            "S",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Afscherming gevaarlijke delen": {
+          "Vermindering functionaliteit": [
+            1,
+            0
+          ],
+          "Defecten": [
+            1,
+            0
+          ],
+          "Vervorming": [
+            1,
+            0
+          ],
+          "Scheuren of gaten": [
+            1,
+            0
+          ],
+          "Ontbreekt": [
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "NSA ruimte": {
+          "Vervuiling": [
+            1,
+            0
+          ],
+          "Onbereikbaar voor functie/onderhoud": [
+            1,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Generator algemeen": [
+      {
+        "Generator algemeen": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Isolatieweerstand onvoldoende": [
+            "E",
+            50
+          ],
+          "Kortsluitvastheid onvoldoende": [
+            "E",
+            50
+          ],
+          "Onjuiste spanning": [
+            "S",
+            50
+          ],
+          "Overmatig trillen": [
+            "S",
+            50
+          ],
+          "Geluid productie": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "S",
+            50
+          ],
+          "Bros geworden delen": [
+            "S",
+            50
+          ],
+          "Beschadigde isolatie": [
+            "S",
+            50
+          ],
+          "Ontbrekende isolatie": [
+            "S",
+            50
+          ],
+          "Geen service meer mogelijk": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Spanningsregeling": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Geen spanning": [
+            "E",
+            50
+          ],
+          "Te hoge spanning": [
+            "E",
+            50
+          ],
+          "Te lage spanning": [
+            "E",
+            50
+          ],
+          "Dalende spanning onder belasting": [
+            "S",
+            50
+          ],
+          "Onjuiste instelling": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Anti condensverwarming": {
+          "Defecten": [
+            "S",
+            50
+          ],
+          "Isolatieweerstand onvoldoende": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Kortsluit-/overstroombeveiliging": {
+          "Defecten": [
+            "S",
+            50
+          ],
+          "Onjuiste instelling": [
+            "S",
+            50
+          ],
+          "Onjuist gedimensioneerde componenten": [
+            "S",
+            50
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Motor algemeen": [
+      {
+        "Motor algemeen": {
+          "Overmatig trillen": [
+            "E",
+            50
+          ],
+          "Capaciteit onvoldoende": [
+            "E",
+            50
+          ],
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "E",
+            50
+          ],
+          "Geen service meer mogelijk": [
+            "E",
+            50
+          ],
+          "Corrosie": [
+            "S",
+            50
+          ],
+          "Bovenmatig olieverbruik": [
+            "S",
+            50
+          ],
+          "Onjuist gedimensioneerde componenten": [
+            "S",
+            50
+          ],
+          "Geen vervangende onderdelen verkrijgbaar": [
+            "S",
+            50
+          ],
+          "Asbest houdend": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Koudstart": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Startmotor": {
+          "Overmatig trillen": [
+            "E",
+            50
+          ],
+          "Capaciteit onvoldoende": [
+            "E",
+            50
+          ],
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "E",
+            50
+          ],
+          "Isolatieweerstand onvoldoende": [
+            "E",
+            50
+          ],
+          "Kortsluitvastheid onvoldoende": [
+            "E",
+            50
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            50
+          ],
+          "Vervuiling": [
+            "S",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Startmotor relais": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Blijft plakken": [
+            "E",
+            50
+          ]
+        }
+      },
+      {
+        "Starterkrans": {
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Beschadigde isolatie": [
+            "S",
+            50
+          ],
+          "Ontbrekende isolatie": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Carterdeksel/zijdeksel": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Vervorming": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Carterpan": {
+          "Scheuren of gaten": [
+            "E",
+            50
+          ],
+          "Vervorming": [
+            "S",
+            50
+          ],
+          "Lekkage": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Carterontluchting": {
+          "Defecten": [
+            "S",
+            50
+          ],
+          "Vervorming": [
+            "S",
+            50
+          ],
+          "Scheuren of gaten": [
+            "S",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ],
+          "Lekkage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Vliegwiel inclusief koppeling": {
+          "Overmatig trillen": [
+            "E",
+            50
+          ],
+          "Defecten": [
+            "E",
+            50
+          ],
+          "Vervorming": [
+            "E",
+            50
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            50
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            50
+          ],
+          "Corrosie": [
+            "G",
+            50
+          ],
+          "Vervuiling": [
+            "G",
+            50
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Uitlaatsysteem": [
+      {
+        "Turbo": {
+          "Defecten": [
+            "E",
+            30
+          ],
+          "Vervorming": [
+            "E",
+            30
+          ],
+          "Scheuren of gaten": [
+            "E",
+            30
+          ],
+          "Onjuiste speling": [
+            "S",
+            30
+          ],
+          "Vervuiling": [
+            "S",
+            30
+          ],
+          "Lekkage": [
+            "S",
+            30
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            30
+          ],
+          "Corrosie": [
+            "G",
+            30
+          ]
+        }
+      },
+      {
+        "Uitlaatpijp": {
+          "Capaciteit onvoldoende": [
+            "E",
+            30
+          ],
+          "Scheuren of gaten": [
+            "E",
+            30
+          ],
+          "Vervorming": [
+            "S",
+            30
+          ],
+          "Geluid productie": [
+            "S",
+            30
+          ],
+          "Lekkage": [
+            "S",
+            30
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            30
+          ],
+          "Onjuiste aanleg": [
+            "S",
+            30
+          ],
+          "Asbest houdend": [
+            "S",
+            30
+          ],
+          "Overmatig trillen": [
+            "G",
+            30
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            30
+          ],
+          "Corrosie": [
+            "G",
+            30
+          ],
+          "Beschadigde isolatie": [
+            "G",
+            30
+          ],
+          "Ontbrekende isolatie": [
+            "G",
+            30
+          ],
+          "Condens/water (in behuizing)": [
+            "G",
+            30
+          ],
+          "Vervuiling": [
+            "G",
+            30
+          ],
+          "Doorgebogen leiding": [
+            "G",
+            30
+          ],
+          "Loshangende leiding": [
+            "G",
+            30
+          ],
+          "Slechte verbindingen": [
+            "G",
+            30
+          ]
+        }
+      },
+      {
+        "Uitlaatdemper": {
+          "Capaciteit onvoldoende": [
+            "E",
+            30
+          ],
+          "Scheuren of gaten": [
+            "E",
+            30
+          ],
+          "Vervorming": [
+            "S",
+            30
+          ],
+          "Geluid productie": [
+            "S",
+            30
+          ],
+          "Lekkage": [
+            "S",
+            30
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            30
+          ],
+          "Onjuiste aanleg": [
+            "S",
+            30
+          ],
+          "Asbest houdend": [
+            "S",
+            30
+          ],
+          "Overmatig trillen": [
+            "G",
+            30
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            30
+          ],
+          "Corrosie": [
+            "G",
+            30
+          ],
+          "Beschadigde isolatie": [
+            "G",
+            30
+          ],
+          "Ontbrekende isolatie": [
+            "G",
+            30
+          ],
+          "Condens/water (in behuizing)": [
+            "G",
+            30
+          ],
+          "Vervuiling": [
+            "G",
+            30
+          ],
+          "Doorgebogen leiding": [
+            "G",
+            30
+          ],
+          "Loshangende leiding": [
+            "G",
+            30
+          ],
+          "Slechte verbindingen": [
+            "G",
+            30
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Luchtinlaatsysteem": [
+      {
+        "Luchtfilter": {
+          "Capaciteit onvoldoende": [
+            "E",
+            60
+          ],
+          "Scheuren of gaten": [
+            "S",
+            60
+          ],
+          "Vervuiling": [
+            "S",
+            60
+          ],
+          "Vervorming": [
+            "G",
+            60
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            60
+          ],
+          "Corrosie": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Slangen/leidingen": {
+          "Scheuren of gaten": [
+            "E",
+            60
+          ],
+          "Breuk van leidingen": [
+            "E",
+            60
+          ],
+          "Vervorming": [
+            "S",
+            60
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            60
+          ],
+          "Corrosie": [
+            "S",
+            60
+          ],
+          "Onjuist type": [
+            "S",
+            60
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            60
+          ],
+          "Loshangende leiding": [
+            "S",
+            60
+          ],
+          "Slechte verbindingen": [
+            "S",
+            60
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            60
+          ]
+        }
+      },
+      {
+        "Luchtinlaat": {
+          "Defecten": [
+            "E",
+            60
+          ],
+          "Vervorming": [
+            "S",
+            60
+          ],
+          "Scheuren of gaten": [
+            "S",
+            60
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            60
+          ],
+          "Corrosie": [
+            "G",
+            60
+          ],
+          "Vervuiling": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Laadlucht/intercooler": {
+          "Defecten": [
+            "E",
+            60
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            60
+          ],
+          "Vervorming": [
+            "S",
+            60
+          ],
+          "Scheuren of gaten": [
+            "S",
+            60
+          ],
+          "Vervuiling": [
+            "S",
+            60
+          ],
+          "Lekkage": [
+            "S",
+            60
+          ],
+          "Corrosie": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Kleppen/tuimelaar/geleider/stoterstangen": {
+          "Defecten": [
+            "E",
+            60
+          ],
+          "Vervorming": [
+            "E",
+            60
+          ],
+          "Onjuiste speling": [
+            "S",
+            60
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            60
+          ],
+          "Vervuiling": [
+            "S",
+            60
+          ],
+          "Onjuiste instelling": [
+            "S",
+            60
+          ],
+          "Lekkage": [
+            "S",
+            60
+          ]
+        }
+      },
+      {
+        "Kleppendeksel": {
+          "Defecten": [
+            "S",
+            60
+          ],
+          "Vervorming": [
+            "S",
+            60
+          ],
+          "Scheuren of gaten": [
+            "S",
+            60
+          ],
+          "Bros geworden delen": [
+            "S",
+            60
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            60
+          ],
+          "Corrosie": [
+            "G",
+            60
+          ],
+          "Lekkage": [
+            "G",
+            60
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Brandstofsysteem": [
+      {
+        "HD brandstofleiding": {
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Breuk van leidingen": [
+            "E",
+            80
+          ],
+          "Overmatig trillen": [
+            "S",
+            80
+          ],
+          "Vervorming": [
+            "S",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            80
+          ],
+          "Loshangende leiding": [
+            "S",
+            80
+          ],
+          "Slechte verbindingen": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beschadigde aansluitpunten": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            80
+          ]
+        }
+      },
+      {
+        "HD brandstofpomp": {
+          "Capaciteit onvoldoende": [
+            "E",
+            80
+          ],
+          "Defecten": [
+            "E",
+            80
+          ],
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Onjuist type": [
+            "E",
+            80
+          ],
+          "Onjuiste instelling": [
+            "E",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            80
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Leidingen/slangen": {
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Breuk van leidingen": [
+            "E",
+            80
+          ],
+          "Vervorming": [
+            "S",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Onjuist type": [
+            "S",
+            80
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            80
+          ],
+          "Loshangende leiding": [
+            "S",
+            80
+          ],
+          "Slechte verbindingen": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            80
+          ]
+        }
+      },
+      {
+        "Verstuivers/injectoren": {
+          "Capaciteit onvoldoende": [
+            "E",
+            80
+          ],
+          "Defecten": [
+            "E",
+            80
+          ],
+          "Slijtageverschijnselen": [
+            "E",
+            80
+          ],
+          "Onjuist type": [
+            "E",
+            80
+          ],
+          "Onjuiste instelling": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Regulateur": {
+          "Defecten": [
+            "E",
+            80
+          ],
+          "Onjuist type": [
+            "E",
+            80
+          ],
+          "Onjuiste instelling": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "G",
+            80
+          ],
+          "Vervuiling": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Filter(s)": {
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Bros geworden delen": [
+            "S",
+            80
+          ],
+          "Onjuist type": [
+            "S",
+            80
+          ],
+          "Vervuiling": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Vervorming": [
+            "G",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Koeler": {
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            80
+          ],
+          "Vervorming": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Vervuiling": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Opvoerpomp(en)": {
+          "Defecten": [
+            "E",
+            80
+          ],
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            80
+          ],
+          "Bros geworden delen": [
+            "S",
+            80
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Waterafscheider": {
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Niveau medium te hoog": [
+            "S",
+            80
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "S",
+            80
+          ],
+          "Bros geworden delen": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            80
+          ],
+          "Vervuiling": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Trimpomp": {
+          "Defecten": [
+            "E",
+            80
+          ],
+          "Scheuren of gaten": [
+            "E",
+            80
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            80
+          ],
+          "Overmatig trillen": [
+            "S",
+            80
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            80
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            80
+          ],
+          "Isolatieweerstand onvoldoende": [
+            "S",
+            80
+          ],
+          "Lekkage": [
+            "S",
+            80
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            80
+          ],
+          "Corrosie": [
+            "G",
+            80
+          ],
+          "Bros geworden delen": [
+            "G",
+            80
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Smeeroliesysteem": [
+      {
+        "Slangen/leidingen": {
+          "Scheuren of gaten": [
+            "E",
+            70
+          ],
+          "Breuk van leidingen": [
+            "E",
+            70
+          ],
+          "Vervorming": [
+            "S",
+            70
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            70
+          ],
+          "Corrosie": [
+            "S",
+            70
+          ],
+          "Onjuist type": [
+            "S",
+            70
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            70
+          ],
+          "Loshangende leiding": [
+            "S",
+            70
+          ],
+          "Slechte verbindingen": [
+            "S",
+            70
+          ],
+          "Lekkage": [
+            "S",
+            70
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            70
+          ]
+        }
+      },
+      {
+        "Filter": {
+          "Scheuren of gaten": [
+            "E",
+            70
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            70
+          ],
+          "Corrosie": [
+            "S",
+            70
+          ],
+          "Bros geworden delen": [
+            "S",
+            70
+          ],
+          "Onjuist type": [
+            "S",
+            70
+          ],
+          "Vervuiling": [
+            "S",
+            70
+          ],
+          "Lekkage": [
+            "S",
+            70
+          ],
+          "Vervorming": [
+            "G",
+            70
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            70
+          ]
+        }
+      },
+      {
+        "Koeler": {
+          "Scheuren of gaten": [
+            "E",
+            70
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            70
+          ],
+          "Vervorming": [
+            "S",
+            70
+          ],
+          "Corrosie": [
+            "S",
+            70
+          ],
+          "Vervuiling": [
+            "S",
+            70
+          ],
+          "Lekkage": [
+            "S",
+            70
+          ],
+          "Uitdrogen rubber": [
+            "G",
+            70
+          ]
+        }
+      },
+      {
+        "Carter aftappomp": {
+          "Defecten": [
+            "G",
+            70
+          ],
+          "Lekkage": [
+            "G",
+            70
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Koelsysteem": [
+      {
+        "Slangen/leidingen": {
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Breuk van leidingen": [
+            "E",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Onjuist type": [
+            "S",
+            40
+          ],
+          "Doorgebogen leiding": [
+            "S",
+            40
+          ],
+          "Loshangende leiding": [
+            "S",
+            40
+          ],
+          "Slechte verbindingen": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Klep/thermostaat": {
+          "Defecten": [
+            "E",
+            40
+          ],
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Onjuiste instelling": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            40
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Radiateur": {
+          "Defecten": [
+            "E",
+            40
+          ],
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Vervuiling": [
+            "S",
+            40
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Niveau medium te hoog": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Radiateur lamellen": {
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Vervuiling": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Radiateur dop": {
+          "Ontbreekt": [
+            "E",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Scheuren of gaten": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Koelwatervoorverwarming": {
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Onjuist type": [
+            "S",
+            40
+          ],
+          "Vastzittende afsluiter": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Warmtewisselaar": {
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            40
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Onjuist type": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            40
+          ],
+          "Beschadigde coating/lak": [
+            "G",
+            40
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Expansievat": {
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            40
+          ],
+          "Vervuiling": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Koelwaterpomp(en)": {
+          "Defecten": [
+            "E",
+            40
+          ],
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            40
+          ],
+          "Vervorming": [
+            "S",
+            40
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Waterfilter": {
+          "Scheuren of gaten": [
+            "E",
+            40
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            40
+          ],
+          "Capaciteit onvoldoende": [
+            "S",
+            40
+          ],
+          "Corrosie": [
+            "S",
+            40
+          ],
+          "Bros geworden delen": [
+            "S",
+            40
+          ],
+          "Onjuist type": [
+            "S",
+            40
+          ],
+          "Vervuiling": [
+            "S",
+            40
+          ],
+          "Lekkage": [
+            "S",
+            40
+          ],
+          "Vervorming": [
+            "G",
+            40
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Distributie": [
+      {
+        "Poellies": {
+          "Defecten": [
+            "E",
+            90
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            90
+          ],
+          "Overmatig trillen": [
+            "S",
+            90
+          ],
+          "Scheuren of gaten": [
+            "S",
+            90
+          ],
+          "Geluid productie": [
+            "S",
+            90
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            90
+          ],
+          "Corrosie": [
+            "S",
+            90
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            90
+          ]
+        }
+      },
+      {
+        "Snaren/v-riemen": {
+          "Scheuren of gaten": [
+            "E",
+            90
+          ],
+          "Veroudering": [
+            "S",
+            90
+          ],
+          "Onjuiste spanning": [
+            "S",
+            90
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            90
+          ],
+          "Geluid productie": [
+            "S",
+            90
+          ],
+          "Uitdrogen rubber": [
+            "S",
+            90
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            90
+          ]
+        }
+      },
+      {
+        "Spanners": {
+          "Vervorming": [
+            "E",
+            90
+          ],
+          "Vermindering functionaliteit": [
+            "S",
+            90
+          ],
+          "Slijtageverschijnselen": [
+            "S",
+            90
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Accu's/startvoorziening": [
+      {
+        "Accu bak": {
+          "Scheuren of gaten": [
+            "G",
+            20
+          ],
+          "Ontbreekt": [
+            "G",
+            20
+          ]
+        }
+      },
+      {
+        "Kabels/klemmen": {
+          "Defecten": [
+            "E",
+            20
+          ],
+          "Beschadigde isolatie": [
+            "S",
+            20
+          ],
+          "Ontbrekende isolatie": [
+            "S",
+            20
+          ],
+          "Onjuist type": [
+            "S",
+            20
+          ],
+          "Ontbreekt": [
+            "S",
+            20
+          ],
+          "Gecorrodeerde klemmen accu": [
+            "S",
+            20
+          ],
+          "Slechte verbindingen": [
+            "S",
+            20
+          ],
+          "Beschadigde aansluitpunten": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Lader/laadcircuit": {
+          "Defecten": [
+            "S",
+            20
+          ],
+          "Onjuiste instelling": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Dynamo": {
+          "Onjuiste spanning": [
+            "S",
+            20
+          ],
+          "Defecten": [
+            "S",
+            20
+          ],
+          "Kortsluitvastheid onvoldoende": [
+            "S",
+            20
+          ],
+          "Vervuiling": [
+            "S",
+            20
+          ],
+          "Beschadigde aansluitpunten": [
+            "S",
+            20
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Startaccu": {
+          "Capaciteit onvoldoende": [
+            "E",
+            20
+          ],
+          "Defecten": [
+            "E",
+            20
+          ],
+          "Onjuist type": [
+            "E",
+            20
+          ],
+          "Onjuiste spanning": [
+            "S",
+            20
+          ],
+          "Niveau medium onvoldoende": [
+            "S",
+            20
+          ],
+          "Gecorrodeerde klemmen accu": [
+            "S",
+            20
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            20
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Equalizer": {
+          "Defecten": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "PlC backup (knoopcel) batterij": {
+          "Capaciteit onvoldoende": [
+            "E",
+            20
+          ],
+          "Defecten": [
+            "E",
+            20
+          ],
+          "Onjuist type": [
+            "E",
+            20
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Paneel accu": {
+          "Capaciteit onvoldoende": [
+            "E",
+            20
+          ],
+          "Defecten": [
+            "E",
+            20
+          ],
+          "Onjuist type": [
+            "E",
+            20
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "S",
+            20
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Regelkast/besturingspaneel": [
+      {
+        "Indicatie lampen": {
+          "Defecte lampen": [
+            "S",
+            10
+          ],
+          "Onjuiste instelling": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Netwachter": {
+          "Defecten": [
+            "E",
+            10
+          ],
+          "Onjuiste instelling": [
+            "E",
+            10
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            10
+          ],
+          "Codering onjuist": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Relais": {
+          "Defecten": [
+            "E",
+            10
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            10
+          ],
+          "Codering onjuist": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Synchronisatiepaneel": {
+          "Defecten": [
+            "E",
+            10
+          ],
+          "Onjuiste instelling": [
+            "E",
+            10
+          ],
+          "Vervorming": [
+            "S",
+            10
+          ],
+          "Overmatige warmte ontwikkeling": [
+            "S",
+            10
+          ],
+          "Codering onjuist": [
+            "G",
+            10
+          ],
+          "Slechte verbindingen": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Motorbeveiligingen": {
+          "Defecten": [
+            "S",
+            50
+          ],
+          "Onjuiste instelling": [
+            "S",
+            50
+          ],
+          "Defecte lampen": [
+            "S",
+            50
+          ],
+          "Slechte verbindingen": [
+            "S",
+            50
+          ],
+          "Onterechte melding": [
+            "S",
+            50
+          ],
+          "Beshadigde/onjuiste aansluiting": [
+            "G",
+            50
+          ]
+        }
+      }
+    ]
+  }
+]

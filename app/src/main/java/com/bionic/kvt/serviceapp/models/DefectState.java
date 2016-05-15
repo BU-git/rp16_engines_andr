@@ -3,7 +3,11 @@ package com.bionic.kvt.serviceapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
+import com.google.gson.JsonElement;
+
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Objects;
 
 /** */
@@ -29,7 +33,7 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
     //Saving data for future logic
     private String extent; // Omvang
     private String intensity; // Intensiteit
-    private boolean fixed = false; // Opgelost
+    private boolean fixed; // Opgelost
     private String action; // Acties
     //Saving data for state
     private Integer extentId = 0;
@@ -48,6 +52,7 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
         this.extentId = 0;
         this.intensityId = 0;
         this.actionId = 0;
+        this.fixed = false;
         //Calculation Score
         this.condition = 1;
         this.initialScore = 0;
@@ -239,5 +244,22 @@ public class DefectState implements Parcelable, Serializable, Comparable<DefectS
         if (!groupPosition.equals(another.getGroupPosition())) return -1;
         else if (checkboxPosition.equals(another.getCheckboxPosition())) return 0;
         return 1;
+    }
+
+    //Method to adjust the score, once the parameter was being modified
+    public void performScoreAdjustments(Map.Entry<String, JsonElement> child) {
+        Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
+                extentId,
+                intensityId,
+                fixed,
+                child.getValue().getAsJsonArray().get(0).getAsString()
+        );
+        if (tempCondition != null) condition = tempCondition;
+
+        initialScore = child.getValue().getAsJsonArray().get(1).getAsInt();
+        if (condition != null) {
+            correlation = CalculationHelper.INSTANCE.getConditionFactor(getCondition());
+            correlatedScore = correlation * initialScore;
+        }
     }
 }

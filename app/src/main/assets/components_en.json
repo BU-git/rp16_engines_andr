@@ -1,0 +1,2626 @@
+[
+  {
+    "Installation general": [
+      {
+        "Installation general": {
+          "Excessive vibration": [
+            "E",
+            50
+          ],
+          "No maintenance possible": [
+            "E",
+            50
+          ],
+          "Short-circuit resistance insufficient": [
+            "E",
+            50
+          ],
+          "Illegal/dangerous substances (PCB, R11. R12)": [
+            "E",
+            50
+          ],
+          "Corrosion": [
+            "S",
+            50
+          ],
+          "Damaged point of connection": [
+            "S",
+            50
+          ],
+          "Moisture/water (in housing)": [
+            "S",
+            50
+          ],
+          "No available replacements for component": [
+            "S",
+            50
+          ],
+          "Incorrect construction": [
+            "S",
+            50
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ],
+          "Missing logbook": [
+            "G",
+            50
+          ],
+          "Missing technical drawings": [
+            "G",
+            50
+          ],
+          "Unaprochable for maintanence": [
+            "G",
+            50
+          ],
+          "Incorrect encoding": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Bulktank": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Fractured pipeline": [
+            "E",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Stuck valve": [
+            "S",
+            50
+          ],
+          "Curved pipeline": [
+            "S",
+            50
+          ],
+          "Loose pipeline": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Deformation": [
+            "G",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ],
+          "Moisture/water (in housing)": [
+            "G",
+            50
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Daytank": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Fractured pipeline": [
+            "E",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Stuck valve": [
+            "S",
+            50
+          ],
+          "Curved pipeline": [
+            "S",
+            50
+          ],
+          "Loose pipeline": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Deformation": [
+            "G",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ],
+          "Moisture/water (in housing)": [
+            "G",
+            50
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Frametank": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Fractured pipeline": [
+            "E",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Stuck valve": [
+            "S",
+            50
+          ],
+          "Curved pipeline": [
+            "S",
+            50
+          ],
+          "Loose pipeline": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Deformation": [
+            "G",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ],
+          "Moisture/water (in housing)": [
+            "G",
+            50
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Fuel": {
+          "Wrong type": [
+            "E",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Engine oil/lubricant": {
+          "Decreasing functionality": [
+            "S",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Level medium too high": [
+            "S",
+            50
+          ],
+          "Excessive use of oil": [
+            "S",
+            50
+          ],
+          "Wrong type": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Coolant": {
+          "Aging": [
+            "S",
+            50
+          ],
+          "Decreasing functionality": [
+            "S",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Wrong type": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ],
+          "Leakage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "External cooling system": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Fractured pipeline": [
+            "E",
+            50
+          ],
+          "Level medium insufficient": [
+            "S",
+            50
+          ],
+          "Capacity insufficient": [
+            "S",
+            50
+          ],
+          "Deformation": [
+            "S",
+            50
+          ],
+          "Withered rubber": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "S",
+            50
+          ],
+          "Brittle parts": [
+            "S",
+            50
+          ],
+          "No maintenance possible": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ],
+          "Stuck valve": [
+            "S",
+            50
+          ],
+          "Curved pipeline": [
+            "S",
+            50
+          ],
+          "Loose pipeline": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Excessive heat development": [
+            "S",
+            50
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Valve register": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "Capacity insufficient": [
+            "S",
+            50
+          ],
+          "Disrupting influence": [
+            "S",
+            50
+          ],
+          "Incorrect dimensioned components": [
+            "S",
+            50
+          ],
+          "Incorrect construction": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Servomotor": {
+          "Defects": [
+            "E",
+            50
+          ]
+        }
+      },
+      {
+        "Vibration dampers": {
+          "Deformation": [
+            "E",
+            50
+          ],
+          "Excessive vibration": [
+            "S",
+            50
+          ],
+          "Capacity insufficient": [
+            "S",
+            50
+          ],
+          "Cracks or holes": [
+            "S",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Cover for dangerous parts": {
+          "Decreasing functionality": [
+            1,
+            0
+          ],
+          "Defects": [
+            1,
+            0
+          ],
+          "Deformation": [
+            1,
+            0
+          ],
+          "Cracks or holes": [
+            1,
+            0
+          ],
+          "Missing": [
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "Emergency generator room": {
+          "Unclean": [
+            1,
+            0
+          ],
+          "Unaprochable for maintanence": [
+            1,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Generator general": [
+      {
+        "Generator general": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "Isolationresistance insufficient": [
+            "E",
+            50
+          ],
+          "Short-circuit resistance insufficient": [
+            "E",
+            50
+          ],
+          "Incorrect voltage": [
+            "S",
+            50
+          ],
+          "Excessive vibration": [
+            "S",
+            50
+          ],
+          "Sound production": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "S",
+            50
+          ],
+          "Brittle parts": [
+            "S",
+            50
+          ],
+          "Damaged isolation": [
+            "S",
+            50
+          ],
+          "Missing isolation": [
+            "S",
+            50
+          ],
+          "No maintenance possible": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Excessive heat development": [
+            "S",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Voltage regulation": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "No voltage": [
+            "E",
+            50
+          ],
+          "Voltage too high": [
+            "E",
+            50
+          ],
+          "Voltage too low": [
+            "E",
+            50
+          ],
+          "Decreasing voltage under load": [
+            "S",
+            50
+          ],
+          "Incorrect settings": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Anti condensation heating": {
+          "Defects": [
+            "S",
+            50
+          ],
+          "Isolationresistance insufficient": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Short circuit/overcurrent security": {
+          "Defects": [
+            "S",
+            50
+          ],
+          "Incorrect settings": [
+            "S",
+            50
+          ],
+          "Incorrect dimensioned components": [
+            "S",
+            50
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Motor general": [
+      {
+        "Motor general": {
+          "Excessive vibration": [
+            "E",
+            50
+          ],
+          "Capacity insufficient": [
+            "E",
+            50
+          ],
+          "Defects": [
+            "E",
+            50
+          ],
+          "Excessive heat development": [
+            "E",
+            50
+          ],
+          "No maintenance possible": [
+            "E",
+            50
+          ],
+          "Corrosion": [
+            "S",
+            50
+          ],
+          "Excessive use of oil": [
+            "S",
+            50
+          ],
+          "Incorrect dimensioned components": [
+            "S",
+            50
+          ],
+          "No available replacements for component": [
+            "S",
+            50
+          ],
+          "Contains asbestos": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Cold start": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "Decreasing functionality": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Starter engine": {
+          "Excessive vibration": [
+            "E",
+            50
+          ],
+          "Capacity insufficient": [
+            "E",
+            50
+          ],
+          "Defects": [
+            "E",
+            50
+          ],
+          "Excessive heat development": [
+            "E",
+            50
+          ],
+          "Isolationresistance insufficient": [
+            "E",
+            50
+          ],
+          "Short-circuit resistance insufficient": [
+            "E",
+            50
+          ],
+          "Wear and tear": [
+            "S",
+            50
+          ],
+          "Unclean": [
+            "S",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Starter engine relay": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "Sticking": [
+            "E",
+            50
+          ]
+        }
+      },
+      {
+        "Ring gear": {
+          "Defects": [
+            "E",
+            50
+          ],
+          "Damaged isolation": [
+            "S",
+            50
+          ],
+          "Missing isolation": [
+            "S",
+            50
+          ]
+        }
+      },
+      {
+        "Crankcase cover": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Deformation": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Crankcase sump": {
+          "Cracks or holes": [
+            "E",
+            50
+          ],
+          "Deformation": [
+            "S",
+            50
+          ],
+          "Leakage": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Crankcase ventilation system": {
+          "Defects": [
+            "S",
+            50
+          ],
+          "Deformation": [
+            "S",
+            50
+          ],
+          "Cracks or holes": [
+            "S",
+            50
+          ],
+          "Withered rubber": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ],
+          "Leakage": [
+            "G",
+            50
+          ]
+        }
+      },
+      {
+        "Flywheel including clutch": {
+          "Excessive vibration": [
+            "E",
+            50
+          ],
+          "Defects": [
+            "E",
+            50
+          ],
+          "Deformation": [
+            "E",
+            50
+          ],
+          "Withered rubber": [
+            "S",
+            50
+          ],
+          "Wear and tear": [
+            "S",
+            50
+          ],
+          "Corrosion": [
+            "G",
+            50
+          ],
+          "Unclean": [
+            "G",
+            50
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Turbo": [
+      {
+        "Turbo": {
+          "Defects": [
+            "E",
+            30
+          ],
+          "Deformation": [
+            "E",
+            30
+          ],
+          "Cracks or holes": [
+            "E",
+            30
+          ],
+          "Incorrect tolerance": [
+            "S",
+            30
+          ],
+          "Unclean": [
+            "S",
+            30
+          ],
+          "Leakage": [
+            "S",
+            30
+          ],
+          "Excessive heat development": [
+            "S",
+            30
+          ],
+          "Corrosion": [
+            "G",
+            30
+          ]
+        }
+      },
+      {
+        "Exhaust pipe": {
+          "Capacity insufficient": [
+            "E",
+            30
+          ],
+          "Cracks or holes": [
+            "E",
+            30
+          ],
+          "Deformation": [
+            "S",
+            30
+          ],
+          "Sound production": [
+            "S",
+            30
+          ],
+          "Leakage": [
+            "S",
+            30
+          ],
+          "Excessive heat development": [
+            "S",
+            30
+          ],
+          "Incorrect construction": [
+            "S",
+            30
+          ],
+          "Contains asbestos": [
+            "S",
+            30
+          ],
+          "Excessive vibration": [
+            "G",
+            30
+          ],
+          "Withered rubber": [
+            "G",
+            30
+          ],
+          "Corrosion": [
+            "G",
+            30
+          ],
+          "Damaged isolation": [
+            "G",
+            30
+          ],
+          "Missing isolation": [
+            "G",
+            30
+          ],
+          "Moisture/water (in housing)": [
+            "G",
+            30
+          ],
+          "Unclean": [
+            "G",
+            30
+          ],
+          "Curved pipeline": [
+            "G",
+            30
+          ],
+          "Loose pipeline": [
+            "G",
+            30
+          ],
+          "Bad connection": [
+            "G",
+            30
+          ]
+        }
+      },
+      {
+        "Exhaust silencer": {
+          "Capacity insufficient": [
+            "E",
+            30
+          ],
+          "Cracks or holes": [
+            "E",
+            30
+          ],
+          "Deformation": [
+            "S",
+            30
+          ],
+          "Sound production": [
+            "S",
+            30
+          ],
+          "Leakage": [
+            "S",
+            30
+          ],
+          "Excessive heat development": [
+            "S",
+            30
+          ],
+          "Incorrect construction": [
+            "S",
+            30
+          ],
+          "Contains asbestos": [
+            "S",
+            30
+          ],
+          "Excessive vibration": [
+            "G",
+            30
+          ],
+          "Withered rubber": [
+            "G",
+            30
+          ],
+          "Corrosion": [
+            "G",
+            30
+          ],
+          "Damaged isolation": [
+            "G",
+            30
+          ],
+          "Missing isolation": [
+            "G",
+            30
+          ],
+          "Moisture/water (in housing)": [
+            "G",
+            30
+          ],
+          "Unclean": [
+            "G",
+            30
+          ],
+          "Curved pipeline": [
+            "G",
+            30
+          ],
+          "Loose pipeline": [
+            "G",
+            30
+          ],
+          "Bad connection": [
+            "G",
+            30
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Air filter": [
+      {
+        "Air filter": {
+          "Capacity insufficient": [
+            "E",
+            60
+          ],
+          "Cracks or holes": [
+            "S",
+            60
+          ],
+          "Unclean": [
+            "S",
+            60
+          ],
+          "Deformation": [
+            "G",
+            60
+          ],
+          "Withered rubber": [
+            "G",
+            60
+          ],
+          "Corrosion": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Hoses/pipes": {
+          "Cracks or holes": [
+            "E",
+            60
+          ],
+          "Fractured pipeline": [
+            "E",
+            60
+          ],
+          "Deformation": [
+            "S",
+            60
+          ],
+          "Withered rubber": [
+            "S",
+            60
+          ],
+          "Corrosion": [
+            "S",
+            60
+          ],
+          "Wrong type": [
+            "S",
+            60
+          ],
+          "Curved pipeline": [
+            "S",
+            60
+          ],
+          "Loose pipeline": [
+            "S",
+            60
+          ],
+          "Bad connection": [
+            "S",
+            60
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            60
+          ]
+        }
+      },
+      {
+        "Air inlet": {
+          "Defects": [
+            "E",
+            60
+          ],
+          "Deformation": [
+            "S",
+            60
+          ],
+          "Cracks or holes": [
+            "S",
+            60
+          ],
+          "Withered rubber": [
+            "G",
+            60
+          ],
+          "Corrosion": [
+            "G",
+            60
+          ],
+          "Unclean": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Air charger/intercooler": {
+          "Defects": [
+            "E",
+            60
+          ],
+          "Capacity insufficient": [
+            "S",
+            60
+          ],
+          "Deformation": [
+            "S",
+            60
+          ],
+          "Cracks or holes": [
+            "S",
+            60
+          ],
+          "Unclean": [
+            "S",
+            60
+          ],
+          "Leakage": [
+            "S",
+            60
+          ],
+          "Corrosion": [
+            "G",
+            60
+          ]
+        }
+      },
+      {
+        "Valves/Tumbler/conductor/pushrods": {
+          "Defects": [
+            "E",
+            60
+          ],
+          "Deformation": [
+            "E",
+            60
+          ],
+          "Incorrect tolerance": [
+            "S",
+            60
+          ],
+          "Wear and tear": [
+            "S",
+            60
+          ],
+          "Unclean": [
+            "S",
+            60
+          ],
+          "Incorrect settings": [
+            "S",
+            60
+          ],
+          "Leakage": [
+            "S",
+            60
+          ]
+        }
+      },
+      {
+        "Valve cover": {
+          "Defects": [
+            "S",
+            60
+          ],
+          "Deformation": [
+            "S",
+            60
+          ],
+          "Cracks or holes": [
+            "S",
+            60
+          ],
+          "Brittle parts": [
+            "S",
+            60
+          ],
+          "Withered rubber": [
+            "G",
+            60
+          ],
+          "Corrosion": [
+            "G",
+            60
+          ],
+          "Leakage": [
+            "G",
+            60
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "High pressure fuel pipe": [
+      {
+        "High pressure fuel pipe": {
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Fractured pipeline": [
+            "E",
+            80
+          ],
+          "Excessive vibration": [
+            "S",
+            80
+          ],
+          "Deformation": [
+            "S",
+            80
+          ],
+          "Withered rubber": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Curved pipeline": [
+            "S",
+            80
+          ],
+          "Loose pipeline": [
+            "S",
+            80
+          ],
+          "Bad connection": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged point of connection": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            80
+          ]
+        }
+      },
+      {
+        "High pressure fuel pump": {
+          "Capacity insufficient": [
+            "E",
+            80
+          ],
+          "Defects": [
+            "E",
+            80
+          ],
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Wrong type": [
+            "E",
+            80
+          ],
+          "Incorrect settings": [
+            "E",
+            80
+          ],
+          "Withered rubber": [
+            "S",
+            80
+          ],
+          "Wear and tear": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Pipes/hoses": {
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Fractured pipeline": [
+            "E",
+            80
+          ],
+          "Deformation": [
+            "S",
+            80
+          ],
+          "Withered rubber": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Wrong type": [
+            "S",
+            80
+          ],
+          "Curved pipeline": [
+            "S",
+            80
+          ],
+          "Loose pipeline": [
+            "S",
+            80
+          ],
+          "Bad connection": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            80
+          ]
+        }
+      },
+      {
+        "Atomizers/Injectors": {
+          "Capacity insufficient": [
+            "E",
+            80
+          ],
+          "Defects": [
+            "E",
+            80
+          ],
+          "Wear and tear": [
+            "E",
+            80
+          ],
+          "Wrong type": [
+            "E",
+            80
+          ],
+          "Incorrect settings": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Regulator": {
+          "Defects": [
+            "E",
+            80
+          ],
+          "Wrong type": [
+            "E",
+            80
+          ],
+          "Incorrect settings": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Wear and tear": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "G",
+            80
+          ],
+          "Unclean": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Filter(s)": {
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Capacity insufficient": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Brittle parts": [
+            "S",
+            80
+          ],
+          "Wrong type": [
+            "S",
+            80
+          ],
+          "Unclean": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Deformation": [
+            "G",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Cooler": {
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Capacity insufficient": [
+            "S",
+            80
+          ],
+          "Deformation": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Unclean": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Withered rubber": [
+            "G",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Fuel feed pump": {
+          "Defects": [
+            "E",
+            80
+          ],
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Capacity insufficient": [
+            "S",
+            80
+          ],
+          "Withered rubber": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Wear and tear": [
+            "S",
+            80
+          ],
+          "Brittle parts": [
+            "S",
+            80
+          ],
+          "Stuck valve": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Water seperator": {
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Level medium too high": [
+            "S",
+            80
+          ],
+          "Withered rubber": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "S",
+            80
+          ],
+          "Brittle parts": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            80
+          ],
+          "Unclean": [
+            "G",
+            80
+          ]
+        }
+      },
+      {
+        "Trim pump": {
+          "Defects": [
+            "E",
+            80
+          ],
+          "Cracks or holes": [
+            "E",
+            80
+          ],
+          "Decreasing functionality": [
+            "S",
+            80
+          ],
+          "Excessive vibration": [
+            "S",
+            80
+          ],
+          "Capacity insufficient": [
+            "S",
+            80
+          ],
+          "Wear and tear": [
+            "S",
+            80
+          ],
+          "Isolationresistance insufficient": [
+            "S",
+            80
+          ],
+          "Leakage": [
+            "S",
+            80
+          ],
+          "Excessive heat development": [
+            "S",
+            80
+          ],
+          "Corrosion": [
+            "G",
+            80
+          ],
+          "Brittle parts": [
+            "G",
+            80
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Hoses/pipes": [
+      {
+        "Hoses/pipes": {
+          "Cracks or holes": [
+            "E",
+            70
+          ],
+          "Fractured pipeline": [
+            "E",
+            70
+          ],
+          "Deformation": [
+            "S",
+            70
+          ],
+          "Withered rubber": [
+            "S",
+            70
+          ],
+          "Corrosion": [
+            "S",
+            70
+          ],
+          "Wrong type": [
+            "S",
+            70
+          ],
+          "Curved pipeline": [
+            "S",
+            70
+          ],
+          "Loose pipeline": [
+            "S",
+            70
+          ],
+          "Bad connection": [
+            "S",
+            70
+          ],
+          "Leakage": [
+            "S",
+            70
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            70
+          ]
+        }
+      },
+      {
+        "Filter": {
+          "Cracks or holes": [
+            "E",
+            70
+          ],
+          "Capacity insufficient": [
+            "S",
+            70
+          ],
+          "Corrosion": [
+            "S",
+            70
+          ],
+          "Brittle parts": [
+            "S",
+            70
+          ],
+          "Wrong type": [
+            "S",
+            70
+          ],
+          "Unclean": [
+            "S",
+            70
+          ],
+          "Leakage": [
+            "S",
+            70
+          ],
+          "Deformation": [
+            "G",
+            70
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            70
+          ]
+        }
+      },
+      {
+        "Cooler": {
+          "Cracks or holes": [
+            "E",
+            70
+          ],
+          "Capacity insufficient": [
+            "S",
+            70
+          ],
+          "Deformation": [
+            "S",
+            70
+          ],
+          "Corrosion": [
+            "S",
+            70
+          ],
+          "Unclean": [
+            "S",
+            70
+          ],
+          "Leakage": [
+            "S",
+            70
+          ],
+          "Withered rubber": [
+            "G",
+            70
+          ]
+        }
+      },
+      {
+        "Crankcase drainpump": {
+          "Defects": [
+            "G",
+            70
+          ],
+          "Leakage": [
+            "G",
+            70
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Hoses/pipes": [
+      {
+        "Hoses/pipes": {
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Fractured pipeline": [
+            "E",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Wrong type": [
+            "S",
+            40
+          ],
+          "Curved pipeline": [
+            "S",
+            40
+          ],
+          "Loose pipeline": [
+            "S",
+            40
+          ],
+          "Bad connection": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Valve/thermostat": {
+          "Defects": [
+            "E",
+            40
+          ],
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Incorrect settings": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Excessive heat development": [
+            "S",
+            40
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Radiator": {
+          "Defects": [
+            "E",
+            40
+          ],
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Level medium insufficient": [
+            "S",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Unclean": [
+            "S",
+            40
+          ],
+          "Stuck valve": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Level medium too high": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Radiator lamaelle": {
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Wear and tear": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Unclean": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Radiator cap": {
+          "Missing": [
+            "E",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Cracks or holes": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Coolant heating": {
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Wrong type": [
+            "S",
+            40
+          ],
+          "Stuck valve": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Heat exchanger": {
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Level medium insufficient": [
+            "S",
+            40
+          ],
+          "Capacity insufficient": [
+            "S",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Wrong type": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Excessive heat development": [
+            "S",
+            40
+          ],
+          "Damaged coating/paintwork": [
+            "G",
+            40
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Expansion tank": {
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Level medium insufficient": [
+            "S",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            40
+          ],
+          "Unclean": [
+            "G",
+            40
+          ]
+        }
+      },
+      {
+        "Coolant pump(s)": {
+          "Defects": [
+            "E",
+            40
+          ],
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Capacity insufficient": [
+            "S",
+            40
+          ],
+          "Deformation": [
+            "S",
+            40
+          ],
+          "Withered rubber": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ]
+        }
+      },
+      {
+        "Waterfilter": {
+          "Cracks or holes": [
+            "E",
+            40
+          ],
+          "Decreasing functionality": [
+            "S",
+            40
+          ],
+          "Capacity insufficient": [
+            "S",
+            40
+          ],
+          "Corrosion": [
+            "S",
+            40
+          ],
+          "Brittle parts": [
+            "S",
+            40
+          ],
+          "Wrong type": [
+            "S",
+            40
+          ],
+          "Unclean": [
+            "S",
+            40
+          ],
+          "Leakage": [
+            "S",
+            40
+          ],
+          "Deformation": [
+            "G",
+            40
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Pulleys": [
+      {
+        "Pulleys": {
+          "Defects": [
+            "E",
+            90
+          ],
+          "Decreasing functionality": [
+            "S",
+            90
+          ],
+          "Excessive vibration": [
+            "S",
+            90
+          ],
+          "Cracks or holes": [
+            "S",
+            90
+          ],
+          "Sound production": [
+            "S",
+            90
+          ],
+          "Withered rubber": [
+            "S",
+            90
+          ],
+          "Corrosion": [
+            "S",
+            90
+          ],
+          "Wear and tear": [
+            "S",
+            90
+          ]
+        }
+      },
+      {
+        "Serpentine belt": {
+          "Cracks or holes": [
+            "E",
+            90
+          ],
+          "Aging": [
+            "S",
+            90
+          ],
+          "Incorrect voltage": [
+            "S",
+            90
+          ],
+          "Decreasing functionality": [
+            "S",
+            90
+          ],
+          "Sound production": [
+            "S",
+            90
+          ],
+          "Withered rubber": [
+            "S",
+            90
+          ],
+          "Wear and tear": [
+            "S",
+            90
+          ]
+        }
+      },
+      {
+        "Spanner": {
+          "Deformation": [
+            "E",
+            90
+          ],
+          "Decreasing functionality": [
+            "S",
+            90
+          ],
+          "Wear and tear": [
+            "S",
+            90
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Battery tray": [
+      {
+        "Battery tray": {
+          "Cracks or holes": [
+            "G",
+            20
+          ],
+          "Missing": [
+            "G",
+            20
+          ]
+        }
+      },
+      {
+        "Cables/Clips": {
+          "Defects": [
+            "E",
+            20
+          ],
+          "Damaged isolation": [
+            "S",
+            20
+          ],
+          "Missing isolation": [
+            "S",
+            20
+          ],
+          "Wrong type": [
+            "S",
+            20
+          ],
+          "Missing": [
+            "S",
+            20
+          ],
+          "Corroded battery terminals": [
+            "S",
+            20
+          ],
+          "Bad connection": [
+            "S",
+            20
+          ],
+          "Damaged point of connection": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Charger/charge circuit": {
+          "Defects": [
+            "S",
+            20
+          ],
+          "Incorrect settings": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Dynamo": {
+          "Incorrect voltage": [
+            "S",
+            20
+          ],
+          "Defects": [
+            "S",
+            20
+          ],
+          "Short-circuit resistance insufficient": [
+            "S",
+            20
+          ],
+          "Unclean": [
+            "S",
+            20
+          ],
+          "Damaged point of connection": [
+            "S",
+            20
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Starting battery": {
+          "Capacity insufficient": [
+            "E",
+            20
+          ],
+          "Defects": [
+            "E",
+            20
+          ],
+          "Wrong type": [
+            "E",
+            20
+          ],
+          "Incorrect voltage": [
+            "S",
+            20
+          ],
+          "Level medium insufficient": [
+            "S",
+            20
+          ],
+          "Corroded battery terminals": [
+            "S",
+            20
+          ],
+          "Excessive heat development": [
+            "S",
+            20
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Equalizer": {
+          "Defects": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "PLC back up (cell) battery": {
+          "Capacity insufficient": [
+            "E",
+            20
+          ],
+          "Defects": [
+            "E",
+            20
+          ],
+          "Wrong type": [
+            "E",
+            20
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            20
+          ]
+        }
+      },
+      {
+        "Panel battery": {
+          "Capacity insufficient": [
+            "E",
+            20
+          ],
+          "Defects": [
+            "E",
+            20
+          ],
+          "Wrong type": [
+            "E",
+            20
+          ],
+          "Damaged/incorrect point of connection": [
+            "S",
+            20
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "Indication lights": [
+      {
+        "Indication lights": {
+          "Faulty lights": [
+            "S",
+            10
+          ],
+          "Incorrect settings": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Phase monitor": {
+          "Defects": [
+            "E",
+            10
+          ],
+          "Incorrect settings": [
+            "E",
+            10
+          ],
+          "Excessive heat development": [
+            "S",
+            10
+          ],
+          "Incorrect encoding": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Relay": {
+          "Defects": [
+            "E",
+            10
+          ],
+          "Excessive heat development": [
+            "S",
+            10
+          ],
+          "Incorrect encoding": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Syncronization panel": {
+          "Defects": [
+            "E",
+            10
+          ],
+          "Incorrect settings": [
+            "E",
+            10
+          ],
+          "Deformation": [
+            "S",
+            10
+          ],
+          "Excessive heat development": [
+            "S",
+            10
+          ],
+          "Incorrect encoding": [
+            "G",
+            10
+          ],
+          "Bad connection": [
+            "G",
+            10
+          ]
+        }
+      },
+      {
+        "Motor security": {
+          "Defects": [
+            "S",
+            50
+          ],
+          "Incorrect settings": [
+            "S",
+            50
+          ],
+          "Faulty lights": [
+            "S",
+            50
+          ],
+          "Bad connection": [
+            "S",
+            50
+          ],
+          "Unjust notification": [
+            "S",
+            50
+          ],
+          "Damaged/incorrect point of connection": [
+            "G",
+            50
+          ]
+        }
+      }
+    ]
+  }
+]

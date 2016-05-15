@@ -151,14 +151,16 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 //Hiding default fields if checkbox is not selected;
                 problemDetailLayout.setVisibility(View.GONE);
 
+
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //Tracking state of the checkboxes
                         final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT, groupClickedPosition, id);
                         state.setElement((String) getGroup(groupPosition));
                         state.setProblem(child.getKey());
-
                         //Setting default fields
 
                         omvangSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -166,23 +168,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setExtentId(omvangSpinner.getSelectedItemPosition());
                                 state.setExtent((String) omvangSpinner.getSelectedItem());
-                                Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
-                                        state.getExtentId(),
-                                        state.getIntensityId(),
-                                        child.getValue().getAsJsonArray().get(0).getAsString());
-                                if (tempCondition != null) {
-                                    state.setCondition(CalculationHelper.INSTANCE.getCondition(
-                                            state.getExtentId(),
-                                            state.getIntensityId(),
-                                            child.getValue().getAsJsonArray().get(0).getAsString()
-                                    ));
-                                }
-
-                                state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
-                                if (state.getCondition() != null) {
-                                    state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
-                                    state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
-                                }
+                                state.performScoreAdjustments(child);
                                 notifyDataSetChanged();
 
                             }
@@ -197,18 +183,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setIntensityId(intensitySpinner.getSelectedItemPosition());
                                 state.setIntensity((String) intensitySpinner.getSelectedItem());
-                                Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
-                                        state.getExtentId(),
-                                        state.getIntensityId(),
-                                        child.getValue().getAsJsonArray().get(0).getAsString()
-                                );
-                                if (tempCondition != null) state.setCondition(tempCondition);
-
-                                state.setInitialScore(child.getValue().getAsJsonArray().get(1).getAsInt());
-                                if (state.getCondition() != null) {
-                                    state.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(state.getCondition()));
-                                    state.setCorrelatedScore(state.getCorrelation() * state.getInitialScore());
-                                }
+                                state.performScoreAdjustments(child);
                                 notifyDataSetChanged();
 
                             }
@@ -223,7 +198,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 state.setActionId(actiesSpinner.getSelectedItemPosition());
                                 state.setAction((String) actiesSpinner.getSelectedItem());
-
+                                state.performScoreAdjustments(child);
                                 notifyDataSetChanged();
                             }
 
@@ -236,6 +211,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             @Override
                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                 state.setFixed(oplegostSwitch.isChecked());
+                                state.performScoreAdjustments(child);
                                 notifyDataSetChanged();
                             }
                         });
@@ -273,6 +249,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             Integer tempCondition = CalculationHelper.INSTANCE.getCondition(
                                     d.getExtentId(),
                                     d.getIntensityId(),
+                                    d.isFixed(),
                                     child.getValue().getAsJsonArray().get(0).getAsString());
                             if (tempCondition != null) d.setCondition(tempCondition);
 

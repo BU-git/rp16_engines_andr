@@ -1,7 +1,5 @@
 package com.bionic.kvt.serviceapp.helpers;
 
-import android.util.Log;
-
 import com.bionic.kvt.serviceapp.models.DefectState;
 
 import java.util.ArrayList;
@@ -14,11 +12,9 @@ import java.util.List;
 /** */
 public enum CalculationHelper {
     INSTANCE;
-    private static final Integer [] CALCULATIONARRAY = {1, 1, 1, 1, 2, 3, 4, 5, 6};
-    private static final Double [] CONDITIONARRAY = {1d, 1d, 1.02, 1.1, 1.3, 1.7, 2d};
-
     public static final String TAG = CalculationHelper.class.getName();
-
+    private static final Integer[] CALCULATIONARRAY = {1, 1, 1, 1, 2, 3, 4, 5, 6};
+    private static final Double[] CONDITIONARRAY = {1d, 1d, 1.02, 1.1, 1.3, 1.7, 2d};
     private static final Integer ROWSIZE = 5;
 
     CalculationHelper() {}
@@ -44,8 +40,8 @@ public enum CalculationHelper {
         return new Integer[5];
     }
 
-    public Integer getCondition (Integer scopeId, Integer intensityId, String defectType){
-        return getConditionArray(defectType, intensityId)[scopeId];
+    public Integer getCondition(Integer scopeId, Integer intensityId, Boolean isFixed, String defectType) {
+        return (isFixed) ? 1 : getConditionArray(defectType, intensityId)[scopeId];
     }
 
     public Double getConditionFactor (Integer condition){
@@ -70,7 +66,6 @@ public enum CalculationHelper {
                 }
             }).getCondition();
         }
-
         else if (partDefects.size() == 1) return partDefects.get(0).getCondition();
         else return 1;
     }
