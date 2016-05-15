@@ -22,6 +22,7 @@ import android.widget.ViewSwitcher;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.activities.LMRAActivity;
+import com.bionic.kvt.serviceapp.activities.LMRAImageActivity;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
@@ -29,6 +30,7 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -38,85 +40,6 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
     private static final int REQUEST_TAKE_PHOTO = 1;
 
     private Context context;
-
-    private static class LMRAViewHolder implements ViewSwitcher.ViewFactory {
-        private Context context;
-        private long lmraId;
-        private TextView lmraName;
-        private TextView lmraDescription;
-        private List<File> listLMRAPhotos;
-        private Button lmraDeleteButton;
-
-        private ImageView lmraImageView;
-        private Button lmraPrevButton;
-        private TextView lmra_photo_count;
-        private Button lmraNetxButton;
-        private Button lmraCameraButton;
-        private Button lmraDeletePhotoButton;
-
-
-        private int currentPhotoPosition = 0;
-
-        private void setNextPhoto() {
-            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
-                currentPhotoPosition++;
-                if (currentPhotoPosition > listLMRAPhotos.size() - 1) currentPhotoPosition = 0;
-
-                Picasso.with(context)
-                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
-                        .resize(200, 200)
-                        .centerCrop()
-                        .into(lmraImageView);
-
-                lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
-            } else {
-                lmra_photo_count.setText("0 of 0");
-            }
-        }
-
-        private void setPrevPhoto() {
-            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
-                currentPhotoPosition--;
-                if (currentPhotoPosition < 0) currentPhotoPosition = listLMRAPhotos.size() - 1;
-
-                Picasso.with(context)
-                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
-                        .resize(200, 200)
-                        .centerCrop()
-                        .into(lmraImageView);
-
-                lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
-            } else {
-                lmra_photo_count.setText("0 of 0");
-                lmraImageView.setImageDrawable(
-                        ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
-            }
-        }
-
-        private void setLastPhoto() {
-            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
-                currentPhotoPosition = listLMRAPhotos.size() - 2;
-                setNextPhoto();
-            } else {
-                lmra_photo_count.setText("0 of 0");
-                lmraImageView.setImageDrawable(
-                        ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
-            }
-        }
-
-
-        @Override
-        public View makeView() {
-            ImageView imageView = new ImageView(context);
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setLayoutParams(new
-                    ImageSwitcher.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-            imageView.setBackgroundColor(0xFFFFFFFF);
-            return imageView;
-        }
-    }
-
 
     public LMRAAdapter(Context context, List<LMRAModel> lmraModelList) {
         super(context, R.layout.template_lmra, lmraModelList);
@@ -232,6 +155,21 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             }
         });
 
+        if (lmraViewHolder.lmra_photo_count != null && !lmraViewHolder.lmra_photo_count.getText().toString().equals("0 of 0")) {
+            lmraViewHolder.lmraImageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(context, LMRAImageActivity.class);
+                    try {
+                        i.putExtra("imageFile", lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition).toURI().toURL().toString());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    context.startActivity(i);
+                }
+            });
+        }
+
 
         return convertView;
     }
@@ -241,6 +179,84 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
         lmraDialog.setEdit(true);
         LMRAActivity.currentLMRAID = lmraModel.getLmraId();
         lmraDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "Modified dialog");
+    }
+
+    private static class LMRAViewHolder implements ViewSwitcher.ViewFactory {
+        private Context context;
+        private long lmraId;
+        private TextView lmraName;
+        private TextView lmraDescription;
+        private List<File> listLMRAPhotos;
+        private Button lmraDeleteButton;
+
+        private ImageView lmraImageView;
+        private Button lmraPrevButton;
+        private TextView lmra_photo_count;
+        private Button lmraNetxButton;
+        private Button lmraCameraButton;
+        private Button lmraDeletePhotoButton;
+
+
+        private int currentPhotoPosition = 0;
+
+        private void setNextPhoto() {
+            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
+                currentPhotoPosition++;
+                if (currentPhotoPosition > listLMRAPhotos.size() - 1) currentPhotoPosition = 0;
+
+                Picasso.with(context)
+                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
+                        .resize(200, 200)
+                        .centerCrop()
+                        .into(lmraImageView);
+
+                lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
+            } else {
+                lmra_photo_count.setText("0 of 0");
+            }
+        }
+
+        private void setPrevPhoto() {
+            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
+                currentPhotoPosition--;
+                if (currentPhotoPosition < 0) currentPhotoPosition = listLMRAPhotos.size() - 1;
+
+                Picasso.with(context)
+                        .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
+                        .resize(200, 200)
+                        .centerCrop()
+                        .into(lmraImageView);
+
+                lmra_photo_count.setText((currentPhotoPosition + 1) + " of " + listLMRAPhotos.size());
+            } else {
+                lmra_photo_count.setText("0 of 0");
+                lmraImageView.setImageDrawable(
+                        ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
+            }
+        }
+
+        private void setLastPhoto() {
+            if (listLMRAPhotos != null && !listLMRAPhotos.isEmpty()) {
+                currentPhotoPosition = listLMRAPhotos.size() - 2;
+                setNextPhoto();
+            } else {
+                lmra_photo_count.setText("0 of 0");
+                lmraImageView.setImageDrawable(
+                        ContextCompat.getDrawable(context, R.drawable.ic_lmra_no_photo_24dp));
+            }
+        }
+
+
+        @Override
+        public View makeView() {
+            ImageView imageView = new ImageView(context);
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setLayoutParams(new
+                    ImageSwitcher.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+            imageView.setBackgroundColor(0xFFFFFFFF);
+            return imageView;
+        }
     }
 
 }
