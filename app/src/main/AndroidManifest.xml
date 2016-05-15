@@ -64,6 +64,10 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
+            android:name=".activities.LMRAImageActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
             android:name=".activities.ComponentListActivity"
             android:label="@string/title_component_list"
             android:launchMode="singleTop"
