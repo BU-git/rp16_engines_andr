@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
@@ -227,7 +228,10 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
+                            state.setCondition(GlobalConstants.DEFAULT_SCORE);
+                            state.performScoreAdjustments(child);
                             ComponentListActivity.defectStateList.remove(state);
+
                         }
                         notifyDataSetChanged();
 

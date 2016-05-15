@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
+import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonArray;
@@ -63,6 +64,7 @@ public class ComponentListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
+        Log.d(TAG, "Global score: " + CalculationHelper.INSTANCE.getGeneralScore(partMap, defectStateList));
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
