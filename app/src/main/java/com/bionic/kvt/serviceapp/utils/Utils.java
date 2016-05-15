@@ -47,37 +47,11 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
 
 public class Utils {
+    public static final int REQUEST_WRITE_CODE = 1;
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
-
-    public static class ServerRequestResult {
-        private boolean isSuccessful;
-        private String message;
-
-        public ServerRequestResult(boolean isSuccessful, String message) {
-            this.isSuccessful = isSuccessful;
-            this.message = message;
-        }
-
-        public boolean isSuccessful() {
-            return isSuccessful;
-        }
-
-        public void setSuccessful(boolean successful) {
-            isSuccessful = successful;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
-    }
-
-    public static final int REQUEST_WRITE_CODE = 1;
+    private static final String TAG = Utils.class.getName();
 
     public static boolean isEmailValid(String email) {
         return email.contains("@");
@@ -310,5 +284,31 @@ public class Utils {
 
         Session.addToSessionLog("New password request send. Check email <" + email + "> for new password.");
         return new ServerRequestResult(true, "New password request send. Check email <" + email + "> for new password.");
+    }
+
+    public static class ServerRequestResult {
+        private boolean isSuccessful;
+        private String message;
+
+        public ServerRequestResult(boolean isSuccessful, String message) {
+            this.isSuccessful = isSuccessful;
+            this.message = message;
+        }
+
+        public boolean isSuccessful() {
+            return isSuccessful;
+        }
+
+        public void setSuccessful(boolean successful) {
+            isSuccessful = successful;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
     }
 }

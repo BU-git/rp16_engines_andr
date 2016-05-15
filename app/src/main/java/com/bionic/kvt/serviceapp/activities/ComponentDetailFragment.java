@@ -1,8 +1,8 @@
 package com.bionic.kvt.serviceapp.activities;
 
 import android.app.Activity;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +14,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
 import com.google.gson.JsonObject;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
 /**
  * A fragment representing a single Component detail screen.
@@ -23,16 +23,13 @@ import java.util.Map;
  * on handsets.
  */
 public class ComponentDetailFragment extends Fragment {
+    public static final String ARG_ITEM_ID = "item_id";
+    public static String ARG_CURRENT;
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
     String TAG = ComponentDetailFragment.class.getName();
-
-
-    public static final String ARG_ITEM_ID = "item_id";
-    public static String ARG_CURRENT;
-
     private Integer layoutId = 0;
     private Integer checkboxId = 0;
 
@@ -42,7 +39,7 @@ public class ComponentDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private Map<String, JsonObject> mItem;
+    private LinkedHashMap<String, JsonObject> mItem;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the

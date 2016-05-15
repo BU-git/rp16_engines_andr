@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,23 +20,17 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
 import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
-import com.bionic.kvt.serviceapp.api.Component;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.bionic.kvt.serviceapp.activities.ComponentListActivity.defectStateList;
 
 /**
  * Adapter for the Expandable Parts List
@@ -62,9 +55,17 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public ElementExpandableListAdapter(Context context, Map<String, JsonObject> listChildData) {
         this._context = context;
         listChildData.put(context.getResources().getString(R.string.score_text), null);
-        List<String> listSortedChild = Arrays.asList(listChildData.keySet().toArray(new String[listChildData.keySet().size()]));
-        Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
-        Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
+        String[] arrayChild = listChildData.keySet().toArray(new String[listChildData.keySet().size()]);
+        List<String> listSortedChild = new LinkedList<>();
+        for (String child : arrayChild) {
+            if (child.equals(context.getResources().getString(R.string.score_text))) {
+                listSortedChild.add(0, child);
+            } else {
+                listSortedChild.add(child);
+            }
+        }
+        //Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
+        //Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
         this._listDataHeader = listSortedChild;
         this._listDataChild = listChildData;
     }

@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +26,6 @@ import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,12 +46,9 @@ public class ComponentListActivity extends BaseActivity {
      * device.
      */
     public static List<DefectState> defectStateList = new ArrayList<>();
-
+    public static Map<String, LinkedHashMap<String, JsonObject>> partMap = new LinkedHashMap<>();
     private String TAG = ComponentListActivity.class.getName();
-
-    public static Map<String, Map<String, JsonObject>> partMap = new HashMap<>();
     //public Map<String, JsonObject> elementMap = new HashMap<>();
-
     private String COMPONENTFILE = BuildConfig.COMPONENTS_JSON;
 
     private boolean mTwoPane;
@@ -118,11 +113,11 @@ public class ComponentListActivity extends BaseActivity {
     public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final Map<String, Map<String, JsonObject>> mValues;
+        private final Map<String, LinkedHashMap<String, JsonObject>> mValues;
         private int selectedItem = -1;
 
 
-        public SimpleItemRecyclerViewAdapter(Map<String, Map<String, JsonObject>> items) {
+        public SimpleItemRecyclerViewAdapter(Map<String, LinkedHashMap<String, JsonObject>> items) {
             mValues = items;
         }
 
@@ -210,15 +205,12 @@ public class ComponentListActivity extends BaseActivity {
 
     private class JsonParser extends AsyncTask<Void, Void, Void> {
 
-        //String jsonComponent = new FileReader(new File(COMPONENTFILE));
-
         @Override
         protected Void doInBackground(Void... params) {
 
             String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTFILE);
             com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
 
-            //Log.d(TAG, "JSON Component:" + jsonComponent);
             if (!jsonComponent.isEmpty()) {
                 try {
                     JsonElement parent = parser.parse(jsonComponent);
@@ -235,7 +227,7 @@ public class ComponentListActivity extends BaseActivity {
                             Log.d(TAG, "Part: " + entry.getKey());
 
                             JsonArray thirdArray = entry.getValue().getAsJsonArray();
-                            Map<String, JsonObject> elementMap = new HashMap<>();
+                            LinkedHashMap<String, JsonObject> elementMap = new LinkedHashMap<>();
                             for (int j = 0; j < thirdArray.size(); j++) {
                                 JsonObject thirdObject = thirdArray.get(j).getAsJsonObject();
                                 Set<Map.Entry<String, JsonElement>> entrySetSecond = thirdObject.entrySet();
@@ -250,17 +242,12 @@ public class ComponentListActivity extends BaseActivity {
                             }
                             partMap.put(entry.getKey(), elementMap);
                         }
-
-                        //Log.d(TAG,secondObject.entrySet().toString());
-
                     }
-                    //Log.d(TAG, partMap.toString());
-
-
                 } catch (Exception e) {
                     Log.e(TAG, e.toString());
                 }
             }
+
 
             return null;
         }
