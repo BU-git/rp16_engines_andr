@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonArray;
@@ -62,6 +63,7 @@ public class ComponentListActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        DbUtils.saveDefectStateListToDB(defectStateList);
         Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);
         return super.onOptionsItemSelected(item);
@@ -71,7 +73,7 @@ public class ComponentListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-            setContentView(R.layout.activity_component_list);
+        setContentView(R.layout.activity_component_list);
 
         new JsonParser().execute();
 
@@ -94,7 +96,6 @@ public class ComponentListActivity extends BaseActivity {
             }
         });
         */
-
 
 
         if (findViewById(R.id.component_detail_container) != null) {
@@ -135,7 +136,6 @@ public class ComponentListActivity extends BaseActivity {
         }
 
 
-
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             List valuesList = Arrays.asList(mValues.keySet().toArray());
@@ -170,7 +170,7 @@ public class ComponentListActivity extends BaseActivity {
 
                 }
             });
-            if (position == selectedItem){
+            if (position == selectedItem) {
                 holder.mView.setSelected(true);
             } else {
                 holder.mView.setSelected(false);
@@ -183,7 +183,7 @@ public class ComponentListActivity extends BaseActivity {
             return mValues.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
