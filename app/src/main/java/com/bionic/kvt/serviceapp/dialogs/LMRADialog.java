@@ -21,7 +21,6 @@ import com.bionic.kvt.serviceapp.models.LMRAModel;
 LMRA Dialog to show by clicking the plus
 */
 public class LMRADialog extends AppCompatDialogFragment {
-    public static final String TAG = LMRADialog.class.getName();
     View view = null;
     boolean isEdit = false;
 
@@ -70,7 +69,7 @@ public class LMRADialog extends AppCompatDialogFragment {
         super.onStart();
         final AlertDialog dialog = (AlertDialog) getDialog();
         if (dialog != null) {
-            Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
+            final Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
 
             final EditText mLmraNameView = (EditText) view.findViewById(R.id.title_lmra_add);
             final EditText mLmraDescriptionView = (EditText) view.findViewById(R.id.description_lmra_add);

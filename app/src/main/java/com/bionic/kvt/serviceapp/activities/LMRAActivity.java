@@ -130,8 +130,8 @@ public class LMRAActivity extends BaseActivity {
                 // permission was granted
             } else {
                 // permission denied
-                Session.addToSessionLog("ERROR: Partitions not granted!");
-                Toast.makeText(getApplicationContext(), "Please grant partitions!", Toast.LENGTH_SHORT).show();
+                Session.addToSessionLog("ERROR: Permissions not granted!");
+                Toast.makeText(getApplicationContext(), "Please grant Permissions!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
