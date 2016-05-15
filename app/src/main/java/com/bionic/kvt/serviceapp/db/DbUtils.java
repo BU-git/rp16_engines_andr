@@ -507,6 +507,56 @@ public class DbUtils {
         realm.close();
     }
 
+    public static void saveDefectStateListToDB(final List<com.bionic.kvt.serviceapp.models.DefectState> defectStateList) {
+        removeDefectStateListFromDB();
+
+        final Realm realm = Realm.getDefaultInstance();
+        DefectState newDefectState;
+
+        for (com.bionic.kvt.serviceapp.models.DefectState defectState : defectStateList) {
+            Session.addToSessionLog("Saving defect state: "
+                    + defectState.getPart() + ">"
+                    + defectState.getElement() + ">"
+                    + defectState.getProblem());
+
+            realm.beginTransaction();
+
+            newDefectState = realm.createObject(DefectState.class);
+            newDefectState.setNumber(Session.getCurrentOrder());
+
+            newDefectState.setPart(defectState.getPart());
+            newDefectState.setElement(defectState.getElement());
+            newDefectState.setProblem(defectState.getProblem());
+
+            newDefectState.setExtent(defectState.getExtent());
+            newDefectState.setIntensity(defectState.getIntensity());
+            newDefectState.setFixed(defectState.isFixed());
+            newDefectState.setAction(defectState.getAction());
+
+            newDefectState.setCondition(defectState.getCondition());
+            newDefectState.setInitialScore(defectState.getInitialScore());
+            newDefectState.setCorrelation(defectState.getCorrelation());
+            newDefectState.setCorrelatedScore(defectState.getCorrelatedScore());
+
+            realm.commitTransaction(); // No logic if transaction fail!!!
+        }
+        realm.close();
+    }
+
+    public static void removeDefectStateListFromDB() {
+        Session.addToSessionLog("Removing defect states from DB.");
+
+        final Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+
+        final RealmResults<DefectState> allDefectsForCurrentOrder = realm.where(DefectState.class)
+                .equalTo("number", Session.getCurrentOrder()).findAll();
+        allDefectsForCurrentOrder.deleteAllFromRealm();
+
+        realm.commitTransaction(); // No logic if transaction fail!!!
+        realm.close();
+    }
+
     public static boolean isUserLoginValid(final String email, final String password) {
         Session.addToSessionLog("Validating user: " + email);
 
@@ -584,9 +634,8 @@ public class DbUtils {
         realm.close();
     }
 
-    public static
     @OrderStatus
-    int getOrderStatus(final long orderNumber) {
+    public static int getOrderStatus(final long orderNumber) {
         Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
         int result = ORDER_STATUS_NOT_FOUND;
         final Realm realm = Realm.getDefaultInstance();
