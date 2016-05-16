@@ -277,9 +277,11 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     public void onDoneClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
+        Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
+
         if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
 
-        Intent intent = new Intent(getApplicationContext(), OrderPageActivity.class);
+        Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

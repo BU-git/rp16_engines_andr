@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.Order;
 import com.google.gson.JsonElement;
 
 import java.io.File;
@@ -36,8 +37,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import io.realm.Realm;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -223,6 +226,44 @@ public class Utils {
         } catch (IOException e) {
             Session.addToSessionLog("Error on copy file: " + e.toString());
         }
+    }
+
+    public static void updateOrderStatusOnServer(final long orderNumber) {
+        final Realm realm = Realm.getDefaultInstance();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+
+        if (order == null) {
+            Session.addToSessionLog("Updating order [" + orderNumber + "] status on server: ERROR. No suh order!");
+            realm.close();
+            return;
+        }
+
+        final String email = order.getEmployeeEmail();
+        final long lastAndroidChangeDate = order.getLastAndroidChangeDate().getTime();
+        final int orderStatus = order.getOrderStatus();
+        realm.close();
+
+        final Call<ResponseBody> updateOrderRequest =
+                Session.getServiceConnection().updateOrder(orderNumber, email, lastAndroidChangeDate, orderStatus);
+        Session.addToSessionLog("Updating server order [" + orderNumber + "] status: " + updateOrderRequest.request());
+
+        updateOrderRequest.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (!response.isSuccessful()) {
+                    Session.addToSessionLog("Update server order status fail: " + response.code());
+                    return;
+                }
+
+                Session.addToSessionLog("Update server order status successful.");
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Session.addToSessionLog("Update server order status fail: " + t.toString());
+            }
+        });
+
     }
 
     public static ServerRequestResult getUserFromServer(final String email) {
