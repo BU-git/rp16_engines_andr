@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.DbUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +53,13 @@ public class OrderWorkScreenActivity extends BaseActivity {
 
     @OnClick(R.id.order_processing_first_stage_next_button)
     public void onNextClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), ComponentListActivity.class);
+        Intent intent;
+
+        if (DbUtils.isCustomTemplate(Session.getCurrentOrder())) {
+            intent = new Intent(getApplicationContext(), CustomTemplateActivity.class);
+        } else {
+            intent = new Intent(getApplicationContext(), ComponentListActivity.class);
+        }
         startActivity(intent);
     }
 

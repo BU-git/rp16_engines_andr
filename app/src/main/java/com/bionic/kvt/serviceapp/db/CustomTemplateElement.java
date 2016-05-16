@@ -1,17 +1,22 @@
 package com.bionic.kvt.serviceapp.db;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
+
 import io.realm.RealmObject;
 
 public class CustomTemplateElement extends RealmObject {
+
+    @GlobalConstants.CustomElement
     int elementType;
     String elementText;
     String elementValue;
 
+    @GlobalConstants.CustomElement
     public int getElementType() {
         return elementType;
     }
 
-    public void setElementType(int elementType) {
+    public void setElementType(@GlobalConstants.CustomElement int elementType) {
         this.elementType = elementType;
     }
 

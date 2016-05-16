@@ -123,6 +123,7 @@ public class OrderPageDetailActivity extends BaseActivity {
     public void onStartClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_START_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_IN_PROGRESS);
+        // TODO SEND STATUS UPDATE TO SERVER
 
         Intent intent = new Intent(getApplicationContext(), OrderWorkScreenActivity.class);
         startActivity(intent);

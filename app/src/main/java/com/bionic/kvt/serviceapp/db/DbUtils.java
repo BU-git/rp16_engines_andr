@@ -725,6 +725,15 @@ public class DbUtils {
         realm.close();
     }
 
+    public static boolean isCustomTemplate(final long orderNumber) {
+        long customTemplate = 0;
+        final Realm realm = Realm.getDefaultInstance();
+        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        if (order != null) customTemplate = order.getCustomTemplateID();
+        realm.close();
+        return customTemplate > 0;
+    }
+
     public static String generateXMLReport(final long orderNumber, @GlobalConstants.XMLReportType final int XMLReportType) {
         //TODO XML GENERATION TO FILE
         // returns full XML file path as String!
