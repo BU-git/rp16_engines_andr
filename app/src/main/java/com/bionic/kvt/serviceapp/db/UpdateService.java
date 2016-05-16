@@ -7,6 +7,7 @@ import android.content.Intent;
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.api.CustomTemplate;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
@@ -125,10 +126,38 @@ public class UpdateService extends IntentService {
 
             serviceLog("Request successful!");
 
-            DbUtils.updateOrderFromServer(orderResponse.body());
+            final com.bionic.kvt.serviceapp.api.Order orderOnServer = orderResponse.body();
+            DbUtils.updateOrderFromServer(orderOnServer);
+
+            if (orderOnServer.getCustomTemplateID() > 0)
+                updateCustomTemplateFromServer(orderOnServer.getNumber(), orderOnServer.getCustomTemplateID());
         }
 
         serviceLog("Update " + ordersToBeUpdated.size() + " orders.");
+    }
+
+    private void updateCustomTemplateFromServer(final long orderNumber, final long customTemplateID) {
+        final Call<CustomTemplate> customTemplateRequest =
+                Session.getServiceConnection().getTemplate(customTemplateID);
+
+        serviceLog("Getting custom template from: " + customTemplateRequest.request());
+
+        final Response<CustomTemplate> customTemplateResponse;
+        try {
+            customTemplateResponse = customTemplateRequest.execute();
+        } catch (IOException e) {
+            serviceLog("Custom template request fail: " + e.toString());
+            return;
+        }
+
+        if (!customTemplateResponse.isSuccessful()) {
+            serviceLog("Custom template request error: " + customTemplateResponse.code());
+            return;
+        }
+
+        serviceLog("Request successful. Get [" + customTemplateResponse.body().getCustomTemplateName() + "] template.");
+
+        DbUtils.updateCustomTemplateFromServer(orderNumber, customTemplateResponse.body());
     }
 
     private void prepareOrderFilesToUpload() {

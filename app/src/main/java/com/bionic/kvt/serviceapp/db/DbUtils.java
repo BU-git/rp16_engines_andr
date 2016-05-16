@@ -373,6 +373,35 @@ public class DbUtils {
         realm.close();
     }
 
+    public static void updateCustomTemplateFromServer(final long orderNumber, final com.bionic.kvt.serviceapp.api.CustomTemplate customTemplateOnServer) {
+        final Realm realm = Realm.getDefaultInstance();
+
+        // Deleting current custom template
+        realm.beginTransaction();
+        realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+        realm.commitTransaction();
+
+        Session.addToSessionLog("Creating custom template ID: " + customTemplateOnServer.getCustomTemplateID());
+        realm.beginTransaction();
+        final CustomTemplate newCustomTemplate = realm.createObject(CustomTemplate.class);
+        newCustomTemplate.setNumber(orderNumber);
+        newCustomTemplate.setCustomTemplateID(customTemplateOnServer.getCustomTemplateID());
+        newCustomTemplate.setCustomTemplateName(customTemplateOnServer.getCustomTemplateName());
+
+        final RealmList<CustomTemplateElement> newCustomTemplateElementList = new RealmList<>();
+        for (com.bionic.kvt.serviceapp.api.CustomTemplateElement elementOnServer : customTemplateOnServer.getCustomTemplateElements()) {
+            CustomTemplateElement newCustomTemplateElement = realm.createObject(CustomTemplateElement.class);
+            newCustomTemplateElement.setElementType(elementOnServer.getElementType());
+            newCustomTemplateElement.setElementValue(elementOnServer.getElementValue());
+            newCustomTemplateElement.setElementText(elementOnServer.getElementText());
+            newCustomTemplateElementList.add(newCustomTemplateElement);
+        }
+        newCustomTemplate.setCustomTemplateElements(newCustomTemplateElementList);
+
+        realm.commitTransaction();
+        realm.close();
+    }
+
     public static void createNewLMRAInDB(final String lmraName, final String lmraDescription) {
         Session.addToSessionLog("Creating new LMRA.");
 
@@ -701,4 +730,6 @@ public class DbUtils {
         // returns full XML file path as String!
         return null;
     }
+
+
 }
