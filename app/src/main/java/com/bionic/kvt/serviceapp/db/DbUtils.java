@@ -239,6 +239,7 @@ public class DbUtils {
         realm.where(Order.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
         realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
         realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
+        realm.where(DefectState.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
 
         realm.commitTransaction(); // No logic if transaction fail!!!
         realm.close();

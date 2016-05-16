@@ -34,7 +34,7 @@ public interface ConnectionServiceAPI {
     // Request one custom template with {customTemplateID}
     // URL format /template/{customTemplateID}
     // Expecting JSON
-    @POST("template/{customTemplateID}")
+    @POST("templates/get/{customTemplateID}")
     Call<CustomTemplate> getTemplate(@Path("customTemplateID") long customTemplateID);
 
 
