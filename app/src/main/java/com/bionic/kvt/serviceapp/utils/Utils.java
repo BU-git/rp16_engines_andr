@@ -23,6 +23,8 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.google.gson.JsonElement;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,6 +38,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import io.realm.Realm;
 import okhttp3.ResponseBody;
@@ -55,6 +59,10 @@ public class Utils {
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
     private static final String TAG = Utils.class.getName();
+
+    public static String nullStringToEmpty(@Nullable final String inString) {
+        return (inString == null) ? "" : inString;
+    }
 
     public static boolean isEmailValid(String email) {
         return email.contains("@");
@@ -226,6 +234,37 @@ public class Utils {
         } catch (IOException e) {
             Session.addToSessionLog("Error on copy file: " + e.toString());
         }
+    }
+
+    public static boolean zipXMLReportFiles(final String[] XMLFiles, final String zipFile) {
+        try (ZipOutputStream zipOutputStream =
+                     new ZipOutputStream(
+                             new BufferedOutputStream(
+                                     new FileOutputStream(zipFile)))) {
+
+            byte data[] = new byte[2048];
+            String fileName;
+            int count;
+            for (String XMLFile : XMLFiles) {
+                if (XMLFile == null) continue; // No such file
+                try (BufferedInputStream originFileBufferedInputStream =
+                             new BufferedInputStream(new FileInputStream(XMLFile), 2048)) {
+                    fileName = XMLFile.substring(XMLFile.lastIndexOf("/") + 1);
+                    ZipEntry zipEntry = new ZipEntry(fileName);
+                    zipOutputStream.putNextEntry(zipEntry);
+                    while ((count = originFileBufferedInputStream.read(data, 0, 2048)) != -1)
+                        zipOutputStream.write(data, 0, count);
+                } catch (IOException e) {
+                    Session.addToSessionLog("**** ERROR **** Saving XML to ZIP report file: " + e.toString());
+                    return false;
+                }
+            }
+
+        } catch (IOException e) {
+            Session.addToSessionLog("**** ERROR **** Saving ZIP report file: " + e.toString());
+            return false;
+        }
+        return true;
     }
 
     public static void updateOrderStatusOnServer(final long orderNumber) {

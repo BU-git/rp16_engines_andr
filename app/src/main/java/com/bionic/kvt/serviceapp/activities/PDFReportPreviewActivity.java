@@ -185,7 +185,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
                     .equalTo("number", orderNumber).findFirst();
             if (currentMeasurements != null)
-                pdfWorkingHours = currentMeasurements.getWorkingHours();
+                pdfWorkingHours = currentMeasurements.getRunningHours();
 
             String pdfTask = currentOrder.getTasks().first().getLtxa1();
 

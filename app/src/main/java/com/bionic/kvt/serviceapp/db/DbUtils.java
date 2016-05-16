@@ -2,15 +2,17 @@ package com.bionic.kvt.serviceapp.db;
 
 import android.support.annotation.Nullable;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.bionic.kvt.serviceapp.utils.XMLGenerator;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -21,6 +23,14 @@ import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
@@ -31,8 +41,10 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderMaintenanceType;
 import static com.bionic.kvt.serviceapp.GlobalConstants.OrderStatus;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PASSWORD_HASH_ITERATIONS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.XMLReportType;
 
 public class DbUtils {
+    public static final Gson GSON = new Gson();
 
     // Completely erase all database
     public static void dropDatabase() {
@@ -295,7 +307,6 @@ public class DbUtils {
         Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
 
         final Realm realm = Realm.getDefaultInstance();
-        final Gson gson = new Gson();
         realm.beginTransaction();
 
         final Order newOrder = realm.createObject(Order.class);
@@ -308,24 +319,24 @@ public class DbUtils {
 
         // Relation
         newOrder.setRelation(realm.createObjectFromJson
-                (Relation.class, gson.toJson(serverOrder.getRelation()))
+                (Relation.class, GSON.toJson(serverOrder.getRelation()))
         );
 
         // Employee
         newOrder.setEmployee(realm.createObjectFromJson
-                (Employee.class, gson.toJson(serverOrder.getEmployee()))
+                (Employee.class, GSON.toJson(serverOrder.getEmployee()))
         );
 
         // Installation
         newOrder.setInstallation(realm.createObjectFromJson
-                (Installation.class, gson.toJson(serverOrder.getInstallation()))
+                (Installation.class, GSON.toJson(serverOrder.getInstallation()))
         );
 
         // Task
         final RealmList<Task> newTaskList = new RealmList<>();
         for (com.bionic.kvt.serviceapp.api.Task serverTask : serverOrder.getTasks()) {
             newTaskList.add(realm.createObjectFromJson
-                    (Task.class, gson.toJson(serverTask))
+                    (Task.class, GSON.toJson(serverTask))
             );
         }
         newOrder.setTasks(newTaskList);
@@ -334,7 +345,7 @@ public class DbUtils {
         final RealmList<Component> newComponentList = new RealmList<>();
         for (com.bionic.kvt.serviceapp.api.Component serverComponent : serverOrder.getComponents()) {
             newComponentList.add(realm.createObjectFromJson
-                    (Component.class, gson.toJson(serverComponent))
+                    (Component.class, GSON.toJson(serverComponent))
             );
         }
         newOrder.setComponents(newComponentList);
@@ -343,7 +354,7 @@ public class DbUtils {
         final RealmList<Part> newPartList = new RealmList<>();
         for (com.bionic.kvt.serviceapp.api.Part serverPart : serverOrder.getParts()) {
             newPartList.add(realm.createObjectFromJson
-                    (Part.class, gson.toJson(serverPart))
+                    (Part.class, GSON.toJson(serverPart))
             );
         }
         newOrder.setParts(newPartList);
@@ -352,7 +363,7 @@ public class DbUtils {
         final RealmList<Info> newInfoList = new RealmList<>();
         for (com.bionic.kvt.serviceapp.api.Info serverInfo : serverOrder.getExtraInfo()) {
             newInfoList.add(realm.createObjectFromJson
-                    (Info.class, gson.toJson(serverInfo))
+                    (Info.class, GSON.toJson(serverInfo))
             );
         }
         newOrder.setExtraInfo(newInfoList);
@@ -734,11 +745,40 @@ public class DbUtils {
         return customTemplate > 0;
     }
 
-    public static String generateXMLReport(final long orderNumber, @GlobalConstants.XMLReportType final int XMLReportType) {
-        //TODO XML GENERATION TO FILE
-        // returns full XML file path as String!
-        return null;
+    // returns full XML file path as String
+    @Nullable
+    public static String generateXMLReport(final long orderNumber, @XMLReportType final int XMLReportType) {
+        String XMLData = null;
+        File XMLFile = null;
+
+        switch (XMLReportType) {
+            case DEFAULT_XML:
+                XMLData = XMLGenerator.getXMLFromDefaultTemplate(orderNumber);
+                XMLFile = new File(Utils.getOrderDir(orderNumber), DEFAULT_XML_FILE_NAME + orderNumber + ".xml");
+                break;
+            case CUSTOM_XML:
+                XMLData = XMLGenerator.getXMLFromCustomTemplate(orderNumber);
+                XMLFile = new File(Utils.getOrderDir(orderNumber), CUSTOM_XML_FILE_NAME + orderNumber + ".xml");
+                break;
+            case MEASUREMENTS_XML:
+                XMLData = XMLGenerator.getXMLFromMeasurements(orderNumber);
+                XMLFile = new File(Utils.getOrderDir(orderNumber), MEASUREMENTS_XML_FILE_NAME + orderNumber + ".xml");
+                break;
+            case JOB_RULES_XML:
+                XMLData = XMLGenerator.getXMLFromJobRules(orderNumber);
+                XMLFile = new File(Utils.getOrderDir(orderNumber), JOB_RULES_XML_FILE_NAME + orderNumber + ".xml");
+                break;
+        }
+
+        if (XMLData == null) return null;
+
+        try (FileWriter outputFile = new FileWriter(XMLFile)) {
+            outputFile.write(XMLData);
+        } catch (IOException e) {
+            Session.addToSessionLog("**** ERROR **** Saving XML report file: " + e.toString());
+            return null;
+        }
+
+        return XMLFile.toString();
     }
-
-
 }

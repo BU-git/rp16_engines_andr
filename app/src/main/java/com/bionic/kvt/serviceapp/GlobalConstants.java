@@ -37,7 +37,7 @@ public interface GlobalConstants {
 
     String UPDATE_SERVICE_MSG = "UPDATE_SERVICE_MSG";
 
-    //    @IntDef({FILE_TYPE_ORDER_PDF_REPORT, FILE_TYPE_ORDER_XML_DEFAULT_REPORT, FILE_TYPE_ORDER_XML_CUSTOM_REPORT, FILE_TYPE_ORDER_XML_MEASUREMENTS, FILE_TYPE_ORDER_XML_JOB_RULES})
+//        @IntDef({FILE_TYPE_ORDER_PDF_REPORT, FILE_TYPE_ORDER_XML_DEFAULT_REPORT, FILE_TYPE_ORDER_XML_CUSTOM_REPORT, FILE_TYPE_ORDER_XML_MEASUREMENTS, FILE_TYPE_ORDER_XML_JOB_RULES})
 //    @Retention(RetentionPolicy.SOURCE)
 //    @interface UploadFileType {
 //    }
@@ -79,6 +79,12 @@ public interface GlobalConstants {
     String PDF_REPORT_FILE_NAME = "Report_";
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
     String LMRA_PHOTO_FILE_NAME = "LMRAPhoto_";
+
+    String DEFAULT_XML_FILE_NAME = "ReportDefault_";
+    String CUSTOM_XML_FILE_NAME = "ReportCustom_";
+    String MEASUREMENTS_XML_FILE_NAME = "ReportMeasurements_";
+    String JOB_RULES_XML_FILE_NAME = "ReportJobRules_";
+    String REPORTS_XML_ZIP_FILE_NAME = "ReportXMLs_";
 
     int DEFAULT_SCORE = 1;
     double ONE_CONDITION = 0.01;

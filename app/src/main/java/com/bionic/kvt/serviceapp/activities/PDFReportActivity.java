@@ -277,7 +277,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     public void onDoneClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
-        Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
+//        Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
 
         if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
 

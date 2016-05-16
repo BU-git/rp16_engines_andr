@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter;
@@ -154,7 +155,7 @@ public class MeasurementsActivity extends BaseActivity {
         currentMeasurements.setExhaustGasesTemperature(listMotorDataChild.get(listMotorDataHeader.get(6)).get(0).getItemValue());
         currentMeasurements.setExhaustGasesPressure(listMotorDataChild.get(listMotorDataHeader.get(6)).get(1).getItemValue());
 
-        currentMeasurements.setWorkingHours(listMotorDataChild.get(listMotorDataHeader.get(7)).get(0).getItemValue());
+        currentMeasurements.setRunningHours(listMotorDataChild.get(listMotorDataHeader.get(7)).get(0).getItemValue());
 
         DbUtils.setOrderReportMeasurements(currentMeasurements);
     }
@@ -203,8 +204,8 @@ public class MeasurementsActivity extends BaseActivity {
         child_6_Exhaust.add(new MeasurementsItem(itemsNameArray[16], itemsUnitArray[16]));
         child_6_Exhaust.add(new MeasurementsItem(itemsNameArray[17], itemsUnitArray[17]));
 
-        List<MeasurementsItem> child_7_WorkingHours = new ArrayList<>();
-        child_7_WorkingHours.add(new MeasurementsItem(itemsNameArray[18], itemsUnitArray[18]));
+        List<MeasurementsItem> child_7_RunningHours = new ArrayList<>();
+        child_7_RunningHours.add(new MeasurementsItem(itemsNameArray[18], itemsUnitArray[18]));
 
         // Filling saved data
         final Realm realm = Realm.getDefaultInstance();
@@ -236,7 +237,7 @@ public class MeasurementsActivity extends BaseActivity {
             child_6_Exhaust.get(0).setItemValue(currentMeasurements.getExhaustGasesTemperature());
             child_6_Exhaust.get(1).setItemValue(currentMeasurements.getExhaustGasesPressure());
 
-            child_7_WorkingHours.get(0).setItemValue(currentMeasurements.getWorkingHours());
+            child_7_RunningHours.get(0).setItemValue(currentMeasurements.getRunningHours());
         }
         realm.close();
 
@@ -247,6 +248,6 @@ public class MeasurementsActivity extends BaseActivity {
         listMotorDataChild.put(listMotorDataHeader.get(4), child_4_Installation);
         listMotorDataChild.put(listMotorDataHeader.get(5), child_5_Installation);
         listMotorDataChild.put(listMotorDataHeader.get(6), child_6_Exhaust);
-        listMotorDataChild.put(listMotorDataHeader.get(7), child_7_WorkingHours);
+        listMotorDataChild.put(listMotorDataHeader.get(7), child_7_RunningHours);
     }
 }

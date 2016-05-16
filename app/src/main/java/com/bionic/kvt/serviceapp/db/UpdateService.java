@@ -4,7 +4,6 @@ package com.bionic.kvt.serviceapp.db;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.CustomTemplate;
@@ -26,8 +25,10 @@ import retrofit2.Response;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
+import static com.bionic.kvt.serviceapp.GlobalConstants.REPORTS_XML_ZIP_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
@@ -188,10 +189,26 @@ public class UpdateService extends IntentService {
             orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
             orderSync.setOrderCustomXMLReportFile(DbUtils.generateXMLReport(orderNumber, CUSTOM_XML));
             orderSync.setOrderMeasurementsXMLReportFile(DbUtils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
-            orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, GlobalConstants.JOB_RULES_XML));
+//            orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, JOB_RULES_XML));
 
-            // TODO zipFileWithXMLs
+            final String[] XMLFilesToZIP = {
+                    orderSync.getOrderDefaultXMLReportFile(),
+                    orderSync.getOrderCustomXMLReportFile(),
+                    orderSync.getOrderMeasurementsXMLReportFile(),
+                    orderSync.getOrderJobRulesXMLReportFile()
+            };
 
+            final File reportsXMLZipFile = new File(Utils.getOrderDir(orderNumber), REPORTS_XML_ZIP_FILE_NAME + orderNumber + ".zip");
+
+            // Compressing
+//            final boolean zipSuccessful = Utils.zipXMLReportFiles(XMLFilesToZIP, reportsXMLZipFile.toString());
+
+//            if (zipSuccessful) {
+//                orderSync.setZipFileWithXMLs(reportsXMLZipFile.toString());
+//            } else {
+//                orderSync.setZipFileWithXMLs(null);
+//            }
+            // TODO Remove XMLs
             orderSync.setZipFileWithXMLsSynced(false);
 
             // Setting defaultPDFReportFile

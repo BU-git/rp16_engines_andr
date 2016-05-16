@@ -3,11 +3,13 @@ package com.bionic.kvt.serviceapp.db;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+import static com.bionic.kvt.serviceapp.utils.Utils.nullStringToEmpty;
+
 public class OrderReportMeasurements extends RealmObject {
     @PrimaryKey
     private long number;
 
-    private String motorCompressionPressure; // Motor: Compression test [bar]
+    private String motorCompressionPressure = ""; // Motor: Compression test [bar]
 
     private String motorOilPressure; // Motor: Oil [bar]
     private String motorOilTemperature; // Motor: Oil [C]
@@ -32,7 +34,7 @@ public class OrderReportMeasurements extends RealmObject {
     private String exhaustGasesTemperature; // Exhaust: Exhaust gases [C]
     private String exhaustGasesPressure; // Exhaust: Exhaust gases [Mbar]
 
-    private String workingHours; // Working hours [Hours]
+    private String runningHours; // Running hours [Hours]
 
     public long getNumber() {
         return number;
@@ -47,7 +49,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorCompressionPressure(String motorCompressionPressure) {
-        this.motorCompressionPressure = motorCompressionPressure;
+        this.motorCompressionPressure = nullStringToEmpty(motorCompressionPressure);
     }
 
     public String getMotorOilPressure() {
@@ -55,7 +57,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorOilPressure(String motorOilPressure) {
-        this.motorOilPressure = motorOilPressure;
+        this.motorOilPressure = nullStringToEmpty(motorOilPressure);
     }
 
     public String getMotorOilTemperature() {
@@ -63,7 +65,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorOilTemperature(String motorOilTemperature) {
-        this.motorOilTemperature = motorOilTemperature;
+        this.motorOilTemperature = nullStringToEmpty(motorOilTemperature);
     }
 
     public String getMotorOilType() {
@@ -71,7 +73,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorOilType(String motorOilType) {
-        this.motorOilType = motorOilType;
+        this.motorOilType = nullStringToEmpty(motorOilType);
     }
 
     public String getMotorOilManufacture() {
@@ -79,7 +81,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorOilManufacture(String motorOilManufacture) {
-        this.motorOilManufacture = motorOilManufacture;
+        this.motorOilManufacture = nullStringToEmpty(motorOilManufacture);
     }
 
     public String getMotorCoolantTemperature() {
@@ -87,7 +89,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorCoolantTemperature(String motorCoolantTemperature) {
-        this.motorCoolantTemperature = motorCoolantTemperature;
+        this.motorCoolantTemperature = nullStringToEmpty(motorCoolantTemperature);
     }
 
     public String getMotorCoolantAcidity() {
@@ -95,7 +97,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorCoolantAcidity(String motorCoolantAcidity) {
-        this.motorCoolantAcidity = motorCoolantAcidity;
+        this.motorCoolantAcidity = nullStringToEmpty(motorCoolantAcidity);
     }
 
     public String getMotorCoolantFrost() {
@@ -103,7 +105,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setMotorCoolantFrost(String motorCoolantFrost) {
-        this.motorCoolantFrost = motorCoolantFrost;
+        this.motorCoolantFrost = nullStringToEmpty(motorCoolantFrost);
     }
 
     public String getInstallationEnvironmentTemperature() {
@@ -111,7 +113,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationEnvironmentTemperature(String installationEnvironmentTemperature) {
-        this.installationEnvironmentTemperature = installationEnvironmentTemperature;
+        this.installationEnvironmentTemperature = nullStringToEmpty(installationEnvironmentTemperature);
     }
 
     public String getInstallationTestVoltage() {
@@ -119,7 +121,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestVoltage(String installationTestVoltage) {
-        this.installationTestVoltage = installationTestVoltage;
+        this.installationTestVoltage = nullStringToEmpty(installationTestVoltage);
     }
 
     public String getInstallationTestAmperePhase1() {
@@ -127,7 +129,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestAmperePhase1(String installationTestAmperePhase1) {
-        this.installationTestAmperePhase1 = installationTestAmperePhase1;
+        this.installationTestAmperePhase1 = nullStringToEmpty(installationTestAmperePhase1);
     }
 
     public String getInstallationTestAmperePhase2() {
@@ -135,7 +137,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestAmperePhase2(String installationTestAmperePhase2) {
-        this.installationTestAmperePhase2 = installationTestAmperePhase2;
+        this.installationTestAmperePhase2 = nullStringToEmpty(installationTestAmperePhase2);
     }
 
     public String getInstallationTestAmperePhase3() {
@@ -143,7 +145,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestAmperePhase3(String installationTestAmperePhase3) {
-        this.installationTestAmperePhase3 = installationTestAmperePhase3;
+        this.installationTestAmperePhase3 = nullStringToEmpty(installationTestAmperePhase3);
     }
 
     public String getInstallationTestPower() {
@@ -151,7 +153,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestPower(String installationTestPower) {
-        this.installationTestPower = installationTestPower;
+        this.installationTestPower = nullStringToEmpty(installationTestPower);
     }
 
     public String getInstallationTestFrequency() {
@@ -159,7 +161,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestFrequency(String installationTestFrequency) {
-        this.installationTestFrequency = installationTestFrequency;
+        this.installationTestFrequency = nullStringToEmpty(installationTestFrequency);
     }
 
     public String getInstallationTestNoLoadFrequency() {
@@ -167,7 +169,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setInstallationTestNoLoadFrequency(String installationTestNoLoadFrequency) {
-        this.installationTestNoLoadFrequency = installationTestNoLoadFrequency;
+        this.installationTestNoLoadFrequency = nullStringToEmpty(installationTestNoLoadFrequency);
     }
 
     public String getExhaustGasesTemperature() {
@@ -175,7 +177,7 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setExhaustGasesTemperature(String exhaustGasesTemperature) {
-        this.exhaustGasesTemperature = exhaustGasesTemperature;
+        this.exhaustGasesTemperature = nullStringToEmpty(exhaustGasesTemperature);
     }
 
     public String getExhaustGasesPressure() {
@@ -183,14 +185,14 @@ public class OrderReportMeasurements extends RealmObject {
     }
 
     public void setExhaustGasesPressure(String exhaustGasesPressure) {
-        this.exhaustGasesPressure = exhaustGasesPressure;
+        this.exhaustGasesPressure = nullStringToEmpty(exhaustGasesPressure);
     }
 
-    public String getWorkingHours() {
-        return workingHours;
+    public String getRunningHours() {
+        return runningHours;
     }
 
-    public void setWorkingHours(String workingHours) {
-        this.workingHours = workingHours;
+    public void setRunningHours(String runningHours) {
+        this.runningHours = nullStringToEmpty(runningHours);
     }
 }
