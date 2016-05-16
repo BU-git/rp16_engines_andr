@@ -3,6 +3,8 @@ package com.bionic.kvt.serviceapp.db;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+import static com.bionic.kvt.serviceapp.utils.Utils.nullStringToEmpty;
+
 public class OrderReportJobRules extends RealmObject {
     @PrimaryKey
     private long number;
@@ -78,7 +80,7 @@ public class OrderReportJobRules extends RealmObject {
     }
 
     public void setInternalRemarksText(String internalRemarksText) {
-        this.internalRemarksText = internalRemarksText;
+        this.internalRemarksText = nullStringToEmpty(internalRemarksText);
     }
 
     public String getExternalRemarksText() {
@@ -86,7 +88,7 @@ public class OrderReportJobRules extends RealmObject {
     }
 
     public void setExternalRemarksText(String externalRemarksText) {
-        this.externalRemarksText = externalRemarksText;
+        this.externalRemarksText = nullStringToEmpty(externalRemarksText);
     }
 
     public boolean isRemainingWork() {
