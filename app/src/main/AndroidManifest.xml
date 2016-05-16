@@ -64,6 +64,11 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
+            android:name=".activities.LMRAImageActivity"
+            android:label="LMRA Image"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+
+        <activity
             android:name=".activities.ComponentListActivity"
             android:label="@string/title_component_list"
             android:launchMode="singleTop"
