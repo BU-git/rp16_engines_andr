@@ -18,13 +18,16 @@ public class OrderSynchronisation extends RealmObject {
     private String defaultPDFReportFile;
     private boolean defaultPDFReportFileSynced;
 
-    private RealmList<LMRAItem> listLMRAPhotos;
+//    private RealmList<LMRAPhoto> listLMRAPhotos;
+    private boolean isLMRAPhotosSynced;
 
     // Service fields
+    private String orderLMRAXMLReportFile;
     private String orderDefaultXMLReportFile;
     private String orderCustomXMLReportFile;
     private String orderMeasurementsXMLReportFile;
     private String orderJobRulesXMLReportFile;
+
 
     public long getNumber() {
         return number;
@@ -82,12 +85,31 @@ public class OrderSynchronisation extends RealmObject {
         this.defaultPDFReportFileSynced = defaultPDFReportFileSynced;
     }
 
-    public RealmList<LMRAItem> getListLMRAPhotos() {
-        return listLMRAPhotos;
+//    public RealmList<LMRAPhoto> getListLMRAPhotos() {
+//        return listLMRAPhotos;
+//    }
+//
+//
+//
+//    public void setListLMRAPhotos(RealmList<LMRAPhoto> listLMRAPhotos) {
+//        this.listLMRAPhotos = listLMRAPhotos;
+//    }
+
+
+    public boolean isLMRAPhotosSynced() {
+        return isLMRAPhotosSynced;
     }
 
-    public void setListLMRAPhotos(RealmList<LMRAItem> listLMRAPhotos) {
-        this.listLMRAPhotos = listLMRAPhotos;
+    public void setLMRAPhotosSynced(boolean LMRAPhotosSynced) {
+        isLMRAPhotosSynced = LMRAPhotosSynced;
+    }
+
+    public String getOrderLMRAXMLReportFile() {
+        return orderLMRAXMLReportFile;
+    }
+
+    public void setOrderLMRAXMLReportFile(String orderLMRAXMLReportFile) {
+        this.orderLMRAXMLReportFile = orderLMRAXMLReportFile;
     }
 
     public String getOrderDefaultXMLReportFile() {
@@ -132,7 +154,7 @@ public class OrderSynchronisation extends RealmObject {
         sb.append(", zipFileWithXMLsSynced=").append(zipFileWithXMLsSynced);
         sb.append(", defaultPDFReportFile='").append(defaultPDFReportFile).append('\'');
         sb.append(", defaultPDFReportFileSynced=").append(defaultPDFReportFileSynced);
-        sb.append(", listLMRAPhotos=").append(listLMRAPhotos);
+//        sb.append(", listLMRAPhotos=").append(listLMRAPhotos);
         sb.append(", orderDefaultXMLReportFile='").append(orderDefaultXMLReportFile).append('\'');
         sb.append(", orderCustomXMLReportFile='").append(orderCustomXMLReportFile).append('\'');
         sb.append(", orderMeasurementsXMLReportFile='").append(orderMeasurementsXMLReportFile).append('\'');

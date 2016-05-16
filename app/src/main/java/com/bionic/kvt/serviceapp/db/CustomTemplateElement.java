@@ -4,6 +4,8 @@ import com.bionic.kvt.serviceapp.GlobalConstants;
 
 import io.realm.RealmObject;
 
+import static com.bionic.kvt.serviceapp.utils.Utils.nullStringToEmpty;
+
 public class CustomTemplateElement extends RealmObject {
 
     @GlobalConstants.CustomElement
@@ -25,7 +27,7 @@ public class CustomTemplateElement extends RealmObject {
     }
 
     public void setElementText(String elementText) {
-        this.elementText = elementText;
+        this.elementText = nullStringToEmpty(elementText);
     }
 
     public String getElementValue() {
@@ -33,6 +35,6 @@ public class CustomTemplateElement extends RealmObject {
     }
 
     public void setElementValue(String elementValue) {
-        this.elementValue = elementValue;
+        this.elementValue = nullStringToEmpty(elementValue);
     }
 }

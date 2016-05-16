@@ -3,18 +3,93 @@ package com.bionic.kvt.serviceapp.utils;
 import android.support.annotation.Nullable;
 import android.util.Xml;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.db.CustomTemplate;
+import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.LMRAItem;
+import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
 
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class XMLGenerator {
+
+    @Nullable
+    public static String getXMLFromLMRA(final long orderNumber) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+
+            final RealmResults<LMRAItem> allLMRAItemsInDb =
+                    realm.where(LMRAItem.class).equalTo("number", orderNumber).findAll();
+            if (allLMRAItemsInDb.size() == 0) return null;
+            final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
+
+            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] LMRA data.");
+
+            XmlSerializer serializer = Xml.newSerializer();
+            StringWriter writer = new StringWriter();
+            try {
+                serializer.setOutput(writer);
+                serializer.startDocument("UTF-8", true);
+
+                serializer.startTag("", "Report");
+                serializer.attribute("", "Type", "ORDER_XML_LMRA");
+
+                serializer.startTag("", "Order");
+                serializer.attribute("", "Number", String.valueOf(orderNumber));
+                serializer.endTag("", "Order");
+
+                serializer.startTag("", "LMRAItems");
+                for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
+                    serializer.startTag("", "LMRAItem");
+                    serializer.attribute("", "ID", String.valueOf(lmraItem.getLmraId()));
+
+                    serializer.startTag("", "Name");
+                    serializer.text(String.valueOf(lmraItem.getLmraName()));
+                    serializer.endTag("", "Name");
+
+                    serializer.startTag("", "Description");
+                    serializer.text(lmraItem.getLmraDescription());
+                    serializer.endTag("", "Description");
+
+                    final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                            realm.where(LMRAPhoto.class)
+                                    .equalTo("number", orderNumber)
+                                    .equalTo("lmraId", lmraItem.getLmraId())
+                                    .findAll();
+
+                    if (listLMRAPhotosInBD.size() > 0) {
+                        serializer.startTag("", "LMRAPhotoItems");
+                        for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
+                            serializer.startTag("", "LMRAPhotoItem");
+                            serializer.text((new File(lmraPhoto.getLmraPhotoFile())).getName());
+                            serializer.endTag("", "LMRAPhotoItem");
+                        }
+                        serializer.endTag("", "LMRAPhotoItems");
+                    }
+
+                    serializer.endTag("", "LMRAItem");
+                }
+
+                serializer.endTag("", "LMRAItems");
+                serializer.endTag("", "Report");
+
+                serializer.endDocument();
+                return writer.toString();
+            } catch (IOException e) {
+                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+            }
+        }
+        return null;
+    }
 
     @Nullable
     public static String getXMLFromDefaultTemplate(final long orderNumber) {
@@ -23,6 +98,72 @@ public class XMLGenerator {
 
     @Nullable
     public static String getXMLFromCustomTemplate(final long orderNumber) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final CustomTemplate customTemplate =
+                    realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
+            if (customTemplate == null) return null;
+
+            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] custom template.");
+
+            XmlSerializer serializer = Xml.newSerializer();
+            StringWriter writer = new StringWriter();
+            try {
+                serializer.setOutput(writer);
+                serializer.startDocument("UTF-8", true);
+
+                serializer.startTag("", "Report");
+                serializer.attribute("", "Type", "ORDER_XML_CUSTOM_TEMPLATE");
+
+                serializer.startTag("", "Order");
+                serializer.attribute("", "Number", String.valueOf(orderNumber));
+                serializer.endTag("", "Order");
+
+                serializer.startTag("", "CustomTemplateName");
+                serializer.text(customTemplate.getCustomTemplateName());
+                serializer.endTag("", "CustomTemplateName");
+
+                serializer.startTag("", "CustomTemplateElements");
+
+                for (CustomTemplateElement customTemplateElement : customTemplate.getCustomTemplateElements()) {
+                    switch (customTemplateElement.getElementType()) {
+                        case GlobalConstants.CUSTOM_ELEMENT_TEXT_FIELD:
+                            serializer.startTag("", "CustomTemplateElement");
+                            serializer.attribute("", "Type", "CUSTOM_ELEMENT_TEXT_FIELD");
+                            serializer.attribute("", "Text", customTemplateElement.getElementText());
+                            serializer.text(customTemplateElement.getElementValue());
+                            serializer.endTag("", "CustomTemplateName");
+                            break;
+
+                        case GlobalConstants.CUSTOM_ELEMENT_CHECK_BOX:
+                            serializer.startTag("", "CustomTemplateElement");
+                            serializer.attribute("", "Type", "CUSTOM_ELEMENT_CHECK_BOX");
+                            serializer.attribute("", "Text", customTemplateElement.getElementText());
+                            serializer.text(customTemplateElement.getElementValue());
+                            serializer.endTag("", "CustomTemplateName");
+                            break;
+
+                        case GlobalConstants.CUSTOM_ELEMENT_TEXT_AREA:
+                            serializer.startTag("", "CustomTemplateElement");
+                            serializer.attribute("", "Type", "CUSTOM_ELEMENT_TEXT_AREA");
+                            serializer.attribute("", "Text", customTemplateElement.getElementText());
+                            serializer.text(customTemplateElement.getElementValue());
+                            serializer.endTag("", "CustomTemplateName");
+                            break;
+
+                        case GlobalConstants.CUSTOM_ELEMENT_LABEL:
+                            //NOOP
+                            break;
+                    }
+                }
+                serializer.endTag("", "CustomTemplateElements");
+                serializer.endTag("", "Report");
+
+                serializer.endDocument();
+                return writer.toString();
+            } catch (IOException e) {
+                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+            }
+        }
         return null;
     }
 

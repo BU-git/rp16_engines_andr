@@ -45,7 +45,6 @@ public class LMRAItem extends RealmObject {
         this.lmraDescription = lmraDescription;
     }
 
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("LMRAItem{");

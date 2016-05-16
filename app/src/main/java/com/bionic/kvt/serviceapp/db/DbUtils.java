@@ -29,6 +29,8 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_XML_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
@@ -752,6 +754,10 @@ public class DbUtils {
         File XMLFile = null;
 
         switch (XMLReportType) {
+            case LMRA_XML:
+                XMLData = XMLGenerator.getXMLFromLMRA(orderNumber);
+                XMLFile = new File(Utils.getOrderDir(orderNumber), LMRA_XML_FILE_NAME + orderNumber + ".xml");
+                break;
             case DEFAULT_XML:
                 XMLData = XMLGenerator.getXMLFromDefaultTemplate(orderNumber);
                 XMLFile = new File(Utils.getOrderDir(orderNumber), DEFAULT_XML_FILE_NAME + orderNumber + ".xml");
@@ -768,6 +774,7 @@ public class DbUtils {
                 XMLData = XMLGenerator.getXMLFromJobRules(orderNumber);
                 XMLFile = new File(Utils.getOrderDir(orderNumber), JOB_RULES_XML_FILE_NAME + orderNumber + ".xml");
                 break;
+
         }
 
         if (XMLData == null) return null;

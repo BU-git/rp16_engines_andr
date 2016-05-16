@@ -5,6 +5,8 @@ import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+import static com.bionic.kvt.serviceapp.utils.Utils.nullStringToEmpty;
+
 public class CustomTemplate extends RealmObject {
 
     private long number; // Order number
@@ -35,7 +37,7 @@ public class CustomTemplate extends RealmObject {
     }
 
     public void setCustomTemplateName(String customTemplateName) {
-        this.customTemplateName = customTemplateName;
+        this.customTemplateName = nullStringToEmpty(customTemplateName);
     }
 
     public RealmList<CustomTemplateElement> getCustomTemplateElements() {

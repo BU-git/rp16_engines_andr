@@ -37,18 +37,6 @@ public interface GlobalConstants {
 
     String UPDATE_SERVICE_MSG = "UPDATE_SERVICE_MSG";
 
-//        @IntDef({FILE_TYPE_ORDER_PDF_REPORT, FILE_TYPE_ORDER_XML_DEFAULT_REPORT, FILE_TYPE_ORDER_XML_CUSTOM_REPORT, FILE_TYPE_ORDER_XML_MEASUREMENTS, FILE_TYPE_ORDER_XML_JOB_RULES})
-//    @Retention(RetentionPolicy.SOURCE)
-//    @interface UploadFileType {
-//    }
-//
-//    int FILE_TYPE_ORDER_PDF_REPORT = 1;
-//    int FILE_TYPE_ORDER_XML_DEFAULT_REPORT = 2;
-//    int FILE_TYPE_ORDER_XML_CUSTOM_REPORT = 3;
-//    int FILE_TYPE_ORDER_XML_MEASUREMENTS = 4;
-//    int FILE_TYPE_ORDER_XML_JOB_RULES = 5;
-
-
     @IntDef({UPDATE_ORDERS, PREPARE_FILES, UPLOAD_FILES})
     @Retention(RetentionPolicy.SOURCE)
     @interface ServiceMessage {
@@ -59,15 +47,16 @@ public interface GlobalConstants {
     int UPLOAD_FILES = 3;
 
 
-    @IntDef({DEFAULT_XML, CUSTOM_XML, MEASUREMENTS_XML, JOB_RULES_XML})
+    @IntDef({LMRA_XML, DEFAULT_XML, CUSTOM_XML, MEASUREMENTS_XML, JOB_RULES_XML})
     @Retention(RetentionPolicy.SOURCE)
     @interface XMLReportType {
     }
 
-    int DEFAULT_XML = 1;
-    int CUSTOM_XML = 2;
-    int MEASUREMENTS_XML = 3;
-    int JOB_RULES_XML = 4;
+    int LMRA_XML = 1;
+    int DEFAULT_XML = 2;
+    int CUSTOM_XML = 3;
+    int MEASUREMENTS_XML = 4;
+    int JOB_RULES_XML = 5;
 
     int PASSWORD_HASH_ITERATIONS = 3;
 
@@ -80,6 +69,7 @@ public interface GlobalConstants {
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
     String LMRA_PHOTO_FILE_NAME = "LMRAPhoto_";
 
+    String LMRA_XML_FILE_NAME = "ReportLMRA_";
     String DEFAULT_XML_FILE_NAME = "ReportDefault_";
     String CUSTOM_XML_FILE_NAME = "ReportCustom_";
     String MEASUREMENTS_XML_FILE_NAME = "ReportMeasurements_";

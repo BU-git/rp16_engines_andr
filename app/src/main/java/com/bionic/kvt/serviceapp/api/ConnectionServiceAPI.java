@@ -51,7 +51,7 @@ public interface ConnectionServiceAPI {
 
     // Upload file for order {number}
     // Fields in MultipartBody:
-    // {type} - <String> type of file [DEFAULT_PDF_REPORT, CUSTOM_PDF_REPORT, LMRA_PHOTO, XML_ZIP]
+    // {type} - <String> type of file [DEFAULT_PDF_REPORT, CUSTOM_PDF_REPORT, LMRA_PHOTO, XML_ZIP_REPORT]
     // {checksum} - <String> md5 sum for file
     // {file} - <String> file name and <image/png, application/pdf, application/octet-stream> file content
     @POST("upload/{number}")

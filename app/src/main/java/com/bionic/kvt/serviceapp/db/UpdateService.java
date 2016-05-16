@@ -26,6 +26,7 @@ import retrofit2.Response;
 import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.REPORTS_XML_ZIP_FILE_NAME;
@@ -186,12 +187,14 @@ public class UpdateService extends IntentService {
             orderSync.setNumber(orderNumber);
 
             // Setting zipFileWithXMLs
+            orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
             orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
             orderSync.setOrderCustomXMLReportFile(DbUtils.generateXMLReport(orderNumber, CUSTOM_XML));
             orderSync.setOrderMeasurementsXMLReportFile(DbUtils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
             orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, JOB_RULES_XML));
 
             final String[] XMLFilesToZIP = {
+                    orderSync.getOrderLMRAXMLReportFile(),
                     orderSync.getOrderDefaultXMLReportFile(),
                     orderSync.getOrderCustomXMLReportFile(),
                     orderSync.getOrderMeasurementsXMLReportFile(),
@@ -201,23 +204,19 @@ public class UpdateService extends IntentService {
             final File reportsXMLZipFile = new File(Utils.getOrderDir(orderNumber), REPORTS_XML_ZIP_FILE_NAME + orderNumber + ".zip");
 
             // Compressing
-//            final boolean zipSuccessful = Utils.zipXMLReportFiles(XMLFilesToZIP, reportsXMLZipFile.toString());
+            final boolean zipSuccessful = Utils.zipXMLReportFiles(XMLFilesToZIP, reportsXMLZipFile.toString());
 
-//            if (zipSuccessful) {
-//                orderSync.setZipFileWithXMLs(reportsXMLZipFile.toString());
-//            } else {
-//                orderSync.setZipFileWithXMLs(null);
-//            }
+            if (zipSuccessful) {
+                orderSync.setZipFileWithXMLs(reportsXMLZipFile.toString());
+            } else {
+                orderSync.setZipFileWithXMLs(null);
+            }
             // TODO Remove XMLs
             orderSync.setZipFileWithXMLsSynced(false);
 
             // Setting defaultPDFReportFile
             orderSync.setDefaultPDFReportFile(Utils.getPDFReportFileName(orderNumber, false).toString());
             orderSync.setDefaultPDFReportFileSynced(false);
-
-            // Setting listLMRAPhotos
-            // TODO LMRA LIST
-
 
             orderSync.setReadyForSync(true);
 
@@ -233,7 +232,7 @@ public class UpdateService extends IntentService {
 
     private void uploadOrderFiles() {
 
-        final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
         final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
         final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
 
@@ -247,11 +246,45 @@ public class UpdateService extends IntentService {
         for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
             serviceLog(orderToSync.toString());
 
+            // ZIP with XMLs
             if (orderToSync.getZipFileWithXMLs() != null &&
                     !orderToSync.isZipFileWithXMLsSynced()) {
-                // TODO Upload file
+
+                final File fileName = new File(orderToSync.getZipFileWithXMLs());
+                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_OCTET_STREAM, fileName);
+                final String checksum = Utils.getFileMD5Sum(fileName);
+
+                final MultipartBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("type", "XML_ZIP_REPORT")
+                        .addFormDataPart("checksum", checksum)
+                        .addFormDataPart("file", fileName.getName(), requestFile)
+                        .build();
+
+                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
+                serviceLog("UPLOAD REQUEST: " + call.request());
+
+                final Response<ResponseBody> uploadFileResponse;
+                try {
+                    uploadFileResponse = call.execute();
+                } catch (IOException e) {
+                    serviceLog("Upload fail: " + e.toString());
+                    continue;
+                }
+
+                if (!uploadFileResponse.isSuccessful()) {
+                    serviceLog("Upload fail: " + uploadFileResponse.code());
+                    continue;
+                }
+
+                serviceLog("Upload successful: " + uploadFileResponse.code());
+
+                realm.beginTransaction();
+                orderToSync.setZipFileWithXMLsSynced(true);
+                realm.commitTransaction();
             }
 
+            // PDF Default report
             if (orderToSync.getDefaultPDFReportFile() != null &&
                     !orderToSync.isDefaultPDFReportFileSynced()) {
 
@@ -290,12 +323,72 @@ public class UpdateService extends IntentService {
 
             }
 
-            if (orderToSync.getListLMRAPhotos() != null
-                    && orderToSync.getListLMRAPhotos().size() >= 0) {
-                // TODO Upload files
+            // LMRA Photos
+            final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                    realm.where(LMRAPhoto.class)
+                            .equalTo("number", orderToSync.getNumber())
+                            .equalTo("lmraPhotoFileSynced", false)
+                            .findAll();
+            for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
+                final File fileName = new File(lmraPhoto.getLmraPhotoFile());
+                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_JPEG, fileName);
+                final String checksum = Utils.getFileMD5Sum(fileName);
+
+                final MultipartBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("type", "LMRA_PHOTO")
+                        .addFormDataPart("checksum", checksum)
+                        .addFormDataPart("file", fileName.getName(), requestFile)
+                        .build();
+
+                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
+                serviceLog("UPLOAD REQUEST: " + call.request());
+
+                final Response<ResponseBody> uploadFileResponse;
+                try {
+                    uploadFileResponse = call.execute();
+                } catch (IOException e) {
+                    serviceLog("Upload fail: " + e.toString());
+                    continue;
+                }
+
+                if (!uploadFileResponse.isSuccessful()) {
+                    serviceLog("Upload fail: " + uploadFileResponse.code());
+                    continue;
+                }
+
+                serviceLog("Upload successful: " + uploadFileResponse.code());
+
+                realm.beginTransaction();
+                lmraPhoto.setLmraPhotoFileSynced(true);
+                realm.commitTransaction();
+            }
+
+            // Check if all photos synced
+            final RealmResults<LMRAPhoto> listLMRAPhotosNotSyncedInBD =
+                    realm.where(LMRAPhoto.class)
+                            .equalTo("number", orderToSync.getNumber())
+                            .equalTo("lmraPhotoFileSynced", false)
+                            .findAll();
+            if (listLMRAPhotosNotSyncedInBD.size() == 0) {
+                realm.beginTransaction();
+                orderToSync.setLMRAPhotosSynced(true);
+                realm.commitTransaction();
+            }
+
+
+            // Checking all statuses
+            if (orderToSync.isZipFileWithXMLsSynced()
+                    && orderToSync.isDefaultPDFReportFileSynced()
+                    && orderToSync.isLMRAPhotosSynced()) {
+                // All done
+                realm.beginTransaction();
+                orderToSync.setSyncComplete(true);
+                realm.commitTransaction();
             }
 
         }
+
 
         realm.close();
     }

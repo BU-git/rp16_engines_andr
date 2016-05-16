@@ -61,7 +61,7 @@ public class Utils {
     private static final String TAG = Utils.class.getName();
 
     public static String nullStringToEmpty(@Nullable final String inString) {
-        return (inString == null) ? "" : inString;
+        return (inString == null) ? "" : inString.trim();
     }
 
     public static boolean isEmailValid(String email) {
