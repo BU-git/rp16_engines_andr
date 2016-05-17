@@ -181,16 +181,17 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             String pdfInstallationAddress = currentOrder.getInstallation().getAddress() + "\n";
             String pdfInstallationTown = currentOrder.getInstallation().getTown() + "\n";
 
-            String pdfWorkingHours = " ";
+            String pdfRunningHours = " ";
             final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
                     .equalTo("number", orderNumber).findFirst();
             if (currentMeasurements != null)
-                pdfWorkingHours = currentMeasurements.getRunningHours();
+                pdfRunningHours = currentMeasurements.getRunningHours();
 
             String pdfTask = currentOrder.getTasks().first().getLtxa1();
 
+            String pdfScore = String.valueOf(currentOrder.getScore());
+
             String remainingWork = "No";
-            String operationText = "";
             String externalRemarksText = "";
             final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
                     .equalTo("number", orderNumber).findFirst();
@@ -227,7 +228,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                         pdfInstallation +
                         pdfInstallationAddress +
                         pdfInstallationTown +
-                        pdfWorkingHours,
+                        pdfRunningHours,
                         font
                 );
                 x = 425;
@@ -236,28 +237,28 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText.go();
 
                 Phrase orderText3 = new Phrase(pdfTask, font);
-                x = 125;
+                x = 150;
                 y = 495;
                 columnText.setSimpleColumn(orderText3, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
-                Phrase orderText4 = new Phrase(operationText, font);
-                x = 60;
-                y = 325;
+                Phrase orderText4 = new Phrase(pdfScore, font);
+                x = 150;
+                y = 477;
                 ColumnText columnText1 = new ColumnText(contentByte);
-                columnText1.setSimpleColumn(orderText4, x, y, x + 490, y + 150, 15f, Element.ALIGN_TOP);
+                columnText1.setSimpleColumn(orderText4, x, y, x + 490, y + 25, 21.8f, Element.ALIGN_TOP);
                 columnText1.go();
 
                 Phrase orderText5 = new Phrase(remainingWork, font);
                 x = 150;
-                y = 293;
+                y = 459;
                 ColumnText columnText2 = new ColumnText(contentByte);
                 columnText2.setSimpleColumn(orderText5, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText2.go();
 
                 Phrase orderText6 = new Phrase(externalRemarksText, font);
                 x = 60;
-                y = 178;
+                y = 340;
                 ColumnText columnText3 = new ColumnText(contentByte);
                 columnText3.setSimpleColumn(orderText6, x, y, x + 490, y + 100, 15f, Element.ALIGN_LEFT);
                 columnText3.go();

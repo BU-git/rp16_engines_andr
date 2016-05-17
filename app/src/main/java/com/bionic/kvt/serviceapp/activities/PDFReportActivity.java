@@ -228,23 +228,23 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
                 Phrase orderText7 = new Phrase(engineerName, font);
                 int x = 355;
-                int y = 58;
+                int y = 56;
                 columnText.setSimpleColumn(orderText7, x, y, x + 150, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
                 Phrase orderText8 = new Phrase(clientName, font);
                 x = 120;
-                y = 58;
+                y = 56;
                 columnText.setSimpleColumn(orderText8, x, y, x + 150, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
 
                 Image signatureEngineer = Image.getInstance(Session.getByteArrayEngineerSignature());
-                signatureEngineer.setAbsolutePosition(325f, 80f);
+                signatureEngineer.setAbsolutePosition(325f, 79f);
                 signatureEngineer.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureEngineer);
 
                 Image signatureClient = Image.getInstance(Session.getByteArrayClientSignature());
-                signatureClient.setAbsolutePosition(102f, 80f);
+                signatureClient.setAbsolutePosition(102f, 79f);
                 signatureClient.scaleAbsolute(192, 74);
                 contentByte.addImage(signatureClient);
 

@@ -17,9 +17,10 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
-import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.google.gson.JsonArray;
@@ -65,8 +66,10 @@ public class ComponentListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         DbUtils.saveDefectStateListToDB(defectStateList);
-        Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
+        DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(partMap, defectStateList));
         Log.d(TAG, "Global score: " + CalculationHelper.INSTANCE.getGeneralScore(partMap, defectStateList));
+
+        Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
