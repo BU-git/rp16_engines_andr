@@ -12,15 +12,12 @@ import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
-import com.google.gson.JsonObject;
 
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -112,41 +109,27 @@ public class XMLGenerator {
             serializer.attribute("", "Number", String.valueOf(orderNumber));
             serializer.endTag("", "Order");
 
-            serializer.startTag("", "Components");
+            serializer.startTag("", "Parts");
 
             for (String firstLevel : Session.getPartMap().keySet()) {
-                serializer.startTag("", firstLevel);
+                serializer.startTag("", "Part");
+                serializer.attribute("", "Name", firstLevel);
 
                 for (String secondLevel : Session.getPartMap().get(firstLevel).keySet()) {
-                    serializer.startTag("", secondLevel);
+                    serializer.startTag("", "Element");
+                    serializer.attribute("", "Name", secondLevel);
 
-                    serializer.endTag("", secondLevel);
+
+                    serializer.endTag("", "Element");
                 }
-
-                serializer.endTag("", firstLevel);
+                serializer.endTag("", "Part");
             }
 
-//            for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
-//                serializer.startTag("", "LMRAItem");
-//                serializer.attribute("", "ID", String.valueOf(lmraItem.getLmraId()));
-//
-//                serializer.startTag("", "Name");
-//                serializer.text(String.valueOf(lmraItem.getLmraName()));
-//                serializer.endTag("", "Name");
-//
-//                serializer.startTag("", "Description");
-//                serializer.text(lmraItem.getLmraDescription());
-//                serializer.endTag("", "Description");
-//
-//
-//                serializer.endTag("", "LMRAItem");
-//            }
-
-            serializer.endTag("", "Components");
+            serializer.endTag("", "Parts");
             serializer.endTag("", "Report");
 
             serializer.endDocument();
-            Log.e("XXX",  writer.toString());
+            Log.e("XXX", writer.toString());
             return writer.toString();
         } catch (IOException e) {
             Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());

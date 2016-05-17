@@ -194,7 +194,7 @@ public class OrderPageActivity extends BaseActivity implements
 
 
         //Generating PartMap for DbUtils.generateXMLReport(orderNumber, DEFAULT_XML)
-//        runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
+        runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
 
 
     }
