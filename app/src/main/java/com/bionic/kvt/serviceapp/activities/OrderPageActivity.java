@@ -23,6 +23,7 @@ import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
 import com.bionic.kvt.serviceapp.db.UpdateService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
@@ -57,6 +59,8 @@ public class OrderPageActivity extends BaseActivity implements
     private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationListener;
     private RealmResults<OrderSynchronisation> ordersToSynchroniseInDB;
 
+    private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationCompleteListener;
+    private RealmResults<OrderSynchronisation> ordersSynchroniseCompleteInDB;
 
     @BindView(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -167,6 +171,22 @@ public class OrderPageActivity extends BaseActivity implements
         ordersToSynchroniseInDB.addChangeListener(ordersSynchronisationListener);
 
 
+        // Creating OrderSynchronisation SyncComplete callback
+        ordersSynchronisationCompleteListener = new RealmChangeListener<RealmResults<OrderSynchronisation>>() {
+            @Override
+            public void onChange(RealmResults<OrderSynchronisation> orders) {
+                for (OrderSynchronisation order : orders) {
+                    DbUtils.setOrderStatus(order.getNumber(), ORDER_STATUS_COMPLETE_UPLOADED);
+                    Utils.updateOrderStatusOnServer(order.getNumber());
+                }
+            }
+        };
+
+        ordersSynchroniseCompleteInDB = monitorRealm.where(OrderSynchronisation.class)
+                .equalTo("isSyncComplete", true).findAll();
+        ordersSynchroniseCompleteInDB.addChangeListener(ordersSynchronisationCompleteListener);
+
+
         runIntent(PREPARE_FILES);
         runIntent(UPLOAD_FILES);
     }
@@ -234,6 +254,7 @@ public class OrderPageActivity extends BaseActivity implements
         super.onDestroy();
         ordersCompleteInDB.removeChangeListener(ordersCompleteListener);
         ordersToSynchroniseInDB.removeChangeListener(ordersSynchronisationListener);
+        ordersSynchroniseCompleteInDB.removeChangeListener(ordersSynchronisationCompleteListener);
         monitorRealm.close();
     }
 

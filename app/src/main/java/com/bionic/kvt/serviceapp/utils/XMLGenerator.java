@@ -131,7 +131,7 @@ public class XMLGenerator {
                             serializer.attribute("", "Type", "CUSTOM_ELEMENT_TEXT_FIELD");
                             serializer.attribute("", "Text", customTemplateElement.getElementText());
                             serializer.text(customTemplateElement.getElementValue());
-                            serializer.endTag("", "CustomTemplateName");
+                            serializer.endTag("", "CustomTemplateElement");
                             break;
 
                         case GlobalConstants.CUSTOM_ELEMENT_CHECK_BOX:
@@ -139,7 +139,7 @@ public class XMLGenerator {
                             serializer.attribute("", "Type", "CUSTOM_ELEMENT_CHECK_BOX");
                             serializer.attribute("", "Text", customTemplateElement.getElementText());
                             serializer.text(customTemplateElement.getElementValue());
-                            serializer.endTag("", "CustomTemplateName");
+                            serializer.endTag("", "CustomTemplateElement");
                             break;
 
                         case GlobalConstants.CUSTOM_ELEMENT_TEXT_AREA:
@@ -147,7 +147,7 @@ public class XMLGenerator {
                             serializer.attribute("", "Type", "CUSTOM_ELEMENT_TEXT_AREA");
                             serializer.attribute("", "Text", customTemplateElement.getElementText());
                             serializer.text(customTemplateElement.getElementValue());
-                            serializer.endTag("", "CustomTemplateName");
+                            serializer.endTag("", "CustomTemplateElement");
                             break;
 
                         case GlobalConstants.CUSTOM_ELEMENT_LABEL:
