@@ -102,7 +102,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
 
         pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
-        if (DbUtils.getOrderStatus(orderNumber) == ORDER_STATUS_COMPLETE) {
+        if (DbUtils.getOrderStatus(orderNumber) >= ORDER_STATUS_COMPLETE) {
             reportBottomLayout.setVisibility(View.GONE);
             if (pdfReportFile.exists()) { // We have report.
                 sendButton.setEnabled(true);

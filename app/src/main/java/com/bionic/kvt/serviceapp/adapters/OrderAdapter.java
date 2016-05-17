@@ -13,6 +13,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
+import java.io.File;
 import java.util.List;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
@@ -138,8 +139,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 6: // Column PDF Button
                 textCell.setVisibility(View.GONE);
                 buttonCell.setVisibility(View.VISIBLE);
-                if (orderOverviewList.get(row).getOrderStatus() != ORDER_STATUS_COMPLETE)
+                File pdfReportFile = Utils.getPDFReportFileName(orderOverviewList.get(row).getNumber(), false);
+                if (orderOverviewList.get(row).getOrderStatus() >= ORDER_STATUS_COMPLETE
+                        && pdfReportFile.exists()) {
+                    buttonCell.setEnabled(true);
+                }
+                else {
                     buttonCell.setEnabled(false);
+                }
+
                 break;
         }
 
