@@ -12,6 +12,7 @@ import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -115,18 +116,22 @@ public class XMLGenerator {
 
             serializer.startTag("", "Parts");
 
-            for (String firstLevel : Session.getPartMap().keySet()) {
+            for (String part : Session.getPartMap().keySet()) {
                 serializer.startTag("", "Part");
-                serializer.attribute("", "Name", firstLevel);
-                Set<Map.Entry<String, JsonObject>> entrySet = Session.getPartMap().get(firstLevel).entrySet();
+                serializer.attribute("", "Name", part);
+                Set<Map.Entry<String, JsonObject>> entrySet = Session.getPartMap().get(part).entrySet();
                 //top level
-                for (Map.Entry<String, JsonObject> secondLevel : entrySet) {
+                for (Map.Entry<String, JsonObject> element : entrySet) {
                     serializer.startTag("", "Element");
-                    serializer.attribute("", "Name", secondLevel.getKey());
+                    serializer.attribute("", "Name", element.getKey());
                     //Installation general
-                    Set<Map.Entry<String, JsonElement>> thirdLevel = secondLevel.getValue().entrySet();
-                    for (Map.Entry<String, JsonElement> child : thirdLevel) {
-                        //Defecten - child.getKey();
+                    Set<Map.Entry<String, JsonElement>> thirdLevel = element.getValue().entrySet();
+                    for (Map.Entry<String, JsonElement> problem : thirdLevel) {
+                        //Defecten
+                        serializer.startTag("", "Problem");
+                        serializer.attribute("", "Name", problem.getKey());
+
+                        serializer.endTag("", "Problem");
                     }
                     serializer.endTag("", "Element");
                 }
