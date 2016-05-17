@@ -34,6 +34,7 @@ public class Order extends RealmObject {
     // Order processing fields
     private Date maintenanceStartTime;
     private Date maintenanceEndTime;
+    private int score;
 
     // Service fields
     private String employeeEmail; // Copy of employee.email for search optimisation
@@ -196,5 +197,13 @@ public class Order extends RealmObject {
 
     public void setCustomTemplateID(long customTemplateID) {
         this.customTemplateID = customTemplateID;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

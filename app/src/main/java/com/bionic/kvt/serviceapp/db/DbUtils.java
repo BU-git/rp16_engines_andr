@@ -600,10 +600,21 @@ public class DbUtils {
         realm.close();
     }
 
+    public static void saveScoreToDB(final long orderNumber, final int score) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            if (order == null) return;
+
+            realm.beginTransaction();
+            order.setScore(score);
+            realm.commitTransaction();
+        }
+    }
+
     public static boolean isUserLoginValid(final String email, final String password) {
         Session.addToSessionLog("Validating user: " + email);
 
-        Realm realm = Realm.getDefaultInstance();
+        final Realm realm = Realm.getDefaultInstance();
         final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
         if (usersInDB.size() != 1) {
             realm.close();
