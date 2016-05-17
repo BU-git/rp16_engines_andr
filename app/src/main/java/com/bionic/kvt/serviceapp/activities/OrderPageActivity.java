@@ -31,6 +31,8 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
@@ -189,6 +191,12 @@ public class OrderPageActivity extends BaseActivity implements
 
         runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
         runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
+
+
+        //Generating PartMap for DbUtils.generateXMLReport(orderNumber, DEFAULT_XML)
+//        runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
+
+
     }
 
     private Runnable orderUpdateTask = new Runnable() {

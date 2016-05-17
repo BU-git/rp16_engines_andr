@@ -13,6 +13,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.bionic.kvt.serviceapp.utils.XMLGenerator;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
@@ -124,6 +126,8 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         realm.close();
+
+//        XMLGenerator.getXMLFromDefaultTemplate(Session.getCurrentOrder());
     }
 
 
