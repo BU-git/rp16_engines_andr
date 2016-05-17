@@ -1,6 +1,5 @@
 package com.bionic.kvt.serviceapp.db;
 
-import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -18,7 +17,7 @@ public class OrderSynchronisation extends RealmObject {
     private String defaultPDFReportFile;
     private boolean defaultPDFReportFileSynced;
 
-//    private RealmList<LMRAPhoto> listLMRAPhotos;
+    //    private RealmList<LMRAPhoto> listLMRAPhotos;
     private boolean isLMRAPhotosSynced;
 
     // Service fields

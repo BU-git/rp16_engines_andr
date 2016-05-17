@@ -51,13 +51,12 @@ public interface ConnectionServiceAPI {
 
     // Upload file for order {number}
     // Fields in MultipartBody:
-    // {type} - <String> type of file [DEFAULT_PDF_REPORT, CUSTOM_PDF_REPORT, LMRA_PHOTO, XML_ZIP_REPORT]
+    // {type} - <String> type of file [DEFAULT_PDF_REPORT, LMRA_PHOTO, XML_ZIP_REPORT]
     // {checksum} - <String> md5 sum for file
     // {file} - <String> file name and <image/png, application/pdf, application/octet-stream> file content
     @POST("upload/{number}")
     Call<ResponseBody> uploadFile(@Path("number") long number,
                                   @Body MultipartBody requestBody);
-
 
 
     // Request user password reset

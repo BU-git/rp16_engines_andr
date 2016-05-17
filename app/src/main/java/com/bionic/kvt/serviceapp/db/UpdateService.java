@@ -36,6 +36,10 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 
 
 public class UpdateService extends IntentService {
+    private static final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
+    private static final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
+    private static final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
+
     private String currentTask = "";
 
     public UpdateService() {
@@ -230,167 +234,116 @@ public class UpdateService extends IntentService {
         realm.close();
     }
 
+    private boolean uploadFile(final String fileToUpload, final MediaType mediaType, final String fileType, final long orderNumber) {
+        final File fileName = new File(fileToUpload);
+        final RequestBody requestFile = RequestBody.create(mediaType, fileName);
+        final String checksum = Utils.getFileMD5Sum(fileName);
+
+        final MultipartBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("type", fileType)
+                .addFormDataPart("checksum", checksum)
+                .addFormDataPart("file", fileName.getName(), requestFile)
+                .build();
+
+        final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderNumber, requestBody);
+        serviceLog("UPLOAD REQUEST: " + call.request());
+
+        final Response<ResponseBody> uploadFileResponse;
+        try {
+            uploadFileResponse = call.execute();
+        } catch (IOException e) {
+            serviceLog("Upload fail: " + e.toString());
+            return false;
+        }
+
+        if (!uploadFileResponse.isSuccessful()) {
+            serviceLog("Upload fail: " + uploadFileResponse.code());
+            return false;
+        }
+
+        serviceLog("Upload successful: " + uploadFileResponse.code());
+        return true;
+    }
+
     private void uploadOrderFiles() {
-
-        final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
-        final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
-        final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
-
         serviceLog("Service started.");
+        boolean uploadResult;
 
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        RealmResults<OrderSynchronisation> currentOrderToSyncList =
-                realm.where(OrderSynchronisation.class).equalTo("isReadyForSync", true).findAll();
+            RealmResults<OrderSynchronisation> currentOrderToSyncList =
+                    realm.where(OrderSynchronisation.class).equalTo("isReadyForSync", true).findAll();
 
-        for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
-            serviceLog(orderToSync.toString());
+            for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
+                serviceLog(orderToSync.toString());
 
-            // ZIP with XMLs
-            if (orderToSync.getZipFileWithXMLs() != null &&
-                    !orderToSync.isZipFileWithXMLsSynced()) {
+                // ZIP with XMLs
+                if (orderToSync.getZipFileWithXMLs() != null && !orderToSync.isZipFileWithXMLsSynced()) {
 
-                final File fileName = new File(orderToSync.getZipFileWithXMLs());
-                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_OCTET_STREAM, fileName);
-                final String checksum = Utils.getFileMD5Sum(fileName);
+                    uploadResult = uploadFile(orderToSync.getZipFileWithXMLs(), MEDIA_TYPE_OCTET_STREAM, "XML_ZIP_REPORT", orderToSync.getNumber());
 
-                final MultipartBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("type", "XML_ZIP_REPORT")
-                        .addFormDataPart("checksum", checksum)
-                        .addFormDataPart("file", fileName.getName(), requestFile)
-                        .build();
-
-                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
-                serviceLog("UPLOAD REQUEST: " + call.request());
-
-                final Response<ResponseBody> uploadFileResponse;
-                try {
-                    uploadFileResponse = call.execute();
-                } catch (IOException e) {
-                    serviceLog("Upload fail: " + e.toString());
-                    continue;
+                    if (uploadResult) {
+                        realm.beginTransaction();
+                        orderToSync.setZipFileWithXMLsSynced(true);
+                        realm.commitTransaction();
+                    }
                 }
 
-                if (!uploadFileResponse.isSuccessful()) {
-                    serviceLog("Upload fail: " + uploadFileResponse.code());
-                    continue;
+                // PDF Default report
+                if (orderToSync.getDefaultPDFReportFile() != null && !orderToSync.isDefaultPDFReportFileSynced()) {
+
+                    uploadResult = uploadFile(orderToSync.getDefaultPDFReportFile(), MEDIA_TYPE_PDF, "DEFAULT_PDF_REPORT", orderToSync.getNumber());
+
+                    if (uploadResult) {
+                        realm.beginTransaction();
+                        orderToSync.setDefaultPDFReportFileSynced(true);
+                        realm.commitTransaction();
+                    }
                 }
 
-                serviceLog("Upload successful: " + uploadFileResponse.code());
+                // LMRA Photos
+                final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                        realm.where(LMRAPhoto.class)
+                                .equalTo("number", orderToSync.getNumber())
+                                .equalTo("lmraPhotoFileSynced", false)
+                                .findAll();
+                for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
 
-                realm.beginTransaction();
-                orderToSync.setZipFileWithXMLsSynced(true);
-                realm.commitTransaction();
-            }
+                    uploadResult = uploadFile(lmraPhoto.getLmraPhotoFile(), MEDIA_TYPE_JPEG, "LMRA_PHOTO", orderToSync.getNumber());
 
-            // PDF Default report
-            if (orderToSync.getDefaultPDFReportFile() != null &&
-                    !orderToSync.isDefaultPDFReportFileSynced()) {
-
-                final File fileName = new File(orderToSync.getDefaultPDFReportFile());
-                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_PDF, fileName);
-                final String checksum = Utils.getFileMD5Sum(fileName);
-
-                final MultipartBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("type", "DEFAULT_PDF_REPORT")
-                        .addFormDataPart("checksum", checksum)
-                        .addFormDataPart("file", fileName.getName(), requestFile)
-                        .build();
-
-                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
-                serviceLog("UPLOAD REQUEST: " + call.request());
-
-                final Response<ResponseBody> uploadFileResponse;
-                try {
-                    uploadFileResponse = call.execute();
-                } catch (IOException e) {
-                    serviceLog("Upload fail: " + e.toString());
-                    continue;
+                    if (uploadResult) {
+                        realm.beginTransaction();
+                        lmraPhoto.setLmraPhotoFileSynced(true);
+                        realm.commitTransaction();
+                    }
                 }
 
-                if (!uploadFileResponse.isSuccessful()) {
-                    serviceLog("Upload fail: " + uploadFileResponse.code());
-                    continue;
+                // Check if all photos synced
+                final RealmResults<LMRAPhoto> listLMRAPhotosNotSyncedInBD =
+                        realm.where(LMRAPhoto.class)
+                                .equalTo("number", orderToSync.getNumber())
+                                .equalTo("lmraPhotoFileSynced", false)
+                                .findAll();
+                if (listLMRAPhotosNotSyncedInBD.size() == 0) {
+                    realm.beginTransaction();
+                    orderToSync.setLMRAPhotosSynced(true);
+                    realm.commitTransaction();
                 }
 
-                serviceLog("Upload successful: " + uploadFileResponse.code());
-
-                realm.beginTransaction();
-                orderToSync.setDefaultPDFReportFileSynced(true);
-                realm.commitTransaction();
-
-            }
-
-            // LMRA Photos
-            final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
-                    realm.where(LMRAPhoto.class)
-                            .equalTo("number", orderToSync.getNumber())
-                            .equalTo("lmraPhotoFileSynced", false)
-                            .findAll();
-            for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
-                final File fileName = new File(lmraPhoto.getLmraPhotoFile());
-                final RequestBody requestFile = RequestBody.create(MEDIA_TYPE_JPEG, fileName);
-                final String checksum = Utils.getFileMD5Sum(fileName);
-
-                final MultipartBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("type", "LMRA_PHOTO")
-                        .addFormDataPart("checksum", checksum)
-                        .addFormDataPart("file", fileName.getName(), requestFile)
-                        .build();
-
-                final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderToSync.getNumber(), requestBody);
-                serviceLog("UPLOAD REQUEST: " + call.request());
-
-                final Response<ResponseBody> uploadFileResponse;
-                try {
-                    uploadFileResponse = call.execute();
-                } catch (IOException e) {
-                    serviceLog("Upload fail: " + e.toString());
-                    continue;
+                // Checking all statuses
+                if (orderToSync.isZipFileWithXMLsSynced()
+                        && orderToSync.isDefaultPDFReportFileSynced()
+                        && orderToSync.isLMRAPhotosSynced()) {
+                    // All done
+                    realm.beginTransaction();
+                    orderToSync.setSyncComplete(true);
+                    realm.commitTransaction();
                 }
 
-                if (!uploadFileResponse.isSuccessful()) {
-                    serviceLog("Upload fail: " + uploadFileResponse.code());
-                    continue;
-                }
-
-                serviceLog("Upload successful: " + uploadFileResponse.code());
-
-                realm.beginTransaction();
-                lmraPhoto.setLmraPhotoFileSynced(true);
-                realm.commitTransaction();
-            }
-
-            // Check if all photos synced
-            final RealmResults<LMRAPhoto> listLMRAPhotosNotSyncedInBD =
-                    realm.where(LMRAPhoto.class)
-                            .equalTo("number", orderToSync.getNumber())
-                            .equalTo("lmraPhotoFileSynced", false)
-                            .findAll();
-            if (listLMRAPhotosNotSyncedInBD.size() == 0) {
-                realm.beginTransaction();
-                orderToSync.setLMRAPhotosSynced(true);
-                realm.commitTransaction();
-            }
-
-
-            // Checking all statuses
-            if (orderToSync.isZipFileWithXMLsSynced()
-                    && orderToSync.isDefaultPDFReportFileSynced()
-                    && orderToSync.isLMRAPhotosSynced()) {
-                // All done
-                realm.beginTransaction();
-                orderToSync.setSyncComplete(true);
-                realm.commitTransaction();
             }
 
         }
-
-
-        realm.close();
     }
 
 }
