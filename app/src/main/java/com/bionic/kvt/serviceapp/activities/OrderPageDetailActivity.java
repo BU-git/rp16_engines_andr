@@ -47,6 +47,9 @@ public class OrderPageDetailActivity extends BaseActivity {
     @BindView(R.id.process_order_page_detail_town)
     TextView orderTown;
 
+    @BindView(R.id.process_order_page_detail_contact_person)
+    TextView orderContactPerson;
+
     @BindView(R.id.process_order_page_detail_telephone)
     TextView orderPhone;
 
@@ -61,6 +64,9 @@ public class OrderPageDetailActivity extends BaseActivity {
 
     @BindView(R.id.process_order_page_detail_installation)
     TextView orderInstallation;
+
+    @BindView(R.id.process_order_page_detail_address)
+    TextView orderAddress;
 
     @BindView(R.id.process_order_page1_device_town)
     TextView orderInstallationTown;
@@ -101,14 +107,16 @@ public class OrderPageDetailActivity extends BaseActivity {
         // Setting Order data to textView
         //TODO PROPER NULL HANDLING
         try {
-            orderNumber.setText(Long.toString(currentOrder.getNumber()));
+            orderNumber.setText(String.valueOf(currentOrder.getNumber()));
             orderRelation.setText(currentOrder.getRelation().getName());
             orderTown.setText(currentOrder.getRelation().getTown());
+            orderContactPerson.setText(currentOrder.getRelation().getContactPerson());
             orderPhone.setText(currentOrder.getRelation().getTelephone());
             orderEmployee.setText(currentOrder.getEmployee().getName());
             orderDate.setText(Utils.getDateStringFromDate(currentOrder.getDate()));
             orderReference.setText(currentOrder.getReference());
             orderInstallation.setText(currentOrder.getInstallation().getName());
+            orderAddress.setText(currentOrder.getInstallation().getAddress());
             orderInstallationTown.setText(currentOrder.getInstallation().getTown());
 
             orderInstuctions.setText(currentOrder.getNote());
