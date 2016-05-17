@@ -8,11 +8,12 @@ import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.CustomTemplate;
 import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.DefectState;
 import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -115,7 +116,7 @@ public class XMLGenerator {
             serializer.endTag("", "Order");
 
             serializer.startTag("", "Parts");
-
+            int count = 0;
             for (String part : Session.getPartMap().keySet()) {
                 serializer.startTag("", "Part");
                 serializer.attribute("", "Name", part);
@@ -125,11 +126,53 @@ public class XMLGenerator {
                     serializer.startTag("", "Element");
                     serializer.attribute("", "Name", element.getKey());
                     //Installation general
+                    Log.e(">>>>>>>>>>>>>>>>> " + count++, element.getKey());
                     Set<Map.Entry<String, JsonElement>> thirdLevel = element.getValue().entrySet();
                     for (Map.Entry<String, JsonElement> problem : thirdLevel) {
                         //Defecten
                         serializer.startTag("", "Problem");
                         serializer.attribute("", "Name", problem.getKey());
+
+                        DefectState defectState = DbUtils.getDefectStateFromDB(orderNumber, part, element.getKey(), problem.getKey());
+                        if (defectState == null) {
+                            serializer.endTag("", "Problem");
+                            continue;
+                        }
+
+                        serializer.startTag("", "Extent");
+                        serializer.text(defectState.getExtent());
+                        serializer.endTag("", "Extent");
+
+                        serializer.startTag("", "Intensity");
+                        serializer.text(defectState.getIntensity());
+                        serializer.endTag("", "Intensity");
+
+                        serializer.startTag("", "Fixed");
+                        if (defectState.isFixed())
+                            serializer.text("True");
+                        else
+                            serializer.text("False");
+                        serializer.endTag("", "Fixed");
+
+                        serializer.startTag("", "Action");
+                        serializer.text(defectState.getAction());
+                        serializer.endTag("", "Action");
+
+                        serializer.startTag("", "Condition");
+                        serializer.text(String.valueOf(defectState.getCondition()));
+                        serializer.endTag("", "Condition");
+
+                        serializer.startTag("", "InitialScore");
+                        serializer.text(String.valueOf(defectState.getInitialScore()));
+                        serializer.endTag("", "InitialScore");
+
+                        serializer.startTag("", "Correlation");
+                        serializer.text(String.valueOf(defectState.getCorrelation()));
+                        serializer.endTag("", "Correlation");
+
+                        serializer.startTag("", "CorrelatedScore");
+                        serializer.text(String.valueOf(defectState.getCorrelatedScore()));
+                        serializer.endTag("", "CorrelatedScore");
 
                         serializer.endTag("", "Problem");
                     }
@@ -142,7 +185,6 @@ public class XMLGenerator {
             serializer.endTag("", "Report");
 
             serializer.endDocument();
-            Log.e("XXX", writer.toString());
             return writer.toString();
         } catch (IOException e) {
             Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());

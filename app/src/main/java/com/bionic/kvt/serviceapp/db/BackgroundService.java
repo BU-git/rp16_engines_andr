@@ -203,9 +203,6 @@ public class BackgroundService extends IntentService {
             final OrderSynchronisation orderSync = new OrderSynchronisation();
             orderSync.setNumber(orderNumber);
 
-            //Generating PartMap for DbUtils.generateXMLReport(orderNumber, DEFAULT_XML)
-            if (Session.getPartMap().size() != 0) generatePartMap();
-
             // Setting zipFileWithXMLs
             orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
             orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));

@@ -189,14 +189,9 @@ public class OrderPageActivity extends BaseActivity implements
         ordersSynchroniseCompleteInDB.addChangeListener(ordersSynchronisationCompleteListener);
 
 
+        runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
         runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
         runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
-
-
-        //Generating PartMap for DbUtils.generateXMLReport(orderNumber, DEFAULT_XML)
-        runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
-
-
     }
 
     private Runnable orderUpdateTask = new Runnable() {

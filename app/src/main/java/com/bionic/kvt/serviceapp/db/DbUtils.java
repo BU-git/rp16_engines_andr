@@ -586,6 +586,19 @@ public class DbUtils {
         realm.close();
     }
 
+    @Nullable
+    public static DefectState getDefectStateFromDB(final long orderNumber, final String part, final String element, final String problem) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final DefectState defectState = realm.where(DefectState.class)
+                    .equalTo("number", orderNumber)
+                    .equalTo("part", part)
+                    .equalTo("element", element)
+                    .equalTo("problem", problem)
+                    .findFirst();
+            return defectState;
+        }
+    }
+
     public static void removeDefectStateListFromDB() {
         Session.addToSessionLog("Removing defect states from DB.");
 
