@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +134,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
-                //Todo: Replace with actual default fields
                 TextView text = new TextView(_context);
                 final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang, null);
                 final Spinner actiesSpinner = (Spinner) infalInflater.inflate(R.layout.template_acties, null);
@@ -231,6 +231,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             state.setCondition(GlobalConstants.DEFAULT_SCORE);
                             state.performScoreAdjustments(child);
                             ComponentListActivity.defectStateList.remove(state);
+                            Log.d(TAG, "Size after removal: " + ComponentListActivity.defectStateList.size());
 
                         }
                         notifyDataSetChanged();
