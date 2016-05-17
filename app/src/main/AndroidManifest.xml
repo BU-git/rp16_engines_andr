@@ -40,7 +40,7 @@
         </activity>
 
         <service
-            android:name=".db.UpdateService"
+            android:name=".db.BackgroundService"
             android:exported="false" />
 
         <activity android:name=".activities.ForgetPasswordActivity" />

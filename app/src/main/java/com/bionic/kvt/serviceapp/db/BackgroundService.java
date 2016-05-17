@@ -4,15 +4,24 @@ package com.bionic.kvt.serviceapp.db;
 import android.app.IntentService;
 import android.content.Intent;
 
+import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.CustomTemplate;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -25,6 +34,7 @@ import retrofit2.Response;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
@@ -35,14 +45,14 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 
 
-public class UpdateService extends IntentService {
+public class BackgroundService extends IntentService {
     private static final MediaType MEDIA_TYPE_JPEG = MediaType.parse("image/jpeg");
     private static final MediaType MEDIA_TYPE_PDF = MediaType.parse("application/pdf");
     private static final MediaType MEDIA_TYPE_OCTET_STREAM = MediaType.parse("application/octet-stream");
 
     private String currentTask = "";
 
-    public UpdateService() {
+    public BackgroundService() {
         super("KVT Service: Update service");
     }
 
@@ -63,7 +73,10 @@ public class UpdateService extends IntentService {
                 currentTask = "UPLOAD_FILES";
                 uploadOrderFiles();
                 break;
-
+            case GENERATE_PART_MAP:
+                currentTask = "GENERATE_PART_MAP";
+                generatePartMap();
+                break;
         }
     }
 
@@ -347,6 +360,52 @@ public class UpdateService extends IntentService {
             }
 
         }
+    }
+
+    private void generatePartMap() {
+        serviceLog("Service started.");
+
+        if (Session.getPartMap().size() != 0) {
+            serviceLog("Map already generated.");
+            return;
+        }
+
+        final String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), BuildConfig.COMPONENTS_JSON);
+
+        if (jsonComponent.isEmpty()) {
+            serviceLog("**** ERROR **** generating map: Empty JSON.");
+            return;
+        }
+
+        final JsonParser jsonParser = new JsonParser();
+        final Map<String, LinkedHashMap<String, JsonObject>> partMap = Session.getPartMap();
+        partMap.clear();
+
+        try {
+            JsonElement parentElement = jsonParser.parse(jsonComponent);
+            JsonArray parentArray = parentElement.getAsJsonArray();
+            for (int k = 0; k < parentArray.size(); k++) {
+                JsonObject secondObject = parentArray.get(k).getAsJsonObject();
+                Set<Map.Entry<String, JsonElement>> entrySet = secondObject.entrySet();
+                for (Map.Entry<String, JsonElement> entry : entrySet) {
+                    JsonArray thirdArray = entry.getValue().getAsJsonArray();
+                    LinkedHashMap<String, JsonObject> elementMap = new LinkedHashMap<>();
+                    for (int j = 0; j < thirdArray.size(); j++) {
+                        JsonObject thirdObject = thirdArray.get(j).getAsJsonObject();
+                        Set<Map.Entry<String, JsonElement>> entrySetSecond = thirdObject.entrySet();
+                        for (Map.Entry<String, JsonElement> entrySecond : entrySetSecond) {
+                            elementMap.put(entrySecond.getKey(), entrySecond.getValue().getAsJsonObject());
+                        }
+                    }
+                    partMap.put(entry.getKey(), elementMap);
+                }
+            }
+        } catch (Exception e) {
+            serviceLog("**** ERROR **** generating map: " + e.toString());
+        }
+        serviceLog("Map generated.");
+        Session.setPartMap(partMap);
+
     }
 
 }

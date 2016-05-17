@@ -37,7 +37,7 @@ public interface GlobalConstants {
 
     String UPDATE_SERVICE_MSG = "UPDATE_SERVICE_MSG";
 
-    @IntDef({UPDATE_ORDERS, PREPARE_FILES, UPLOAD_FILES})
+    @IntDef({UPDATE_ORDERS, PREPARE_FILES, UPLOAD_FILES, GENERATE_PART_MAP})
     @Retention(RetentionPolicy.SOURCE)
     @interface ServiceMessage {
     }
@@ -45,6 +45,7 @@ public interface GlobalConstants {
     int UPDATE_ORDERS = 1;
     int PREPARE_FILES = 2;
     int UPLOAD_FILES = 3;
+    int GENERATE_PART_MAP = 4;
 
 
     @IntDef({LMRA_XML, DEFAULT_XML, CUSTOM_XML, MEASUREMENTS_XML, JOB_RULES_XML})

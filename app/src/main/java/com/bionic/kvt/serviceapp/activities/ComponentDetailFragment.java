@@ -11,6 +11,7 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
 import com.google.gson.JsonObject;
 
@@ -56,7 +57,7 @@ public class ComponentDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = ComponentListActivity.partMap.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = Session.getPartMap().get(getArguments().getString(ARG_ITEM_ID));
             ARG_CURRENT = getArguments().getString(ARG_ITEM_ID);
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);

@@ -29,6 +29,15 @@
             layout="@layout/component_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/component_list_next_button"
+            android:layout_marginBottom="@dimen/next_padding"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            android:layout_gravity="right|bottom" />
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

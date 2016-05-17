@@ -14,16 +14,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
-import com.bionic.kvt.serviceapp.db.UpdateService;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
-import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +36,9 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
-import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
+import static com.bionic.kvt.serviceapp.utils.Utils.runBackgroundServiceIntent;
+import static com.bionic.kvt.serviceapp.utils.Utils.updateOrderStatusOnServer;
 
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
@@ -150,7 +148,8 @@ public class OrderPageActivity extends BaseActivity implements
         ordersCompleteListener = new RealmChangeListener<RealmResults<Order>>() {
             @Override
             public void onChange(RealmResults<Order> orders) {
-                if (orders.size() > 0) runIntent(PREPARE_FILES);
+                if (orders.size() > 0)
+                    runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
             }
         };
 
@@ -162,7 +161,8 @@ public class OrderPageActivity extends BaseActivity implements
         ordersSynchronisationListener = new RealmChangeListener<RealmResults<OrderSynchronisation>>() {
             @Override
             public void onChange(RealmResults<OrderSynchronisation> orders) {
-                if (orders.size() > 0) runIntent(UPLOAD_FILES);
+                if (orders.size() > 0)
+                    runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
             }
         };
 
@@ -177,7 +177,7 @@ public class OrderPageActivity extends BaseActivity implements
             public void onChange(RealmResults<OrderSynchronisation> orders) {
                 for (OrderSynchronisation order : orders) {
                     DbUtils.setOrderStatus(order.getNumber(), ORDER_STATUS_COMPLETE_UPLOADED);
-                    Utils.updateOrderStatusOnServer(order.getNumber());
+                    updateOrderStatusOnServer(order.getNumber());
                 }
             }
         };
@@ -187,20 +187,14 @@ public class OrderPageActivity extends BaseActivity implements
         ordersSynchroniseCompleteInDB.addChangeListener(ordersSynchronisationCompleteListener);
 
 
-        runIntent(PREPARE_FILES);
-        runIntent(UPLOAD_FILES);
-    }
-
-    private void runIntent(@ServiceMessage final int intentType) {
-        Intent updateService = new Intent(OrderPageActivity.this, UpdateService.class);
-        updateService.putExtra(UPDATE_SERVICE_MSG, intentType);
-        startService(updateService);
+        runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
+        runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
         @Override
         public void run() {
-            runIntent(UPDATE_ORDERS);
+            runBackgroundServiceIntent(OrderPageActivity.this, UPDATE_ORDERS);
             updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
         }
     };

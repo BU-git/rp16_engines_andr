@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.utils;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
@@ -17,8 +18,10 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.User;
+import com.bionic.kvt.serviceapp.db.BackgroundService;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.google.gson.JsonElement;
@@ -52,6 +55,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_PHOTO_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 
 public class Utils {
     public static final int REQUEST_WRITE_CODE = 1;
@@ -140,6 +144,12 @@ public class Utils {
         } else {
             return new File(getOrderDir(orderNumber), PDF_REPORT_FILE_NAME + orderNumber + ".pdf");
         }
+    }
+
+    public static void runBackgroundServiceIntent(final Context context, @GlobalConstants.ServiceMessage final int intentType) {
+        Intent updateService = new Intent(context, BackgroundService.class);
+        updateService.putExtra(UPDATE_SERVICE_MSG, intentType);
+        context.startService(updateService);
     }
 
     public static int getSetIndex(Set<Map.Entry<String, JsonElement>> set, Map.Entry<String, JsonElement> value) {

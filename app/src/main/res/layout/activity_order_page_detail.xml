@@ -489,7 +489,7 @@
             android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/activity_horizontal_margin">
+            android:paddingBottom="@dimen/next_padding">
 
             <TextView
                 android:id="@+id/process_order_page_accept_instructions"

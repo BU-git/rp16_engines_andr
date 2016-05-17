@@ -5,11 +5,14 @@ import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
 import com.bionic.kvt.serviceapp.utils.Utils;
+import com.google.gson.JsonObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
@@ -27,14 +30,16 @@ public class Session extends Application {
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS);
+
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(BuildConfig.BACK_OFFICE_HOST)
             .addConverterFactory(GsonConverterFactory.create());
 
+    private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
+
     private ConnectionServiceAPI connectionServiceAPI;
     private List<String> sessionLog;
 
-//    private File currentAppExternalPrivateDir;
     private File currentAppInternalPrivateDir;
 
     private String engineerName;
@@ -47,9 +52,9 @@ public class Session extends Application {
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
+        partMap = new LinkedHashMap<>();
         sessionLog = new ArrayList<>();
         currentAppInternalPrivateDir = getFilesDir();
-//        getApplicationContext().getExternalFilesDir("");
 
         Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
         connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
@@ -78,6 +83,14 @@ public class Session extends Application {
         currentUserSession.currentOrder = 0L;
         currentUserSession.byteArrayEngineerSignature = null;
         currentUserSession.byteArrayClientSignature = null;
+    }
+
+    public static Map<String, LinkedHashMap<String, JsonObject>> getPartMap() {
+        return partMap;
+    }
+
+    public static void setPartMap(Map<String, LinkedHashMap<String, JsonObject>> partMap) {
+        Session.partMap = partMap;
     }
 
     public static List<String> getSessionLog() {
