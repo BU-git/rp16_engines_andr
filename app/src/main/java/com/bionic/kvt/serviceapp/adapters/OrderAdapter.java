@@ -84,7 +84,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 0: // Column Order number
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
-                textCell.setText(orderOverviewList.get(row).getNumber().toString());
+                textCell.setText(String.valueOf(orderOverviewList.get(row).getNumber()));
                 break;
 
             case 1: // Column Date
@@ -116,22 +116,22 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
                 buttonCell.setVisibility(View.GONE);
 
                 if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_COMPLETE_UPLOADED) {
-                    textCell.setText("Uploaded");
+                    textCell.setText(context.getText(R.string.uploaded));
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorOK));
                 }
 
                 if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_COMPLETE) {
-                    textCell.setText("Complete");
+                    textCell.setText(context.getText(R.string.complete));
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorOK));
                 }
 
                 if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_IN_PROGRESS) {
-                    textCell.setText("In progress");
+                    textCell.setText(context.getText(R.string.in_progress));
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorWarring));
                 }
 
                 if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_NOT_STARTED) {
-                    textCell.setText("Not started");
+                    textCell.setText(context.getText(R.string.not_started));
                     textCell.setTextColor(ContextCompat.getColor(context, R.color.colorError));
                 }
                 break;
