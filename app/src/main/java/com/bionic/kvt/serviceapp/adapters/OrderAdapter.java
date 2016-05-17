@@ -17,6 +17,7 @@ import java.util.List;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_NOT_STARTED;
 
@@ -112,6 +113,11 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.UserViewHold
             case 5: // Column Status
                 textCell.setVisibility(View.VISIBLE);
                 buttonCell.setVisibility(View.GONE);
+
+                if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_COMPLETE_UPLOADED) {
+                    textCell.setText("Uploaded");
+                    textCell.setTextColor(ContextCompat.getColor(context, R.color.colorOK));
+                }
 
                 if (orderOverviewList.get(row).getOrderStatus() == ORDER_STATUS_COMPLETE) {
                     textCell.setText("Complete");
