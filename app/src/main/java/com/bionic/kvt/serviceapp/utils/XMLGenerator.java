@@ -12,12 +12,16 @@ import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Map;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -114,12 +118,16 @@ public class XMLGenerator {
             for (String firstLevel : Session.getPartMap().keySet()) {
                 serializer.startTag("", "Part");
                 serializer.attribute("", "Name", firstLevel);
-
-                for (String secondLevel : Session.getPartMap().get(firstLevel).keySet()) {
+                Set<Map.Entry<String, JsonObject>> entrySet = Session.getPartMap().get(firstLevel).entrySet();
+                //top level
+                for (Map.Entry<String, JsonObject> secondLevel : entrySet) {
                     serializer.startTag("", "Element");
-                    serializer.attribute("", "Name", secondLevel);
-
-
+                    serializer.attribute("", "Name", secondLevel.getKey());
+                    //Installation general
+                    Set<Map.Entry<String, JsonElement>> thirdLevel = secondLevel.getValue().entrySet();
+                    for (Map.Entry<String, JsonElement> child : thirdLevel) {
+                        //Defecten - child.getKey();
+                    }
                     serializer.endTag("", "Element");
                 }
                 serializer.endTag("", "Part");
