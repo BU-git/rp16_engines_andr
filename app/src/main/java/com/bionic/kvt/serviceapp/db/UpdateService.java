@@ -247,7 +247,7 @@ public class UpdateService extends IntentService {
                 .build();
 
         final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderNumber, requestBody);
-        serviceLog("UPLOAD REQUEST: " + call.request());
+        serviceLog("UPLOAD REQUEST [" + fileType + "]: " + call.request());
 
         final Response<ResponseBody> uploadFileResponse;
         try {
@@ -273,7 +273,10 @@ public class UpdateService extends IntentService {
         try (final Realm realm = Realm.getDefaultInstance()) {
 
             RealmResults<OrderSynchronisation> currentOrderToSyncList =
-                    realm.where(OrderSynchronisation.class).equalTo("isReadyForSync", true).findAll();
+                    realm.where(OrderSynchronisation.class)
+                            .equalTo("isReadyForSync", true)
+                            .equalTo("isSyncComplete", false)
+                            .findAll();
 
             for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
                 serviceLog(orderToSync.toString());
