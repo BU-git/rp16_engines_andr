@@ -126,8 +126,6 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         realm.close();
-
-//        XMLGenerator.getXMLFromDefaultTemplate(Session.getCurrentOrder());
     }
 
 

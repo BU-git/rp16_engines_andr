@@ -8,10 +8,13 @@ import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.CustomTemplate;
 import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.DefectState;
 import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.xmlpull.v1.XmlSerializer;
@@ -19,8 +22,8 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -112,41 +115,76 @@ public class XMLGenerator {
             serializer.attribute("", "Number", String.valueOf(orderNumber));
             serializer.endTag("", "Order");
 
-            serializer.startTag("", "Components");
+            serializer.startTag("", "Parts");
+            int count = 0;
+            for (String part : Session.getPartMap().keySet()) {
+                serializer.startTag("", "Part");
+                serializer.attribute("", "Name", part);
+                Set<Map.Entry<String, JsonObject>> entrySet = Session.getPartMap().get(part).entrySet();
+                //top level
+                for (Map.Entry<String, JsonObject> element : entrySet) {
+                    serializer.startTag("", "Element");
+                    serializer.attribute("", "Name", element.getKey());
+                    //Installation general
+                    Log.e(">>>>>>>>>>>>>>>>> " + count++, element.getKey());
+                    Set<Map.Entry<String, JsonElement>> thirdLevel = element.getValue().entrySet();
+                    for (Map.Entry<String, JsonElement> problem : thirdLevel) {
+                        //Defecten
+                        serializer.startTag("", "Problem");
+                        serializer.attribute("", "Name", problem.getKey());
 
-            for (String firstLevel : Session.getPartMap().keySet()) {
-                serializer.startTag("", firstLevel);
+                        DefectState defectState = DbUtils.getDefectStateFromDB(orderNumber, part, element.getKey(), problem.getKey());
+                        if (defectState == null) {
+                            serializer.endTag("", "Problem");
+                            continue;
+                        }
 
-                for (String secondLevel : Session.getPartMap().get(firstLevel).keySet()) {
-                    serializer.startTag("", secondLevel);
+                        serializer.startTag("", "Extent");
+                        serializer.text(defectState.getExtent());
+                        serializer.endTag("", "Extent");
 
-                    serializer.endTag("", secondLevel);
+                        serializer.startTag("", "Intensity");
+                        serializer.text(defectState.getIntensity());
+                        serializer.endTag("", "Intensity");
+
+                        serializer.startTag("", "Fixed");
+                        if (defectState.isFixed())
+                            serializer.text("True");
+                        else
+                            serializer.text("False");
+                        serializer.endTag("", "Fixed");
+
+                        serializer.startTag("", "Action");
+                        serializer.text(defectState.getAction());
+                        serializer.endTag("", "Action");
+
+                        serializer.startTag("", "Condition");
+                        serializer.text(String.valueOf(defectState.getCondition()));
+                        serializer.endTag("", "Condition");
+
+                        serializer.startTag("", "InitialScore");
+                        serializer.text(String.valueOf(defectState.getInitialScore()));
+                        serializer.endTag("", "InitialScore");
+
+                        serializer.startTag("", "Correlation");
+                        serializer.text(String.valueOf(defectState.getCorrelation()));
+                        serializer.endTag("", "Correlation");
+
+                        serializer.startTag("", "CorrelatedScore");
+                        serializer.text(String.valueOf(defectState.getCorrelatedScore()));
+                        serializer.endTag("", "CorrelatedScore");
+
+                        serializer.endTag("", "Problem");
+                    }
+                    serializer.endTag("", "Element");
                 }
-
-                serializer.endTag("", firstLevel);
+                serializer.endTag("", "Part");
             }
 
-//            for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
-//                serializer.startTag("", "LMRAItem");
-//                serializer.attribute("", "ID", String.valueOf(lmraItem.getLmraId()));
-//
-//                serializer.startTag("", "Name");
-//                serializer.text(String.valueOf(lmraItem.getLmraName()));
-//                serializer.endTag("", "Name");
-//
-//                serializer.startTag("", "Description");
-//                serializer.text(lmraItem.getLmraDescription());
-//                serializer.endTag("", "Description");
-//
-//
-//                serializer.endTag("", "LMRAItem");
-//            }
-
-            serializer.endTag("", "Components");
+            serializer.endTag("", "Parts");
             serializer.endTag("", "Report");
 
             serializer.endDocument();
-            Log.e("XXX",  writer.toString());
             return writer.toString();
         } catch (IOException e) {
             Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
