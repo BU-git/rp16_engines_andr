@@ -203,6 +203,11 @@ public class BackgroundService extends IntentService {
             final OrderSynchronisation orderSync = new OrderSynchronisation();
             orderSync.setNumber(orderNumber);
 
+            // Kostil
+            Session.getPartMap().clear();
+            generatePartMap();
+
+
             // Setting zipFileWithXMLs
             orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
             orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
