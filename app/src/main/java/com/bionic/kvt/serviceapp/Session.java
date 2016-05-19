@@ -4,6 +4,7 @@ import android.app.Application;
 import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
 
@@ -49,6 +50,8 @@ public class Session extends Application {
     private byte[] byteArrayEngineerSignature;
     private byte[] byteArrayClientSignature;
 
+    private RealmConfiguration logConfig;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -67,6 +70,19 @@ public class Session extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
+
+        // Realm config for log DB
+        logConfig = new RealmConfiguration.Builder(this)
+                .name("kvtLog.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        AppLog.initLog();
+    }
+
+    public static Realm getLogRealm(){
+        return Realm.getInstance(currentUserSession.logConfig);
     }
 
     public static ConnectionServiceAPI getServiceConnection() {
