@@ -12,8 +12,9 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.bionic.kvt.serviceapp.utils.XMLGenerator;
 
 import java.util.Date;
 
@@ -21,13 +22,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 
 public class OrderPageDetailActivity extends BaseActivity {
+
+    private Realm monitorLogRealm = Session.getLogRealm();
+    private RealmChangeListener<RealmResults<LogItem>> logListener;
+    private RealmResults<LogItem> logsWithNotification;
+
     @BindView(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
 
@@ -126,8 +133,11 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         realm.close();
-    }
 
+
+        logListener = AppLog.setLogListener(OrderPageDetailActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
+    }
 
     @OnClick(R.id.service_engenieer_start_button)
     public void onStartClick(View v) {
@@ -156,5 +166,11 @@ public class OrderPageDetailActivity extends BaseActivity {
             startButton.setEnabled(true);
             orderAcceptInstructions.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
     }
 }

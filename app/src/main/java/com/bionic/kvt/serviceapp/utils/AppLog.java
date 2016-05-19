@@ -21,9 +21,9 @@ public class AppLog {
     private static final int WARRING = 3;
     private static final int ERROR = 4;
 
-    private static Realm monitorLogRealm;
-    private static RealmChangeListener<RealmResults<LogItem>> logListener;
-    private static RealmResults<LogItem> logsWithNotification;
+//    private static Realm monitorLogRealm;
+//    private static RealmChangeListener<RealmResults<LogItem>> logListener;
+//    private static RealmResults<LogItem> logsWithNotification;
 
     public static void initLog() {
         try (final Realm logRealm = Session.getLogRealm()) {
@@ -35,12 +35,13 @@ public class AppLog {
         }
     }
 
-    public static void setLogListener(final Activity activity) {
-        logListener = new RealmChangeListener<RealmResults<LogItem>>() {
+    public static RealmChangeListener<RealmResults<LogItem>> setLogListener(final Activity activity,
+                                                                            final Realm monitorLogRealm) {
+        return new RealmChangeListener<RealmResults<LogItem>>() {
             @Override
             public void onChange(RealmResults<LogItem> logItems) {
                 if (logItems.size() == 0) return;
-                Snackbar snackbar = AppLog.getSnackbar(activity, logItems.get(0));
+                Snackbar snackbar = getSnackbar(activity, logItems.get(0));
                 snackbar.setAction("MORE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -55,13 +56,16 @@ public class AppLog {
         };
     }
 
-    public static void addListener() {
-        monitorLogRealm = Session.getLogRealm();
-        logsWithNotification = monitorLogRealm.where(LogItem.class).equalTo("notify", true).findAll().sort("dateTime");
+    public static RealmResults<LogItem> addListener(final Realm monitorLogRealm,
+                                                    final RealmChangeListener<RealmResults<LogItem>> logListener) {
+        RealmResults<LogItem> logsWithNotification = monitorLogRealm.where(LogItem.class).equalTo("notify", true).findAll().sort("dateTime");
         logsWithNotification.addChangeListener(logListener);
+        return logsWithNotification;
     }
 
-    public static void removeListener() {
+    public static void removeListener(final Realm monitorLogRealm,
+                                      final RealmResults<LogItem> logsWithNotification,
+                                      final RealmChangeListener<RealmResults<LogItem>> logListener) {
         logsWithNotification.removeChangeListener(logListener);
         monitorLogRealm.close();
     }
@@ -91,6 +95,17 @@ public class AppLog {
         return snackbar;
     }
 
+    public static StringBuilder getLog() {
+        try (final Realm logRealm = Session.getLogRealm()) {
+            final StringBuilder stringBuilder = new StringBuilder("Application log:");
+            final RealmResults<LogItem> logItems = logRealm.where(LogItem.class).findAll().sort("dateTime");
+            for (LogItem logItem : logItems) {
+                stringBuilder.append("\n").append(logItem.getMessage());
+            }
+            return stringBuilder;
+        }
+    }
+
     public static void D(final String message) {
         add(DEBUG, false, -1, message);
     }
@@ -118,7 +133,6 @@ public class AppLog {
     public static void E(final boolean notify, final long orderNumber, final String message) {
         add(ERROR, notify, orderNumber, message);
     }
-
 
     private static void add(final int level, final boolean notify, final long orderNumber, final String message) {
         try (final Realm logRealm = Session.getLogRealm()) {

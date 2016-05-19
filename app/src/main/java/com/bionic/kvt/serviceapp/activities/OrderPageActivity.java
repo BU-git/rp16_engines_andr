@@ -21,6 +21,8 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
@@ -61,6 +62,11 @@ public class OrderPageActivity extends BaseActivity implements
 
     private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationCompleteListener;
     private RealmResults<OrderSynchronisation> ordersSynchroniseCompleteInDB;
+
+
+    private Realm monitorLogRealm = Session.getLogRealm();
+    private RealmChangeListener<RealmResults<LogItem>> logListener;
+    private RealmResults<LogItem> logsWithNotification;
 
     @BindView(R.id.order_update_status)
     TextView orderUpdateStatusText;
@@ -192,6 +198,9 @@ public class OrderPageActivity extends BaseActivity implements
         runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
         runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
         runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
+
+        logListener = AppLog.setLogListener(OrderPageActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
@@ -221,12 +230,13 @@ public class OrderPageActivity extends BaseActivity implements
                 startActivity(intent);
                 break;
             case R.id.show_log:
-                intent = new Intent(getApplicationContext(), DebugActivity.class);
+                intent = new Intent(getApplicationContext(), LogActivity.class);
                 startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     protected void onResume() {
@@ -253,6 +263,8 @@ public class OrderPageActivity extends BaseActivity implements
         ordersToSynchroniseInDB.removeChangeListener(ordersSynchronisationListener);
         ordersSynchroniseCompleteInDB.removeChangeListener(ordersSynchronisationCompleteListener);
         monitorRealm.close();
+
+        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
     }
 
     @Override

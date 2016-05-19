@@ -7,8 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.bionic.kvt.serviceapp.utils.AppLog;
-
 public class BaseActivity extends AppCompatActivity {
 
     @Override
@@ -37,21 +35,6 @@ public class BaseActivity extends AppCompatActivity {
             }
         }
 
-        AppLog.setLogListener(this);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppLog.addListener();
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        AppLog.removeListener();
     }
 
     @Override
@@ -62,5 +45,4 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

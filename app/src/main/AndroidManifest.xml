@@ -59,7 +59,7 @@
             android:screenOrientation="sensorPortrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".activities.DebugActivity"
+            android:name=".activities.LogActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.LMRAImageActivity"
