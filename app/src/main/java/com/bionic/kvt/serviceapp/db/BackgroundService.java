@@ -254,6 +254,12 @@ public class BackgroundService extends IntentService {
 
     private boolean uploadFile(final String fileToUpload, final MediaType mediaType, final String fileType, final long orderNumber) {
         final File fileName = new File(fileToUpload);
+
+        if (!fileName.exists()) {
+            serviceLog("**** ERROR **** File not found: " + fileToUpload);
+            return true;
+        }
+
         final RequestBody requestFile = RequestBody.create(mediaType, fileName);
         final String checksum = Utils.getFileMD5Sum(fileName);
 

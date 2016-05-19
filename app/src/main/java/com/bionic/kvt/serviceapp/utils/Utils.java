@@ -116,6 +116,18 @@ public class Utils {
         return null; //Directory is not exist and fail to create
     }
 
+    @Nullable
+    public static File getAppExternalPrivateDir() {
+        final File currentAppExternalPrivateDir = Session.getAppExternalPrivateDir();
+        if (currentAppExternalPrivateDir == null) return null;
+
+        if (currentAppExternalPrivateDir.exists() || currentAppExternalPrivateDir.mkdirs()) {
+            return currentAppExternalPrivateDir;
+        }
+
+        return null; //Directory is not exist and fail to create
+    }
+
     //TODO IMPLEMENT LANGUAGE SUPPORT
     @Nullable
     public static File getPDFTemplateFile(final Context context) {
@@ -226,11 +238,12 @@ public class Utils {
     @Nullable
     public static File createImageFile(final long orderNumber) {
         final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_";
-        final File publicDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        if (publicDirectory == null) return null;
+        final File appExternalPrivateDir = getAppExternalPrivateDir();
+        if (appExternalPrivateDir == null) return null;
         try {
-            return File.createTempFile(imageFileName, ".jpg", publicDirectory);
+            return File.createTempFile(imageFileName, ".jpg", appExternalPrivateDir);
         } catch (IOException e) {
+            e.printStackTrace();
             Session.addToSessionLog("Error on creating LMRA file: " + e.toString());
             return null;
         }
