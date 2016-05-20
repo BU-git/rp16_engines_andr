@@ -377,12 +377,12 @@ public class Utils {
         try {
             resetPasswordResponse = resetPasswordRequest.execute();
         } catch (IOException e) {
-            AppLog.serviceE(true, -1, "Reset password request fail: " + e.toString());
+            AppLog.serviceE(false, -1, "Reset password request fail: " + e.toString());
             return new ServerRequestResult(false, "Reset password request fail: " + e.toString());
         }
 
         if (!resetPasswordResponse.isSuccessful()) { // Request unsuccessful
-            AppLog.serviceE(true, -1, "Error connecting to server: " + resetPasswordResponse.code());
+            AppLog.serviceE(false, -1, "Error connecting to server: " + resetPasswordResponse.code());
             return new ServerRequestResult(false, "Error connecting to server: " + resetPasswordResponse.code());
         }
 
