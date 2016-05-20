@@ -57,143 +57,113 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.XMLReportType;
 public class DbUtils {
     public static final Gson GSON = new Gson();
 
-    // Completely erase all database
-    public static void dropDatabase() {
-        final Realm realm = Realm.getDefaultInstance();
-        try {
-            realm.beginTransaction();
-            realm.deleteAll();
-            realm.commitTransaction();
-            //Realm file has been deleted.
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            //No Realm file to remove.
-        }
-        realm.close();
-    }
-
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
-        Session.addToSessionLog("Resetting User table.");
-
-        final Realm realm = Realm.getDefaultInstance();
-
-        realm.beginTransaction();
-        realm.delete(User.class);
-        User user = realm.createObject(User.class);
-        user.setName("Demo User");
-        user.setEmail("demo@kvt.nl");
-        user.setPasswordHash("ae820b72d36942625b345ec26070073e82a6f0054b2b1d0320561147653d5abe");
-        user.setSalt("");
-        realm.commitTransaction();
-
-        realm.close();
+        AppLog.serviceI("Resetting User table.");
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            realm.delete(User.class);
+            realm.commitTransaction();
+        }
     }
 
     // Completely erase Order Table and all sub tables
     public static void resetOrderTableWithSubTables() {
-        Session.addToSessionLog("Resetting Order table.");
+        AppLog.serviceI("Resetting Order table.");
 
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            realm.delete(Order.class);
+            realm.delete(Component.class);
+            realm.delete(Employee.class);
+            realm.delete(Info.class);
+            realm.delete(Installation.class);
+            realm.delete(Part.class);
+            realm.delete(Relation.class);
+            realm.delete(Task.class);
 
-        realm.beginTransaction();
-        realm.delete(Order.class);
-        realm.delete(Component.class);
-        realm.delete(Employee.class);
-        realm.delete(Info.class);
-        realm.delete(Installation.class);
-        realm.delete(Part.class);
-        realm.delete(Relation.class);
-        realm.delete(Task.class);
+            realm.delete(OrderReportJobRules.class);
+            realm.delete(OrderReportMeasurements.class);
+            realm.delete(OrderSynchronisation.class);
+            realm.delete(CustomTemplate.class);
+            realm.delete(CustomTemplateElement.class);
+            realm.delete(DefectState.class);
+            realm.delete(LMRAPhoto.class);
+            realm.delete(LMRAItem.class);
 
-        realm.delete(OrderReportJobRules.class);
-        realm.delete(OrderReportMeasurements.class);
-        realm.delete(OrderSynchronisation.class);
+            realm.commitTransaction();
 
-        realm.commitTransaction();
-
-        realm.close();
+        }
     }
 
     public static void deleteUser(final String email) {
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final User user = realm.where(User.class).equalTo("email", email).findFirst();
-        if (user != null) {
-            user.deleteFromRealm();
+        AppLog.serviceI("Deleting user from DB: " + email);
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            realm.where(User.class).equalTo("email", email).findAll().deleteAllFromRealm();
+            realm.commitTransaction();
         }
-        realm.commitTransaction();
-        realm.close();
     }
 
     public static void updateOrderOverviewList(final List<OrderOverview> listToUpdate) {
-        Session.addToSessionLog("Updating Order Overview List");
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<Order> allOrdersInDbSorted = realm.where(Order.class)
+                    .equalTo("employeeEmail", Session.getEngineerEmail())
+                    .findAllSorted("number");
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<Order> allOrdersInDb =
-                realm.where(Order.class).equalTo("employeeEmail", Session.getEngineerEmail()).findAll();
-        final RealmResults<Order> allOrdersInDbSorted = allOrdersInDb.sort("number");
+            listToUpdate.clear();
+            for (Order order : allOrdersInDbSorted) {
+                final OrderOverview orderOverview = new OrderOverview();
+                orderOverview.setNumber(order.getNumber());
+                orderOverview.setDate(order.getDate());
 
-        listToUpdate.clear();
-        for (Order order : allOrdersInDbSorted) {
-            final OrderOverview orderOverview = new OrderOverview();
-            orderOverview.setNumber(order.getNumber());
-            orderOverview.setDate(order.getDate());
+                if (order.getInstallation() != null) {
+                    orderOverview.setInstallationName(order.getInstallation().getName());
+                    orderOverview.setInstallationAddress(order.getInstallation().getAddress());
+                }
+                if (order.getTasks().first() != null) {
+                    orderOverview.setTaskLtxa1(order.getTasks().first().getLtxa1());
+                }
+                orderOverview.setOrderStatus(order.getOrderStatus());
+                orderOverview.setPdfString("PDF");
 
-            if (order.getInstallation() != null) {
-                orderOverview.setInstallationName(order.getInstallation().getName());
-                orderOverview.setInstallationAddress(order.getInstallation().getAddress());
+                listToUpdate.add(orderOverview);
             }
-            if (order.getTasks().first() != null) {
-                orderOverview.setTaskLtxa1(order.getTasks().first().getLtxa1());
-            }
-            orderOverview.setOrderStatus(order.getOrderStatus());
-            orderOverview.setPdfString("PDF");
-
-            listToUpdate.add(orderOverview);
         }
-
-        realm.close();
-        Session.addToSessionLog("Added " + listToUpdate.size() + " orders to view.");
     }
 
     public static void updateLMRAList(final List<LMRAModel> listToUpdate) {
-        Session.addToSessionLog("Updating LMRA Model List");
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<LMRAItem> allLMRAItemsInDbSorted = realm.where(LMRAItem.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .findAllSorted("lmraId");
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<LMRAItem> allLMRAItemsInDb =
-                realm.where(LMRAItem.class).equalTo("number", Session.getCurrentOrder()).findAll();
-        final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
+            listToUpdate.clear();
+            for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
+                final LMRAModel lmraModel = new LMRAModel();
+                lmraModel.setLmraId(lmraItem.getLmraId());
+                lmraModel.setLmraName(lmraItem.getLmraName());
+                lmraModel.setLmraDescription(lmraItem.getLmraDescription());
 
-        listToUpdate.clear();
-        for (LMRAItem lmraItem : allLMRAItemsInDbSorted) {
-            final LMRAModel lmraModel = new LMRAModel();
-            lmraModel.setLmraId(lmraItem.getLmraId());
-            lmraModel.setLmraName(lmraItem.getLmraName());
-            lmraModel.setLmraDescription(lmraItem.getLmraDescription());
+                List<File> listLMRAPhotos = null;
 
-            List<File> listLMRAPhotos = null;
+                final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                        realm.where(LMRAPhoto.class)
+                                .equalTo("number", Session.getCurrentOrder())
+                                .equalTo("lmraId", lmraItem.getLmraId())
+                                .findAll();
 
-            final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
-                    realm.where(LMRAPhoto.class)
-                            .equalTo("number", Session.getCurrentOrder())
-                            .equalTo("lmraId", lmraItem.getLmraId())
-                            .findAll();
-
-            if (listLMRAPhotosInBD.size() > 0) {
-                listLMRAPhotos = new ArrayList<>();
-                for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
-                    listLMRAPhotos.add(new File(lmraPhoto.getLmraPhotoFile()));
+                if (listLMRAPhotosInBD.size() > 0) {
+                    listLMRAPhotos = new ArrayList<>();
+                    for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
+                        listLMRAPhotos.add(new File(lmraPhoto.getLmraPhotoFile()));
+                    }
                 }
+
+                lmraModel.setListLMRAPhotos(listLMRAPhotos);
+                listToUpdate.add(lmraModel);
             }
-
-            lmraModel.setListLMRAPhotos(listLMRAPhotos);
-
-            listToUpdate.add(lmraModel);
         }
-
-        realm.close();
-        Session.addToSessionLog("Added " + listToUpdate.size() + " LMRAs to list.");
     }
 
     public static List<Long> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
@@ -297,7 +267,6 @@ public class DbUtils {
                     case ORDER_STATUS_IN_PROGRESS:
                         AppLog.serviceW(true, currentOrderInDB.getNumber(), "Cannot update order in status IN PROGRESS.");
                         break;
-
                     case ORDER_STATUS_COMPLETE:
                         AppLog.serviceW(true, currentOrderInDB.getNumber(), "Cannot update order in status COMPLETE.");
                         break;
@@ -394,7 +363,6 @@ public class DbUtils {
 
     public static void updateCustomTemplateFromServer(final long orderNumber, final com.bionic.kvt.serviceapp.api.CustomTemplate customTemplateOnServer) {
         try (final Realm realm = Realm.getDefaultInstance()) {
-
             // Deleting current custom template
             realm.beginTransaction();
             realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
@@ -422,207 +390,201 @@ public class DbUtils {
     }
 
     public static void createNewLMRAInDB(final String lmraName, final String lmraDescription) {
-        Session.addToSessionLog("Creating new LMRA.");
+        AppLog.serviceI("Creating new LMRA.");
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final LMRAItem newLMRAItem = realm.createObject(LMRAItem.class);
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            final LMRAItem newLMRAItem = realm.createObject(LMRAItem.class);
 
-        newLMRAItem.setLmraId(System.currentTimeMillis());
-        newLMRAItem.setNumber(Session.getCurrentOrder());
-        newLMRAItem.setLmraName(lmraName);
-        newLMRAItem.setLmraDescription(lmraDescription);
+            newLMRAItem.setLmraId(System.currentTimeMillis());
+            newLMRAItem.setNumber(Session.getCurrentOrder());
+            newLMRAItem.setLmraName(lmraName);
+            newLMRAItem.setLmraDescription(lmraDescription);
 
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        Session.addToSessionLog("New LMRA: " + newLMRAItem.toString());
-        realm.close();
+            realm.commitTransaction(); // No logic if transaction fail!!!
+            AppLog.serviceI("New LMRA created. ID: " + newLMRAItem.getLmraId());
+        }
     }
 
     public static void updateLMRAInDB(final long lmraId, final String lmraName, final String lmraDescription) {
-        Session.addToSessionLog("Updating LMRA: " + lmraId);
-        final Realm realm = Realm.getDefaultInstance();
+        AppLog.serviceI("Updating LMRA: " + lmraId);
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
-                .equalTo("number", Session.getCurrentOrder())
-                .equalTo("lmraId", lmraId)
-                .findFirst();
+            final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .equalTo("lmraId", lmraId)
+                    .findFirst();
 
+            if (currentLMRAItem == null) {
+                AppLog.serviceE(true, -1, "No such LMRA: " + lmraId);
+                return;
+            }
 
-        if (currentLMRAItem != null) { // We have this LMRA
             realm.beginTransaction();
             currentLMRAItem.setLmraName(lmraName);
             currentLMRAItem.setLmraDescription(lmraDescription);
             realm.commitTransaction();
-            Session.addToSessionLog("Modified.");
-        } else {
-            Session.addToSessionLog("Error. No such LMRA");
         }
-
-        realm.close();
     }
 
     public static void removeLMRAFromDB(final long lmraId) {
-        Session.addToSessionLog("Deleting LMRA: " + lmraId);
+        AppLog.serviceI("Deleting LMRA: " + lmraId);
 
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .equalTo("lmraId", lmraId)
+                    .findFirst();
 
-        final LMRAItem currentLMRAItem = realm.where(LMRAItem.class)
-                .equalTo("number", Session.getCurrentOrder())
-                .equalTo("lmraId", lmraId)
-                .findFirst();
+            if (currentLMRAItem == null) {
+                AppLog.serviceE(true, -1, "No such LMRA: " + lmraId);
+                return;
+            }
 
-        if (currentLMRAItem != null) {
+            removeLMRAPhoto(lmraId, "");
+
             realm.beginTransaction();
             currentLMRAItem.deleteFromRealm();
             realm.commitTransaction(); // No logic if transaction fail!!!
-            Session.addToSessionLog("Deleted.");
-        } else {
-            Session.addToSessionLog("**** ERROR **** No such LMRA found.");
         }
-
-        removeLMRAPhoto(lmraId, "");
-
-        realm.close();
     }
 
     public static void saveLMRAPhotoInDB(final long lmraId, final File lmraPhotoFile) {
-        Session.addToSessionLog("Saving LMRA [" + lmraId + "] photo file to DB: " + lmraPhotoFile);
+        AppLog.serviceI("Saving LMRA [" + lmraId + "] photo file to DB: " + lmraPhotoFile);
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final LMRAPhoto newLMRAPhoto = realm.createObject(LMRAPhoto.class);
-
-        newLMRAPhoto.setLmraId(lmraId);
-        newLMRAPhoto.setNumber(Session.getCurrentOrder());
-        newLMRAPhoto.setLmraPhotoFile(lmraPhotoFile.toString());
-        newLMRAPhoto.setLmraPhotoFileSynced(false);
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        realm.close();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            final LMRAPhoto newLMRAPhoto = realm.createObject(LMRAPhoto.class);
+            newLMRAPhoto.setLmraId(lmraId);
+            newLMRAPhoto.setNumber(Session.getCurrentOrder());
+            newLMRAPhoto.setLmraPhotoFile(lmraPhotoFile.toString());
+            newLMRAPhoto.setLmraPhotoFileSynced(false);
+            realm.commitTransaction(); // No logic if transaction fail!!!
+        }
     }
 
     public static void removeLMRAPhoto(final long lmraId, final String lmraPhotoFile) {
-        Session.addToSessionLog("Deleting photos for LMRA: " + lmraId);
+        AppLog.serviceI("Deleting photos for LMRA: " + lmraId);
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        RealmResults<LMRAPhoto> allLMRAPhotosForLMRAID;
-        if ("".equals(lmraPhotoFile)) {
-            allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
-                    .equalTo("number", Session.getCurrentOrder())
-                    .equalTo("lmraId", lmraId)
-                    .findAll();
-        } else {
-            allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
-                    .equalTo("number", Session.getCurrentOrder())
-                    .equalTo("lmraId", lmraId)
-                    .equalTo("lmraPhotoFile", lmraPhotoFile)
-                    .findAll();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            RealmResults<LMRAPhoto> allLMRAPhotosForLMRAID;
+            if ("".equals(lmraPhotoFile)) {
+                allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
+                        .equalTo("number", Session.getCurrentOrder())
+                        .equalTo("lmraId", lmraId)
+                        .findAll();
+            } else {
+                allLMRAPhotosForLMRAID = realm.where(LMRAPhoto.class)
+                        .equalTo("number", Session.getCurrentOrder())
+                        .equalTo("lmraId", lmraId)
+                        .equalTo("lmraPhotoFile", lmraPhotoFile)
+                        .findAll();
+            }
+
+            // Deleting photo files
+            for (LMRAPhoto lmraPhoto : allLMRAPhotosForLMRAID) {
+                final File lmraFile = new File(lmraPhoto.getLmraPhotoFile());
+                if (lmraFile.exists()) lmraFile.delete();
+            }
+
+            allLMRAPhotosForLMRAID.deleteAllFromRealm();
+            realm.commitTransaction(); // No logic if transaction fail!!!
         }
-
-        // Deleting photo files
-        for (LMRAPhoto lmraPhoto : allLMRAPhotosForLMRAID) {
-            final File lmraFile = new File(lmraPhoto.getLmraPhotoFile());
-            if (lmraFile.exists()) lmraFile.delete();
-        }
-
-        allLMRAPhotosForLMRAID.deleteAllFromRealm();
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        Session.addToSessionLog("Deleted.");
-
-        realm.close();
     }
 
     public static void updateUserFromServer(final com.bionic.kvt.serviceapp.api.User serverUser) {
-        Session.addToSessionLog("Updating User table from server data.");
+        AppLog.serviceI("Updating User table from server data.");
 
-        final Realm realm = Realm.getDefaultInstance();
-        // Searching for user in DB
-        final User userInDb = realm.where(User.class).equalTo("email", serverUser.getEmail()).findFirst();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            // Searching for user in DB
+            final User userInDb = realm.where(User.class).equalTo("email", serverUser.getEmail()).findFirst();
 
-        realm.beginTransaction();
-        if (userInDb != null) { // We have this user on DB, updating it
-            userInDb.setName(serverUser.getName());
-            userInDb.setEmail(serverUser.getEmail());
-            userInDb.setPasswordHash(serverUser.getPasswordHash());
-            userInDb.setSalt(serverUser.getSalt());
-        } else { // New user, creating it in DB
-            User newUser = realm.createObject(User.class);
-            newUser.setName(serverUser.getName());
-            newUser.setEmail(serverUser.getEmail());
-            newUser.setPasswordHash(serverUser.getPasswordHash());
-            newUser.setSalt(serverUser.getSalt());
+            realm.beginTransaction();
+            if (userInDb != null) { // We have this user on DB, updating it
+                userInDb.setName(serverUser.getName());
+                userInDb.setEmail(serverUser.getEmail());
+                userInDb.setPasswordHash(serverUser.getPasswordHash());
+                userInDb.setSalt(serverUser.getSalt());
+            } else { // New user, creating it in DB
+                final User newUser = realm.createObject(User.class);
+                newUser.setName(serverUser.getName());
+                newUser.setEmail(serverUser.getEmail());
+                newUser.setPasswordHash(serverUser.getPasswordHash());
+                newUser.setSalt(serverUser.getSalt());
+            }
+            realm.commitTransaction(); //No logic if transaction fail!!!
         }
-        realm.commitTransaction(); //No logic if transaction fail!!!
-        realm.close();
     }
 
     public static void saveDefectStateListToDB(final List<com.bionic.kvt.serviceapp.models.DefectState> defectStateList) {
         removeDefectStateListFromDB();
 
-        final Realm realm = Realm.getDefaultInstance();
-        DefectState newDefectState;
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            DefectState newDefectState;
 
-        for (com.bionic.kvt.serviceapp.models.DefectState defectState : defectStateList) {
-            Session.addToSessionLog("Saving defect state: "
-                    + defectState.getPart() + ">"
-                    + defectState.getElement() + ">"
-                    + defectState.getProblem());
+            for (com.bionic.kvt.serviceapp.models.DefectState defectState : defectStateList) {
+                AppLog.serviceI("Saving defect state: "
+                        + defectState.getPart() + ">"
+                        + defectState.getElement() + ">"
+                        + defectState.getProblem());
 
-            realm.beginTransaction();
+                realm.beginTransaction();
 
-            newDefectState = realm.createObject(DefectState.class);
-            newDefectState.setNumber(Session.getCurrentOrder());
+                newDefectState = realm.createObject(DefectState.class);
+                newDefectState.setNumber(Session.getCurrentOrder());
 
-            newDefectState.setPart(defectState.getPart());
-            newDefectState.setElement(defectState.getElement());
-            newDefectState.setProblem(defectState.getProblem());
+                newDefectState.setPart(defectState.getPart());
+                newDefectState.setElement(defectState.getElement());
+                newDefectState.setProblem(defectState.getProblem());
 
-            newDefectState.setExtent(defectState.getExtent());
-            newDefectState.setIntensity(defectState.getIntensity());
-            newDefectState.setFixed(defectState.isFixed());
-            newDefectState.setAction(defectState.getAction());
+                newDefectState.setExtent(defectState.getExtent());
+                newDefectState.setIntensity(defectState.getIntensity());
+                newDefectState.setFixed(defectState.isFixed());
+                newDefectState.setAction(defectState.getAction());
 
-            newDefectState.setCondition(defectState.getCondition());
-            newDefectState.setInitialScore(defectState.getInitialScore());
-            newDefectState.setCorrelation(defectState.getCorrelation());
-            newDefectState.setCorrelatedScore(defectState.getCorrelatedScore());
+                newDefectState.setCondition(defectState.getCondition());
+                newDefectState.setInitialScore(defectState.getInitialScore());
+                newDefectState.setCorrelation(defectState.getCorrelation());
+                newDefectState.setCorrelatedScore(defectState.getCorrelatedScore());
 
-            realm.commitTransaction(); // No logic if transaction fail!!!
+                realm.commitTransaction(); // No logic if transaction fail!!!
+            }
         }
-        realm.close();
     }
 
     @Nullable
     public static DefectState getDefectStateFromDB(final long orderNumber, final String part, final String element, final String problem) {
         try (final Realm realm = Realm.getDefaultInstance()) {
-            final DefectState defectState = realm.where(DefectState.class)
+            return realm.where(DefectState.class)
                     .equalTo("number", orderNumber)
                     .equalTo("part", part)
                     .equalTo("element", element)
                     .equalTo("problem", problem)
                     .findFirst();
-            return defectState;
         }
     }
 
     public static void removeDefectStateListFromDB() {
-        Session.addToSessionLog("Removing defect states from DB.");
+        AppLog.serviceI("Removing defect states from DB.");
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-
-        final RealmResults<DefectState> allDefectsForCurrentOrder = realm.where(DefectState.class)
-                .equalTo("number", Session.getCurrentOrder()).findAll();
-        allDefectsForCurrentOrder.deleteAllFromRealm();
-
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        realm.close();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            realm.where(DefectState.class)
+                    .equalTo("number", Session.getCurrentOrder())
+                    .findAll()
+                    .deleteAllFromRealm();
+            realm.commitTransaction(); // No logic if transaction fail!!!
+        }
     }
 
     public static void saveScoreToDB(final long orderNumber, final int score) {
         try (final Realm realm = Realm.getDefaultInstance()) {
             final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-            if (order == null) return;
+            if (order == null) {
+                AppLog.serviceE(true, orderNumber, "Saving score to DB: No order found.");
+                return;
+            }
 
             realm.beginTransaction();
             order.setScore(score);
@@ -631,64 +593,63 @@ public class DbUtils {
     }
 
     public static boolean isUserLoginValid(final String email, final String password) {
-        Session.addToSessionLog("Validating user: " + email);
+        AppLog.serviceI("Validating user: " + email);
 
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
-        if (usersInDB.size() != 1) {
-            realm.close();
-            return false;
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
+            if (usersInDB.size() != 1) {
+                AppLog.serviceE(true, -1, "Validating user login: More then one user found: " + email);
+                return false;
+            }
+
+            final MessageDigest digester;
+            try {
+                digester = MessageDigest.getInstance("SHA-256");
+            } catch (NoSuchAlgorithmException e) {
+                AppLog.serviceE(true, -1, "NoSuchAlgorithmException (SHA-256): " + e.toString());
+                return false;
+            }
+
+            final String saltInDB = usersInDB.first().getSalt();
+            final String passwordHashInDB = usersInDB.first().getPasswordHash();
+
+            if (passwordHashInDB == null) {
+                AppLog.serviceE(true, -1, "No password in DB.");
+                return false;
+            }
+
+            byte[] hash = (password + saltInDB).getBytes();
+            for (int i = 0; i <= PASSWORD_HASH_ITERATIONS; i++) {
+                digester.update(hash);
+                hash = digester.digest();
+            }
+            return passwordHashInDB.equals(Utils.convertByteArrayToHexString(hash));
         }
-
-        final MessageDigest digester;
-        try {
-            digester = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            Session.addToSessionLog("NoSuchAlgorithmException (SHA-256): " + e.toString());
-            realm.close();
-            return false;
-        }
-
-        final String saltInDB = usersInDB.first().getSalt();
-        final String passwordHashInDB = usersInDB.first().getPasswordHash();
-        realm.close();
-
-        if (passwordHashInDB == null) return false;
-
-        byte[] hash = (password + saltInDB).getBytes();
-        for (int i = 0; i <= PASSWORD_HASH_ITERATIONS; i++) {
-            digester.update(hash);
-            hash = digester.digest();
-        }
-
-        return passwordHashInDB.equals(Utils.convertByteArrayToHexString(hash));
     }
 
     public static void setUserSession(final String email) {
-        Session.addToSessionLog("Setting user session: " + email);
+        AppLog.serviceI("Setting user session: " + email);
 
         Session.clearSession();
-        final Realm realm = Realm.getDefaultInstance();
-        final RealmResults<User> result = realm.where(User.class).equalTo("email", email).findAll();
-        if (result.size() == 1) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
+            if (usersInDB.size() != 1) {
+                AppLog.serviceE(true, -1, "Validating user login: More then one user found: " + email);
+                return;
+            }
+
             Session.setEngineerEmail(email);
-            Session.setEngineerName(result.get(0).getName());
+            Session.setEngineerName(usersInDB.get(0).getName());
         }
-        realm.close();
     }
 
     @Nullable
     public static String getUserHash(final String email) {
-        final Realm realm = Realm.getDefaultInstance();
-        final User userInDB = realm.where(User.class).equalTo("email", email).findFirst();
-        if (userInDB == null) {
-            realm.close();
-            return null;
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final User userInDB = realm.where(User.class).equalTo("email", email).findFirst();
+            if (userInDB == null) return null;
+            return userInDB.getPasswordHash();
         }
-
-        final String result = userInDB.getPasswordHash();
-        realm.close();
-        return result;
     }
 
     public static void setOrderStatus(final long orderNumber, @OrderStatus final int status) {
@@ -724,33 +685,33 @@ public class DbUtils {
     }
 
     public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
-        Session.addToSessionLog("Saving Job Rules");
+        AppLog.serviceI("Saving Job Rules");
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        // Remove if already exist
-        final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
-                .equalTo("number", jobRules.getNumber()).findFirst();
-        if (currentJobRules != null) currentJobRules.deleteFromRealm();
-        // Save new
-        realm.copyToRealm(jobRules);
-        realm.commitTransaction();
-        realm.close();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            // Remove if already exist
+            final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
+                    .equalTo("number", jobRules.getNumber()).findFirst();
+            if (currentJobRules != null) currentJobRules.deleteFromRealm();
+            // Save new
+            realm.copyToRealm(jobRules);
+            realm.commitTransaction();
+        }
     }
 
     public static void setOrderReportMeasurements(final OrderReportMeasurements measurements) {
-        Session.addToSessionLog("Saving Measurements");
+        AppLog.serviceI("Saving Measurements");
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        // Remove if already exist
-        final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
-                .equalTo("number", measurements.getNumber()).findFirst();
-        if (currentMeasurements != null) currentMeasurements.deleteFromRealm();
-        // Save new
-        realm.copyToRealm(measurements);
-        realm.commitTransaction();
-        realm.close();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
+            // Remove if already exist
+            final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
+                    .equalTo("number", measurements.getNumber()).findFirst();
+            if (currentMeasurements != null) currentMeasurements.deleteFromRealm();
+            // Save new
+            realm.copyToRealm(measurements);
+            realm.commitTransaction();
+        }
     }
 
     public static void setOrderMaintenanceTime(final long orderNumber, @OrderMaintenanceType final int timeType, final Date time) {
@@ -776,12 +737,10 @@ public class DbUtils {
     }
 
     public static boolean isCustomTemplate(final long orderNumber) {
-        long customTemplate = 0;
-        final Realm realm = Realm.getDefaultInstance();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-        if (order != null) customTemplate = order.getCustomTemplateID();
-        realm.close();
-        return customTemplate > 0;
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            return order != null && order.getCustomTemplateID() > 0;
+        }
     }
 
     // returns full XML file path as String

@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
@@ -73,7 +72,7 @@ public class Utils {
     }
 
     public static boolean isPasswordValid(String password) {
-        return password.length() >= 4;
+        return password.length() >= 1;
     }
 
     public static boolean isExternalStorageWritable() {
@@ -125,6 +124,7 @@ public class Utils {
             return currentAppExternalPrivateDir;
         }
 
+        AppLog.serviceE(true, -1, "Problem with creating dir: " + currentAppExternalPrivateDir.toString());
         return null; //Directory is not exist and fail to create
     }
 
@@ -144,7 +144,7 @@ public class Utils {
                 outputStream.write(buf, 0, len);
             }
         } catch (IOException e) {
-            Session.addToSessionLog("ERROR getting PDF template from assets: " + e.toString());
+            AppLog.serviceE(true, -1, "Error getting PDF template from assets: " + e.toString());
             return null;
         }
         return pdfTemplate;
@@ -181,17 +181,16 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static void showPDFReport(@NonNull final Context context,
+    public static void showPDFReport(@NonNull final Activity activity,
                                      @NonNull final File pdfReportFile,
                                      @NonNull final ImageView pdfView) {
 
         if (!pdfReportFile.exists()) {
-            Toast.makeText(context, "ERROR: PDF report file not found!", Toast.LENGTH_SHORT).show();
-            Session.addToSessionLog("ERROR: PDF report file not found: " + pdfReportFile);
+            AppLog.E(activity, "PDF report file not found: " + pdfReportFile);
             return;
         }
 
-        final int zoomFactor = 3;
+        final int zoomFactor = 2;
 
         try (ParcelFileDescriptor mFileDescriptor =
                      ParcelFileDescriptor.open(pdfReportFile, ParcelFileDescriptor.MODE_READ_ONLY)) {
@@ -209,8 +208,7 @@ public class Utils {
             mCurrentPage.close();
             mPdfRenderer.close();
         } catch (IOException e) {
-            Toast.makeText(context, "Some error during PDF file open", Toast.LENGTH_SHORT).show();
-            Session.addToSessionLog("ERROR: PDF file render problem: " + e.toString());
+            AppLog.E(activity, "PDF file render problem: " + e.toString());
         }
     }
 
@@ -245,8 +243,7 @@ public class Utils {
         try {
             return File.createTempFile(imageFileName, ".jpg", appExternalPrivateDir);
         } catch (IOException e) {
-            e.printStackTrace();
-            Session.addToSessionLog("Error on creating LMRA file: " + e.toString());
+            AppLog.serviceE(true, orderNumber, "Error on creating LMRA file: " + e.toString());
             return null;
         }
     }
@@ -257,7 +254,7 @@ public class Utils {
         ) {
             inChannel.transferTo(0, inChannel.size(), outChannel);
         } catch (IOException e) {
-            Session.addToSessionLog("Error on copy file: " + e.toString());
+            AppLog.serviceE(true, -1, "Error on copy file: " + e.toString());
         }
     }
 
@@ -329,64 +326,67 @@ public class Utils {
         }
     }
 
+
+    // TODO REDESIGN RETURN LOGIC
     public static ServerRequestResult getUserFromServer(final String email) {
         final Call<User> userRequest = Session.getServiceConnection().getUser(email);
-        Session.addToSessionLog("Connecting to server: " + userRequest.request());
+        AppLog.serviceI("Connecting to server: " + userRequest.request());
 
         final Response<User> userResponse;
         try {
             userResponse = userRequest.execute();
         } catch (IOException e) {
-            Session.addToSessionLog("User request fail: " + e.toString());
+            AppLog.serviceE(true, -1, "User request fail: " + e.toString());
             return new ServerRequestResult(false, "User request fail: " + e.toString());
         }
 
         if (!userResponse.isSuccessful()) { // Request unsuccessful
-            Session.addToSessionLog("Error connecting to server: " + userResponse.code());
+            AppLog.serviceE(true, -1, "Error connecting to server: " + userResponse.code());
             return new ServerRequestResult(false, "Error connecting to server: " + userResponse.code());
         }
 
         if (userResponse.body() == null) {
-            Session.addToSessionLog("Connection successful. Empty response.");
+            AppLog.serviceE(true, -1, "Connection successful. Empty response.");
             return new ServerRequestResult(false, "Connection successful. Empty response.");
         }
 
         if (userResponse.body().getEmail() == null) { // No such user on server
             DbUtils.deleteUser(email); // Deleting if we have local user
-            Session.addToSessionLog("Connection successful. No user found: " + email);
+            AppLog.serviceI("Connection successful. No user found: " + email);
             return new ServerRequestResult(false, "The entered e-mail address is not known.\nIf you are sure, please call the administrator.");
         }
 
         // We have this user on server
         DbUtils.updateUserFromServer(userResponse.body());
-        Session.addToSessionLog("Connection successful. User found: " + email);
+        AppLog.serviceI("Connection successful. User found: " + email);
         return new ServerRequestResult(true, "Connection successful. User found.");
     }
 
+    // TODO REDESIGN RETURN LOGIC
     public static ServerRequestResult requestPasswordReset(final String email) {
         final String userHash = DbUtils.getUserHash(email);
         if (userHash == null) {
-            Session.addToSessionLog("Password reset. No such user found!");
-            return new ServerRequestResult(false, "ERROR. No such user found. Please, call administrator.");
+            AppLog.serviceI("Password reset. No such user found!");
+            return new ServerRequestResult(false, "No such user found. Please, call administrator.");
         }
 
         final Call<ResponseBody> resetPasswordRequest = Session.getServiceConnection().passwordReset(email, userHash);
-        Session.addToSessionLog("Connecting to server: " + resetPasswordRequest.request());
+        AppLog.serviceI("Connecting to server: " + resetPasswordRequest.request());
 
         final Response<ResponseBody> resetPasswordResponse;
         try {
             resetPasswordResponse = resetPasswordRequest.execute();
         } catch (IOException e) {
-            Session.addToSessionLog("Reset password request fail: " + e.toString());
+            AppLog.serviceE(true, -1, "Reset password request fail: " + e.toString());
             return new ServerRequestResult(false, "Reset password request fail: " + e.toString());
         }
 
         if (!resetPasswordResponse.isSuccessful()) { // Request unsuccessful
-            Session.addToSessionLog("Error connecting to server: " + resetPasswordResponse.code());
+            AppLog.serviceE(true, -1, "Error connecting to server: " + resetPasswordResponse.code());
             return new ServerRequestResult(false, "Error connecting to server: " + resetPasswordResponse.code());
         }
 
-        Session.addToSessionLog("New password request send. Check email <" + email + "> for new password.");
+        AppLog.serviceI("New password request send. Check email <" + email + "> for new password.");
         return new ServerRequestResult(true, "New password request send. Check email <" + email + "> for new password.");
     }
 
@@ -403,16 +403,8 @@ public class Utils {
             return isSuccessful;
         }
 
-        public void setSuccessful(boolean successful) {
-            isSuccessful = successful;
-        }
-
         public String getMessage() {
             return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
         }
     }
 }

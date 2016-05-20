@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 import com.bionic.kvt.serviceapp.BuildConfig;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +21,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
-import static com.bionic.kvt.serviceapp.Session.addToSessionLog;
 
 public class MailHelper extends javax.mail.Authenticator {
     private String recipient;
@@ -107,14 +106,14 @@ public class MailHelper extends javax.mail.Authenticator {
             Transport.send(message);
 
         } catch (MessagingException e) {
-            addToSessionLog("ERROR during message sent: " + e.toString());
+            AppLog.serviceE(true, -1, "Error during message sent: " + e.toString());
             return false;
         } catch (IOException e) {
-            addToSessionLog("ERROR with file during message sent: " + e.toString());
+            AppLog.serviceE(true, -1, "Error with file during message sent: " + e.toString());
             return false;
         }
 
-        addToSessionLog("The message was sent successfully to " + recipient);
+        AppLog.serviceI("The message was sent successfully to " + recipient);
         return true;
     }
 

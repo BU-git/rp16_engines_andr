@@ -84,17 +84,6 @@ public class OrderSynchronisation extends RealmObject {
         this.defaultPDFReportFileSynced = defaultPDFReportFileSynced;
     }
 
-//    public RealmList<LMRAPhoto> getListLMRAPhotos() {
-//        return listLMRAPhotos;
-//    }
-//
-//
-//
-//    public void setListLMRAPhotos(RealmList<LMRAPhoto> listLMRAPhotos) {
-//        this.listLMRAPhotos = listLMRAPhotos;
-//    }
-
-
     public boolean isLMRAPhotosSynced() {
         return isLMRAPhotosSynced;
     }

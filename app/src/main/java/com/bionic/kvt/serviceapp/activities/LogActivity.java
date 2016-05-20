@@ -5,9 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 
@@ -35,14 +33,12 @@ public class LogActivity extends BaseActivity {
     @OnClick(R.id.reset_user_db)
     public void onResetUserDBClick(View v) {
         DbUtils.resetUserTable();
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("User DB reset done!");
         showApplicationLog();
     }
 
     @OnClick(R.id.reset_order_db)
     public void onResetOrderDBClick(View v) {
         DbUtils.resetOrderTableWithSubTables();
-        if (BuildConfig.IS_LOGGING_ON) Session.addToSessionLog("Order DB reset done!");
         showApplicationLog();
     }
 
