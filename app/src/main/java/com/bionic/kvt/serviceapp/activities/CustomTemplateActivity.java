@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.CustomTemplate;
 import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +35,22 @@ public class CustomTemplateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_template);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + CustomTemplateActivity.class.getSimpleName());
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(CustomTemplateActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
 
         generatedTagPrefix = String.valueOf(Session.getCurrentOrder()) + "_";
 
@@ -45,7 +63,7 @@ public class CustomTemplateActivity extends BaseActivity {
 
     @OnClick(R.id.custom_template_next_button)
     public void onNextClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);
     }
 
@@ -57,11 +75,11 @@ public class CustomTemplateActivity extends BaseActivity {
 
     private void inflateCustomTemplate() {
         try (final Realm realm = Realm.getDefaultInstance()) {
-            Session.addToSessionLog("Generating custom template layout.");
+            AppLog.serviceI("Generating custom template layout");
 
             final CustomTemplate customTemplate = realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) {
-                Session.addToSessionLog("**** ERROR **** No custom template found for order : " + Session.getCurrentOrder());
+                AppLog.E(this, "No custom template found for order : " + Session.getCurrentOrder());
                 return;
             }
 
@@ -158,11 +176,11 @@ public class CustomTemplateActivity extends BaseActivity {
 
     private void saveCustomTemplateData() {
         try (final Realm realm = Realm.getDefaultInstance()) {
-            Session.addToSessionLog("Saving custom template data.");
+            AppLog.serviceI("Saving custom template data.");
 
             final CustomTemplate customTemplate = realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) {
-                Session.addToSessionLog("**** ERROR **** No custom template found for order : " + Session.getCurrentOrder());
+                AppLog.E(this, "No custom template found for order : " + Session.getCurrentOrder());
                 return;
             }
 

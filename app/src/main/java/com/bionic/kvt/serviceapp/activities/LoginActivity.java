@@ -23,6 +23,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.BindView;
@@ -57,8 +58,9 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + LoginActivity.class.getSimpleName());
 
-        HeaderHelper headerHelper = new HeaderHelper(this);
+        final HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();
     }
 
@@ -89,8 +91,8 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.forget_password_button)
     public void onForgetPasswordClick(View v) {
-        if (!Utils.isNetworkConnected(LoginActivity.this)) {
-            Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
+        if (!Utils.isNetworkConnected(this)) {
+            AppLog.W(this, getText(R.string.no_connection).toString());
             return;
         }
 
@@ -191,65 +193,6 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-//        return new CursorLoader(this,
-//                // Retrieve data rows for the device user's 'profile' contact.
-//                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-//                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-//
-//                // Select only email addresses.
-//                ContactsContract.Contacts.Data.MIMETYPE +
-//                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-//                .CONTENT_ITEM_TYPE},
-//
-//                // Show primary email addresses first. Note that there won't be
-//                // a primary email address if the user hasn't specified one.
-//                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-//        List<String> emails = new ArrayList<>();
-//        cursor.moveToFirst();
-//        while (!cursor.isAfterLast()) {
-//            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-//            cursor.moveToNext();
-//        }
-//
-//        addEmailsToAutoComplete(emails);
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-//
-//    }
-//
-//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-//        ArrayAdapter<String> adapter =
-//                new ArrayAdapter<>(LoginActivity.this,
-//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-//
-//        mEmailView.setAdapter(adapter);
-//    }
-
-//    @Override
-//    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//        Map<String, ?> all = sharedPreferences.getAll();
-//        Toast.makeText(getApplicationContext(), "name:" + all, Toast.LENGTH_SHORT).show();
-//    }
-
-//    private interface ProfileQuery {
-//        String[] PROJECTION = {
-//                ContactsContract.CommonDataKinds.Email.ADDRESS,
-//                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-//        };
-//
-//        int ADDRESS = 0;
-//        int IS_PRIMARY = 1;
-//    }
-
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -268,7 +211,7 @@ public class LoginActivity extends BaseActivity {
         @Override
         protected Boolean doInBackground(Void... params) {
             if (!Utils.isNetworkConnected(LoginActivity.this)) {
-                Session.addToSessionLog("No connection to network.");
+                AppLog.serviceI("No connection to network. Offline login only.");
                 serverRequestResult = new Utils.ServerRequestResult(true, "No connection to network. Offline login only.");
             } else {
                 serverRequestResult = Utils.getUserFromServer(mEmail);

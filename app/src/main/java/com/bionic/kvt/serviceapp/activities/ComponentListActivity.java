@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
 
@@ -60,6 +62,7 @@ public class ComponentListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_component_list);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + ComponentListActivity.class.getSimpleName());
 
         Utils.runBackgroundServiceIntent(ComponentListActivity.this, GlobalConstants.GENERATE_PART_MAP);
 
@@ -74,6 +77,21 @@ public class ComponentListActivity extends BaseActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(ComponentListActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
     }
 
     @OnClick(R.id.component_list_next_button)
@@ -81,7 +99,7 @@ public class ComponentListActivity extends BaseActivity {
         DbUtils.saveDefectStateListToDB(defectStateList);
         DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(Session.getPartMap(), defectStateList));
 
-        Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);
     }
 

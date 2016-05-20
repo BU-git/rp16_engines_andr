@@ -59,11 +59,10 @@ public class OrderPageActivity extends BaseActivity implements
     private RealmResults<Order> ordersCompleteInDB;
     private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationListener;
     private RealmResults<OrderSynchronisation> ordersToSynchroniseInDB;
-
     private RealmChangeListener<RealmResults<OrderSynchronisation>> ordersSynchronisationCompleteListener;
     private RealmResults<OrderSynchronisation> ordersSynchroniseCompleteInDB;
 
-
+    // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
     private RealmChangeListener<RealmResults<LogItem>> logListener;
     private RealmResults<LogItem> logsWithNotification;
@@ -82,6 +81,11 @@ public class OrderPageActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + OrderPageActivity.class.getSimpleName());
+
+        // Setting App log listener
+        logListener = AppLog.setLogListener(OrderPageActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
 
         //Configuring Search view
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
@@ -116,7 +120,7 @@ public class OrderPageActivity extends BaseActivity implements
 
         // Configuring engineer Id
         ActionBar actionBar = getSupportActionBar();
-        String currentEngineer = getText(R.string.service_engineer) + " " + Session.getEngineerName() +
+        final String currentEngineer = getText(R.string.service_engineer) + " " + Session.getEngineerName() +
                 " (" + Session.getEngineerEmail() + ")";
         if (actionBar != null) actionBar.setSubtitle(currentEngineer);
 
@@ -198,9 +202,6 @@ public class OrderPageActivity extends BaseActivity implements
         runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
         runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
         runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
-
-        logListener = AppLog.setLogListener(OrderPageActivity.this, monitorLogRealm);
-        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
@@ -273,7 +274,7 @@ public class OrderPageActivity extends BaseActivity implements
                 get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
-        Intent intent = new Intent(getApplicationContext(), OrderPageDetailActivity.class);
+        final Intent intent = new Intent(this, OrderPageDetailActivity.class);
         startActivity(intent);
     }
 
@@ -283,7 +284,7 @@ public class OrderPageActivity extends BaseActivity implements
                 get(position / ORDER_OVERVIEW_COLUMN_COUNT).getNumber();
         Session.setCurrentOrder(currentOrderNumber);
 
-        Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
+        final Intent intent = new Intent(this, PDFReportActivity.class);
         startActivity(intent);
     }
 
@@ -304,7 +305,6 @@ public class OrderPageActivity extends BaseActivity implements
 
     private void updateOrderAdapter() {
         DbUtils.updateOrderOverviewList(orderOverviewList);
-        Session.addToSessionLog("Setting OrderAdapter data.");
         ordersAdapter.setOrdersDataSet(orderOverviewList);
         ordersAdapter.notifyDataSetChanged();
     }

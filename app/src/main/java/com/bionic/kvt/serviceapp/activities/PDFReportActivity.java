@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -22,6 +23,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -78,8 +80,27 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + PDFReportActivity.class.getSimpleName());
 
-        Bundle extras = getIntent().getExtras();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report));
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
+
+        final Bundle extras = getIntent().getExtras();
         if (extras != null) {
             engineerName = extras.getString("ENGINEER_NAME");
             clientName = extras.getString("CLIENT_NAME");
@@ -87,29 +108,19 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         final long orderNumber = Session.getCurrentOrder();
 
-        // Exit if Session is empty
-        if (orderNumber == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number to show PDF!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report));
-
-        String pdfReportFileName = getText(R.string.generating_pdf_document).toString()
+        final String pdfReportFileName = getText(R.string.generating_pdf_document).toString()
                 + " " + PDF_REPORT_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
 
+        pdfReportFile = Utils.getPDFReportFileName(orderNumber, false);
 
-        pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
         if (DbUtils.getOrderStatus(orderNumber) >= ORDER_STATUS_COMPLETE) {
             reportBottomLayout.setVisibility(View.GONE);
             if (pdfReportFile.exists()) { // We have report.
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
+                Utils.showPDFReport(this, pdfReportFile, pdfView);
             } else {
-                Session.addToSessionLog("No PDF Report file: " + pdfReportFile.toString());
-                Toast.makeText(getApplicationContext(), "ERROR: Can not find PDF Report file!", Toast.LENGTH_SHORT).show();
+                AppLog.E(this, "No PDF Report file: " + pdfReportFile.toString());
             }
 
             return;
@@ -120,7 +131,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
                 // Device is rotated. No need to generate. Just show.
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
+                Utils.showPDFReport(this, pdfReportFile, pdfView);
                 return;
             }
         }
@@ -130,10 +141,9 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             pdfReportFile.delete();
         }
 
-        pdfReportPreviewFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), true);
+        pdfReportPreviewFile = Utils.getPDFReportFileName(orderNumber, true);
         if (!pdfReportPreviewFile.exists()) {
-            Session.addToSessionLog("Can not get pdf preview file!");
-            Toast.makeText(getApplicationContext(), "ERROR: Can not get PDF preview file!", Toast.LENGTH_SHORT).show();
+            AppLog.E(this, "Can not get pdf preview file.");
             return;
         }
 
@@ -154,14 +164,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         switch (loader.getId()) {
             case PDF_LOADER_ID:
                 sendButton.setEnabled(true);
-                Utils.showPDFReport(getApplicationContext(), pdfReportFile, pdfView);
+                Utils.showPDFReport(this, pdfReportFile, pdfView);
                 break;
             case MAIL_LOADER_ID:
                 if (data) {
-                    Toast.makeText(getApplicationContext(),
+                    Toast.makeText(this,
                             getText(R.string.success_email_toast), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),
+                    Toast.makeText(this,
                             getText(R.string.error_email_toast), Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -281,7 +291,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
 
-        Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
+        final Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

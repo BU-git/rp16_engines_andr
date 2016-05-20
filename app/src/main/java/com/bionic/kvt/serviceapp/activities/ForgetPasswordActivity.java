@@ -8,8 +8,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
-import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.BindView;
@@ -29,8 +29,9 @@ public class ForgetPasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + ForgetPasswordActivity.class.getSimpleName());
 
-        HeaderHelper headerHelper = new HeaderHelper(this);
+        final HeaderHelper headerHelper = new HeaderHelper(this);
         headerHelper.setHeader();
     }
 
@@ -40,7 +41,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         mEmailView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        final String email = mEmailView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -68,7 +69,6 @@ public class ForgetPasswordActivity extends BaseActivity {
 
 
     public class PasswordResetTask extends AsyncTask<Void, Void, Void> {
-
         private final String mEmail;
         private Utils.ServerRequestResult serverRequestResult;
 
@@ -79,16 +79,14 @@ public class ForgetPasswordActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             if (!Utils.isNetworkConnected(ForgetPasswordActivity.this)) {
-                Session.addToSessionLog("No connection to network.  Cannot request new password.");
+                AppLog.serviceI("No connection to network.  Cannot request new password.");
                 serverRequestResult = new Utils.ServerRequestResult(false, "No connection to network. Cannot request new password.");
                 return null;
             }
 
             serverRequestResult = Utils.getUserFromServer(mEmail);
             if (!serverRequestResult.isSuccessful()) return null;
-
             serverRequestResult = Utils.requestPasswordReset(mEmail);
-
             return null;
         }
 

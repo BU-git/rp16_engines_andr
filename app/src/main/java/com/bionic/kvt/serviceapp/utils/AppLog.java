@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -30,7 +31,7 @@ public class AppLog {
             logRealm.deleteAll();
             logRealm.commitTransaction();
 
-            I("Application started.");
+            serviceI("Application started.");
         }
     }
 
@@ -40,7 +41,8 @@ public class AppLog {
             @Override
             public void onChange(RealmResults<LogItem> logItems) {
                 if (logItems.size() == 0) return;
-                Snackbar snackbar = getSnackbar(activity, logItems.get(0));
+                final Snackbar snackbar = getSnackbar(activity, logItems.get(0).getLogItemID());
+                if (snackbar == null) return;
                 snackbar.setAction("MORE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -58,7 +60,7 @@ public class AppLog {
 
     public static RealmResults<LogItem> addListener(final Realm monitorLogRealm,
                                                     final RealmChangeListener<RealmResults<LogItem>> logListener) {
-        RealmResults<LogItem> logsWithNotification = monitorLogRealm.where(LogItem.class).equalTo("notify", true).findAll().sort("dateTime");
+        RealmResults<LogItem> logsWithNotification = monitorLogRealm.where(LogItem.class).equalTo("notify", true).findAllSorted("dateTime");
         logsWithNotification.addChangeListener(logListener);
         return logsWithNotification;
     }
@@ -68,32 +70,6 @@ public class AppLog {
                                       final RealmChangeListener<RealmResults<LogItem>> logListener) {
         logsWithNotification.removeChangeListener(logListener);
         monitorLogRealm.close();
-    }
-
-    public static Snackbar getSnackbar(final Activity activity, final LogItem logItem) {
-        final View rootView = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
-
-        Snackbar snackbar;
-        if (logItem.getLevel() == ERROR) {
-            snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_INDEFINITE);
-        } else {
-            snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_LONG);
-        }
-        final View sbView = snackbar.getView();
-        final TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-        switch (logItem.getLevel()) {
-            case INFO:
-                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorOK));
-                break;
-            case WARRING:
-                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWarring));
-                break;
-            case ERROR:
-                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorError));
-                break;
-        }
-
-        return snackbar;
     }
 
     public static StringBuilder getLog() {
@@ -131,44 +107,112 @@ public class AppLog {
         }
     }
 
-    public static void D(final String message) {
-        add(DEBUG, false, -1, message);
+    public static void E(final Activity activity, final String message) {
+        final long logItemID = serviceAdd(ERROR, false, -1, message);
+        showSnackbar(activity, logItemID);
+        ;
     }
 
-    public static void D(final boolean notify, final long orderNumber, final String message) {
-        add(DEBUG, notify, orderNumber, message);
+    public static void W(final Activity activity, final String message) {
+        final long logItemID = serviceAdd(WARRING, false, -1, message);
+        showSnackbar(activity, logItemID);
     }
 
-    public static void I(final String message) {
-        add(INFO, false, -1, message);
+    public static void I(final Activity activity, final String message) {
+        final long logItemID = serviceAdd(INFO, false, -1, message);
+        showSnackbar(activity, logItemID);
     }
 
-    public static void I(final boolean notify, final long orderNumber, final String message) {
-        add(INFO, notify, orderNumber, message);
+    public static void D(final Activity activity, final String message) {
+        final long logItemID = serviceAdd(DEBUG, false, -1, message);
+        showSnackbar(activity, logItemID);
     }
 
-    public static void W(final String message) {
-        add(WARRING, true, -1, message);
+    public static void serviceD(final String message) {
+        serviceAdd(DEBUG, false, -1, message);
     }
 
-    public static void W(final boolean notify, final long orderNumber, final String message) {
-        add(WARRING, notify, orderNumber, message);
+    public static void serviceD(final boolean notify, final long orderNumber, final String message) {
+        serviceAdd(DEBUG, notify, orderNumber, message);
     }
 
-    public static void E(final String message) {
-        add(ERROR, true, -1, message);
+    public static void serviceI(final String message) {
+        serviceAdd(INFO, false, -1, message);
     }
 
-    public static void E(final boolean notify, final long orderNumber, final String message) {
-        add(ERROR, notify, orderNumber, message);
+    public static void serviceI(final boolean notify, final long orderNumber, final String message) {
+        serviceAdd(INFO, notify, orderNumber, message);
     }
 
-    private static void add(final int level, final boolean notify, final long orderNumber, final String message) {
+    public static void serviceW(final String message) {
+        serviceAdd(WARRING, true, -1, message);
+    }
+
+    public static void serviceW(final boolean notify, final long orderNumber, final String message) {
+        serviceAdd(WARRING, notify, orderNumber, message);
+    }
+
+    public static void serviceE(final String message) {
+        serviceAdd(ERROR, true, -1, message);
+    }
+
+    public static void serviceE(final boolean notify, final long orderNumber, final String message) {
+        serviceAdd(ERROR, notify, orderNumber, message);
+    }
+
+    // Private methods
+
+    private static long serviceAdd(final int level, final boolean notify, final long orderNumber, final String message) {
         try (final Realm logRealm = Session.getLogRealm()) {
-            final LogItem logItem = new LogItem(System.currentTimeMillis(), new Date(), level, notify, orderNumber, message);
+            final long logItemID = System.currentTimeMillis();
+            final LogItem logItem = new LogItem(logItemID, new Date(), level, notify, orderNumber, message);
             logRealm.beginTransaction();
             logRealm.copyToRealm(logItem);
             logRealm.commitTransaction();
+            return logItemID;
+        }
+    }
+
+    private static void showSnackbar(final Activity activity, final long logItemID) {
+        final Snackbar snackbar = getSnackbar(activity, logItemID);
+        if (snackbar != null)
+            snackbar.setAction("MORE", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.startActivity(new Intent(activity, LogActivity.class));
+                }
+            }).show();
+    }
+
+    @Nullable
+    private static Snackbar getSnackbar(final Activity activity, final long logItemID) {
+        try (final Realm logRealm = Session.getLogRealm()) {
+            final LogItem logItem = logRealm.where(LogItem.class).equalTo("logItemID", logItemID).findFirst();
+            if (logItem == null) return null;
+
+            final View rootView = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
+            Snackbar snackbar;
+            if (logItem.getLevel() == ERROR) {
+                snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_INDEFINITE);
+            } else {
+                snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_LONG);
+            }
+            final View sbView = snackbar.getView();
+            final TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+            switch (logItem.getLevel()) {
+                case INFO:
+                    textView.setTextColor(ContextCompat.getColor(activity, R.color.colorOK));
+                    break;
+                case WARRING:
+                    textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWarring));
+                    break;
+                case ERROR:
+                    textView.setTextColor(ContextCompat.getColor(activity, R.color.colorError));
+                    break;
+            }
+
+            return snackbar;
+
         }
     }
 }

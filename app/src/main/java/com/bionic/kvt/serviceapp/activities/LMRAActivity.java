@@ -3,12 +3,12 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
@@ -16,6 +16,7 @@ import com.bionic.kvt.serviceapp.adapters.LMRAAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
@@ -42,19 +43,28 @@ public class LMRAActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lmra);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + LMRAActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.lmra_title));
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(LMRAActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
             return;
         }
 
         if (!Utils.isExternalStorageWritable()) {
-            Session.addToSessionLog("Can not write photos file to external storage!");
-            Toast.makeText(getApplicationContext(), "ERROR: Can not write photos to external storage!", Toast.LENGTH_SHORT).show();
+            AppLog.E(this, "Can not write photos file to external storage.");
             return;
         }
 
@@ -130,9 +140,16 @@ public class LMRAActivity extends BaseActivity {
                 // permission was granted
             } else {
                 // permission denied
-                Session.addToSessionLog("ERROR: Permissions not granted!");
-                Toast.makeText(getApplicationContext(), "Please grant Permissions!", Toast.LENGTH_SHORT).show();
-                finish();
+                AppLog.E(this, "Permissions not granted!");
+
+                // Give time to read message
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        LMRAActivity.this.finish();
+                    }
+                }, 3000);
+
             }
         }
     }

@@ -2,15 +2,16 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,20 +35,32 @@ public class OrderWorkScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_work_screen);
         ButterKnife.bind(this);
-
-        // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        AppLog.serviceI("Create activity: " + OrderWorkScreenActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.preparations));
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(OrderWorkScreenActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
+
+
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)
     public void onLMRAClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), LMRAActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), LMRAActivity.class);
         startActivity(intent);
     }
 

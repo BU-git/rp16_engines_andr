@@ -30,7 +30,6 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -155,21 +154,17 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
             }
         });
 
-        if (lmraViewHolder.lmra_photo_count != null && !lmraViewHolder.lmra_photo_count.getText().toString().equals("0 of 0")) {
-            lmraViewHolder.lmraImageView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(context, LMRAImageActivity.class);
-                    try {
-                        i.putExtra("imageFile", lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition).toURI().toURL().toString());
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    context.startActivity(i);
-                }
-            });
-        }
-
+        lmraViewHolder.lmraImageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (lmraViewHolder.listLMRAPhotos == null || lmraViewHolder.listLMRAPhotos.size() == 0)
+                    return;
+                final File currentPhotoFile = lmraViewHolder.listLMRAPhotos.get(lmraViewHolder.currentPhotoPosition);
+                final Intent intent = new Intent(context, LMRAImageActivity.class);
+                intent.putExtra("imageFile", currentPhotoFile.toString());
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

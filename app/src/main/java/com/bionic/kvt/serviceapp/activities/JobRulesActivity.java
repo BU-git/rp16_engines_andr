@@ -2,17 +2,18 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +53,7 @@ public class JobRulesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_rules);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + JobRulesActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_rules));
@@ -79,8 +81,17 @@ public class JobRulesActivity extends BaseActivity {
         });
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(JobRulesActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
             return;
         }
 
@@ -118,7 +129,7 @@ public class JobRulesActivity extends BaseActivity {
         jobRules.setExternalRemarksText(externalRemarksText.getText().toString());
         DbUtils.setOrderReportJobRules(jobRules);
 
-        Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);
         startActivity(intent);
     }
 }

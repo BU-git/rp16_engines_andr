@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.ToggleButton;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.views.SignatureView;
 
@@ -50,23 +52,36 @@ public class SignaturesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signatures);
         ButterKnife.bind(this);
-
-        // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        AppLog.serviceI("Create activity: " + SignaturesActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.signatures));
 
-        final Realm realm = Realm.getDefaultInstance();
-        final Order currentOrder = realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
-        if (currentOrder != null) {
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(SignaturesActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
+
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order currentOrder = realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
+            if (currentOrder == null) {
+                AppLog.E(this, "No order found with number: " + Session.getCurrentOrder());
+                return;
+            }
             clientName.setText(currentOrder.getRelation().getContactPerson());
             engineerName.setText(currentOrder.getEmployee().getName());
         }
-        realm.close();
+
     }
 
     @OnClick(R.id.button_clear_engineer)
@@ -88,7 +103,7 @@ public class SignaturesActivity extends BaseActivity {
         final File pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
-        Intent intent = new Intent(getApplicationContext(), PDFReportActivity.class);
+        final Intent intent = new Intent(this, PDFReportActivity.class);
         intent.putExtra("ENGINEER_NAME", engineerName.getText().toString());
         intent.putExtra("CLIENT_NAME", clientName.getText().toString());
         startActivity(intent);
@@ -97,7 +112,7 @@ public class SignaturesActivity extends BaseActivity {
     @OnClick(R.id.button_confirm_engineer)
     public void onConfirmEngineerClick(View v) {
         if (engineerDrawingView.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please, draw signature.", Toast.LENGTH_LONG).show();
             buttonConfirmEngineer.setChecked(false);
             return;
         }
@@ -116,7 +131,7 @@ public class SignaturesActivity extends BaseActivity {
     @OnClick(R.id.button_confirm_client)
     public void onConfirmClientClick(View v) {
         if (clientDrawingView.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Please, draw signature.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please, draw signature.", Toast.LENGTH_LONG).show();
             buttonConfirmClient.setChecked(false);
             return;
         }

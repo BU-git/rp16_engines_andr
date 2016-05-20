@@ -4,18 +4,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,13 +48,23 @@ public class MeasurementsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurements);
         ButterKnife.bind(this);
+        AppLog.serviceI("Create activity: " + MeasurementsActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
 
         // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(MeasurementsActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
             return;
         }
 
@@ -123,7 +133,7 @@ public class MeasurementsActivity extends BaseActivity {
     public void onNextClick(View v) {
         saveMeasurements();
 
-        Intent intent = new Intent(getApplicationContext(), JobRulesActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), JobRulesActivity.class);
         startActivity(intent);
     }
 

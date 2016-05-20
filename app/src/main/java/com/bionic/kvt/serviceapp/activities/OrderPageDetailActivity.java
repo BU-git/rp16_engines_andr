@@ -2,10 +2,10 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
@@ -13,7 +13,6 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.util.Date;
@@ -22,19 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 
 public class OrderPageDetailActivity extends BaseActivity {
-
-    private Realm monitorLogRealm = Session.getLogRealm();
-    private RealmChangeListener<RealmResults<LogItem>> logListener;
-    private RealmResults<LogItem> logsWithNotification;
-
     @BindView(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
 
@@ -81,28 +73,38 @@ public class OrderPageDetailActivity extends BaseActivity {
     TextView orderInstallationTown;
 
     @BindView(R.id.instructions_text)
-    TextView orderInstuctions;
+    TextView orderInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
         ButterKnife.bind(this);
-
-        // Exit if Session is empty
-        if (Session.getCurrentOrder() == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        AppLog.serviceI("Create activity: " + OrderPageActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.order_data));
+
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(OrderPageDetailActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
                 realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();
         if (currentOrder == null) {
-            Toast.makeText(getApplicationContext(), "No such order in database!", Toast.LENGTH_SHORT).show();
+            AppLog.E(this, "No such order in database!");
             return;
         }
 
@@ -128,15 +130,11 @@ public class OrderPageDetailActivity extends BaseActivity {
             orderAddress.setText(currentOrder.getInstallation().getAddress());
             orderInstallationTown.setText(currentOrder.getInstallation().getTown());
 
-            orderInstuctions.setText(currentOrder.getNote());
+            orderInstructions.setText(currentOrder.getNote());
         } catch (NullPointerException e) {
         }
 
         realm.close();
-
-
-        logListener = AppLog.setLogListener(OrderPageDetailActivity.this, monitorLogRealm);
-        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
     }
 
     @OnClick(R.id.service_engenieer_start_button)
@@ -168,9 +166,4 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
-    }
 }

@@ -3,19 +3,20 @@ package com.bionic.kvt.serviceapp.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -55,30 +56,39 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report_preview);
         ButterKnife.bind(this);
-
-        final long orderNumber = Session.getCurrentOrder();
-
-        // Exit if Session is empty
-        if (orderNumber == 0L) {
-            Toast.makeText(getApplicationContext(), "No order number to show PDF!", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        AppLog.serviceI("Create activity: " + PDFReportPreviewActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report_preview));
 
-        String pdfReportFileName = getText(R.string.generating_pdf_preview_document).toString()
+        // Exit if Session is empty
+        if (Session.getCurrentOrder() <= 0L) {
+            AppLog.E(this, "No order number.");
+            // Give time to read message
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    final Intent intent = new Intent(PDFReportPreviewActivity.this, OrderPageActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }, 3000);
+            return;
+        }
+
+        final long orderNumber = Session.getCurrentOrder();
+
+        final String pdfReportFileName = getText(R.string.generating_pdf_preview_document).toString()
                 + " " + PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf";
         pdfTextLog.setText(pdfReportFileName);
 
-
-        pdfReportPreviewFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), true);
+        pdfReportPreviewFile = Utils.getPDFReportFileName(orderNumber, true);
 
         // Check rotation
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean(ROTATION_FLAG)) {
                 // Device is rotated. No need to generate. Just show.
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, pdfView);
+                Utils.showPDFReport(this, pdfReportPreviewFile, pdfView);
                 return;
             }
         }
@@ -88,10 +98,9 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         }
 
         // Generating...
-        pdfTemplate = Utils.getPDFTemplateFile(getApplicationContext());
+        pdfTemplate = Utils.getPDFTemplateFile(this);
         if (pdfTemplate == null || !pdfTemplate.exists()) {
-            Session.addToSessionLog("Can not get pdf template!");
-            Toast.makeText(getApplicationContext(), "ERROR: Can not get pdf template!", Toast.LENGTH_SHORT).show();
+            AppLog.E(this, "Can not get pdf template.");
             return;
         }
 
@@ -109,7 +118,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     public void onLoadFinished(Loader<Boolean> loader, Boolean data) {
         switch (loader.getId()) {
             case PDF_LOADER_ID:
-                Utils.showPDFReport(getApplicationContext(), pdfReportPreviewFile, pdfView);
+                Utils.showPDFReport(this, pdfReportPreviewFile, pdfView);
                 break;
         }
     }
@@ -279,7 +288,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
     @OnClick(R.id.pdf_preview_button_next)
     public void onDoneClick(View v) {
-        Intent intent = new Intent(getApplicationContext(), SignaturesActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), SignaturesActivity.class);
         startActivity(intent);
     }
 }
