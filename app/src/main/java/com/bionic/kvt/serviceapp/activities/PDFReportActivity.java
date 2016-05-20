@@ -24,6 +24,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -37,7 +38,6 @@ import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
@@ -45,6 +45,9 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
@@ -62,6 +65,11 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     private String clientName;
 
     private AlertDialog enterEmailDialog;
+
+    // App Log monitor
+    private Realm monitorLogRealm = Session.getLogRealm();
+    private RealmChangeListener<RealmResults<LogItem>> logListener;
+    private RealmResults<LogItem> logsWithNotification;
 
     @BindView(R.id.pdf_report_send_button)
     Button sendButton;
@@ -83,6 +91,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report));
+
+        // Setting App log listener
+        logListener = AppLog.setLogListener(PDFReportActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
 
         // Exit if Session is empty
         if (Session.getCurrentOrder() <= 0L) {
@@ -260,12 +272,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 contentByte.addImage(signatureClient);
 
                 pdfStamper.close();
-            } catch (FileNotFoundException e) {
-                Session.addToSessionLog("ERROR: 1" + e.toString());
-            } catch (IOException e) {
-                Session.addToSessionLog("ERROR: 2" + e.toString());
-            } catch (DocumentException e) {
-                Session.addToSessionLog("ERROR: 3" + e.toString());
+            } catch (IOException | DocumentException e) {
+                AppLog.serviceE(true, Session.getCurrentOrder(), "Error while generating PDF: " + e.toString());
             }
 
             return false;
@@ -282,6 +290,12 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     protected void onStop() {
         super.onStop();
         if (enterEmailDialog != null && enterEmailDialog.isShowing()) enterEmailDialog.dismiss();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
     }
 
     @OnClick(R.id.pdf_button_complete_order)
@@ -323,7 +337,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         enterEmailDialog = dialogBuilder.create();
         enterEmailDialog.show();
     }
-
 
     public void sendEmailWithPDF(final String email) {
         mailHelper = new MailHelper();

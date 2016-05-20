@@ -38,7 +38,6 @@ public class Session extends Application {
     private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
 
     private ConnectionServiceAPI connectionServiceAPI;
-    private List<String> sessionLog;
 
     private File currentAppInternalPrivateDir;
     private File currentAppExternalPrivateDir;
@@ -56,7 +55,6 @@ public class Session extends Application {
         super.onCreate();
         currentUserSession = this;
         partMap = new LinkedHashMap<>();
-        sessionLog = new ArrayList<>();
         currentAppInternalPrivateDir = getFilesDir();
         currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
 
@@ -108,11 +106,6 @@ public class Session extends Application {
 
     public static void setPartMap(Map<String, LinkedHashMap<String, JsonObject>> partMap) {
         Session.partMap = partMap;
-    }
-
-    public static void addToSessionLog(String message) {
-        if (!IS_LOGGING_ON) return;
-        currentUserSession.sessionLog.add("[" + Utils.getDateTimeStringFromDate(new Date()) + "](" + currentUserSession.engineerEmail + ") " + message);
     }
 
     public static void setEngineerName(String engineerName) {

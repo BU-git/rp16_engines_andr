@@ -17,6 +17,7 @@ import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
 import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -28,7 +29,6 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -36,6 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 
@@ -44,6 +46,11 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     private static final int PDF_LOADER_ID = 1;
     private File pdfReportPreviewFile;
     private File pdfTemplate;
+
+    // App Log monitor
+    private Realm monitorLogRealm = Session.getLogRealm();
+    private RealmChangeListener<RealmResults<LogItem>> logListener;
+    private RealmResults<LogItem> logsWithNotification;
 
     @BindView(R.id.pdf_preview_text_log)
     TextView pdfTextLog;
@@ -59,6 +66,10 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report_preview));
+
+        // Setting App log listener
+        logListener = AppLog.setLogListener(PDFReportPreviewActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
 
         // Exit if Session is empty
         if (Session.getCurrentOrder() <= 0L) {
@@ -274,12 +285,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText3.go();
 
                 pdfStamper.close();
-            } catch (FileNotFoundException e) {
-                Session.addToSessionLog("ERROR: 1" + e.toString());
-            } catch (IOException e) {
-                Session.addToSessionLog("ERROR: 2" + e.toString());
-            } catch (DocumentException e) {
-                Session.addToSessionLog("ERROR: 3" + e.toString());
+            } catch (IOException | DocumentException e) {
+                AppLog.serviceE(true, orderNumber, "Error while generating PDF: " + e.toString());
             }
 
             return false;
@@ -291,6 +298,12 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
     public void onDoneClick(View v) {
         final Intent intent = new Intent(getApplicationContext(), SignaturesActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
     }
 }
 

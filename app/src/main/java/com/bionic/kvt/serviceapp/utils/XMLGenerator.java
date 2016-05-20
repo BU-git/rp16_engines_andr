@@ -39,7 +39,7 @@ public class XMLGenerator {
             if (allLMRAItemsInDb.size() == 0) return null;
             final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
 
-            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] LMRA data.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] LMRA data.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -92,7 +92,7 @@ public class XMLGenerator {
                 serializer.endDocument();
                 return writer.toString();
             } catch (IOException e) {
-                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+                AppLog.serviceE("Error generating XML: " + e.toString());
             }
         }
         return null;
@@ -100,7 +100,7 @@ public class XMLGenerator {
 
     @Nullable
     public static String getXMLFromDefaultTemplate(final long orderNumber) {
-        Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] Default template.");
+        AppLog.serviceI("Generating XML from Order [" + orderNumber + "] Default template.");
 
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
@@ -187,7 +187,7 @@ public class XMLGenerator {
             serializer.endDocument();
             return writer.toString();
         } catch (IOException e) {
-            Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+            AppLog.serviceE("Error generating XML: " + e.toString());
         }
 
 
@@ -201,7 +201,7 @@ public class XMLGenerator {
                     realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) return null;
 
-            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] custom template.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] custom template.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -259,7 +259,7 @@ public class XMLGenerator {
                 serializer.endDocument();
                 return writer.toString();
             } catch (IOException e) {
-                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+                AppLog.serviceE("Error generating XML: " + e.toString());
             }
         }
         return null;
@@ -272,7 +272,7 @@ public class XMLGenerator {
                     realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst();
             if (orderMeasurements == null) return null;
 
-            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] measurements.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] measurements.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -368,7 +368,7 @@ public class XMLGenerator {
                 serializer.endDocument();
                 return writer.toString();
             } catch (IOException e) {
-                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+                AppLog.serviceE("Error generating XML: " + e.toString());
             }
         }
         return null;
@@ -381,7 +381,7 @@ public class XMLGenerator {
                     realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst();
             if (orderReportJobRules == null) return null;
 
-            Session.addToSessionLog("Generating XML from Order [" + orderNumber + "] job rules.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] job rules.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -437,7 +437,7 @@ public class XMLGenerator {
                 serializer.endDocument();
                 return writer.toString();
             } catch (IOException e) {
-                Session.addToSessionLog("**** ERROR **** generating XML: " + e.toString());
+                AppLog.serviceE("Error generating XML: " + e.toString());
             }
         }
         return null;

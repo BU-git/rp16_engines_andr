@@ -26,6 +26,7 @@ import com.bionic.kvt.serviceapp.activities.LMRAImageActivity;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -129,7 +130,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
 
                 final File photoFile = Utils.createImageFile(Session.getCurrentOrder());
                 if (photoFile == null) {
-                    Session.addToSessionLog("**** ERROR **** Can not create image file.");
+                    AppLog.serviceE(true, Session.getCurrentOrder(),"Can not create image file.");
                     return;
                 }
 
