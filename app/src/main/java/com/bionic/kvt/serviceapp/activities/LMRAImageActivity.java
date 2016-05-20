@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class LMRAImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lmra_image);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + LMRAImageActivity.class.getSimpleName());
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + LMRAImageActivity.class.getSimpleName());
 
         imageView.setImageURI(Uri.fromFile(new File(getIntent().getStringExtra("imageFile"))));
         new PhotoViewAttacher(imageView);

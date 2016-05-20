@@ -52,7 +52,6 @@ public class SignaturesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signatures);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + SignaturesActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.signatures));
@@ -71,6 +70,8 @@ public class SignaturesActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + SignaturesActivity.class.getSimpleName());
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             final Order currentOrder = realm.where(Order.class).equalTo("number", Session.getCurrentOrder()).findFirst();

@@ -1,6 +1,13 @@
 package com.bionic.kvt.serviceapp.db;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
+import com.bionic.kvt.serviceapp.db.Components.Component;
+import com.bionic.kvt.serviceapp.db.Components.Employee;
+import com.bionic.kvt.serviceapp.db.Components.Info;
+import com.bionic.kvt.serviceapp.db.Components.Installation;
+import com.bionic.kvt.serviceapp.db.Components.Part;
+import com.bionic.kvt.serviceapp.db.Components.Relation;
+import com.bionic.kvt.serviceapp.db.Components.Task;
 
 import java.util.Date;
 

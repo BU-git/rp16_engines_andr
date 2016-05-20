@@ -53,7 +53,6 @@ public class JobRulesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_job_rules);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + JobRulesActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.job_rules));
@@ -94,6 +93,8 @@ public class JobRulesActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + JobRulesActivity.class.getSimpleName());
 
         // Filling saved data
         final Realm realm = Realm.getDefaultInstance();

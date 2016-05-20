@@ -98,7 +98,7 @@ public class AppLog {
                 if (logItem.getOrderNumber() > 0) {
                     stringBuilder.append("(").append(logItem.getOrderNumber()).append("): ");
                 } else {
-                    stringBuilder.append("(No order): ");
+                    stringBuilder.append("(NoOrder): ");
                 }
 
                 stringBuilder.append(logItem.getMessage());
@@ -162,10 +162,16 @@ public class AppLog {
 
     // Private methods
 
-    private static long serviceAdd(final int level, final boolean notify, final long orderNumber, final String message) {
+    private static synchronized long serviceAdd(final int level, final boolean notify, final long orderNumber, final String message) {
         try (final Realm logRealm = Session.getLogRealm()) {
-            final long logItemID = System.currentTimeMillis();
-            final LogItem logItem = new LogItem(logItemID, new Date(), level, notify, orderNumber, message);
+            long logItemID;
+            LogItem logItem;
+            do { // ID can be already
+                logItemID = System.currentTimeMillis();
+                logItem = logRealm.where(LogItem.class).equalTo("logItemID", logItemID).findFirst();
+            } while (logItem != null);
+
+            logItem = new LogItem(logItemID, new Date(), level, notify, orderNumber, message);
             logRealm.beginTransaction();
             logRealm.copyToRealm(logItem);
             logRealm.commitTransaction();

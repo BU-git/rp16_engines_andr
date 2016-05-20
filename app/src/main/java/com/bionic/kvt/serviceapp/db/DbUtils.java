@@ -4,8 +4,17 @@ import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
+import com.bionic.kvt.serviceapp.db.Components.Component;
+import com.bionic.kvt.serviceapp.db.Components.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.Components.Employee;
+import com.bionic.kvt.serviceapp.db.Components.Info;
+import com.bionic.kvt.serviceapp.db.Components.Installation;
+import com.bionic.kvt.serviceapp.db.Components.Part;
+import com.bionic.kvt.serviceapp.db.Components.Relation;
+import com.bionic.kvt.serviceapp.db.Components.Task;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.bionic.kvt.serviceapp.utils.XMLGenerator;
 import com.google.gson.Gson;
@@ -188,50 +197,48 @@ public class DbUtils {
     }
 
     public static List<Long> getOrdersToBeUpdated(final List<OrderBrief> serverOrderBriefList) {
-        Session.addToSessionLog("Looking for orders to be updated.");
+        AppLog.serviceI("Looking for orders to be updated.");
 
         final List<Long> ordersToBeUpdated = new ArrayList<>();
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        for (OrderBrief orderBrief : serverOrderBriefList) {
-            Order orderInDb = realm
-                    .where(Order.class)
-                    .equalTo("number", orderBrief.getNumber())
-                    .findFirst();
+            for (OrderBrief orderBrief : serverOrderBriefList) {
+                Order orderInDb = realm
+                        .where(Order.class)
+                        .equalTo("number", orderBrief.getNumber())
+                        .findFirst();
 
-            if (orderInDb == null) { // No such order in DB
-                ordersToBeUpdated.add(orderBrief.getNumber());
-                continue;
+                if (orderInDb == null) { // No such order in DB
+                    ordersToBeUpdated.add(orderBrief.getNumber());
+                    continue;
+                }
+
+                if (isOrderNewerOnServer(orderInDb, orderBrief)) { // We have order in DB but it's outdated
+                    ordersToBeUpdated.add(orderBrief.getNumber());
+                }
             }
 
-            if (orderInDb.getOrderStatus() == ORDER_STATUS_NOT_STARTED
-                    && isOrderNewerOnServer(orderInDb, orderBrief)) { // We have order in DB but it's outdated
-                ordersToBeUpdated.add(orderBrief.getNumber());
-            }
         }
-
-        realm.close();
-        Session.addToSessionLog("Found " + ordersToBeUpdated.size() + " orders to be updated.");
+        AppLog.serviceI("Found " + ordersToBeUpdated.size() + " orders to be updated.");
         return ordersToBeUpdated;
     }
 
-    public static List<Long> getOrdersToBeUploaded() {
-        Session.addToSessionLog("Looking for orders to be uploaded.");
+    public static List<Long> getOrdersToBePrepared() {
+        AppLog.serviceI("Looking for orders to be uploaded.");
 
         final List<Long> ordersToBeUploaded = new ArrayList<>();
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        final RealmResults<Order> completeOrdersInDb = realm
-                .where(Order.class)
-                .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
-                .findAll();
+            final RealmResults<Order> completeOrdersInDb = realm.where(Order.class)
+                    .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
+                    .findAll();
 
-        for (Order order : completeOrdersInDb) {
-            ordersToBeUploaded.add(order.getNumber());
+            for (Order order : completeOrdersInDb) {
+                ordersToBeUploaded.add(order.getNumber());
+            }
+
         }
-
-        realm.close();
-        Session.addToSessionLog("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
+        AppLog.serviceI("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
         return ordersToBeUploaded;
     }
 
@@ -248,171 +255,170 @@ public class DbUtils {
     }
 
     private static void removeOrderFromDB(final long orderNumber) {
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.where(Order.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
-        realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
-        realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
-        realm.where(DefectState.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+        AppLog.serviceI(false, orderNumber, "Removing all order data.");
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
 
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        realm.close();
+            //TODO Implement remove files
 
-        //TODO Do we need to remove files?
+            realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(DefectState.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(LMRAItem.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(LMRAPhoto.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(Order.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
+            realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(OrderSynchronisation.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+
+            realm.commitTransaction(); // No logic if transaction fail!!!
+        }
     }
 
     public static void updateOrderFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        Session.addToSessionLog("Updating order from server order data: " + serverOrder.getNumber());
+        AppLog.serviceI("Updating order from server order data: " + serverOrder.getNumber());
 
-        final Realm realm = Realm.getDefaultInstance();
-        final Order currentOrderInDB = realm
-                .where(Order.class)
-                .equalTo("number", serverOrder.getNumber())
-                .findFirst();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order currentOrderInDB = realm.where(Order.class)
+                    .equalTo("number", serverOrder.getNumber())
+                    .findFirst();
 
-        if (currentOrderInDB == null) { // New order
-            createNewOrderInDb(serverOrder);
-            Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
-        }
+            if (currentOrderInDB == null) { // New order
+                createNewOrderInDb(serverOrder);
+            }
 
-        if (currentOrderInDB != null) { // Existing order
-            switch (currentOrderInDB.getOrderStatus()) {
-                case ORDER_STATUS_NOT_STARTED:
-                    Session.addToSessionLog("Deleting order: " + currentOrderInDB.getNumber());
-                    removeOrderFromDB(currentOrderInDB.getNumber());
-                    createNewOrderInDb(serverOrder);
-                    Session.addToSessionLog("Update order table from server order " + serverOrder.getNumber() + " done.");
-                    break;
+            if (currentOrderInDB != null) { // Existing order
+                switch (currentOrderInDB.getOrderStatus()) {
+                    case ORDER_STATUS_NOT_STARTED:
+                        AppLog.serviceI("Deleting order: " + currentOrderInDB.getNumber());
+                        removeOrderFromDB(currentOrderInDB.getNumber());
+                        createNewOrderInDb(serverOrder);
+                        break;
 
-                case ORDER_STATUS_IN_PROGRESS:
-                    Session.addToSessionLog("*** WARRING ***: Cannot update order in status IN_PROGRESS. Order #"
-                            + currentOrderInDB.getNumber());
-                    break;
+                    case ORDER_STATUS_IN_PROGRESS:
+                        AppLog.serviceW(true, currentOrderInDB.getNumber(), "Cannot update order in status IN PROGRESS.");
+                        break;
 
-                case ORDER_STATUS_COMPLETE:
-                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE. Order #"
-                            + currentOrderInDB.getNumber());
-                    break;
-                case ORDER_STATUS_COMPLETE_UPLOADED:
-                    Session.addToSessionLog("*** ERROR ***: Cannot update order in status COMPLETE_UPLOADED. Order #"
-                            + currentOrderInDB.getNumber());
-                    break;
-                case ORDER_STATUS_NOT_FOUND:
-                    break;
+                    case ORDER_STATUS_COMPLETE:
+                        AppLog.serviceW(true, currentOrderInDB.getNumber(), "Cannot update order in status COMPLETE.");
+                        break;
+                    case ORDER_STATUS_COMPLETE_UPLOADED:
+                        AppLog.serviceW(true, currentOrderInDB.getNumber(), "Cannot update order in status UPLOADED.");
+                        break;
+                    case ORDER_STATUS_NOT_FOUND:
+                        break;
+                }
             }
         }
-        realm.close();
 
     }
 
     private static void createNewOrderInDb(final com.bionic.kvt.serviceapp.api.Order serverOrder) {
-        Session.addToSessionLog("Creating order: " + serverOrder.getNumber());
+        AppLog.serviceI("Creating order: " + serverOrder.getNumber());
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            realm.beginTransaction();
 
-        final Order newOrder = realm.createObject(Order.class);
+            final Order newOrder = realm.createObject(Order.class);
 
-        newOrder.setNumber(serverOrder.getNumber());
-        newOrder.setOrderType(serverOrder.getOrderType());
-        newOrder.setDate(new Date(serverOrder.getDate()));
-        newOrder.setReference(serverOrder.getReference());
-        newOrder.setNote(serverOrder.getNote());
+            newOrder.setNumber(serverOrder.getNumber());
+            newOrder.setOrderType(serverOrder.getOrderType());
+            newOrder.setDate(new Date(serverOrder.getDate()));
+            newOrder.setReference(serverOrder.getReference());
+            newOrder.setNote(serverOrder.getNote());
 
-        // Relation
-        newOrder.setRelation(realm.createObjectFromJson
-                (Relation.class, GSON.toJson(serverOrder.getRelation()))
-        );
-
-        // Employee
-        newOrder.setEmployee(realm.createObjectFromJson
-                (Employee.class, GSON.toJson(serverOrder.getEmployee()))
-        );
-
-        // Installation
-        newOrder.setInstallation(realm.createObjectFromJson
-                (Installation.class, GSON.toJson(serverOrder.getInstallation()))
-        );
-
-        // Task
-        final RealmList<Task> newTaskList = new RealmList<>();
-        for (com.bionic.kvt.serviceapp.api.Task serverTask : serverOrder.getTasks()) {
-            newTaskList.add(realm.createObjectFromJson
-                    (Task.class, GSON.toJson(serverTask))
+            // Relation
+            newOrder.setRelation(realm.createObjectFromJson
+                    (Relation.class, GSON.toJson(serverOrder.getRelation()))
             );
-        }
-        newOrder.setTasks(newTaskList);
 
-        // Component
-        final RealmList<Component> newComponentList = new RealmList<>();
-        for (com.bionic.kvt.serviceapp.api.Component serverComponent : serverOrder.getComponents()) {
-            newComponentList.add(realm.createObjectFromJson
-                    (Component.class, GSON.toJson(serverComponent))
+            // Employee
+            newOrder.setEmployee(realm.createObjectFromJson
+                    (Employee.class, GSON.toJson(serverOrder.getEmployee()))
             );
-        }
-        newOrder.setComponents(newComponentList);
 
-        // Part
-        final RealmList<Part> newPartList = new RealmList<>();
-        for (com.bionic.kvt.serviceapp.api.Part serverPart : serverOrder.getParts()) {
-            newPartList.add(realm.createObjectFromJson
-                    (Part.class, GSON.toJson(serverPart))
+            // Installation
+            newOrder.setInstallation(realm.createObjectFromJson
+                    (Installation.class, GSON.toJson(serverOrder.getInstallation()))
             );
+
+            // Task
+            final RealmList<Task> newTaskList = new RealmList<>();
+            for (com.bionic.kvt.serviceapp.api.Task serverTask : serverOrder.getTasks()) {
+                newTaskList.add(realm.createObjectFromJson
+                        (Task.class, GSON.toJson(serverTask))
+                );
+            }
+            newOrder.setTasks(newTaskList);
+
+            // Component
+            final RealmList<Component> newComponentList = new RealmList<>();
+            for (com.bionic.kvt.serviceapp.api.Component serverComponent : serverOrder.getComponents()) {
+                newComponentList.add(realm.createObjectFromJson
+                        (Component.class, GSON.toJson(serverComponent))
+                );
+            }
+            newOrder.setComponents(newComponentList);
+
+            // Part
+            final RealmList<Part> newPartList = new RealmList<>();
+            for (com.bionic.kvt.serviceapp.api.Part serverPart : serverOrder.getParts()) {
+                newPartList.add(realm.createObjectFromJson
+                        (Part.class, GSON.toJson(serverPart))
+                );
+            }
+            newOrder.setParts(newPartList);
+
+            // Info
+            final RealmList<Info> newInfoList = new RealmList<>();
+            for (com.bionic.kvt.serviceapp.api.Info serverInfo : serverOrder.getExtraInfo()) {
+                newInfoList.add(realm.createObjectFromJson
+                        (Info.class, GSON.toJson(serverInfo))
+                );
+            }
+            newOrder.setExtraInfo(newInfoList);
+
+            newOrder.setImportDate(new Date(serverOrder.getImportDate()));
+            newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
+            newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
+            newOrder.setCustomTemplateID(serverOrder.getCustomTemplateID());
+            newOrder.setOrderStatus(serverOrder.getOrderStatus());
+
+            newOrder.setMaintenanceStartTime(new Date(0));
+            newOrder.setMaintenanceEndTime(new Date(0));
+
+            newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
+
+            realm.commitTransaction(); // No logic if transaction fail!!!
         }
-        newOrder.setParts(newPartList);
-
-        // Info
-        final RealmList<Info> newInfoList = new RealmList<>();
-        for (com.bionic.kvt.serviceapp.api.Info serverInfo : serverOrder.getExtraInfo()) {
-            newInfoList.add(realm.createObjectFromJson
-                    (Info.class, GSON.toJson(serverInfo))
-            );
-        }
-        newOrder.setExtraInfo(newInfoList);
-
-        newOrder.setImportDate(new Date(serverOrder.getImportDate()));
-        newOrder.setLastServerChangeDate(new Date(serverOrder.getLastServerChangeDate()));
-        newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
-        newOrder.setCustomTemplateID(serverOrder.getCustomTemplateID());
-        newOrder.setOrderStatus(serverOrder.getOrderStatus());
-
-        newOrder.setMaintenanceStartTime(new Date(0));
-        newOrder.setMaintenanceEndTime(new Date(0));
-
-        newOrder.setEmployeeEmail(serverOrder.getEmployee().getEmail());
-
-        realm.commitTransaction(); // No logic if transaction fail!!!
-        Session.addToSessionLog(newOrder.toString());
-        realm.close();
     }
 
     public static void updateCustomTemplateFromServer(final long orderNumber, final com.bionic.kvt.serviceapp.api.CustomTemplate customTemplateOnServer) {
-        final Realm realm = Realm.getDefaultInstance();
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        // Deleting current custom template
-        realm.beginTransaction();
-        realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
-        realm.commitTransaction();
+            // Deleting current custom template
+            realm.beginTransaction();
+            realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.commitTransaction();
 
-        Session.addToSessionLog("Creating custom template ID: " + customTemplateOnServer.getCustomTemplateID());
-        realm.beginTransaction();
-        final CustomTemplate newCustomTemplate = realm.createObject(CustomTemplate.class);
-        newCustomTemplate.setNumber(orderNumber);
-        newCustomTemplate.setCustomTemplateID(customTemplateOnServer.getCustomTemplateID());
-        newCustomTemplate.setCustomTemplateName(customTemplateOnServer.getCustomTemplateName());
+            AppLog.serviceI("Creating custom template ID: " + customTemplateOnServer.getCustomTemplateID());
+            realm.beginTransaction();
+            final CustomTemplate newCustomTemplate = realm.createObject(CustomTemplate.class);
+            newCustomTemplate.setNumber(orderNumber);
+            newCustomTemplate.setCustomTemplateID(customTemplateOnServer.getCustomTemplateID());
+            newCustomTemplate.setCustomTemplateName(customTemplateOnServer.getCustomTemplateName());
 
-        final RealmList<CustomTemplateElement> newCustomTemplateElementList = new RealmList<>();
-        for (com.bionic.kvt.serviceapp.api.CustomTemplateElement elementOnServer : customTemplateOnServer.getCustomTemplateElements()) {
-            CustomTemplateElement newCustomTemplateElement = realm.createObject(CustomTemplateElement.class);
-            newCustomTemplateElement.setElementType(elementOnServer.getElementType());
-            newCustomTemplateElement.setElementValue(elementOnServer.getElementValue());
-            newCustomTemplateElement.setElementText(elementOnServer.getElementText());
-            newCustomTemplateElementList.add(newCustomTemplateElement);
+            final RealmList<CustomTemplateElement> newCustomTemplateElementList = new RealmList<>();
+            for (com.bionic.kvt.serviceapp.api.CustomTemplateElement elementOnServer : customTemplateOnServer.getCustomTemplateElements()) {
+                CustomTemplateElement newCustomTemplateElement = realm.createObject(CustomTemplateElement.class);
+                newCustomTemplateElement.setElementType(elementOnServer.getElementType());
+                newCustomTemplateElement.setElementValue(elementOnServer.getElementValue());
+                newCustomTemplateElement.setElementText(elementOnServer.getElementText());
+                newCustomTemplateElementList.add(newCustomTemplateElement);
+            }
+            newCustomTemplate.setCustomTemplateElements(newCustomTemplateElementList);
+
+            realm.commitTransaction();
         }
-        newCustomTemplate.setCustomTemplateElements(newCustomTemplateElementList);
-
-        realm.commitTransaction();
-        realm.close();
     }
 
     public static void createNewLMRAInDB(final String lmraName, final String lmraDescription) {
@@ -686,30 +692,35 @@ public class DbUtils {
     }
 
     public static void setOrderStatus(final long orderNumber, @OrderStatus final int status) {
-        Session.addToSessionLog("Setting order [" + orderNumber + "] status: " + status);
+        AppLog.serviceI(false, orderNumber, "Setting order status: " + status);
 
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-        if (order != null) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            if (order == null) {
+                AppLog.serviceE(true, orderNumber, "Setting order status: No such order!");
+                return;
+            }
+            realm.beginTransaction();
             if (order.getOrderStatus() != status) {
                 order.setOrderStatus(status);
                 order.setLastAndroidChangeDate(new Date());
             }
+            realm.commitTransaction();
         }
-        realm.commitTransaction();
-        realm.close();
     }
 
     @OrderStatus
     public static int getOrderStatus(final long orderNumber) {
-        Session.addToSessionLog("Getting order [" + orderNumber + "] status.");
-        int result = ORDER_STATUS_NOT_FOUND;
-        final Realm realm = Realm.getDefaultInstance();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-        if (order != null) result = order.getOrderStatus();
-        realm.close();
-        return result;
+        AppLog.serviceI(false, orderNumber, "Getting order status.");
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            if (order == null) {
+                AppLog.serviceE(true, orderNumber, "Getting order status: No such order!");
+                return ORDER_STATUS_NOT_FOUND;
+            } else {
+                return order.getOrderStatus();
+            }
+        }
     }
 
     public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
@@ -743,23 +754,25 @@ public class DbUtils {
     }
 
     public static void setOrderMaintenanceTime(final long orderNumber, @OrderMaintenanceType final int timeType, final Date time) {
-        final Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-        if (order != null) {
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+            if (order == null) {
+                AppLog.serviceE(true, orderNumber, "Setting order Maintenance time: No such order!");
+                return;
+            }
+            realm.beginTransaction();
             switch (timeType) {
                 case ORDER_MAINTENANCE_START_TIME:
+                    AppLog.serviceI(false, orderNumber, "Setting order maintenance start time: " + Utils.getDateTimeStringFromDate(time));
                     order.setMaintenanceStartTime(time);
-                    Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance start time: " + Utils.getDateTimeStringFromDate(time));
                     break;
                 case ORDER_MAINTENANCE_END_TIME:
+                    AppLog.serviceI(false, orderNumber, "Setting order maintenance end time: " + Utils.getDateTimeStringFromDate(time));
                     order.setMaintenanceEndTime(time);
-                    Session.addToSessionLog("Setting order [" + orderNumber + "] maintenance end time: " + Utils.getDateTimeStringFromDate(time));
                     break;
             }
+            realm.commitTransaction();
         }
-        realm.commitTransaction();
-        realm.close();
     }
 
     public static boolean isCustomTemplate(final long orderNumber) {
@@ -806,7 +819,7 @@ public class DbUtils {
         try (FileWriter outputFile = new FileWriter(XMLFile)) {
             outputFile.write(XMLData);
         } catch (IOException e) {
-            Session.addToSessionLog("**** ERROR **** Saving XML report file: " + e.toString());
+            AppLog.serviceE(true, orderNumber, "Error saving XML report file: " + e.toString());
             return null;
         }
 

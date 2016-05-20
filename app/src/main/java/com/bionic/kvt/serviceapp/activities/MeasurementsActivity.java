@@ -48,7 +48,6 @@ public class MeasurementsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_measurements);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + MeasurementsActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.measurements));
@@ -67,6 +66,8 @@ public class MeasurementsActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + MeasurementsActivity.class.getSimpleName());
 
         getMeasurementsData();
 

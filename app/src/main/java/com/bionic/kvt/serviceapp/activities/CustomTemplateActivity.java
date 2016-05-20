@@ -15,7 +15,7 @@ import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.CustomTemplate;
-import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.Components.CustomTemplateElement;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 
 import butterknife.BindView;
@@ -35,7 +35,6 @@ public class CustomTemplateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_template);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + CustomTemplateActivity.class.getSimpleName());
 
         // Exit if Session is empty
         if (Session.getCurrentOrder() <= 0L) {
@@ -51,6 +50,8 @@ public class CustomTemplateActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + CustomTemplateActivity.class.getSimpleName());
 
         generatedTagPrefix = String.valueOf(Session.getCurrentOrder()) + "_";
 

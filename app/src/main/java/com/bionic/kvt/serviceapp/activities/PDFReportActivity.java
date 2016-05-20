@@ -80,7 +80,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + PDFReportActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report));
@@ -99,6 +98,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + PDFReportActivity.class.getSimpleName());
 
         final Bundle extras = getIntent().getExtras();
         if (extras != null) {

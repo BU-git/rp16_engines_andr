@@ -56,7 +56,6 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_report_preview);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + PDFReportPreviewActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.pdf_report_preview));
@@ -75,6 +74,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + PDFReportPreviewActivity.class.getSimpleName());
 
         final long orderNumber = Session.getCurrentOrder();
 

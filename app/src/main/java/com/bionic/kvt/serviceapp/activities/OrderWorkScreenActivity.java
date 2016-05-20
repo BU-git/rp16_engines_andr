@@ -35,7 +35,6 @@ public class OrderWorkScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_work_screen);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + OrderWorkScreenActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.preparations));
@@ -55,7 +54,7 @@ public class OrderWorkScreenActivity extends BaseActivity {
             return;
         }
 
-
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderWorkScreenActivity.class.getSimpleName());
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)

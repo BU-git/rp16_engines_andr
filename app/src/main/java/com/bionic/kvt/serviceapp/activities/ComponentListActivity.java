@@ -62,7 +62,6 @@ public class ComponentListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_component_list);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + ComponentListActivity.class.getSimpleName());
 
         Utils.runBackgroundServiceIntent(ComponentListActivity.this, GlobalConstants.GENERATE_PART_MAP);
 
@@ -92,6 +91,8 @@ public class ComponentListActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + ComponentListActivity.class.getSimpleName());
     }
 
     @OnClick(R.id.component_list_next_button)

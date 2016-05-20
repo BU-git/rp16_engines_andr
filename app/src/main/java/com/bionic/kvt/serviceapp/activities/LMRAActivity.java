@@ -43,7 +43,6 @@ public class LMRAActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lmra);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + LMRAActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.lmra_title));
@@ -62,6 +61,8 @@ public class LMRAActivity extends BaseActivity {
             }, 3000);
             return;
         }
+
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + LMRAActivity.class.getSimpleName());
 
         if (!Utils.isExternalStorageWritable()) {
             AppLog.E(this, "Can not write photos file to external storage.");

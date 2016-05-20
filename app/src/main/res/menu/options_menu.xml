@@ -5,5 +5,5 @@
         android:title="@string/logout" />
     <item
         android:id="@+id/show_log"
-        android:title="Debug" />
+        android:title="Application log" />
 </menu>

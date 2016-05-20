@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.activities.OrderPageActivity;
 import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.BackgroundService;
 import com.bionic.kvt.serviceapp.db.DbUtils;
@@ -113,7 +112,7 @@ public class Utils {
         if (dir.exists() || dir.mkdirs()) {
             return dir;
         }
-        Session.addToSessionLog("**** ERROR **** Problem with creating order dir: " + dir.toString());
+        AppLog.serviceE(true, orderNumber, "Problem with creating order dir: " + dir.toString());
         return null; //Directory is not exist and fail to create
     }
 
@@ -220,6 +219,7 @@ public class Utils {
         try {
             messageDigestMD5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
+            AppLog.serviceI(e.toString());
             return "";
         }
 
@@ -232,6 +232,7 @@ public class Utils {
 
             return convertByteArrayToHexString(messageDigestMD5.digest());
         } catch (IOException e) {
+            AppLog.serviceI(e.toString());
             return "";
         }
     }
@@ -279,54 +280,53 @@ public class Utils {
                     while ((count = originFileBufferedInputStream.read(data, 0, 2048)) != -1)
                         zipOutputStream.write(data, 0, count);
                 } catch (IOException e) {
-                    Session.addToSessionLog("**** ERROR **** Saving XML to ZIP report file: " + e.toString());
+                    AppLog.serviceE(true, -1, "Error saving XML to ZIP report file: " + e.toString());
                     return false;
                 }
             }
 
         } catch (IOException e) {
-            Session.addToSessionLog("**** ERROR **** Saving ZIP report file: " + e.toString());
+            AppLog.serviceE(true, -1, "Error saving ZIP report file: " + e.toString());
             return false;
         }
         return true;
     }
 
     public static void updateOrderStatusOnServer(final long orderNumber) {
-        final Realm realm = Realm.getDefaultInstance();
-        final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
 
-        if (order == null) {
-            Session.addToSessionLog("Updating order [" + orderNumber + "] status on server: ERROR. No suh order!");
-            realm.close();
-            return;
-        }
+            if (order == null) {
+                AppLog.serviceE(true, orderNumber, "Updating order status on server: No such order!");
+                return;
+            }
 
-        final String email = order.getEmployeeEmail();
-        final long lastAndroidChangeDate = order.getLastAndroidChangeDate().getTime();
-        final int orderStatus = order.getOrderStatus();
-        realm.close();
+            final String email = order.getEmployeeEmail();
+            final long lastAndroidChangeDate = order.getLastAndroidChangeDate().getTime();
+            final int orderStatus = order.getOrderStatus();
 
-        final Call<ResponseBody> updateOrderRequest =
-                Session.getServiceConnection().updateOrder(orderNumber, email, lastAndroidChangeDate, orderStatus);
-        Session.addToSessionLog("Updating server order [" + orderNumber + "] status: " + updateOrderRequest.request());
+            final Call<ResponseBody> updateOrderRequest =
+                    Session.getServiceConnection().updateOrder(orderNumber, email, lastAndroidChangeDate, orderStatus);
 
-        updateOrderRequest.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (!response.isSuccessful()) {
-                    Session.addToSessionLog("Update server order status fail: " + response.code());
-                    return;
+            AppLog.serviceI(false, orderNumber, "Updating server order status: " + updateOrderRequest.request());
+
+            updateOrderRequest.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (!response.isSuccessful()) {
+                        AppLog.serviceE(true, orderNumber, "Update server order status fail: " + response.code());
+                        return;
+                    }
+
+                    AppLog.serviceI("Update server order status successful.");
                 }
 
-                Session.addToSessionLog("Update server order status successful.");
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Session.addToSessionLog("Update server order status fail: " + t.toString());
-            }
-        });
-
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    AppLog.serviceE(true, orderNumber, "Update server order status fail: " + t.toString());
+                }
+            });
+        }
     }
 
     public static ServerRequestResult getUserFromServer(final String email) {

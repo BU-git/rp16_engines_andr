@@ -80,7 +80,6 @@ public class OrderPageDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_page_detail);
         ButterKnife.bind(this);
-        AppLog.serviceI("Create activity: " + OrderPageActivity.class.getSimpleName());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.order_data));
@@ -99,6 +98,7 @@ public class OrderPageDetailActivity extends BaseActivity {
             }, 3000);
             return;
         }
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderPageActivity.class.getSimpleName());
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
@@ -108,7 +108,7 @@ public class OrderPageDetailActivity extends BaseActivity {
             return;
         }
 
-        if (currentOrder.getOrderStatus() == ORDER_STATUS_COMPLETE) {
+        if (currentOrder.getOrderStatus() >= ORDER_STATUS_COMPLETE) {
             acceptButton.setVisibility(View.GONE);
             startButton.setVisibility(View.GONE);
             orderAcceptInstructions.setVisibility(View.GONE);
@@ -143,7 +143,7 @@ public class OrderPageDetailActivity extends BaseActivity {
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_IN_PROGRESS);
         Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
 
-        Intent intent = new Intent(getApplicationContext(), OrderWorkScreenActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), OrderWorkScreenActivity.class);
         startActivity(intent);
     }
 

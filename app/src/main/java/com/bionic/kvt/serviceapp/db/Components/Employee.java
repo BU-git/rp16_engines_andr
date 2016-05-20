@@ -1,4 +1,4 @@
-package com.bionic.kvt.serviceapp.db;
+package com.bionic.kvt.serviceapp.db.Components;
 
 
 import io.realm.RealmObject;

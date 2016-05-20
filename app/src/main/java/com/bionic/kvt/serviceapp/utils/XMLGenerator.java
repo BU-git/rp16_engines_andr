@@ -7,7 +7,7 @@ import android.util.Xml;
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.CustomTemplate;
-import com.bionic.kvt.serviceapp.db.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.Components.CustomTemplateElement;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.DefectState;
 import com.bionic.kvt.serviceapp.db.LMRAItem;

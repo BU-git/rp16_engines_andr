@@ -10,6 +10,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.CustomTemplate;
 import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
+import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -58,23 +59,23 @@ public class BackgroundService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        @ServiceMessage int serviceMessage = intent.getIntExtra(UPDATE_SERVICE_MSG, 0);
+        @ServiceMessage final int serviceMessage = intent.getIntExtra(UPDATE_SERVICE_MSG, 0);
         currentTask = "";
         switch (serviceMessage) {
             case UPDATE_ORDERS:
-                currentTask = "UPDATE_ORDERS";
+                currentTask = "SERVICE [UPDATE ORDERS]: ";
                 updateOrdersFromServer();
                 break;
             case PREPARE_FILES:
-                currentTask = "PREPARE_FILES";
+                currentTask = "SERVICE [PREPARE FILES]: ";
                 prepareOrderFilesToUpload();
                 break;
             case UPLOAD_FILES:
-                currentTask = "UPLOAD_FILES";
+                currentTask = "SERVICE [UPLOAD FILES]: ";
                 uploadOrderFiles();
                 break;
             case GENERATE_PART_MAP:
-                currentTask = "GENERATE_PART_MAP";
+                currentTask = "SERVICE [GENERATE PART MAP]: ";
                 generatePartMap();
                 break;
         }
@@ -83,45 +84,41 @@ public class BackgroundService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        serviceLog("Service stopped.");
-    }
-
-    private void serviceLog(final String message) {
-        Session.addToSessionLog("UPDATE SERVICE [" + currentTask + "]: " + message);
+        AppLog.serviceI(currentTask + "Service stopped.");
     }
 
     private void updateOrdersFromServer() {
-        serviceLog("Service started.");
+        AppLog.serviceI(currentTask + "Service started.");
 
         if (!Utils.isNetworkConnected(getApplicationContext())) {
-            serviceLog("No connection to network. Canceling update.");
+            AppLog.serviceI(true, -1, currentTask + "No connection to network. Canceling update.");
             return;
         }
 
         final Call<List<OrderBrief>> orderBriefListRequest =
                 Session.getServiceConnection().getOrdersBrief(Session.getEngineerEmail());
 
-        serviceLog("Getting orders brief list from: " + orderBriefListRequest.request());
+        AppLog.serviceI(currentTask + "Getting orders brief list from: " + orderBriefListRequest.request());
 
         final Response<List<OrderBrief>> orderBriefListResponse;
         try {
             orderBriefListResponse = orderBriefListRequest.execute();
         } catch (IOException e) {
-            serviceLog("Orders brief list request fail: " + e.toString());
+            AppLog.serviceW(true, -1, currentTask + "Orders brief list request fail: " + e.toString());
             return;
         }
 
         if (!orderBriefListResponse.isSuccessful()) {
-            serviceLog("Orders brief list request error: " + orderBriefListResponse.code());
+            AppLog.serviceW(true, -1, currentTask + "Orders brief list request error: " + orderBriefListResponse.code());
             return;
         }
 
-        serviceLog("Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
+        AppLog.serviceI(currentTask + "Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
 
         final List<Long> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
 
         if (ordersToBeUpdated.isEmpty()) {
-            serviceLog("Nothing to update.");
+            AppLog.serviceI(currentTask + "Nothing to update.");
             return;
         }
 
@@ -129,21 +126,21 @@ public class BackgroundService extends IntentService {
             final Call<com.bionic.kvt.serviceapp.api.Order> orderRequest =
                     Session.getServiceConnection().getOrder(orderNumber, Session.getEngineerEmail());
 
-            serviceLog("Getting order from: " + orderRequest.request());
+            AppLog.serviceI(currentTask + "Getting order from: " + orderRequest.request());
 
             final Response<com.bionic.kvt.serviceapp.api.Order> orderResponse;
             try {
                 orderResponse = orderRequest.execute();
             } catch (IOException e) {
-                serviceLog("Order request fail: " + e.toString());
+                AppLog.serviceW(true, -1, currentTask + "Order request fail: " + e.toString());
                 return;
             }
             if (!orderResponse.isSuccessful()) {
-                serviceLog("Order request error: " + orderResponse.code());
+                AppLog.serviceW(true, -1, currentTask + "Order request error: " + orderResponse.code());
                 return;
             }
 
-            serviceLog("Request successful!");
+            AppLog.serviceI(currentTask + "Request successful!");
 
             final com.bionic.kvt.serviceapp.api.Order orderOnServer = orderResponse.body();
             DbUtils.updateOrderFromServer(orderOnServer);
@@ -152,116 +149,126 @@ public class BackgroundService extends IntentService {
                 updateCustomTemplateFromServer(orderOnServer.getNumber(), orderOnServer.getCustomTemplateID());
         }
 
-        serviceLog("Update " + ordersToBeUpdated.size() + " orders.");
+        AppLog.serviceI(currentTask + "Update " + ordersToBeUpdated.size() + " orders.");
     }
 
     private void updateCustomTemplateFromServer(final long orderNumber, final long customTemplateID) {
         final Call<CustomTemplate> customTemplateRequest =
                 Session.getServiceConnection().getTemplate(customTemplateID);
 
-        serviceLog("Getting custom template from: " + customTemplateRequest.request());
+        AppLog.serviceI(currentTask + "Getting custom template from: " + customTemplateRequest.request());
 
         final Response<CustomTemplate> customTemplateResponse;
         try {
             customTemplateResponse = customTemplateRequest.execute();
         } catch (IOException e) {
-            serviceLog("Custom template request fail: " + e.toString());
+            AppLog.serviceW(true, -1, currentTask + "Custom template request fail: " + e.toString());
             return;
         }
 
         if (!customTemplateResponse.isSuccessful()) {
-            serviceLog("Custom template request error: " + customTemplateResponse.code());
+            AppLog.serviceW(true, -1, currentTask + "Custom template request error: " + customTemplateResponse.code());
             return;
         }
 
-        serviceLog("Request successful. Get [" + customTemplateResponse.body().getCustomTemplateName() + "] template.");
+        AppLog.serviceI(currentTask + "Request successful. Get [" + customTemplateResponse.body().getCustomTemplateName() + "] template.");
 
         DbUtils.updateCustomTemplateFromServer(orderNumber, customTemplateResponse.body());
     }
 
     private void prepareOrderFilesToUpload() {
-        serviceLog("Service started.");
-        final List<Long> orderNumberToPrepare = DbUtils.getOrdersToBeUploaded();
-        final Realm realm = Realm.getDefaultInstance();
+        AppLog.serviceI(currentTask + "Service started.");
+        final List<Long> orderNumberToPrepare = DbUtils.getOrdersToBePrepared();
+        try (final Realm realm = Realm.getDefaultInstance()) {
 
-        for (Long orderNumber : orderNumberToPrepare) {
-            serviceLog("Preparing files to upload for order: " + orderNumber);
+            for (Long orderNumber : orderNumberToPrepare) {
+                AppLog.serviceI(currentTask + "Preparing files to upload for order: " + orderNumber);
 
-            OrderSynchronisation currentOrderSync =
-                    realm.where(OrderSynchronisation.class).equalTo("number", orderNumber).findFirst();
-            if (currentOrderSync != null) {
-                if (!currentOrderSync.isReadyForSync()) { // Task preparation is uncompleted
-                    realm.beginTransaction();
-                    currentOrderSync.deleteFromRealm();
-                    realm.commitTransaction(); // No logic if transaction fail!!!
-                } else { // Task preparation is completed. Skipping.
-                    serviceLog("Files to upload already prepared: " + orderNumber);
-                    continue;
+                OrderSynchronisation currentOrderSync =
+                        realm.where(OrderSynchronisation.class).equalTo("number", orderNumber).findFirst();
+                if (currentOrderSync != null) {
+                    if (!currentOrderSync.isReadyForSync()) { // Task preparation is uncompleted
+                        AppLog.serviceI(currentTask + "Previous preparation failed. Cleaning.");
+                        realm.beginTransaction();
+                        currentOrderSync.deleteFromRealm();
+                        realm.commitTransaction(); // No logic if transaction fail!!!
+                        // TODO DELETE XMLS FILES
+                    } else { // Task preparation is completed. Skipping.
+                        AppLog.serviceI(currentTask + "Files to upload already prepared: " + orderNumber);
+                        continue;
+                    }
                 }
+
+                final OrderSynchronisation orderSync = new OrderSynchronisation();
+                orderSync.setNumber(orderNumber);
+
+                //TODO REMOVE
+                // Kostil
+                Session.getPartMap().clear();
+                generatePartMap();
+
+
+                // Setting zipFileWithXMLs
+                orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
+                orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
+                orderSync.setOrderCustomXMLReportFile(DbUtils.generateXMLReport(orderNumber, CUSTOM_XML));
+                orderSync.setOrderMeasurementsXMLReportFile(DbUtils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
+                orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, JOB_RULES_XML));
+
+                final String[] XMLFilesToZIP = {
+                        orderSync.getOrderLMRAXMLReportFile(),
+                        orderSync.getOrderDefaultXMLReportFile(),
+                        orderSync.getOrderCustomXMLReportFile(),
+                        orderSync.getOrderMeasurementsXMLReportFile(),
+                        orderSync.getOrderJobRulesXMLReportFile()
+                };
+
+                final File reportsXMLZipFile = new File(Utils.getOrderDir(orderNumber), REPORTS_XML_ZIP_FILE_NAME + orderNumber + ".zip");
+
+                // Compressing
+                final boolean zipSuccessful = Utils.zipXMLReportFiles(XMLFilesToZIP, reportsXMLZipFile.toString());
+
+                if (zipSuccessful) {
+                    orderSync.setZipFileWithXMLs(reportsXMLZipFile.toString());
+                } else {
+                    orderSync.setZipFileWithXMLs(null);
+                    AppLog.serviceI(currentTask + "XML files compressing failed.");
+                    // TODO Remove ZIP
+                }
+                // TODO Remove XMLs
+                orderSync.setZipFileWithXMLsSynced(false);
+
+                // Setting defaultPDFReportFile
+                orderSync.setDefaultPDFReportFile(Utils.getPDFReportFileName(orderNumber, false).toString());
+                orderSync.setDefaultPDFReportFileSynced(false);
+
+                orderSync.setReadyForSync(true);
+
+                realm.beginTransaction();
+                realm.copyToRealm(orderSync);
+                realm.commitTransaction(); // No logic if transaction fail!!!
+
+                AppLog.serviceI(currentTask + "Preparing files to upload done.");
             }
 
-            final OrderSynchronisation orderSync = new OrderSynchronisation();
-            orderSync.setNumber(orderNumber);
-
-            // Kostil
-            Session.getPartMap().clear();
-            generatePartMap();
-
-
-            // Setting zipFileWithXMLs
-            orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
-            orderSync.setOrderDefaultXMLReportFile(DbUtils.generateXMLReport(orderNumber, DEFAULT_XML));
-            orderSync.setOrderCustomXMLReportFile(DbUtils.generateXMLReport(orderNumber, CUSTOM_XML));
-            orderSync.setOrderMeasurementsXMLReportFile(DbUtils.generateXMLReport(orderNumber, MEASUREMENTS_XML));
-            orderSync.setOrderJobRulesXMLReportFile(DbUtils.generateXMLReport(orderNumber, JOB_RULES_XML));
-
-            final String[] XMLFilesToZIP = {
-                    orderSync.getOrderLMRAXMLReportFile(),
-                    orderSync.getOrderDefaultXMLReportFile(),
-                    orderSync.getOrderCustomXMLReportFile(),
-                    orderSync.getOrderMeasurementsXMLReportFile(),
-                    orderSync.getOrderJobRulesXMLReportFile()
-            };
-
-            final File reportsXMLZipFile = new File(Utils.getOrderDir(orderNumber), REPORTS_XML_ZIP_FILE_NAME + orderNumber + ".zip");
-
-            // Compressing
-            final boolean zipSuccessful = Utils.zipXMLReportFiles(XMLFilesToZIP, reportsXMLZipFile.toString());
-
-            if (zipSuccessful) {
-                orderSync.setZipFileWithXMLs(reportsXMLZipFile.toString());
-            } else {
-                orderSync.setZipFileWithXMLs(null);
-            }
-            // TODO Remove XMLs
-            orderSync.setZipFileWithXMLsSynced(false);
-
-            // Setting defaultPDFReportFile
-            orderSync.setDefaultPDFReportFile(Utils.getPDFReportFileName(orderNumber, false).toString());
-            orderSync.setDefaultPDFReportFileSynced(false);
-
-            orderSync.setReadyForSync(true);
-
-            realm.beginTransaction();
-            realm.copyToRealm(orderSync);
-            realm.commitTransaction(); // No logic if transaction fail!!!
-
-            serviceLog("Preparing files to upload done: " + orderSync.toString());
         }
-
-        realm.close();
     }
 
     private boolean uploadFile(final String fileToUpload, final MediaType mediaType, final String fileType, final long orderNumber) {
         final File fileName = new File(fileToUpload);
 
         if (!fileName.exists()) {
-            serviceLog("**** ERROR **** File not found: " + fileToUpload);
+            AppLog.serviceE(true, orderNumber, currentTask + "File not found: " + fileToUpload);
             return true;
         }
 
         final RequestBody requestFile = RequestBody.create(mediaType, fileName);
         final String checksum = Utils.getFileMD5Sum(fileName);
+
+        if (checksum.equals("")) {
+            AppLog.serviceE(true, orderNumber, currentTask + "Error calculating checksum.");
+            return true;
+        }
 
         final MultipartBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -271,27 +278,27 @@ public class BackgroundService extends IntentService {
                 .build();
 
         final Call<ResponseBody> call = Session.getServiceConnection().uploadFile(orderNumber, requestBody);
-        serviceLog("UPLOAD REQUEST [" + fileType + "]: " + call.request());
+        AppLog.serviceI(currentTask + "UPLOAD REQUEST [" + fileType + "]: " + call.request());
 
         final Response<ResponseBody> uploadFileResponse;
         try {
             uploadFileResponse = call.execute();
         } catch (IOException e) {
-            serviceLog("Upload fail: " + e.toString());
+            AppLog.serviceW(true, -1, currentTask + "Upload fail: " + e.toString());
             return false;
         }
 
         if (!uploadFileResponse.isSuccessful()) {
-            serviceLog("Upload fail: " + uploadFileResponse.code());
+            AppLog.serviceW(true, -1, currentTask + "Upload fail: " + uploadFileResponse.code());
             return false;
         }
 
-        serviceLog("Upload successful: " + uploadFileResponse.code());
+        AppLog.serviceI(currentTask + "Upload successful: " + uploadFileResponse.code());
         return true;
     }
 
     private void uploadOrderFiles() {
-        serviceLog("Service started.");
+        AppLog.serviceI(currentTask + "Service started.");
         boolean uploadResult;
 
         try (final Realm realm = Realm.getDefaultInstance()) {
@@ -302,18 +309,16 @@ public class BackgroundService extends IntentService {
                             .equalTo("isSyncComplete", false)
                             .findAll();
 
-            for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
-                serviceLog(orderToSync.toString());
+            realm.beginTransaction();
 
+            for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
                 // ZIP with XMLs
                 if (orderToSync.getZipFileWithXMLs() != null && !orderToSync.isZipFileWithXMLsSynced()) {
 
                     uploadResult = uploadFile(orderToSync.getZipFileWithXMLs(), MEDIA_TYPE_OCTET_STREAM, "XML_ZIP_REPORT", orderToSync.getNumber());
 
-                    if (uploadResult) {
-                        realm.beginTransaction();
+                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
                         orderToSync.setZipFileWithXMLsSynced(true);
-                        realm.commitTransaction();
                     }
                 }
 
@@ -322,10 +327,8 @@ public class BackgroundService extends IntentService {
 
                     uploadResult = uploadFile(orderToSync.getDefaultPDFReportFile(), MEDIA_TYPE_PDF, "DEFAULT_PDF_REPORT", orderToSync.getNumber());
 
-                    if (uploadResult) {
-                        realm.beginTransaction();
+                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
                         orderToSync.setDefaultPDFReportFileSynced(true);
-                        realm.commitTransaction();
                     }
                 }
 
@@ -339,10 +342,8 @@ public class BackgroundService extends IntentService {
 
                     uploadResult = uploadFile(lmraPhoto.getLmraPhotoFile(), MEDIA_TYPE_JPEG, "LMRA_PHOTO", orderToSync.getNumber());
 
-                    if (uploadResult) {
-                        realm.beginTransaction();
+                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
                         lmraPhoto.setLmraPhotoFileSynced(true);
-                        realm.commitTransaction();
                     }
                 }
 
@@ -353,9 +354,7 @@ public class BackgroundService extends IntentService {
                                 .equalTo("lmraPhotoFileSynced", false)
                                 .findAll();
                 if (listLMRAPhotosNotSyncedInBD.size() == 0) {
-                    realm.beginTransaction();
                     orderToSync.setLMRAPhotosSynced(true);
-                    realm.commitTransaction();
                 }
 
                 // Checking all statuses
@@ -363,28 +362,27 @@ public class BackgroundService extends IntentService {
                         && orderToSync.isDefaultPDFReportFileSynced()
                         && orderToSync.isLMRAPhotosSynced()) {
                     // All done
-                    realm.beginTransaction();
                     orderToSync.setSyncComplete(true);
-                    realm.commitTransaction();
                 }
 
             }
 
+            realm.commitTransaction();
         }
     }
 
     private void generatePartMap() {
-        serviceLog("Service started.");
+        AppLog.serviceI(currentTask + "Service started.");
 
         if (Session.getPartMap().size() != 0) {
-            serviceLog("Map already generated.");
+            AppLog.serviceI(currentTask + "Map already generated.");
             return;
         }
 
         final String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), BuildConfig.COMPONENTS_JSON);
 
         if (jsonComponent.isEmpty()) {
-            serviceLog("**** ERROR **** generating map: Empty JSON.");
+            AppLog.serviceE(true, -1, currentTask + "Error generating map: Empty JSON.");
             return;
         }
 
@@ -412,10 +410,11 @@ public class BackgroundService extends IntentService {
                 }
             }
         } catch (Exception e) {
-            serviceLog("**** ERROR **** generating map: " + e.toString());
+            AppLog.serviceE(true, -1, currentTask + "Error generating map: " + e.toString());
         }
-        serviceLog("Map generated.");
+
         Session.setPartMap(partMap);
+        AppLog.serviceI(currentTask + "Map generated.");
 
     }
 
