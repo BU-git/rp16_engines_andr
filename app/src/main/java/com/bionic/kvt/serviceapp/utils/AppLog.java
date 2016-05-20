@@ -1,13 +1,16 @@
 package com.bionic.kvt.serviceapp.utils;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.activities.LogActivity;
 
 import java.util.Date;
 
@@ -20,10 +23,6 @@ public class AppLog {
     private static final int INFO = 2;
     private static final int WARRING = 3;
     private static final int ERROR = 4;
-
-//    private static Realm monitorLogRealm;
-//    private static RealmChangeListener<RealmResults<LogItem>> logListener;
-//    private static RealmResults<LogItem> logsWithNotification;
 
     public static void initLog() {
         try (final Realm logRealm = Session.getLogRealm()) {
@@ -45,6 +44,7 @@ public class AppLog {
                 snackbar.setAction("MORE", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        activity.startActivity(new Intent(activity, LogActivity.class));
                     }
                 });
                 snackbar.show();
@@ -72,25 +72,26 @@ public class AppLog {
 
     public static Snackbar getSnackbar(final Activity activity, final LogItem logItem) {
         final View rootView = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
-        Snackbar snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_LONG);
 
+        Snackbar snackbar;
+        if (logItem.getLevel() == ERROR) {
+            snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_INDEFINITE);
+        } else {
+            snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_LONG);
+        }
+        final View sbView = snackbar.getView();
+        final TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
         switch (logItem.getLevel()) {
             case INFO:
-                snackbar.setActionTextColor(ContextCompat.getColor(activity, R.color.colorOK));
+                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorOK));
                 break;
             case WARRING:
-                snackbar.setActionTextColor(ContextCompat.getColor(activity, R.color.colorWarring));
+                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorWarring));
                 break;
             case ERROR:
-                snackbar.setActionTextColor(ContextCompat.getColor(activity, R.color.colorError));
+                textView.setTextColor(ContextCompat.getColor(activity, R.color.colorError));
                 break;
         }
-
-
-        // Changing action button text color
-//        View sbView = snackbar.getView();
-//        TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-//        textView.setTextColor(Color.YELLOW);
 
         return snackbar;
     }
@@ -99,8 +100,32 @@ public class AppLog {
         try (final Realm logRealm = Session.getLogRealm()) {
             final StringBuilder stringBuilder = new StringBuilder("Application log:");
             final RealmResults<LogItem> logItems = logRealm.where(LogItem.class).findAll().sort("dateTime");
+
             for (LogItem logItem : logItems) {
-                stringBuilder.append("\n").append(logItem.getMessage());
+                stringBuilder.append("\n");
+
+                switch (logItem.getLevel()) {
+                    case DEBUG:
+                        stringBuilder.append("DEBUG  ");
+                        break;
+                    case INFO:
+                        stringBuilder.append("INFO   ");
+                        break;
+                    case WARRING:
+                        stringBuilder.append("WARRING");
+                        break;
+                    case ERROR:
+                        stringBuilder.append("ERROR  ");
+                        break;
+                }
+                stringBuilder.append(" [").append(Utils.getDateTimeStringFromDate(logItem.getDateTime())).append("]");
+                if (logItem.getOrderNumber() > 0) {
+                    stringBuilder.append("(").append(logItem.getOrderNumber()).append("): ");
+                } else {
+                    stringBuilder.append("(No order): ");
+                }
+
+                stringBuilder.append(logItem.getMessage());
             }
             return stringBuilder;
         }
@@ -120,6 +145,10 @@ public class AppLog {
 
     public static void I(final boolean notify, final long orderNumber, final String message) {
         add(INFO, notify, orderNumber, message);
+    }
+
+    public static void W(final String message) {
+        add(WARRING, true, -1, message);
     }
 
     public static void W(final boolean notify, final long orderNumber, final String message) {

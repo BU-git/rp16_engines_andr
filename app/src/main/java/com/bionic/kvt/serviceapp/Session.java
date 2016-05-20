@@ -1,7 +1,6 @@
 package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
-import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
 import com.bionic.kvt.serviceapp.utils.AppLog;
@@ -81,7 +80,7 @@ public class Session extends Application {
         AppLog.initLog();
     }
 
-    public static Realm getLogRealm(){
+    public static Realm getLogRealm() {
         return Realm.getInstance(currentUserSession.logConfig);
     }
 
@@ -109,10 +108,6 @@ public class Session extends Application {
 
     public static void setPartMap(Map<String, LinkedHashMap<String, JsonObject>> partMap) {
         Session.partMap = partMap;
-    }
-
-    public static List<String> getSessionLog() {
-        return currentUserSession.sessionLog;
     }
 
     public static void addToSessionLog(String message) {
@@ -148,7 +143,7 @@ public class Session extends Application {
         return currentUserSession.currentAppInternalPrivateDir;
     }
 
-    public static File getAppExternalPrivateDir(){
+    public static File getAppExternalPrivateDir() {
         return currentUserSession.currentAppExternalPrivateDir;
     }
 

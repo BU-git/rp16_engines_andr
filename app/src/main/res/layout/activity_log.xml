@@ -59,7 +59,8 @@
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_horizontal_margin"
-                android:textSize="12sp" />
+                android:textSize="10sp"
+                android:typeface="monospace" />
         </LinearLayout>
     </ScrollView>
 
