@@ -17,6 +17,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
@@ -25,6 +26,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class LMRAActivity extends BaseActivity {
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -38,6 +42,12 @@ public class LMRAActivity extends BaseActivity {
     public static long currentLMRAID; // Need for onActivityResult
     public static File currentLMRAProtoFile; // Need for onActivityResult
 
+    // App Log monitor
+    private Realm monitorLogRealm = Session.getLogRealm();
+    private RealmChangeListener<RealmResults<LogItem>> logListener;
+    private RealmResults<LogItem> logsWithNotification;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +56,10 @@ public class LMRAActivity extends BaseActivity {
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setSubtitle(getText(R.string.lmra_title));
+
+        // Setting App log listener
+        logListener = AppLog.setLogListener(LMRAActivity.this, monitorLogRealm);
+        logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);
 
         // Exit if Session is empty
         if (Session.getCurrentOrder() <= 0L) {
@@ -132,6 +146,11 @@ public class LMRAActivity extends BaseActivity {
         return null;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
