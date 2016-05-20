@@ -179,9 +179,10 @@ public class OrderPageActivity extends BaseActivity implements
         };
 
         ordersToSynchroniseInDB = monitorRealm.where(OrderSynchronisation.class)
-                .equalTo("isReadyForSync", true).equalTo("isSyncComplete", false).findAll();
+                .equalTo("isReadyForSync", true).equalTo("isSyncComplete", false).equalTo("isError", false).findAll();
         ordersToSynchroniseInDB.addChangeListener(ordersSynchronisationListener);
 
+        //TODO WHat with order with isError=true ?
 
         // Creating OrderSynchronisation SyncComplete callback
         ordersSynchronisationCompleteListener = new RealmChangeListener<RealmResults<OrderSynchronisation>>() {

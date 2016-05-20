@@ -10,6 +10,7 @@ public class OrderSynchronisation extends RealmObject {
 
     private boolean isReadyForSync;
     private boolean isSyncComplete;
+    private boolean isError;
 
     private String zipFileWithXMLs;
     private boolean zipFileWithXMLsSynced;
@@ -26,7 +27,6 @@ public class OrderSynchronisation extends RealmObject {
     private String orderCustomXMLReportFile;
     private String orderMeasurementsXMLReportFile;
     private String orderJobRulesXMLReportFile;
-
 
     public long getNumber() {
         return number;
@@ -50,6 +50,14 @@ public class OrderSynchronisation extends RealmObject {
 
     public void setSyncComplete(boolean syncComplete) {
         isSyncComplete = syncComplete;
+    }
+
+    public boolean isError() {
+        return isError;
+    }
+
+    public void setError(boolean error) {
+        isError = error;
     }
 
     public String getZipFileWithXMLs() {
@@ -130,24 +138,5 @@ public class OrderSynchronisation extends RealmObject {
 
     public void setOrderJobRulesXMLReportFile(String orderJobRulesXMLReportFile) {
         this.orderJobRulesXMLReportFile = orderJobRulesXMLReportFile;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("OrderSynchronisation{");
-        sb.append("number=").append(number);
-        sb.append(", isReadyForSync=").append(isReadyForSync);
-        sb.append(", isSyncComplete=").append(isSyncComplete);
-        sb.append(", zipFileWithXMLs='").append(zipFileWithXMLs).append('\'');
-        sb.append(", zipFileWithXMLsSynced=").append(zipFileWithXMLsSynced);
-        sb.append(", defaultPDFReportFile='").append(defaultPDFReportFile).append('\'');
-        sb.append(", defaultPDFReportFileSynced=").append(defaultPDFReportFileSynced);
-//        sb.append(", listLMRAPhotos=").append(listLMRAPhotos);
-        sb.append(", orderDefaultXMLReportFile='").append(orderDefaultXMLReportFile).append('\'');
-        sb.append(", orderCustomXMLReportFile='").append(orderCustomXMLReportFile).append('\'');
-        sb.append(", orderMeasurementsXMLReportFile='").append(orderMeasurementsXMLReportFile).append('\'');
-        sb.append(", orderJobRulesXMLReportFile='").append(orderJobRulesXMLReportFile).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }

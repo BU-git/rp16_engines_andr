@@ -262,7 +262,7 @@ public class BackgroundService extends IntentService {
 
         if (!fileName.exists()) {
             AppLog.serviceE(true, orderNumber, currentTask + "File not found: " + fileToUpload);
-            return true;
+            return false;
         }
 
         final RequestBody requestFile = RequestBody.create(mediaType, fileName);
@@ -270,7 +270,7 @@ public class BackgroundService extends IntentService {
 
         if (checksum.equals("")) {
             AppLog.serviceE(true, orderNumber, currentTask + "Error calculating checksum.");
-            return true;
+            return false;
         }
 
         final MultipartBody requestBody = new MultipartBody.Builder()
@@ -313,15 +313,20 @@ public class BackgroundService extends IntentService {
                             .findAll();
 
             realm.beginTransaction();
-
+            boolean isError;
             for (OrderSynchronisation orderToSync : currentOrderToSyncList) {
+                isError = false;
+
                 // ZIP with XMLs
                 if (orderToSync.getZipFileWithXMLs() != null && !orderToSync.isZipFileWithXMLsSynced()) {
 
                     uploadResult = uploadFile(orderToSync.getZipFileWithXMLs(), MEDIA_TYPE_OCTET_STREAM, "XML_ZIP_REPORT", orderToSync.getNumber());
 
-                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
+                    if (uploadResult) {
                         orderToSync.setZipFileWithXMLsSynced(true);
+                    } else {
+                        orderToSync.setZipFileWithXMLsSynced(false);
+                        isError = true;
                     }
                 }
 
@@ -330,44 +335,56 @@ public class BackgroundService extends IntentService {
 
                     uploadResult = uploadFile(orderToSync.getDefaultPDFReportFile(), MEDIA_TYPE_PDF, "DEFAULT_PDF_REPORT", orderToSync.getNumber());
 
-                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
+                    if (uploadResult) {
                         orderToSync.setDefaultPDFReportFileSynced(true);
+                    } else {
+                        orderToSync.setDefaultPDFReportFileSynced(false);
+                        isError = true;
                     }
                 }
 
                 // LMRA Photos
-                final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
-                        realm.where(LMRAPhoto.class)
-                                .equalTo("number", orderToSync.getNumber())
-                                .equalTo("lmraPhotoFileSynced", false)
-                                .findAll();
-                for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
+                if (!orderToSync.isLMRAPhotosSynced()) {
+                    final RealmResults<LMRAPhoto> listLMRAPhotosInBD =
+                            realm.where(LMRAPhoto.class)
+                                    .equalTo("number", orderToSync.getNumber())
+                                    .equalTo("lmraPhotoFileSynced", false)
+                                    .findAll();
+                    for (LMRAPhoto lmraPhoto : listLMRAPhotosInBD) {
 
-                    uploadResult = uploadFile(lmraPhoto.getLmraPhotoFile(), MEDIA_TYPE_JPEG, "LMRA_PHOTO", orderToSync.getNumber());
+                        uploadResult = uploadFile(lmraPhoto.getLmraPhotoFile(), MEDIA_TYPE_JPEG, "LMRA_PHOTO", orderToSync.getNumber());
 
-                    if (uploadResult) { // TODO SOME LOGICK IF ERROR
-                        lmraPhoto.setLmraPhotoFileSynced(true);
+                        if (uploadResult) {
+                            lmraPhoto.setLmraPhotoFileSynced(true);
+                        } else {
+                            lmraPhoto.setLmraPhotoFileSynced(false);
+                            isError = true;
+                        }
+                    }
+
+                    // Check if all photos synced
+                    final RealmResults<LMRAPhoto> listLMRAPhotosNotSyncedInBD =
+                            realm.where(LMRAPhoto.class)
+                                    .equalTo("number", orderToSync.getNumber())
+                                    .equalTo("lmraPhotoFileSynced", false)
+                                    .findAll();
+                    if (listLMRAPhotosNotSyncedInBD.size() == 0) {
+                        orderToSync.setLMRAPhotosSynced(true);
                     }
                 }
 
-                // Check if all photos synced
-                final RealmResults<LMRAPhoto> listLMRAPhotosNotSyncedInBD =
-                        realm.where(LMRAPhoto.class)
-                                .equalTo("number", orderToSync.getNumber())
-                                .equalTo("lmraPhotoFileSynced", false)
-                                .findAll();
-                if (listLMRAPhotosNotSyncedInBD.size() == 0) {
-                    orderToSync.setLMRAPhotosSynced(true);
-                }
+                orderToSync.setError(isError);
 
                 // Checking all statuses
-                if (orderToSync.isZipFileWithXMLsSynced()
+                if (!orderToSync.isError()
+                        && orderToSync.isZipFileWithXMLsSynced()
                         && orderToSync.isDefaultPDFReportFileSynced()
                         && orderToSync.isLMRAPhotosSynced()) {
                     // All done
                     orderToSync.setSyncComplete(true);
+                } else {
+                    orderToSync.setSyncComplete(false);
                 }
-
             }
 
             realm.commitTransaction();
