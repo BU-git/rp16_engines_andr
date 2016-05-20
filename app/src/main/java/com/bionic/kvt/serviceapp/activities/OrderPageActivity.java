@@ -83,8 +83,6 @@ public class OrderPageActivity extends BaseActivity implements
         ButterKnife.bind(this);
         AppLog.serviceI("Create activity: " + OrderPageActivity.class.getSimpleName());
 
-        //TODO CHECK USER LOGIN
-
         // Setting App log listener
         logListener = AppLog.setLogListener(OrderPageActivity.this, monitorLogRealm);
         logsWithNotification = AppLog.addListener(monitorLogRealm, logListener);

@@ -4,14 +4,10 @@ import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -20,8 +16,6 @@ import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.bionic.kvt.serviceapp.BuildConfig.IS_LOGGING_ON;
 
 public class Session extends Application {
     private static Session currentUserSession;
@@ -55,7 +49,7 @@ public class Session extends Application {
         super.onCreate();
         currentUserSession = this;
         partMap = new LinkedHashMap<>();
-        currentAppInternalPrivateDir = getFilesDir();
+        currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
         currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
 
         Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();

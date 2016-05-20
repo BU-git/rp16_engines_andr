@@ -59,7 +59,7 @@ public class DbUtils {
 
     // Completely erase User table and add Demo user
     public static void resetUserTable() {
-        AppLog.serviceI("Resetting User table.");
+        AppLog.serviceI("Resetting User database.");
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
             realm.delete(User.class);
@@ -69,7 +69,7 @@ public class DbUtils {
 
     // Completely erase Order Table and all sub tables
     public static void resetOrderTableWithSubTables() {
-        AppLog.serviceI("Resetting Order table.");
+        AppLog.serviceI("Resetting Order database.");
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
@@ -93,6 +93,7 @@ public class DbUtils {
 
             realm.commitTransaction();
 
+            Utils.deleteRecursive(Session.getCurrentAppDir());
         }
     }
 
@@ -229,19 +230,25 @@ public class DbUtils {
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
 
-            //TODO Implement remove files
-
             realm.where(CustomTemplate.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
             realm.where(DefectState.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
-            realm.where(LMRAItem.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
-            realm.where(LMRAPhoto.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
             realm.where(Order.class).equalTo("number", orderNumber).findFirst().deleteFromRealm();
             realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
             realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
             realm.where(OrderSynchronisation.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(LMRAItem.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
+            realm.where(LMRAPhoto.class).equalTo("number", orderNumber).findAll().deleteAllFromRealm();
 
             realm.commitTransaction(); // No logic if transaction fail!!!
+
+            removeOrderDir(orderNumber);
         }
+    }
+
+    public static void removeOrderDir(final long orderNumber) {
+        AppLog.serviceI("Removing order folder: " + orderNumber);
+        Utils.deleteRecursive(Utils.getOrderDir(orderNumber));
+
     }
 
     public static void updateOrderFromServer(final com.bionic.kvt.serviceapp.api.Order serverOrder) {

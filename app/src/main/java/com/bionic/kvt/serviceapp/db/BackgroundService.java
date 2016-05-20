@@ -192,7 +192,6 @@ public class BackgroundService extends IntentService {
                         realm.beginTransaction();
                         currentOrderSync.deleteFromRealm();
                         realm.commitTransaction(); // No logic if transaction fail!!!
-                        // TODO DELETE XMLS FILES
                     } else { // Task preparation is completed. Skipping.
                         AppLog.serviceI(currentTask + "Files to upload already prepared: " + orderNumber);
                         continue;
@@ -202,8 +201,7 @@ public class BackgroundService extends IntentService {
                 final OrderSynchronisation orderSync = new OrderSynchronisation();
                 orderSync.setNumber(orderNumber);
 
-                //TODO REMOVE
-                // Kostil
+                //TODO REMOVE Kostil
                 Session.getPartMap().clear();
                 generatePartMap();
 
@@ -233,9 +231,14 @@ public class BackgroundService extends IntentService {
                 } else {
                     orderSync.setZipFileWithXMLs(null);
                     AppLog.serviceI(currentTask + "XML files compressing failed.");
-                    // TODO Remove ZIP
+                    Utils.deleteRecursive(reportsXMLZipFile);
                 }
-                // TODO Remove XMLs
+
+                // Remove XML files
+                for (String file : XMLFilesToZIP) {
+                    if (file != null) Utils.deleteRecursive(new File(file));
+                }
+
                 orderSync.setZipFileWithXMLsSynced(false);
 
                 // Setting defaultPDFReportFile

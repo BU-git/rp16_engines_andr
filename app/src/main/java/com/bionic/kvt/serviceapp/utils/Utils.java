@@ -104,6 +104,14 @@ public class Utils {
         return time.format(date);
     }
 
+    public static void deleteRecursive(final File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+
+        fileOrDirectory.delete();
+    }
+
     @Nullable
     public static File getOrderDir(final long orderNumber) {
         final File dir = new File(Session.getCurrentAppDir(), "" + orderNumber);
@@ -268,7 +276,8 @@ public class Utils {
             String fileName;
             int count;
             for (String XMLFile : XMLFiles) {
-                if (XMLFile == null) continue; // No such file
+                if (XMLFile == null) continue; // Empty string
+                if (!(new File(XMLFile).exists())) continue; // No such file
                 try (BufferedInputStream originFileBufferedInputStream =
                              new BufferedInputStream(new FileInputStream(XMLFile), 2048)) {
                     fileName = XMLFile.substring(XMLFile.lastIndexOf("/") + 1);

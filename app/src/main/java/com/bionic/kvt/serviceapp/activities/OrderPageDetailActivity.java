@@ -116,7 +116,6 @@ public class OrderPageDetailActivity extends BaseActivity {
         }
 
         // Setting Order data to textView
-        //TODO PROPER NULL HANDLING
         try {
             orderNumber.setText(String.valueOf(currentOrder.getNumber()));
             orderRelation.setText(currentOrder.getRelation().getName());
@@ -131,7 +130,7 @@ public class OrderPageDetailActivity extends BaseActivity {
             orderInstallationTown.setText(currentOrder.getInstallation().getTown());
 
             orderInstructions.setText(currentOrder.getNote());
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e) {//NOOP
         }
 
         realm.close();
