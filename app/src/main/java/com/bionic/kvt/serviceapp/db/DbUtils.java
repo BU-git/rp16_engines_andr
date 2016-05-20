@@ -597,8 +597,8 @@ public class DbUtils {
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             final RealmResults<User> usersInDB = realm.where(User.class).equalTo("email", email).findAll();
-            if (usersInDB.size() != 1) {
-                AppLog.serviceE(true, -1, "Validating user login: More then one user found: " + email);
+            if (usersInDB.size() == 0) {
+                AppLog.serviceI("Validating user login: No user found: " + email);
                 return false;
             }
 

@@ -24,6 +24,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.HeaderHelper;
 import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.LogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import butterknife.BindView;
@@ -31,6 +32,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 public class LoginActivity extends BaseActivity {
     private UserLoginTask mAuthTask = null;
@@ -51,7 +55,6 @@ public class LoginActivity extends BaseActivity {
     View mLoginFormView;
 
     private SharedPreferences userSharedPreferences;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

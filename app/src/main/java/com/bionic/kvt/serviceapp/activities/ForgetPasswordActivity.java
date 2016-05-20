@@ -67,7 +67,6 @@ public class ForgetPasswordActivity extends BaseActivity {
         }
     }
 
-
     public class PasswordResetTask extends AsyncTask<Void, Void, Void> {
         private final String mEmail;
         private Utils.ServerRequestResult serverRequestResult;

@@ -336,17 +336,17 @@ public class Utils {
         try {
             userResponse = userRequest.execute();
         } catch (IOException e) {
-            AppLog.serviceE(true, -1, "User request fail: " + e.toString());
+            AppLog.serviceE(false, -1, "User request fail: " + e.toString());
             return new ServerRequestResult(false, "User request fail: " + e.toString());
         }
 
         if (!userResponse.isSuccessful()) { // Request unsuccessful
-            AppLog.serviceE(true, -1, "Error connecting to server: " + userResponse.code());
+            AppLog.serviceE(false, -1, "Error connecting to server: " + userResponse.code());
             return new ServerRequestResult(false, "Error connecting to server: " + userResponse.code());
         }
 
         if (userResponse.body() == null) {
-            AppLog.serviceE(true, -1, "Connection successful. Empty response.");
+            AppLog.serviceE(false, -1, "Connection successful. Empty response.");
             return new ServerRequestResult(false, "Connection successful. Empty response.");
         }
 
