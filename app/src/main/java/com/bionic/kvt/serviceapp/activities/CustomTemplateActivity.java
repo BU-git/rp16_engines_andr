@@ -80,7 +80,7 @@ public class CustomTemplateActivity extends BaseActivity {
 
             final CustomTemplate customTemplate = realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) {
-                AppLog.E(this, "No custom template found for order : " + Session.getCurrentOrder());
+                AppLog.E(this, "No custom template found for order: " + Session.getCurrentOrder());
                 return;
             }
 
@@ -181,7 +181,7 @@ public class CustomTemplateActivity extends BaseActivity {
 
             final CustomTemplate customTemplate = realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) {
-                AppLog.E(this, "No custom template found for order : " + Session.getCurrentOrder());
+                AppLog.E(this, "No custom template found for order: " + Session.getCurrentOrder());
                 return;
             }
 

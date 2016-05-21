@@ -44,15 +44,4 @@ public class LMRAItem extends RealmObject {
     public void setLmraDescription(String lmraDescription) {
         this.lmraDescription = lmraDescription;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("LMRAItem{");
-        sb.append("lmraId=").append(lmraId);
-        sb.append(", number=").append(number);
-        sb.append(", lmraName='").append(lmraName).append('\'');
-        sb.append(", lmraDescription='").append(lmraDescription).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

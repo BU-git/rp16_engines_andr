@@ -13,38 +13,37 @@ import retrofit2.http.Path;
 
 public interface ConnectionServiceAPI {
     // Request User data
-    // URL format /user/{email}
     // Expecting JSON
-    @POST("user/{email}")
-    Call<User> getUser(@Path("email") String email);
+    @FormUrlEncoded
+    @POST("user")
+    Call<User> getUser(@Field("email") String email);
 
     // Request list of all Orders currently available for {email} in brief format
-    // URL format /orders/brief/{email}
     // Expecting JSON
-    @POST("orders/brief/{email}")
-    Call<List<OrderBrief>> getOrdersBrief(@Path("email") String email);
+    @FormUrlEncoded
+    @POST("orders/brief")
+    Call<List<OrderBrief>> getOrdersBrief(@Field("email") String email);
 
     // Request one order with {number} for {email}
-    // URL format /orders/get/{number}/{email}
     // Expecting JSON
-    @POST("orders/get/{number}/{email}")
-    Call<Order> getOrder(@Path("number") long number,
-                         @Path("email") String email);
+    @FormUrlEncoded
+    @POST("orders/get")
+    Call<Order> getOrder(@Field("number") long number,
+                         @Field("email") String email);
 
     // Request one custom template with {customTemplateID}
-    // URL format /template/{customTemplateID}
     // Expecting JSON
-    @POST("templates/get/{customTemplateID}")
-    Call<CustomTemplate> getTemplate(@Path("customTemplateID") long customTemplateID);
+    @FormUrlEncoded
+    @POST("templates/get")
+    Call<CustomTemplate> getTemplate(@Field("customTemplateID") long customTemplateID);
 
 
     // Send order update information for order {number}, user {email}
-    // URL format /orders/update/{number}/{email}
     // Expecting standard HTTP response [200, 400, 500]
     @FormUrlEncoded
-    @POST("orders/update/{number}/{email}")
-    Call<ResponseBody> updateOrder(@Path("number") long number,
-                                   @Path("email") String email,
+    @POST("orders/update")
+    Call<ResponseBody> updateOrder(@Field("number") long number,
+                                   @Field("email") String email,
                                    @Field("lastAndroidChangeDate") long lastAndroidChangeDate,
                                    @Field("orderStatus") int orderStatus);
 
