@@ -18,17 +18,16 @@ public class OrderBrief {
     /**
      * This is time when this order was changed in BO Server.
      * If order changed in BO this field has to be updated.
-     * This field will be used by Android App to check if order has to be updated from server.
+     * This field is used by Android App to check if order has to be updated from server.
      * When order is imported to BO Server this time is set the same value as lastServerChangeDate
-     * This field will NOT changed in Android App.
+     * This field is NOT changed in Android App.
      */
     private long lastServerChangeDate;
 
     /**
      * This is time when this order was changed in Android.
      * If order changed in Android App this field has to be updated.
-     * This field will be used by Android App to check if order need to be updated to server.
-     * This field will NOT changed in BO Server.
+     * This field should NOT changed in BO Server.
      * When order is imported to BO Server this time is set to NULL
      */
     private long lastAndroidChangeDate;
@@ -36,6 +35,7 @@ public class OrderBrief {
     /**
      * Order status
      */
+    @GlobalConstants.OrderStatus
     private int orderStatus;
 
     public OrderBrief() {
@@ -73,23 +73,12 @@ public class OrderBrief {
         this.number = number;
     }
 
-    public @GlobalConstants.OrderStatus int getOrderStatus() {
+    @GlobalConstants.OrderStatus
+    public int getOrderStatus() {
         return orderStatus;
     }
 
     public void setOrderStatus(@GlobalConstants.OrderStatus int orderStatus) {
         this.orderStatus = orderStatus;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("OrderBrief{");
-        sb.append("number=").append(number);
-        sb.append(", importDate=").append(importDate);
-        sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
-        sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
-        sb.append(", orderStatus=").append(orderStatus);
-        sb.append('}');
-        return sb.toString();
     }
 }

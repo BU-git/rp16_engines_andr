@@ -29,27 +29,31 @@ public class Order {
     /**
      * This is time when this order was imported to BO Server.
      * After import it never changed.
-     * NotNull
      */
     private long importDate;
 
     /**
      * This is time when this order was changed in BO Server.
      * If order changed in BO this field has to be updated.
-     * This field will be used by Android App to check if order has to be updated from server.
+     * This field is used by Android App to check if order has to be updated from server.
      * When order is imported to BO Server this time is set the same value as lastServerChangeDate
-     * This field will NOT changed in Android App.
+     * This field is NOT changed in Android App.
      */
     private long lastServerChangeDate;
 
     /**
      * This is time when this order was changed in Android.
      * If order changed in Android App this field has to be updated.
-     * This field will be used by Android App to check if order need to be updated to server.
-     * This field will NOT changed in BO Server.
+     * This field should NOT changed in BO Server.
      * When order is imported to BO Server this time is set to NULL
      */
     private long lastAndroidChangeDate;
+
+    /**
+     * Order status
+     */
+    @GlobalConstants.OrderStatus
+    private int orderStatus;
 
     /**
      * This is ID for custom template.
@@ -58,11 +62,6 @@ public class Order {
      * If non-default template is assigned/changed on server than lastServerChangeDate has to be updated.
      */
     private long customTemplateID;
-
-    /**
-     * Order status
-     */
-    private int orderStatus;
 
     public Order() {
     }
@@ -75,7 +74,8 @@ public class Order {
         this.customTemplateID = customTemplateID;
     }
 
-    public @GlobalConstants.OrderStatus int getOrderStatus() {
+    @GlobalConstants.OrderStatus
+    public int getOrderStatus() {
         return orderStatus;
     }
 
@@ -201,29 +201,5 @@ public class Order {
 
     public void setLastAndroidChangeDate(long lastAndroidChangeDate) {
         this.lastAndroidChangeDate = lastAndroidChangeDate;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
-        sb.append("number=").append(number);
-        sb.append(", orderType='").append(orderType).append('\'');
-        sb.append(", date=").append(date);
-        sb.append(", reference='").append(reference).append('\'');
-        sb.append(", note='").append(note).append('\'');
-        sb.append(", relation=").append(relation);
-        sb.append(", employee=").append(employee);
-        sb.append(", installation=").append(installation);
-        sb.append(", tasks=").append(tasks);
-        sb.append(", components=").append(components);
-        sb.append(", parts=").append(parts);
-        sb.append(", extraInfo=").append(extraInfo);
-        sb.append(", importDate=").append(importDate);
-        sb.append(", lastServerChangeDate=").append(lastServerChangeDate);
-        sb.append(", lastAndroidChangeDate=").append(lastAndroidChangeDate);
-        sb.append(", customTemplateID=").append(customTemplateID);
-        sb.append(", orderStatus=").append(orderStatus);
-        sb.append('}');
-        return sb.toString();
     }
 }

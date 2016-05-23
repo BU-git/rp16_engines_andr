@@ -9,10 +9,6 @@ public class User {
     public User() {
     }
 
-    public User(String email) {
-        this.email = email;
-    }
-
     public String getName() {
         return name;
     }
@@ -46,25 +42,11 @@ public class User {
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", passwordHash='").append(passwordHash).append('\'');
-        sb.append(", salt='").append(salt).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
         return email.equals(user.email);
-
     }
 
     @Override

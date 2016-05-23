@@ -10,9 +10,8 @@ public class CustomTemplateElement {
     public CustomTemplateElement() {
     }
 
-    public
     @CustomElement
-    int getElementType() {
+    public int getElementType() {
         return elementType;
     }
 
