@@ -17,7 +17,7 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.LogItem;
+import com.bionic.kvt.serviceapp.utils.AppLogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
@@ -44,8 +44,8 @@ public class LMRAActivity extends BaseActivity {
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
-    private RealmChangeListener<RealmResults<LogItem>> logListener;
-    private RealmResults<LogItem> logsWithNotification;
+    private RealmChangeListener<RealmResults<AppLogItem>> logListener;
+    private RealmResults<AppLogItem> logsWithNotification;
 
 
     @Override

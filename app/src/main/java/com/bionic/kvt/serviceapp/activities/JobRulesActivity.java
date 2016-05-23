@@ -15,10 +15,14 @@ import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 
 public class JobRulesActivity extends BaseActivity {
     @BindView(R.id.job_rules_fuel_added)
@@ -129,6 +133,8 @@ public class JobRulesActivity extends BaseActivity {
         jobRules.setInternalRemarksText(internalRemarksText.getText().toString());
         jobRules.setExternalRemarksText(externalRemarksText.getText().toString());
         DbUtils.setOrderReportJobRules(jobRules);
+
+        DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
 
         final Intent intent = new Intent(getApplicationContext(), PDFReportPreviewActivity.class);
         startActivity(intent);

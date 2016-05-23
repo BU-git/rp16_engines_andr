@@ -35,13 +35,13 @@ public class AppLog {
         }
     }
 
-    public static RealmChangeListener<RealmResults<LogItem>> setLogListener(final Activity activity,
-                                                                            final Realm monitorLogRealm) {
-        return new RealmChangeListener<RealmResults<LogItem>>() {
+    public static RealmChangeListener<RealmResults<AppLogItem>> setLogListener(final Activity activity,
+                                                                               final Realm monitorLogRealm) {
+        return new RealmChangeListener<RealmResults<AppLogItem>>() {
             @Override
-            public void onChange(RealmResults<LogItem> logItems) {
-                if (logItems.size() == 0) return;
-                final Snackbar snackbar = getSnackbar(activity, logItems.get(0).getLogItemID());
+            public void onChange(RealmResults<AppLogItem> appLogItems) {
+                if (appLogItems.size() == 0) return;
+                final Snackbar snackbar = getSnackbar(activity, appLogItems.get(0).getLogItemID());
                 if (snackbar == null) return;
                 snackbar.setAction("MORE", new View.OnClickListener() {
                     @Override
@@ -52,22 +52,22 @@ public class AppLog {
                 snackbar.show();
 
                 monitorLogRealm.beginTransaction();
-                logItems.get(0).setNotify(false);
+                appLogItems.get(0).setNotify(false);
                 monitorLogRealm.commitTransaction();
             }
         };
     }
 
-    public static RealmResults<LogItem> addListener(final Realm monitorLogRealm,
-                                                    final RealmChangeListener<RealmResults<LogItem>> logListener) {
-        RealmResults<LogItem> logsWithNotification = monitorLogRealm.where(LogItem.class).equalTo("notify", true).findAllSorted("dateTime");
+    public static RealmResults<AppLogItem> addListener(final Realm monitorLogRealm,
+                                                       final RealmChangeListener<RealmResults<AppLogItem>> logListener) {
+        RealmResults<AppLogItem> logsWithNotification = monitorLogRealm.where(AppLogItem.class).equalTo("notify", true).findAllSorted("dateTime");
         logsWithNotification.addChangeListener(logListener);
         return logsWithNotification;
     }
 
     public static void removeListener(final Realm monitorLogRealm,
-                                      final RealmResults<LogItem> logsWithNotification,
-                                      final RealmChangeListener<RealmResults<LogItem>> logListener) {
+                                      final RealmResults<AppLogItem> logsWithNotification,
+                                      final RealmChangeListener<RealmResults<AppLogItem>> logListener) {
         logsWithNotification.removeChangeListener(logListener);
         monitorLogRealm.close();
     }
@@ -75,12 +75,12 @@ public class AppLog {
     public static StringBuilder getLog() {
         try (final Realm logRealm = Session.getLogRealm()) {
             final StringBuilder stringBuilder = new StringBuilder("Application log:");
-            final RealmResults<LogItem> logItems = logRealm.where(LogItem.class).findAll().sort("dateTime");
+            final RealmResults<AppLogItem> appLogItems = logRealm.where(AppLogItem.class).findAll().sort("dateTime");
 
-            for (LogItem logItem : logItems) {
+            for (AppLogItem appLogItem : appLogItems) {
                 stringBuilder.append("\n");
 
-                switch (logItem.getLevel()) {
+                switch (appLogItem.getLevel()) {
                     case DEBUG:
                         stringBuilder.append("DEBUG  ");
                         break;
@@ -94,14 +94,14 @@ public class AppLog {
                         stringBuilder.append("ERROR  ");
                         break;
                 }
-                stringBuilder.append(" [").append(Utils.getDateTimeStringFromDate(logItem.getDateTime())).append("]");
-                if (logItem.getOrderNumber() > 0) {
-                    stringBuilder.append("(").append(logItem.getOrderNumber()).append("): ");
+                stringBuilder.append(" [").append(Utils.getDateTimeStringFromDate(appLogItem.getDateTime())).append("]");
+                if (appLogItem.getOrderNumber() > 0) {
+                    stringBuilder.append("(").append(appLogItem.getOrderNumber()).append("): ");
                 } else {
                     stringBuilder.append("(NoOrder): ");
                 }
 
-                stringBuilder.append(logItem.getMessage());
+                stringBuilder.append(appLogItem.getMessage());
             }
             return stringBuilder;
         }
@@ -165,15 +165,15 @@ public class AppLog {
     private static synchronized long serviceAdd(final int level, final boolean notify, final long orderNumber, final String message) {
         try (final Realm logRealm = Session.getLogRealm()) {
             long logItemID;
-            LogItem logItem;
+            AppLogItem appLogItem;
             do { // ID can be already
                 logItemID = System.currentTimeMillis();
-                logItem = logRealm.where(LogItem.class).equalTo("logItemID", logItemID).findFirst();
-            } while (logItem != null);
+                appLogItem = logRealm.where(AppLogItem.class).equalTo("logItemID", logItemID).findFirst();
+            } while (appLogItem != null);
 
-            logItem = new LogItem(logItemID, new Date(), level, notify, orderNumber, message);
+            appLogItem = new AppLogItem(logItemID, new Date(), level, notify, orderNumber, message);
             logRealm.beginTransaction();
-            logRealm.copyToRealm(logItem);
+            logRealm.copyToRealm(appLogItem);
             logRealm.commitTransaction();
             return logItemID;
         }
@@ -193,19 +193,19 @@ public class AppLog {
     @Nullable
     private static Snackbar getSnackbar(final Activity activity, final long logItemID) {
         try (final Realm logRealm = Session.getLogRealm()) {
-            final LogItem logItem = logRealm.where(LogItem.class).equalTo("logItemID", logItemID).findFirst();
-            if (logItem == null) return null;
+            final AppLogItem appLogItem = logRealm.where(AppLogItem.class).equalTo("logItemID", logItemID).findFirst();
+            if (appLogItem == null) return null;
 
             final View rootView = ((ViewGroup) activity.findViewById(android.R.id.content)).getChildAt(0);
             Snackbar snackbar;
-            if (logItem.getLevel() == ERROR) {
-                snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_INDEFINITE);
+            if (appLogItem.getLevel() == ERROR) {
+                snackbar = Snackbar.make(rootView, appLogItem.getMessage(), Snackbar.LENGTH_INDEFINITE);
             } else {
-                snackbar = Snackbar.make(rootView, logItem.getMessage(), Snackbar.LENGTH_LONG);
+                snackbar = Snackbar.make(rootView, appLogItem.getMessage(), Snackbar.LENGTH_LONG);
             }
             final View sbView = snackbar.getView();
             final TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-            switch (logItem.getLevel()) {
+            switch (appLogItem.getLevel()) {
                 case INFO:
                     textView.setTextColor(ContextCompat.getColor(activity, R.color.colorOK));
                     break;

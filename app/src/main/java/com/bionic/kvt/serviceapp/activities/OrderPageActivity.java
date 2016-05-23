@@ -22,7 +22,7 @@ import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.LogItem;
+import com.bionic.kvt.serviceapp.utils.AppLogItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +64,8 @@ public class OrderPageActivity extends BaseActivity implements
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
-    private RealmChangeListener<RealmResults<LogItem>> logListener;
-    private RealmResults<LogItem> logsWithNotification;
+    private RealmChangeListener<RealmResults<AppLogItem>> logListener;
+    private RealmResults<AppLogItem> logsWithNotification;
 
     @BindView(R.id.order_update_status)
     TextView orderUpdateStatusText;

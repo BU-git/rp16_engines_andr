@@ -174,6 +174,7 @@ public class BackgroundService extends IntentService {
         AppLog.serviceI(currentTask + "Request successful. Get [" + customTemplateResponse.body().getCustomTemplateName() + "] template.");
 
         DbUtils.updateCustomTemplateFromServer(orderNumber, customTemplateResponse.body());
+        AppLog.serviceI(currentTask + "Custom template update complete.");
     }
 
     private void prepareOrderFilesToUpload() {
@@ -388,6 +389,7 @@ public class BackgroundService extends IntentService {
             }
 
             realm.commitTransaction();
+            AppLog.serviceI(currentTask + "Upload complete.");
         }
     }
 

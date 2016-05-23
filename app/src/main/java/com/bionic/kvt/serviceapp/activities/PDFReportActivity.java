@@ -24,7 +24,7 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.MailHelper;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.LogItem;
+import com.bionic.kvt.serviceapp.utils.AppLogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -40,7 +40,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +48,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 
@@ -68,8 +66,8 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
-    private RealmChangeListener<RealmResults<LogItem>> logListener;
-    private RealmResults<LogItem> logsWithNotification;
+    private RealmChangeListener<RealmResults<AppLogItem>> logListener;
+    private RealmResults<AppLogItem> logsWithNotification;
 
     @BindView(R.id.pdf_report_send_button)
     Button sendButton;
@@ -300,7 +298,6 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
 
     @OnClick(R.id.pdf_button_complete_order)
     public void onDoneClick(View v) {
-        DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_END_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
         Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
 

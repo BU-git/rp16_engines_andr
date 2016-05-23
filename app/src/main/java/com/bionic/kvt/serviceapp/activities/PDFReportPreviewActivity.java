@@ -17,7 +17,7 @@ import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
 import com.bionic.kvt.serviceapp.utils.AppLog;
-import com.bionic.kvt.serviceapp.utils.LogItem;
+import com.bionic.kvt.serviceapp.utils.AppLogItem;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -49,8 +49,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
-    private RealmChangeListener<RealmResults<LogItem>> logListener;
-    private RealmResults<LogItem> logsWithNotification;
+    private RealmChangeListener<RealmResults<AppLogItem>> logListener;
+    private RealmResults<AppLogItem> logsWithNotification;
 
     @BindView(R.id.pdf_preview_text_log)
     TextView pdfTextLog;

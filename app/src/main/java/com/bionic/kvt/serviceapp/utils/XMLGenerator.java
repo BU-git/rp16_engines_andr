@@ -6,12 +6,13 @@ import android.util.Xml;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.Session;
-import com.bionic.kvt.serviceapp.db.CustomTemplate;
 import com.bionic.kvt.serviceapp.db.Components.CustomTemplateElement;
+import com.bionic.kvt.serviceapp.db.CustomTemplate;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.DefectState;
 import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.db.LMRAPhoto;
+import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderReportJobRules;
 import com.bionic.kvt.serviceapp.db.OrderReportMeasurements;
 import com.google.gson.JsonElement;
@@ -272,6 +273,8 @@ public class XMLGenerator {
                     realm.where(OrderReportMeasurements.class).equalTo("number", orderNumber).findFirst();
             if (orderMeasurements == null) return null;
 
+            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
+
             AppLog.serviceI("Generating XML from Order [" + orderNumber + "] measurements.");
 
             XmlSerializer serializer = Xml.newSerializer();
@@ -362,6 +365,15 @@ public class XMLGenerator {
                 serializer.startTag("", "RunningHours"); //  Running hours [Hours]
                 serializer.text(orderMeasurements.getRunningHours());
                 serializer.endTag("", "RunningHours");
+
+                // From Order
+                serializer.startTag("", "MaintenanceStartTime"); //  Maintenance Start Time [Date]
+                serializer.text(Utils.getDateTimeStringFromDate(order.getMaintenanceStartTime()));
+                serializer.endTag("", "MaintenanceStartTime");
+
+                serializer.startTag("", "MaintenanceEndTime"); //  Maintenance End Time [Date]
+                serializer.text(Utils.getDateTimeStringFromDate(order.getMaintenanceEndTime()));
+                serializer.endTag("", "MaintenanceEndTime");
 
                 serializer.endTag("", "Report");
 

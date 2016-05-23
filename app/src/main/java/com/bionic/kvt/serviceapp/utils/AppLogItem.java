@@ -5,7 +5,7 @@ import java.util.Date;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class LogItem extends RealmObject {
+public class AppLogItem extends RealmObject {
     @PrimaryKey
     private long logItemID;
     private Date dateTime;
@@ -14,10 +14,10 @@ public class LogItem extends RealmObject {
     private long orderNumber;
     private String message;
 
-    public LogItem() {
+    public AppLogItem() {
     }
 
-    public LogItem(long logItemID, Date dateTime, int level, boolean notify, long orderNumber, String message) {
+    public AppLogItem(long logItemID, Date dateTime, int level, boolean notify, long orderNumber, String message) {
         this.logItemID = logItemID;
         this.dateTime = dateTime;
         this.level = level;
