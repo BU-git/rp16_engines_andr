@@ -130,9 +130,10 @@
         android:layout_height="wrap_content"
         android:gravity="right"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/next_padding"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/next_padding">
 
         <Button
             android:id="@+id/button_complete"

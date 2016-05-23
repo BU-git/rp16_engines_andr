@@ -202,6 +202,9 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
             String pdfInstallationAddress = currentOrder.getInstallation().getAddress() + "\n";
             String pdfInstallationTown = currentOrder.getInstallation().getTown() + "\n";
 
+            String pdfMaintenanceStartTime = Utils.getDateTimeStringFromDate(currentOrder.getMaintenanceStartTime());
+            String pdfMaintenanceEndTime = Utils.getDateTimeStringFromDate(currentOrder.getMaintenanceEndTime());
+
             String pdfRunningHours = " ";
             final OrderReportMeasurements currentMeasurements = realm.where(OrderReportMeasurements.class)
                     .equalTo("number", orderNumber).findFirst();
@@ -277,12 +280,26 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText2.setSimpleColumn(orderText5, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText2.go();
 
-                Phrase orderText6 = new Phrase(externalRemarksText, font);
-                x = 60;
-                y = 340;
+                Phrase orderText6 = new Phrase(pdfMaintenanceStartTime, font);
+                x = 183;
+                y = 441;
                 ColumnText columnText3 = new ColumnText(contentByte);
-                columnText3.setSimpleColumn(orderText6, x, y, x + 490, y + 100, 15f, Element.ALIGN_LEFT);
+                columnText3.setSimpleColumn(orderText6, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
                 columnText3.go();
+
+                Phrase orderText7 = new Phrase(pdfMaintenanceEndTime, font);
+                x = 430;
+                y = 441;
+                ColumnText columnText4 = new ColumnText(contentByte);
+                columnText4.setSimpleColumn(orderText7, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);
+                columnText4.go();
+
+                Phrase orderText8 = new Phrase(externalRemarksText, font);
+                x = 60;
+                y = 321;
+                ColumnText columnText5 = new ColumnText(contentByte);
+                columnText5.setSimpleColumn(orderText8, x, y, x + 490, y + 100, 15f, Element.ALIGN_LEFT);
+                columnText5.go();
 
                 pdfStamper.close();
             } catch (IOException | DocumentException e) {

@@ -59,7 +59,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 public class Utils {
     public static final int REQUEST_WRITE_CODE = 1;
     private final static SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy-MM-dd", Locale.GERMANY);
-    private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.GERMANY);
+    private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
     private static final String TAG = Utils.class.getName();
 
