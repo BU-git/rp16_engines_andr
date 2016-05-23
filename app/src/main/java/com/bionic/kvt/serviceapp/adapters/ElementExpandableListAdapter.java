@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.activities.ComponentDetailFragment;
-import com.bionic.kvt.serviceapp.activities.ComponentListActivity;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.Utils;
@@ -29,6 +29,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -56,8 +57,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     public ElementExpandableListAdapter(Context context, Map<String, JsonObject> listChildData) {
         this._context = context;
-        listChildData.put(context.getResources().getString(R.string.score_text), null);
-        String[] arrayChild = listChildData.keySet().toArray(new String[listChildData.keySet().size()]);
+
+        /*
+        Creating mutable map as a copy of a current child map.
+        Initial map is used for XML generation.
+        Current mutated map is used to display the data in Child with an additional "Score" field.
+         */
+        LinkedHashMap<String, JsonObject> mutableListChild = (LinkedHashMap<String, JsonObject>) ((LinkedHashMap<String, JsonObject>) listChildData).clone();
+        mutableListChild.put(context.getResources().getString(R.string.score_text), null);
+        String[] arrayChild = mutableListChild.keySet().toArray(new String[mutableListChild.keySet().size()]);
         List<String> listSortedChild = new LinkedList<>();
         for (String child : arrayChild) {
             if (child.equals(context.getResources().getString(R.string.score_text))) {
@@ -69,7 +77,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
         //Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
         //Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
         this._listDataHeader = listSortedChild;
-        this._listDataChild = listChildData;
+        this._listDataChild = mutableListChild;
     }
 
     @Override
@@ -223,15 +231,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                         if (checkBox.isChecked()) {
                             problemDetailLayout.setVisibility(View.VISIBLE);
-                            if (!ComponentListActivity.defectStateList.contains(state)) {
-                                ComponentListActivity.defectStateList.add(state);
+                            if (!Session.defectStateList.contains(state)) {
+                                Session.defectStateList.add(state);
                             }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
                             state.setCondition(GlobalConstants.DEFAULT_SCORE);
                             state.performScoreAdjustments(child);
-                            ComponentListActivity.defectStateList.remove(state);
-                            Log.d(TAG, "Size after removal: " + ComponentListActivity.defectStateList.size());
+                            Session.defectStateList.remove(state);
+                            Log.d(TAG, "Size after removal: " + Session.defectStateList.size());
 
                         }
                         notifyDataSetChanged();
@@ -242,7 +250,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemPlaceholderLayout.addView(problemDetailLayout);
 
 
-                for (DefectState d : ComponentListActivity.defectStateList) {
+                for (DefectState d : Session.defectStateList) {
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition) {
                         if (checkBox.getId() == d.getCheckboxPosition()) {
                             omvangSpinner.setSelection(d.getExtentId());
@@ -318,8 +326,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             if (groupPosition == 0) {
                 indicator.setVisibility(View.GONE);
                 scoreText.setVisibility(View.VISIBLE);
-                if (ComponentListActivity.defectStateList != null && ComponentListActivity.defectStateList.size() > 0) {
-                    Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(ComponentListActivity.defectStateList, ComponentDetailFragment.ARG_CURRENT);
+                if (Session.defectStateList != null && Session.defectStateList.size() > 0) {
+                    Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(Session.defectStateList, ComponentDetailFragment.ARG_CURRENT);
                     if (partScore != null && partScore >= 1) {
                         score = partScore;
                     }

@@ -17,12 +17,10 @@ import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.ElementExpandableListAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
-import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -42,19 +40,15 @@ import butterknife.OnClick;
  */
 public class ComponentListActivity extends BaseActivity {
 
+    @BindView(R.id.component_list)
+    RecyclerView recyclerView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
      */
-    public static List<DefectState> defectStateList = new ArrayList<>();
     private String TAG = ComponentListActivity.class.getName();
-
-    @BindView(R.id.component_list)
-    RecyclerView recyclerView;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     private boolean mTwoPane;
 
     @Override
@@ -97,8 +91,8 @@ public class ComponentListActivity extends BaseActivity {
 
     @OnClick(R.id.component_list_next_button)
     public void OnNextClick(View v) {
-        DbUtils.saveDefectStateListToDB(defectStateList);
-        DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(Session.getPartMap(), defectStateList));
+        DbUtils.saveDefectStateListToDB(Session.defectStateList);
+        DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(Session.getPartMap(), Session.defectStateList));
 
         final Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);

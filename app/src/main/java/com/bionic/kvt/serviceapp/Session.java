@@ -3,11 +3,14 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
+import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.google.gson.JsonObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -18,19 +21,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Session extends Application {
+    public static List<DefectState> defectStateList = new ArrayList<>();
     private static Session currentUserSession;
-
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS);
-
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(BuildConfig.BACK_OFFICE_HOST)
             .addConverterFactory(GsonConverterFactory.create());
-
     private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
-
     private ConnectionServiceAPI connectionServiceAPI;
 
     private File currentAppInternalPrivateDir;
@@ -43,34 +43,6 @@ public class Session extends Application {
     private byte[] byteArrayClientSignature;
 
     private RealmConfiguration logConfig;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        currentUserSession = this;
-        partMap = new LinkedHashMap<>();
-        currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
-        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
-
-        Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
-        connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
-
-        RealmConfiguration config = new RealmConfiguration.Builder(this)
-                .name(BuildConfig.DB_NAME)
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(config);
-
-        // Realm config for log DB
-        logConfig = new RealmConfiguration.Builder(this)
-                .name("kvtLog.realm")
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        AppLog.initLog();
-    }
 
     public static Realm getLogRealm() {
         return Realm.getInstance(currentUserSession.logConfig);
@@ -102,28 +74,28 @@ public class Session extends Application {
         Session.partMap = partMap;
     }
 
-    public static void setEngineerName(String engineerName) {
-        currentUserSession.engineerName = engineerName;
-    }
-
     public static String getEngineerName() {
         return currentUserSession.engineerName;
     }
 
-    public static void setEngineerEmail(String engineerEmail) {
-        currentUserSession.engineerEmail = engineerEmail;
+    public static void setEngineerName(String engineerName) {
+        currentUserSession.engineerName = engineerName;
     }
 
     public static String getEngineerEmail() {
         return currentUserSession.engineerEmail;
     }
 
-    public static void setCurrentOrder(long order) {
-        currentUserSession.currentOrder = order;
+    public static void setEngineerEmail(String engineerEmail) {
+        currentUserSession.engineerEmail = engineerEmail;
     }
 
     public static long getCurrentOrder() {
         return currentUserSession.currentOrder;
+    }
+
+    public static void setCurrentOrder(long order) {
+        currentUserSession.currentOrder = order;
     }
 
     public static File getCurrentAppDir() {
@@ -148,5 +120,33 @@ public class Session extends Application {
 
     public static void setByteArrayClientSignature(byte[] byteArrayClientSignature) {
         currentUserSession.byteArrayClientSignature = byteArrayClientSignature;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        currentUserSession = this;
+        partMap = new LinkedHashMap<>();
+        currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
+        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
+
+        Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
+        connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
+
+        RealmConfiguration config = new RealmConfiguration.Builder(this)
+                .name(BuildConfig.DB_NAME)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
+
+        // Realm config for log DB
+        logConfig = new RealmConfiguration.Builder(this)
+                .name("kvtLog.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        AppLog.initLog();
     }
 }

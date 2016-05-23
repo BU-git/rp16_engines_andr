@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.bionic.kvt.serviceapp.R;
+import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.models.DefectState;
 
 /**
@@ -17,8 +18,8 @@ import com.bionic.kvt.serviceapp.models.DefectState;
  * in a {@link ComponentListActivity}.
  */
 public class ComponentDetailActivity extends BaseActivity {
-    ComponentDetailFragment fragment;
     private static final String TAG = ComponentDetailActivity.class.getName();
+    ComponentDetailFragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class ComponentDetailActivity extends BaseActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
 
-        for (DefectState d : ComponentListActivity.defectStateList) {
+        for (DefectState d : Session.defectStateList) {
             Log.d(TAG, "Activity screen object: " + d.toString());
         }
 

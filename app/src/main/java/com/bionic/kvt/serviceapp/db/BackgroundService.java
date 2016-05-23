@@ -202,8 +202,6 @@ public class BackgroundService extends IntentService {
                 final OrderSynchronisation orderSync = new OrderSynchronisation();
                 orderSync.setNumber(orderNumber);
 
-                //TODO REMOVE Kostil
-                Session.getPartMap().clear();
                 generatePartMap();
 
 
