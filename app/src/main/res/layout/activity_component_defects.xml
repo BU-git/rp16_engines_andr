@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.ComponentDefectsActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,9 +21,10 @@
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="@string/component_defects"
-            android:textStyle="bold"
-            android:textColor="@color/colorSecondaryText"/>
+            android:textColor="@color/colorSecondaryText"
+            android:textStyle="bold" />
     </LinearLayout>
+
     <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

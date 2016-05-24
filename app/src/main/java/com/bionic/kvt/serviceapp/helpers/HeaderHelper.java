@@ -9,9 +9,6 @@ import com.bionic.kvt.serviceapp.R;
 
 public class HeaderHelper {
     private Context mContext;
-    private ImageView mImageView;
-    private ImageView mImageLogoView;
-    private TextView mHeaderTextView;
 
     public HeaderHelper(Context context) {
         this.mContext = context;
@@ -19,13 +16,13 @@ public class HeaderHelper {
 
     public void setHeader() {
         if (mContext instanceof Activity) {
-            mImageView = (ImageView) ((Activity) mContext).findViewById(R.id.home_image);
+            ImageView mImageView = (ImageView) ((Activity) mContext).findViewById(R.id.home_image);
             mImageView.setImageResource(R.drawable.header);
 
-            mImageLogoView = (ImageView) ((Activity) mContext).findViewById(R.id.logo_image);
+            ImageView mImageLogoView = (ImageView) ((Activity) mContext).findViewById(R.id.logo_image);
             mImageLogoView.setImageResource(R.drawable.logo);
 
-            mHeaderTextView = (TextView) ((Activity) mContext).findViewById(R.id.header_text);
+            TextView mHeaderTextView = (TextView) ((Activity) mContext).findViewById(R.id.header_text);
         }
     }
 }

@@ -86,11 +86,9 @@ public class ComponentDetailFragment extends Fragment {
                 @Override
                 public void onGroupCollapse(int groupPosition) {
 
-                    layoutId = Integer.valueOf(new StringBuilder()
-                            .append(Integer.valueOf(ElementExpandableListAdapter.layoutMagicNumber))
-                            .append(Integer.valueOf(ElementExpandableListAdapter.groupClickedPosition))
-                            .append(groupPosition)
-                            .toString());
+                    layoutId = Integer.valueOf(String.valueOf(ElementExpandableListAdapter.layoutMagicNumber) +
+                            ElementExpandableListAdapter.groupClickedPosition +
+                            groupPosition);
 
                     if (rootView.findViewById(layoutId) != null) {
                         rootView.findViewById(layoutId).setVisibility(View.GONE);
@@ -104,11 +102,9 @@ public class ComponentDetailFragment extends Fragment {
                 public void onGroupExpand(int groupPosition) {
                     for (int i = 0; i < listAdapter.getGroupCount(); i++) {
                         //Id of the view to Restore
-                        Integer id = Integer.valueOf(new StringBuilder()
-                                .append(Integer.valueOf(ElementExpandableListAdapter.layoutMagicNumber))
-                                .append(Integer.valueOf(ElementExpandableListAdapter.groupClickedPosition))
-                                .append(groupPosition)
-                                .toString());
+                        Integer id = Integer.valueOf(String.valueOf(ElementExpandableListAdapter.layoutMagicNumber) +
+                                ElementExpandableListAdapter.groupClickedPosition +
+                                groupPosition);
                         if (i != groupPosition) {
                             if (list.isGroupExpanded(i)) {
                                 list.collapseGroup(i);
@@ -127,11 +123,7 @@ public class ComponentDetailFragment extends Fragment {
                 public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 
                     //Disallow clicks on already expanded group
-                    if (list.isGroupExpanded(groupPosition) || groupPosition == 0) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return list.isGroupExpanded(groupPosition) || groupPosition == 0;
 
                 }
             });

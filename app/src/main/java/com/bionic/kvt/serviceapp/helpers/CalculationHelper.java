@@ -21,24 +21,38 @@ public enum CalculationHelper {
     private static final Double[] CONDITIONARRAY = {1d, 1d, 1.02, 1.1, 1.3, 1.7, 2d};
     private static final Integer ROWSIZE = 5;
 
-    CalculationHelper() {}
+    CalculationHelper() {
+    }
 
-    public Integer [] getConditionArray(String defectType, Integer intensityPosition){
+    public Integer[] getConditionArray(String defectType, Integer intensityPosition) {
         Integer initialIndex;
-        if (defectType.equals("E")) initialIndex = 2;
-        else if (defectType.equals("S")) initialIndex = 1;
-        else if (defectType.equals("G")) initialIndex = 0;
-        else initialIndex = -1;
+        switch (defectType) {
+            case "E":
+                initialIndex = 2;
+                break;
+            case "S":
+                initialIndex = 1;
+                break;
+            case "G":
+                initialIndex = 0;
+                break;
+            default:
+                initialIndex = -1;
+                break;
+        }
 
         return getArrayByIntensityPositionAndIndex(intensityPosition, initialIndex);
     }
 
-    private Integer [] getArrayByIntensityPositionAndIndex(Integer intensityPosition, Integer initialIndex) {
-        if (initialIndex >= 0){
+    private Integer[] getArrayByIntensityPositionAndIndex(Integer intensityPosition, Integer initialIndex) {
+        if (initialIndex >= 0) {
             switch (intensityPosition) {
-                case 0: return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex, initialIndex + ROWSIZE);
-                case 1: return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex + 1, ++initialIndex + ROWSIZE);
-                case 2: return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex + 2, ++initialIndex + 1 + ROWSIZE);
+                case 0:
+                    return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex, initialIndex + ROWSIZE);
+                case 1:
+                    return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex + 1, ++initialIndex + ROWSIZE);
+                case 2:
+                    return Arrays.copyOfRange(CALCULATIONARRAY, initialIndex + 2, ++initialIndex + 1 + ROWSIZE);
             }
         }
         return new Integer[5];
@@ -48,17 +62,16 @@ public enum CalculationHelper {
         return (isFixed) ? 1 : getConditionArray(defectType, intensityId)[scopeId];
     }
 
-    public Double getConditionFactor (Integer condition){
+    public Double getConditionFactor(Integer condition) {
         return CONDITIONARRAY[condition];
     }
 
-    public Integer getScoreByPart (List<DefectState> defectStateList, String part) {
+    public Integer getScoreByPart(List<DefectState> defectStateList, String part) {
         List<DefectState> partDefects = getDefectsByPart(defectStateList, part);
 
         if (partDefects != null && partDefects.size() > 0) {
             return getMaxDefect(partDefects).getCondition();
-        }
-        else return 1;
+        } else return 1;
     }
 
     public List<DefectState> getDefectsByPart(List<DefectState> defectStateList, String part) {
@@ -109,8 +122,6 @@ public enum CalculationHelper {
             return 5;
         else return 6;
     }
-
-
 
 
 }

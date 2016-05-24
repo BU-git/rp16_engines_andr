@@ -48,16 +48,4 @@ public class Info extends RealmObject {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Info{");
-        sb.append("kindOfLine='").append(kindOfLine).append('\'');
-        sb.append(", prePost='").append(prePost).append('\'');
-        sb.append(", sleutel='").append(sleutel).append('\'');
-        sb.append(", line='").append(line).append('\'');
-        sb.append(", description='").append(description).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

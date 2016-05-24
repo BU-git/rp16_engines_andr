@@ -258,7 +258,7 @@ public class Utils {
 
     public static void copyFile(final File srcFile, final File destFile) {
         try (FileChannel inChannel = new FileInputStream(srcFile).getChannel();
-             FileChannel outChannel = new FileOutputStream(destFile).getChannel();
+             FileChannel outChannel = new FileOutputStream(destFile).getChannel()
         ) {
             inChannel.transferTo(0, inChannel.size(), outChannel);
         } catch (IOException e) {

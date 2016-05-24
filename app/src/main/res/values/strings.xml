@@ -19,7 +19,6 @@
     <string name="orders">Orders</string>
     <string name="order_number">Order</string>
 
-
     <string name="uploaded">Uploaded</string>
     <string name="complete">Complete</string>
     <string name="in_progress">In progress</string>
@@ -60,7 +59,6 @@
 
     <!-- String related to LMRA -->
     <string name="button_delete">Delete this LMRA</string>
-    <string name="button_save">Save</string>
     <string name="lmra_button_add">Add Item</string>
     <string name="lmra_text_sample">Text Sample</string>
     <string name="lmra_hint_title">Name</string>
@@ -68,11 +66,7 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="lmra_save">Save</string>
-    <string name="none"></string>
     <!--<string name="error_lmra_name">LMRA name is required</string>-->
-
-    <!-- Test strings -->
-    <string name="test_long_string">dsfdssddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss</string>
 
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
@@ -223,7 +217,6 @@
     <string name="email_dialog_title">Send email to:</string>
     <string name="preparations">Preparations</string>
 
-
     <string name="finish_report">Finish service report</string>
     <string name="sign_report">Sign report</string>
     <string name="show_report">Show report</string>
@@ -234,4 +227,8 @@
     <string name="mark">Mark</string>
     <string name="sort">Sort</string>
     <string name="serial_number">Serial number</string>
+    <string name="internal_remarks">Internal remarks:</string>
+    <string name="external_remarks">External remarks:</string>
+    <string name="take">Take</string>
+    <string name="delete">Delete</string>
 </resources>

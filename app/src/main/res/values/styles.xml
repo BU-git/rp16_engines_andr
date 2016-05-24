@@ -10,20 +10,6 @@
         <!--<item name="android:textColor">@color/colorMainText</item>-->
     </style>
 
-    <style name="MeasurementsCell">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginRight">@dimen/measurements_table_margin</item>
-        <item name="android:background">@color/colorMainBackground</item>
-        <item name="android:padding">@dimen/measurements_table_cell_padding</item>
-    </style>
-
-    <style name="MeasurementsCellText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

@@ -110,7 +110,6 @@ public class AppLog {
     public static void E(final Activity activity, final String message) {
         final long logItemID = serviceAdd(ERROR, false, -1, message);
         showSnackbar(activity, logItemID);
-        ;
     }
 
     public static void W(final Activity activity, final String message) {

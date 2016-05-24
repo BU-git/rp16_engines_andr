@@ -218,11 +218,9 @@ public class DbUtils {
                 .compareTo(new Date(orderBrief.getImportDate())) != 0)
             return true;
 
-        if (orderInDb.getLastServerChangeDate()
-                .compareTo(new Date(orderBrief.getLastServerChangeDate())) != 0)
-            return true;
+        return orderInDb.getLastServerChangeDate()
+                .compareTo(new Date(orderBrief.getLastServerChangeDate())) != 0;
 
-        return false;
     }
 
     private static void removeOrderFromDB(final long orderNumber) {

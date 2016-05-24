@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +14,8 @@ public class Element implements Parcelable, Serializable {
     private String elementName;
     private List<Problem> problemList;
 
-    public Element(){}
+    public Element() {
+    }
 
     public String getElementName() {
         return elementName;

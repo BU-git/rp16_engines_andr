@@ -2,6 +2,7 @@ package com.bionic.kvt.serviceapp.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.google.gson.JsonElement;

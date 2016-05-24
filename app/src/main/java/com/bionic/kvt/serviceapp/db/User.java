@@ -42,15 +42,4 @@ public class User extends RealmObject {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("User{");
-        sb.append("email='").append(email).append('\'');
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", passwordHash='").append(passwordHash).append('\'');
-        sb.append(", salt='").append(salt).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }

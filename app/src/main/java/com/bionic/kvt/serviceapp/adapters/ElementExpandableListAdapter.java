@@ -114,11 +114,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             problemPlaceholderLayout.setId(groupPosition);
             elementLayout.addView(problemPlaceholderLayout);
             //Creating layout id as a concatenation of magic number, group clicked position and group position
-            Integer layoutId = Integer.valueOf(new StringBuilder()
-                    .append(Integer.valueOf(layoutMagicNumber))
-                    .append(Integer.valueOf(groupClickedPosition))
-                    .append(groupPosition)
-                    .toString());
+            Integer layoutId = Integer.valueOf(String.valueOf(layoutMagicNumber) + groupClickedPosition + groupPosition);
             problemPlaceholderLayout.setId(layoutId);
 
             Set<Map.Entry<String, JsonElement>> childSet = childElement.entrySet();
@@ -127,11 +123,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 Integer position = Utils.getSetIndex(childSet, child);
                 final CheckBox checkBox = new CheckBox(this._context);
                 //Creating checkbox id as a concatenation of magic number, group position and checkbox position
-                final Integer id = Integer.valueOf(new StringBuilder()
-                        .append(String.valueOf(viewMagicNumber))
-                        .append(String.valueOf(groupPosition))
-                        .append(String.valueOf(position))
-                        .toString());
+                final Integer id = Integer.valueOf(String.valueOf(viewMagicNumber) + String.valueOf(groupPosition) + String.valueOf(position));
                 checkBox.setId(id);
 
                 childClickedPosition = position;

@@ -50,7 +50,7 @@
                         android:layout_height="match_parent"
                         android:layout_column="1"
                         android:layout_gravity="center"
-                        android:layout_weight="0.5">
+                        android:layout_weight="1.5">
 
                         <CheckBox
                             android:id="@+id/job_rules_fuel_added"
@@ -60,11 +60,6 @@
                             android:gravity="center" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"></TableRow>
                 </TableRow>
 
                 <TableRow
@@ -93,7 +88,7 @@
                         android:layout_height="match_parent"
                         android:layout_column="1"
                         android:layout_gravity="center"
-                        android:layout_weight="0.5">
+                        android:layout_weight="1.5">
 
                         <CheckBox
                             android:id="@+id/job_rules_water_separators_drained"
@@ -103,11 +98,6 @@
                             android:gravity="center" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"></TableRow>
                 </TableRow>
 
                 <TableRow
@@ -136,7 +126,7 @@
                         android:layout_height="match_parent"
                         android:layout_column="1"
                         android:layout_gravity="center"
-                        android:layout_weight="0.5">
+                        android:layout_weight="1.5">
 
                         <CheckBox
                             android:id="@+id/job_rules_leave_operational"
@@ -145,12 +135,6 @@
                             android:checked="false" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"></TableRow>
 
                 </TableRow>
 
@@ -179,7 +163,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_column="1"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical">
 
                         <TextView
@@ -202,13 +186,6 @@
                             android:paddingLeft="@dimen/nsa_padding"
                             android:text="@string/yes" />
                     </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"></TableRow>
 
                 </TableRow>
 
@@ -237,7 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_column="1"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical">
 
                         <TextView
@@ -261,12 +238,6 @@
                             android:text="@string/yes" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"></TableRow>
 
                 </TableRow>
 
@@ -295,7 +266,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_column="1"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical">
 
                         <TextView
@@ -319,12 +290,6 @@
                             android:text="@string/yes" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"></TableRow>
 
                 </TableRow>
 
@@ -353,7 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_column="1"
-                        android:layout_weight="0.5"
+                        android:layout_weight="1.5"
                         android:gravity="center_vertical">
 
                         <TextView
@@ -377,12 +342,6 @@
                             android:text="@string/yes" />
                     </TableRow>
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_column="2"
-                        android:layout_weight="2"
-                        android:gravity="center_vertical"></TableRow>
 
                 </TableRow>
             </TableLayout>
@@ -393,7 +352,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_horizontal_margin"
-                android:text="Internal remarks:" />
+                android:text="@string/internal_remarks" />
 
             <EditText
                 android:id="@+id/job_rules_text_internal_remarks"
@@ -413,7 +372,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_horizontal_margin"
-                android:text="External remarks:" />
+                android:text="@string/external_remarks" />
 
             <EditText
                 android:id="@+id/job_rules_text_external_remarks"

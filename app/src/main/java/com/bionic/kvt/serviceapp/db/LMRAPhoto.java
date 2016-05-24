@@ -41,15 +41,4 @@ public class LMRAPhoto extends RealmObject {
     public void setLmraPhotoFileSynced(boolean lmraPhotoFileSynced) {
         this.lmraPhotoFileSynced = lmraPhotoFileSynced;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("LMRAPhoto{");
-        sb.append("lmraId=").append(lmraId);
-        sb.append(", number=").append(number);
-        sb.append(", lmraPhotoFile='").append(lmraPhotoFile).append('\'');
-        sb.append(", lmraPhotoFileSynced=").append(lmraPhotoFileSynced);
-        sb.append('}');
-        return sb.toString();
-    }
 }
