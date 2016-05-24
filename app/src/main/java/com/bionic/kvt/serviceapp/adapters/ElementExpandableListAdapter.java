@@ -243,7 +243,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
 
                 for (DefectState d : Session.getDefectStateList()) {
-                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition) {
+                    if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition().equals(groupClickedPosition)) {
                         if (checkBox.getId() == d.getCheckboxPosition()) {
                             omvangSpinner.setSelection(d.getExtentId());
                             intensitySpinner.setSelection(d.getIntensityId());
