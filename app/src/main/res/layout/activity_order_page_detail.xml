@@ -453,7 +453,6 @@
             android:text="Instructions!!!!!!"
             android:textStyle="bold" />
 
-
         <ToggleButton
             android:id="@+id/service_engenieer_accept_toggleButton"
             android:layout_width="wrap_content"
@@ -461,17 +460,79 @@
             android:layout_gravity="right"
             android:textOff="@string/accept"
             android:textOn="@string/accepted" />
-
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/process_order_page_detail_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
         android:textAppearance="?android:textAppearanceMedium">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:paddingBottom="@dimen/orders_processing_vertical_margin"
+            android:paddingLeft="@dimen/orders_table_vertical_margin"
+            android:paddingRight="@dimen/orders_table_vertical_margin"
+            android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/orders_table_vertical_margin"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/colorSecondaryText"
+                android:text="@string/component"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/orders_table_vertical_margin"
+                android:layout_weight="1"
+                android:textColor="@color/colorSecondaryText"
+                android:gravity="center_horizontal"
+                android:text="@string/number"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/orders_table_vertical_margin"
+                android:layout_weight="1"
+                android:textColor="@color/colorSecondaryText"
+                android:gravity="center_horizontal"
+                android:text="@string/mark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/orders_table_vertical_margin"
+                android:layout_weight="1"
+                android:textColor="@color/colorSecondaryText"
+                android:gravity="center_horizontal"
+                android:text="@string/sort"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:textColor="@color/colorSecondaryText"
+                android:gravity="center_horizontal"
+                android:text="@string/serial_number"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/process_order_page_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:id="@+id/process_order_page_order_complete"
@@ -489,7 +550,9 @@
             android:layout_weight="1"
             android:gravity="bottom"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/next_padding">
+            android:paddingBottom="@dimen/next_padding"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
 
             <TextView
                 android:id="@+id/process_order_page_accept_instructions"

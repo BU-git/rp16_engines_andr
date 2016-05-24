@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/orders_processing_vertical_margin"
+    android:paddingLeft="@dimen/orders_table_vertical_margin"
+    android:paddingRight="@dimen/orders_table_vertical_margin"
+    android:paddingTop="@dimen/orders_processing_vertical_margin">
+
+    <TextView
+        android:id="@+id/order_component_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/orders_table_vertical_margin"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/order_component_number"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/orders_table_vertical_margin"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/order_component_mark"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/orders_table_vertical_margin"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/order_component_sort"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginRight="@dimen/orders_table_vertical_margin"
+        android:layout_weight="1"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/order_component_serial"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.5"
+        android:gravity="center"/>
+</LinearLayout>

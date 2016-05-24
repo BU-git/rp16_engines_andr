@@ -229,4 +229,9 @@
     <string name="show_report">Show report</string>
     <string name="remaining_work">Remaining work</string>
     <string name="make_lmra_photo">Make LMRA photo</string>
+    <string name="component">Component</string>
+    <string name="number">Number</string>
+    <string name="mark">Mark</string>
+    <string name="sort">Sort</string>
+    <string name="serial_number">Serial number</string>
 </resources>

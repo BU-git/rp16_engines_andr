@@ -5,11 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
+import com.bionic.kvt.serviceapp.adapters.OrderComponentAdapter;
+import com.bionic.kvt.serviceapp.db.Components.Component;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.utils.AppLog;
@@ -21,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmList;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
@@ -74,6 +78,9 @@ public class OrderPageDetailActivity extends BaseActivity {
 
     @BindView(R.id.instructions_text)
     TextView orderInstructions;
+
+    @BindView(R.id.process_order_page_list_view)
+    ListView orderListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +137,12 @@ public class OrderPageDetailActivity extends BaseActivity {
             orderInstallationTown.setText(currentOrder.getInstallation().getTown());
 
             orderInstructions.setText(currentOrder.getNote());
+
+            RealmList<Component> components = currentOrder.getComponents();
+            if (components.size() > 0) {
+                orderListView.setAdapter(new OrderComponentAdapter(this, components));
+            }
+
         } catch (NullPointerException e) {//NOOP
         }
 
