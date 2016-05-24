@@ -91,8 +91,8 @@ public class ComponentListActivity extends BaseActivity {
 
     @OnClick(R.id.component_list_next_button)
     public void OnNextClick(View v) {
-        DbUtils.saveDefectStateListToDB(Session.defectStateList);
-        DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(Session.getPartMap(), Session.defectStateList));
+        DbUtils.saveDefectStateListToDB(Session.getDefectStateList());
+        DbUtils.saveScoreToDB(Session.getCurrentOrder(), CalculationHelper.INSTANCE.getGeneralScore(Session.getPartMap(), Session.getDefectStateList()));
 
         final Intent intent = new Intent(getApplicationContext(), MeasurementsActivity.class);
         startActivity(intent);

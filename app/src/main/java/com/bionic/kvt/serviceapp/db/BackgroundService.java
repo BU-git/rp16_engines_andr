@@ -202,7 +202,7 @@ public class BackgroundService extends IntentService {
                 final OrderSynchronisation orderSync = new OrderSynchronisation();
                 orderSync.setNumber(orderNumber);
 
-                generatePartMap();
+//                generatePartMap();
 
 
                 // Setting zipFileWithXMLs

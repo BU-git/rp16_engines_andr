@@ -1,7 +1,6 @@
 package com.bionic.kvt.serviceapp.utils;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.Xml;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
@@ -117,7 +116,6 @@ public class XMLGenerator {
             serializer.endTag("", "Order");
 
             serializer.startTag("", "Parts");
-            int count = 0;
             for (String part : Session.getPartMap().keySet()) {
                 serializer.startTag("", "Part");
                 serializer.attribute("", "Name", part);
@@ -127,7 +125,6 @@ public class XMLGenerator {
                     serializer.startTag("", "Element");
                     serializer.attribute("", "Name", element.getKey());
                     //Installation general
-                    Log.e(">>>>>>>>>>>>>>>>> " + count++, element.getKey());
                     Set<Map.Entry<String, JsonElement>> thirdLevel = element.getValue().entrySet();
                     for (Map.Entry<String, JsonElement> problem : thirdLevel) {
                         //Defecten
@@ -135,17 +132,14 @@ public class XMLGenerator {
                         serializer.attribute("", "Name", problem.getKey());
 
                         DefectState defectState = DbUtils.getDefectStateFromDB(orderNumber, part, element.getKey(), problem.getKey());
-                        Log.e("<<", element.getKey() + " " + problem.getKey());
                         if (defectState == null) {
                             serializer.endTag("", "Problem");
                             continue;
                         }
-                        //TODO Fix the NPE for XML from Defects
-                        /*
+
                         serializer.startTag("", "Extent");
                         serializer.text(defectState.getExtent());
                         serializer.endTag("", "Extent");
-
 
                         serializer.startTag("", "Intensity");
                         serializer.text(defectState.getIntensity());
@@ -177,7 +171,7 @@ public class XMLGenerator {
                         serializer.startTag("", "CorrelatedScore");
                         serializer.text(String.valueOf(defectState.getCorrelatedScore()));
                         serializer.endTag("", "CorrelatedScore");
-                        */
+
                         serializer.endTag("", "Problem");
                     }
                     serializer.endTag("", "Element");

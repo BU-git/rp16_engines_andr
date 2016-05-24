@@ -45,7 +45,7 @@ public class ComponentDetailActivity extends BaseActivity {
         // http://developer.android.com/guide/components/fragments.html
         //
 
-        for (DefectState d : Session.defectStateList) {
+        for (DefectState d : Session.getDefectStateList()) {
             Log.d(TAG, "Activity screen object: " + d.toString());
         }
 

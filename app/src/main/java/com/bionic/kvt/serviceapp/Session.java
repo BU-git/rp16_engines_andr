@@ -21,16 +21,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Session extends Application {
-    public static List<DefectState> defectStateList = new ArrayList<>();
     private static Session currentUserSession;
+
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS);
+
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(BuildConfig.BACK_OFFICE_HOST)
             .addConverterFactory(GsonConverterFactory.create());
+
     private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
+    private List<DefectState> defectStateList;
+
     private ConnectionServiceAPI connectionServiceAPI;
 
     private File currentAppInternalPrivateDir;
@@ -44,6 +48,37 @@ public class Session extends Application {
 
     private RealmConfiguration logConfig;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        currentUserSession = this;
+
+        partMap = new LinkedHashMap<>();
+        defectStateList = new ArrayList<>();
+
+        currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
+        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
+
+        Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
+        connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
+
+        RealmConfiguration config = new RealmConfiguration.Builder(this)
+                .name(BuildConfig.DB_NAME)
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
+
+        // Realm config for log DB
+        logConfig = new RealmConfiguration.Builder(this)
+                .name("kvtLog.realm")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        AppLog.initLog();
+    }
+
     public static Realm getLogRealm() {
         return Realm.getInstance(currentUserSession.logConfig);
     }
@@ -56,6 +91,7 @@ public class Session extends Application {
         currentUserSession.engineerName = null;
         currentUserSession.engineerEmail = null;
         currentUserSession.currentOrder = 0L;
+        currentUserSession.defectStateList.clear();
         currentUserSession.byteArrayEngineerSignature = null;
         currentUserSession.byteArrayClientSignature = null;
     }
@@ -122,31 +158,8 @@ public class Session extends Application {
         currentUserSession.byteArrayClientSignature = byteArrayClientSignature;
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        currentUserSession = this;
-        partMap = new LinkedHashMap<>();
-        currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
-        currentAppExternalPrivateDir = getApplicationContext().getExternalFilesDir("");
-
-        Retrofit retrofit = retrofitBuilder.client(httpClient.build()).build();
-        connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
-
-        RealmConfiguration config = new RealmConfiguration.Builder(this)
-                .name(BuildConfig.DB_NAME)
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(config);
-
-        // Realm config for log DB
-        logConfig = new RealmConfiguration.Builder(this)
-                .name("kvtLog.realm")
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        AppLog.initLog();
+    public static List<DefectState> getDefectStateList() {
+        return currentUserSession.defectStateList;
     }
+
 }

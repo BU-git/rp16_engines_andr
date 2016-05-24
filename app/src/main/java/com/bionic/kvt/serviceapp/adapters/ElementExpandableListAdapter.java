@@ -231,15 +231,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                         if (checkBox.isChecked()) {
                             problemDetailLayout.setVisibility(View.VISIBLE);
-                            if (!Session.defectStateList.contains(state)) {
-                                Session.defectStateList.add(state);
+                            if (!Session.getDefectStateList().contains(state)) {
+                                Session.getDefectStateList().add(state);
                             }
                         } else {
                             problemDetailLayout.setVisibility(View.GONE);
                             state.setCondition(GlobalConstants.DEFAULT_SCORE);
                             state.performScoreAdjustments(child);
-                            Session.defectStateList.remove(state);
-                            Log.d(TAG, "Size after removal: " + Session.defectStateList.size());
+                            Session.getDefectStateList().remove(state);
+                            Log.d(TAG, "Size after removal: " + Session.getDefectStateList().size());
 
                         }
                         notifyDataSetChanged();
@@ -250,7 +250,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemPlaceholderLayout.addView(problemDetailLayout);
 
 
-                for (DefectState d : Session.defectStateList) {
+                for (DefectState d : Session.getDefectStateList()) {
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition() == groupClickedPosition) {
                         if (checkBox.getId() == d.getCheckboxPosition()) {
                             omvangSpinner.setSelection(d.getExtentId());
@@ -326,8 +326,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             if (groupPosition == 0) {
                 indicator.setVisibility(View.GONE);
                 scoreText.setVisibility(View.VISIBLE);
-                if (Session.defectStateList != null && Session.defectStateList.size() > 0) {
-                    Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(Session.defectStateList, ComponentDetailFragment.ARG_CURRENT);
+                if (Session.getDefectStateList() != null && Session.getDefectStateList().size() > 0) {
+                    Integer partScore = CalculationHelper.INSTANCE.getScoreByPart(Session.getDefectStateList(), ComponentDetailFragment.ARG_CURRENT);
                     if (partScore != null && partScore >= 1) {
                         score = partScore;
                     }
