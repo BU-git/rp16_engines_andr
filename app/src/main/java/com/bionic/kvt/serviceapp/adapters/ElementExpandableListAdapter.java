@@ -134,7 +134,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemPlaceholderLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 final LinearLayout problemDetailLayout = new LinearLayout(_context);
-                TextView text = new TextView(_context);
+                final TextView text = new TextView(_context);
                 final Spinner omvangSpinner = (Spinner) infalInflater.inflate(R.layout.template_omvang, null);
                 final Spinner actiesSpinner = (Spinner) infalInflater.inflate(R.layout.template_acties, null);
                 final Spinner intensitySpinner = (Spinner) infalInflater.inflate(R.layout.template_intensiteit, null);
@@ -160,6 +160,25 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         //Tracking state of the checkboxes
                         final DefectState state = new DefectState(ComponentDetailFragment.ARG_CURRENT, groupClickedPosition, id);
+                        if (Session.getDefectStateList().contains(state)) {
+                            omvangSpinner.setEnabled(false);
+                            actiesSpinner.setEnabled(false);
+                            intensitySpinner.setEnabled(false);
+                            oplegostSwitch.setEnabled(false);
+                        } else {
+                            omvangSpinner.setEnabled(true);
+                            omvangSpinner.setSelection(0);
+                            actiesSpinner.setEnabled(true);
+                            actiesSpinner.setSelection(0);
+                            intensitySpinner.setEnabled(true);
+                            intensitySpinner.setSelection(0);
+                            oplegostSwitch.setEnabled(true);
+                            oplegostSwitch.setSelected(false);
+
+                        }
+                        state.performScoreAdjustments(child);
+                        notifyDataSetChanged();
+
                         state.setElement((String) getGroup(groupPosition));
                         state.setProblem(child.getKey());
                         //Setting default fields
@@ -263,10 +282,9 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 d.setCorrelation(CalculationHelper.INSTANCE.getConditionFactor(d.getCondition()));
                                 d.setCorrelatedScore(d.getCorrelation() * d.getInitialScore());
                             }
-
-                            //Log.d(TAG, "Object in Iteration: " + d.toString());
                         }
                     }
+                    notifyDataSetChanged();
                 }
 
 
@@ -323,6 +341,8 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     if (partScore != null && partScore >= 1) {
                         score = partScore;
                     }
+                } else {
+                    score = 1;
                 }
                 scoreText.setText(String.valueOf(score));
             } else {
