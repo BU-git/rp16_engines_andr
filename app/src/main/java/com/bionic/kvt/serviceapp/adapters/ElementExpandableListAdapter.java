@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -250,8 +249,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                             state.setCondition(GlobalConstants.DEFAULT_SCORE);
                             state.performScoreAdjustments(child);
                             Session.getDefectStateList().remove(state);
-                            Log.d(TAG, "Size after removal: " + Session.getDefectStateList().size());
-
                         }
                         notifyDataSetChanged();
 
@@ -342,7 +339,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         score = partScore;
                     }
                 } else {
-                    score = 1;
+                    score = GlobalConstants.DEFAULT_SCORE;
                 }
                 scoreText.setText(String.valueOf(score));
             } else {
