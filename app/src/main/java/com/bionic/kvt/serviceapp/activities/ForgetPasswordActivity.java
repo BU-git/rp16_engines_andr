@@ -16,6 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * An activity for password restore functionality.<br>
+ * Started by {@link LoginActivity}.<br>
+ * Returns to {@link LoginActivity}.<br>
+ * Use {@link Utils#requestPasswordReset(String)}} for server api request
+ */
+
 public class ForgetPasswordActivity extends BaseActivity {
 
     @BindView(R.id.email)

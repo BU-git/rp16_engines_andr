@@ -20,32 +20,45 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Singleton for Application initialisation and store user session data.
+ */
+
 public class Session extends Application {
     private static Session currentUserSession;
 
+    // Setting timeout for network requests
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS);
 
+    // Setting Back Office server. See {@link build.gradle} for actual address
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(BuildConfig.BACK_OFFICE_HOST)
             .addConverterFactory(GsonConverterFactory.create());
 
+    // Map for Engine components.
+    // Generated once in runtime in {@link BackgroundService}
+    // and depend on current Application language.
     private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
+
+    // Store defect state for current order
     private List<DefectState> defectStateList;
 
     private ConnectionServiceAPI connectionServiceAPI;
-
     private File currentAppInternalPrivateDir;
     private File currentAppExternalPrivateDir;
 
     private String engineerName;
     private String engineerEmail;
     private long currentOrder;
+
+    // Used to store signature bitmaps
     private byte[] byteArrayEngineerSignature;
     private byte[] byteArrayClientSignature;
 
+    // Realm configuration for application log
     private RealmConfiguration logConfig;
 
     @Override

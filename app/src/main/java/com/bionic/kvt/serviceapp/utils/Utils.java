@@ -336,7 +336,6 @@ public class Utils {
     }
 
 
-    // TODO REDESIGN RETURN LOGIC
     public static ServerRequestResult getUserFromServer(final String email) {
         final Call<User> userRequest = Session.getServiceConnection().getUser(email);
         AppLog.serviceI("Connecting to server: " + userRequest.request());
@@ -371,7 +370,6 @@ public class Utils {
         return new ServerRequestResult(true, "Connection successful. User found.");
     }
 
-    // TODO REDESIGN RETURN LOGIC
     public static ServerRequestResult requestPasswordReset(final String email) {
         final String userHash = DbUtils.getUserHash(email);
         if (userHash == null) {

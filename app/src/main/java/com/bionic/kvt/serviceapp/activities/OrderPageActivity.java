@@ -43,6 +43,31 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 import static com.bionic.kvt.serviceapp.utils.Utils.runBackgroundServiceIntent;
 import static com.bionic.kvt.serviceapp.utils.Utils.updateOrderStatusOnServer;
 
+/**
+ * An activity for overview all orders for current user.<br>
+ * Started by {@link LoginActivity}.<br>
+ * Next activity {@link OrderPageDetailActivity} or {@link PDFReportActivity}
+ * <p/>
+ * Allow to preview orders or PDF Reports.<br>
+ * When activity starts it's start IntentService {@link com.bionic.kvt.serviceapp.db.BackgroundService}
+ * with tasks:<br>
+ * - Generate part map.<br>
+ * - Prepare files to upload for orders in status {@link com.bionic.kvt.serviceapp.GlobalConstants#ORDER_STATUS_COMPLETE}.<br>
+ * - Upload files for prepared order files.
+ * <p/>
+ * <p/>
+ * It also register callbacks on data change in database for:<br>
+ * - Orders list update.<br>
+ * - Orders in status {@link com.bionic.kvt.serviceapp.GlobalConstants#ORDER_STATUS_COMPLETE}
+ * to run background task {@link com.bionic.kvt.serviceapp.GlobalConstants#PREPARE_FILES}.<br>
+ * - {@link OrderSynchronisation#isReadyForSync} to run background task
+ * {@link com.bionic.kvt.serviceapp.GlobalConstants#UPLOAD_FILES}.<br>
+ * - {@link OrderSynchronisation#isSyncComplete} to set order status
+ * {@link com.bionic.kvt.serviceapp.GlobalConstants#ORDER_STATUS_COMPLETE_UPLOADED}.<br>
+ * <p/>
+ * {@code OnResume} start {@code Handler} for querying server for order update ones a minute.
+ */
+
 public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener {

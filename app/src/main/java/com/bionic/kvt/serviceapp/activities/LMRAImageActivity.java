@@ -18,6 +18,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+/**
+ * An full window activity preview (LMRA) photo.<br>
+ * Started by {@link LMRAActivity}.<br>
+ * Next activity {@link LMRAActivity}.
+ */
+
 public class LMRAImageActivity extends Activity {
     @BindView(R.id.lmra_image)
     ImageView imageView;

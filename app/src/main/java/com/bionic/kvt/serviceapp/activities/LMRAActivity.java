@@ -30,6 +30,20 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+/**
+ * An activity for register dangerous situations (LMRA) information.<br>
+ * Started by {@link OrderWorkActivity}.<br>
+ * Next activity {@link OrderWorkActivity}.
+ * <p/>
+ * Allow to register dangerous situations, make LMRA photos, preview and manage them.<br>
+ * Required android {@code WRITE_EXTERNAL_STORAGE}
+ * permission and will request it if it is not granted.<br>
+ * Photos stored  in current order folder: {@link Utils#getOrderDir(long)}.
+ * <p/>
+ * Use {@link LMRADialog} for creating new LMRA.<br>
+ * Use {@link LMRAAdapter} for LMRA {@link ListView}.<br>
+ */
+
 public class LMRAActivity extends BaseActivity {
     private static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -39,8 +53,14 @@ public class LMRAActivity extends BaseActivity {
     public static List<LMRAModel> lmraList = new ArrayList<>();
     public static LMRAAdapter lmraAdapter;
 
-    public static long currentLMRAID; // Need for onActivityResult
-    public static File currentLMRAProtoFile; // Need for onActivityResult
+    /**
+     * Need for onActivityResult
+     */
+    public static long currentLMRAID;
+    /**
+     * Need for onActivityResult
+     */
+    public static File currentLMRAProtoFile;
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
@@ -156,7 +176,7 @@ public class LMRAActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         if (requestCode == Utils.REQUEST_WRITE_CODE) {
             // If request is cancelled, the result arrays are empty.
-            if (grantResults!= null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // permission was granted
             } else {
                 // permission denied

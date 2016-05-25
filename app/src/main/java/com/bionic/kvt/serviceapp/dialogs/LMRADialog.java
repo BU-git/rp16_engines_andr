@@ -17,9 +17,10 @@ import com.bionic.kvt.serviceapp.activities.LMRAActivity;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 
-/*
-LMRA Dialog to show by clicking the plus
-*/
+/**
+ * LMRA Dialog showing by clicking the plus im menu.<br>
+ * Allow to create ne LMRA item.
+ */
 public class LMRADialog extends AppCompatDialogFragment {
     View view = null;
     boolean isEdit = false;

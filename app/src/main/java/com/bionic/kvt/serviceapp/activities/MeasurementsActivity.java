@@ -29,6 +29,12 @@ import io.realm.Realm;
 
 import static com.bionic.kvt.serviceapp.adapters.MeasurementsExpListAdapter.MeasurementsItem;
 
+/**
+ * An activity for entering Measurements information.<br>
+ * Started by {@link ComponentListActivity} o {@link CustomTemplateActivity}<br>
+ * Next activity {@link JobRulesActivity}.
+ */
+
 public class MeasurementsActivity extends BaseActivity {
     @BindView(R.id.measurements_motor_exp_list_view)
     ExpandableListView expMotorListView;

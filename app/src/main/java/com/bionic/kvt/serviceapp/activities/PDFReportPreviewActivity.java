@@ -39,7 +39,14 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
+/**
+ * An activity for PDF Report preview.<br>
+ * Started by {@link JobRulesActivity}.<br>
+ * Next activity {@link SignaturesActivity}.<br>
+ * <p/>
+ * Use PDF template for current language from application asset. <br>
+ * Generate PDF Report preview file in current order folder: {@link Utils#getOrderDir(long)}.
+ */
 
 public class PDFReportPreviewActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<Boolean> {
     private static final String ROTATION_FLAG = "ROTATION_FLAG";
@@ -90,11 +97,12 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
         final long orderNumber = Session.getCurrentOrder();
 
-        final String pdfReportFileName = getText(R.string.generating_pdf_preview_document).toString()
-                + " " + PDF_REPORT_PREVIEW_FILE_NAME + orderNumber + ".pdf";
-        pdfTextLog.setText(pdfReportFileName);
 
         pdfReportPreviewFile = Utils.getPDFReportFileName(orderNumber, true);
+
+        final String pdfReportFileName = getText(R.string.generating_pdf_preview_document).toString()
+                + " " + pdfReportPreviewFile.getName();
+        pdfTextLog.setText(pdfReportFileName);
 
         // Check rotation
         if (savedInstanceState != null) {

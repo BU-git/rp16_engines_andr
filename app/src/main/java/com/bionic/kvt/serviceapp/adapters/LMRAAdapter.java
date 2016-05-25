@@ -34,7 +34,11 @@ import java.io.File;
 import java.util.List;
 
 /**
- * LMRA Adapter
+ * LMRA Adapter.<br>
+ * User by {@link LMRAActivity} fro showing LMRA items.<br>
+ * Start external intent {@link MediaStore#ACTION_IMAGE_CAPTURE} for taking photo <br>
+ * and storing it in  application external directory {@link Utils#createImageFile(long)}.<br>
+ * Once executed, photo moved to application internal directory.
  */
 public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
     private static final int REQUEST_TAKE_PHOTO = 1;
@@ -130,7 +134,7 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
 
                 final File photoFile = Utils.createImageFile(Session.getCurrentOrder());
                 if (photoFile == null) {
-                    AppLog.serviceE(true, Session.getCurrentOrder(),"Can not create image file.");
+                    AppLog.serviceE(true, Session.getCurrentOrder(), "Can not create image file.");
                     return;
                 }
 

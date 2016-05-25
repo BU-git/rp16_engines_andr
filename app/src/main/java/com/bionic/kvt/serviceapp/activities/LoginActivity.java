@@ -31,6 +31,20 @@ import butterknife.OnClick;
 import butterknife.OnEditorAction;
 import butterknife.OnFocusChange;
 
+/**
+ * An activity for login in to application.<br>
+ * Next activity {@link OrderPageActivity} or {@link ForgetPasswordActivity}
+ * <p/>
+ * Required android {@code INTERNET} permission.<br>
+ * If network is available, application will validate
+ * login and password on server (no offline login check).<br>
+ * If login is successful - user data will be stored for offline login.<br>
+ * If network is not available, offline check will be executed.
+ * <p/>
+ * If user never login in application than network connection to server required.<br>
+ * Otherwise user login will fail (Because no offline user data available yet).
+ */
+
 public class LoginActivity extends BaseActivity {
     private UserLoginTask mAuthTask = null;
 

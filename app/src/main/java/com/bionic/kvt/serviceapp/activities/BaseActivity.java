@@ -7,6 +7,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+/**
+ * Implement common functionality for application activities
+ */
 public class BaseActivity extends AppCompatActivity {
 
     @Override

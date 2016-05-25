@@ -17,7 +17,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class OrderWorkScreenActivity extends BaseActivity {
+/**
+ * An activity for detail order information.<br>
+ * Started by {@link OrderPageDetailActivity}.<br>
+ * Next activity {@link ComponentListActivity} or {@link CustomTemplateActivity}.<br>
+ * Can start {@link LMRAActivity}.
+ * <p/>
+ */
+
+public class OrderWorkActivity extends BaseActivity {
     @BindView(R.id.process_order_page_hint)
     TextView nextButtonHint;
 
@@ -46,7 +54,7 @@ public class OrderWorkScreenActivity extends BaseActivity {
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    final Intent intent = new Intent(OrderWorkScreenActivity.this, OrderPageActivity.class);
+                    final Intent intent = new Intent(OrderWorkActivity.this, OrderPageActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                 }
@@ -54,7 +62,7 @@ public class OrderWorkScreenActivity extends BaseActivity {
             return;
         }
 
-        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderWorkScreenActivity.class.getSimpleName());
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderWorkActivity.class.getSimpleName());
     }
 
     @OnClick(R.id.order_processing_first_stage_lmra_button)

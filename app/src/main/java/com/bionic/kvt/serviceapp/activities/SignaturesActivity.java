@@ -25,6 +25,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.realm.Realm;
 
+/**
+ * An activity for entering signatures.<br>
+ * Started by {@link PDFReportPreviewActivity}.<br>
+ * Next activity {@link PDFReportActivity}.<br>
+ * <p/>
+ * Get signatures for engineer and client. <br>
+ * Use custom view {@link SignatureView} for entering signatures.<br>
+ * Use {@link Session} as a temporal signature bitmap storage: <br>
+ * {@link Session#setByteArrayEngineerSignature(byte[])}},<br>
+ * {@link Session#setByteArrayClientSignature(byte[])}.
+ */
+
 public class SignaturesActivity extends BaseActivity {
     @BindView(R.id.draw_engineer_signature)
     SignatureView engineerDrawingView;

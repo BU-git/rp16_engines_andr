@@ -30,6 +30,16 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
 
+/**
+ * An activity for detail order information.<br>
+ * Started by {@link OrderPageActivity}.<br>
+ * Next activity {@link OrderWorkActivity}.
+ * <p/>
+ * Allow to start order fulfillment.<br>
+ * On order start set order maintenance start time for current time and
+ * order status as {@link com.bionic.kvt.serviceapp.GlobalConstants#ORDER_STATUS_IN_PROGRESS}.
+ */
+
 public class OrderPageDetailActivity extends BaseActivity {
     @BindView(R.id.service_engenieer_accept_toggleButton)
     ToggleButton acceptButton;
@@ -155,7 +165,7 @@ public class OrderPageDetailActivity extends BaseActivity {
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_IN_PROGRESS);
         Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
 
-        final Intent intent = new Intent(getApplicationContext(), OrderWorkScreenActivity.class);
+        final Intent intent = new Intent(getApplicationContext(), OrderWorkActivity.class);
         startActivity(intent);
     }
 

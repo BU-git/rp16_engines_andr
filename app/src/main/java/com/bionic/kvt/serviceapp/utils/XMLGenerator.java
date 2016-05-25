@@ -138,11 +138,11 @@ public class XMLGenerator {
                         }
 
                         serializer.startTag("", "Extent");
-                        serializer.text(defectState.getExtent());
+                        serializer.text((defectState.getExtent() != null) ? defectState.getExtent() : "");
                         serializer.endTag("", "Extent");
 
                         serializer.startTag("", "Intensity");
-                        serializer.text(defectState.getIntensity());
+                        serializer.text((defectState.getIntensity() != null) ? defectState.getExtent() : "");
                         serializer.endTag("", "Intensity");
 
                         serializer.startTag("", "Fixed");
@@ -153,7 +153,7 @@ public class XMLGenerator {
                         serializer.endTag("", "Fixed");
 
                         serializer.startTag("", "Action");
-                        serializer.text(defectState.getAction());
+                        serializer.text((defectState.getAction() != null) ? defectState.getExtent() : "");
                         serializer.endTag("", "Action");
 
                         serializer.startTag("", "Condition");

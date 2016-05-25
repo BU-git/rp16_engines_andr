@@ -24,6 +24,14 @@ import io.realm.Realm;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_END_TIME;
 
+/**
+ * An activity for collection final data about service process.<br>
+ * Started by {@link MeasurementsActivity}.<br>
+ * Next activity {@link PDFReportPreviewActivity}.
+ * <p/>
+ * Set order maintenance end time for current time.<br>
+ */
+
 public class JobRulesActivity extends BaseActivity {
     @BindView(R.id.job_rules_fuel_added)
     CheckBox fuelAdded;
