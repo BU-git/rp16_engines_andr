@@ -27,7 +27,6 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,10 +43,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public static Integer childClickedPosition;
     public static Integer score = 1;
     String TAG = ElementExpandableListAdapter.class.getName();
-
-    //Saving state
-    private Context context;
-    private HashMap<String, JsonObject> childMap;
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
@@ -73,8 +68,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 listSortedChild.add(child);
             }
         }
-        //Collections.swap(listSortedChild, listSortedChild.indexOf(context.getResources().getString(R.string.score_text)), 0);
-        //Collections.sort(listSortedChild.subList(1, listSortedChild.size()));
         this._listDataHeader = listSortedChild;
         this._listDataChild = mutableListChild;
     }
@@ -234,10 +227,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                                 notifyDataSetChanged();
                             }
                         });
-
-
-                        //Log.d(TAG, "Object is: " + state.toString());
-
 
                         if (checkBox.isChecked()) {
                             problemDetailLayout.setVisibility(View.VISIBLE);

@@ -13,7 +13,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** */
+/**
+ * Class represents the logic for Score Calculation
+ * in the Default Template.
+ * Implemented as Singleton.
+ */
 public enum CalculationHelper {
     INSTANCE;
     public static final String TAG = CalculationHelper.class.getName();
@@ -24,6 +28,13 @@ public enum CalculationHelper {
     CalculationHelper() {
     }
 
+    /**
+     * Method is used to get the sub-list of Condition array
+     *
+     * @param defectType
+     * @param intensityPosition
+     * @return Condition Array
+     */
     public Integer[] getConditionArray(String defectType, Integer intensityPosition) {
         Integer initialIndex;
         switch (defectType) {
@@ -44,6 +55,15 @@ public enum CalculationHelper {
         return getArrayByIntensityPositionAndIndex(intensityPosition, initialIndex);
     }
 
+    /**
+     * Method is used to retrieve a sub-list of 5 Integers
+     * from Calculation array by moving the "window"
+     * according to the Intensity position
+     *
+     * @param intensityPosition
+     * @param initialIndex
+     * @return
+     */
     private Integer[] getArrayByIntensityPositionAndIndex(Integer intensityPosition, Integer initialIndex) {
         if (initialIndex >= 0) {
             switch (intensityPosition) {
@@ -58,6 +78,16 @@ public enum CalculationHelper {
         return new Integer[5];
     }
 
+    /**
+     * Method to get Condition from Condition Array
+     * based on matrix calculation
+     *
+     * @param scopeId
+     * @param intensityId
+     * @param isFixed
+     * @param defectType
+     * @return
+     */
     public Integer getCondition(Integer scopeId, Integer intensityId, Boolean isFixed, String defectType) {
         return (isFixed) ? 1 : getConditionArray(defectType, intensityId)[scopeId];
     }
@@ -66,6 +96,13 @@ public enum CalculationHelper {
         return CONDITIONARRAY[condition];
     }
 
+    /**
+     * Method to retrieve score by part.
+     *
+     * @param defectStateList
+     * @param part
+     * @return
+     */
     public Integer getScoreByPart(List<DefectState> defectStateList, String part) {
         List<DefectState> partDefects = getDefectsByPart(defectStateList, part);
 
@@ -74,6 +111,13 @@ public enum CalculationHelper {
         } else return 1;
     }
 
+    /**
+     * Filtering defects by Part from general defect list.
+     *
+     * @param defectStateList
+     * @param part
+     * @return
+     */
     public List<DefectState> getDefectsByPart(List<DefectState> defectStateList, String part) {
         Iterator<DefectState> defectStateIterator = defectStateList.iterator();
         List<DefectState> partDefects = new ArrayList<>();
@@ -86,6 +130,13 @@ public enum CalculationHelper {
         return partDefects;
     }
 
+    /**
+     * Method to get defect with maximum score.
+     * Note: partDefects should contain values for the particular part - see getDefectsByPart method;
+     *
+     * @param partDefects
+     * @return
+     */
     public DefectState getMaxDefect(List<DefectState> partDefects) {
         if (partDefects.size() > 1) {
             return Collections.max(partDefects, new Comparator<DefectState>() {
@@ -98,6 +149,14 @@ public enum CalculationHelper {
         else return null;
     }
 
+    /**
+     * Method to calculate the main sum of correlated score parts
+     * divided by the Default raw score.
+     *
+     * @param partMap
+     * @param defectStateList
+     * @return
+     */
     public Integer getGeneralScore(Map<String, LinkedHashMap<String, JsonObject>> partMap, List<DefectState> defectStateList) {
         Double sum = 0.0d;
         for (String part : partMap.keySet()) {
@@ -110,6 +169,12 @@ public enum CalculationHelper {
         return getResultForScore(sum / GlobalConstants.DEFAULT_RAW_SCORE);
     }
 
+    /**
+     * Method to get the main score by general Score.
+     *
+     * @param result
+     * @return
+     */
     public Integer getResultForScore(Double result) {
         if (result < GlobalConstants.ONE_CONDITION) return 1;
         else if (GlobalConstants.ONE_CONDITION <= result && result < GlobalConstants.TWO_CONDITION)
