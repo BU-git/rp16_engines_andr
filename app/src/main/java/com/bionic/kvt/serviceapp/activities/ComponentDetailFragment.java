@@ -37,9 +37,6 @@ public class ComponentDetailFragment extends Fragment {
     private int expanded = -1;
     private int collapsed = -2;
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private LinkedHashMap<String, JsonObject> mItem;
 
     /**
@@ -54,9 +51,8 @@ public class ComponentDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
+            // Load the Default template content specified by the fragment
+            // arguments.
             mItem = Session.getPartMap().get(getArguments().getString(ARG_ITEM_ID));
             ARG_CURRENT = getArguments().getString(ARG_ITEM_ID);
             Activity activity = this.getActivity();

@@ -136,7 +136,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                 problemDetailLayout.addView(actiesSpinner);
 
                 final Switch oplegostSwitch = new Switch(_context);
-                oplegostSwitch.setText(R.string.oplegost);
+                oplegostSwitch.setText(R.string.solved);
                 problemDetailLayout.addView(oplegostSwitch);
                 problemDetailLayout.setId(groupPosition);
 

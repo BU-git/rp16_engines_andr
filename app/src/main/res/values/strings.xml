@@ -111,8 +111,11 @@
     <string name="score_text">Score</string>
 
     <!-- Default template string arrays -->
-    <string name="omvang">Omvang</string>
+    <!-- <string name="omvang">Omvang</string> -->
 
+    <string name="size">Size</string>
+
+    <!--
     <string-array name="Omvang">
         <item>Incidenteel</item>
         <item>Plaatselijk</item>
@@ -120,19 +123,40 @@
         <item>Aanzienlijk</item>
         <item>Algemeen</item>
     </string-array>
+    -->
 
-    <string name="intensiteit">Intensiteit</string>
+    <string-array name="Size">
+        <item>Incidental</item>
+        <item>Local</item>
+        <item>Regular</item>
+        <item>Sizable</item>
+        <item>Generic</item>
+    </string-array>
 
+    <!-- <string name="intensiteit">Intensiteit</string> -->
+    <string name="intensity">Intensity</string>
+
+    <!--
     <string-array name="Intensiteit">
         <item>Laag</item>
         <item>Midden</item>
         <item>Hoog</item>
     </string-array>
+    -->
 
-    <string name="oplegost">Opgelost?</string>
+    <string-array name="Intensity">
+        <item>Low</item>
+        <item>Middle</item>
+        <item>High</item>
+    </string-array>
 
-    <string name="acties">Acties</string>
+    <!-- <string name="oplegost">Opgelost?</string> -->
+    <string name="solved">Solved?</string>
 
+    <!-- <string name="acties">Acties</string> -->
+    <string name="action">Action</string>
+
+    <!--
     <string-array name="Acties">
         <item>Gecontroleerd</item>
         <item>Vervangen</item>
@@ -142,6 +166,19 @@
         <item>Gedemonteerd</item>
         <item>Vernieuwd</item>
         <item>Afgesteld</item>
+        <item>-</item>
+    </string-array>
+    -->
+
+    <string-array name="Action">
+        <item>Checked</item>
+        <item>Replaced</item>
+        <item>Refreshed</item>
+        <item>Reconditioned</item>
+        <item>Cleansed</item>
+        <item>Disassembled</item>
+        <item>Renewed</item>
+        <item>Adjusted</item>
         <item>-</item>
     </string-array>
 
