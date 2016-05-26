@@ -2,7 +2,6 @@ package com.bionic.kvt.serviceapp.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 import com.google.gson.JsonElement;
@@ -11,7 +10,9 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
 
-/** */
+/**
+ * Model represents the saved state of a defect in the Default template
+ */
 public class DefectState implements Parcelable, Serializable, Comparable<DefectState> {
 
 

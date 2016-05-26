@@ -19,11 +19,14 @@ import com.bionic.kvt.serviceapp.models.LMRAModel;
 
 /**
  * LMRA Dialog showing by clicking the plus im menu.<br>
- * Allow to create ne LMRA item.
+ * Dialogue is used to create and/or edit new LMRA.
  */
 public class LMRADialog extends AppCompatDialogFragment {
     View view = null;
     boolean isEdit = false;
+
+    public LMRADialog() {
+    }
 
     public boolean isEdit() {
         return isEdit;
@@ -31,9 +34,6 @@ public class LMRADialog extends AppCompatDialogFragment {
 
     public void setEdit(boolean edit) {
         isEdit = edit;
-    }
-
-    public LMRADialog() {
     }
 
     @NonNull
@@ -52,7 +52,9 @@ public class LMRADialog extends AppCompatDialogFragment {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //This is going to be handled within onStart method
+                        //This is going to be handled within onStart method.
+                        //Do not add anything here!
+
                     }
 
                 })

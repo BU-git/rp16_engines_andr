@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Adapter for the Expandable Parts List
+ * Adapter for the Default template
  */
 public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     public final static Integer layoutMagicNumber = 1000;
@@ -75,7 +75,6 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
         return this._listDataChild.get(this._listDataHeader.get(groupPosition)).getAsJsonObject();
-        //return "Hello World";
     }
 
     @Override
@@ -85,6 +84,9 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
     @Override
     @SuppressWarnings("deprecation")
+    /**
+     * Child view is a third level of nesting.
+     */
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
@@ -113,6 +115,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
             for (final Map.Entry<String, JsonElement> child : childSet) {
                 Integer position = Utils.getSetIndex(childSet, child);
+                //Checkbox on the lowest level to open problem details
                 final CheckBox checkBox = new CheckBox(this._context);
                 //Creating checkbox id as a concatenation of magic number, group position and checkbox position
                 final Integer id = Integer.valueOf(String.valueOf(viewMagicNumber) + String.valueOf(groupPosition) + String.valueOf(position));
@@ -120,6 +123,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 childClickedPosition = position;
 
+                //Problem name
                 checkBox.setText(child.getKey() + "\n");
 
                 problemPlaceholderLayout.addView(checkBox);
@@ -246,7 +250,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
                 problemPlaceholderLayout.addView(problemDetailLayout);
 
-
+                //Restoring the state from the list of selected defects
                 for (DefectState d : Session.getDefectStateList()) {
                     if (d.getPart().equals(ComponentDetailFragment.ARG_CURRENT) && d.getGroupPosition().equals(groupClickedPosition)) {
                         if (checkBox.getId() == d.getCheckboxPosition()) {
@@ -276,14 +280,15 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
 
             }
         } else {
+            //Stub. We do not expect to be here
             LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
-
         }
-
         return convertView;
     }
 
     @Override
+    //Since we are passing JsonObject a child - children count is always 1,
+    // if the Json is well formatted
     public int getChildrenCount(int groupPosition) {
         return 1;
     }
@@ -304,6 +309,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    // Group view is a second level of nesting
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
@@ -314,12 +320,17 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.component_detail_text, null);
         }
+        //Indicator view for the expandable list
         View ind = convertView.findViewById(R.id.component_detail_image);
         View mScoreView = convertView.findViewById(R.id.component_detail_score);
         if (ind != null) {
+            //Indicator image
             ImageView indicator = (ImageView) ind;
+            //Part Score
             TextView scoreText = (TextView) mScoreView;
             if (groupPosition == 0) {
+                //Removing indicator for the first
+                // row of the second level list, since it represents part score
                 indicator.setVisibility(View.GONE);
                 scoreText.setVisibility(View.VISIBLE);
                 if (Session.getDefectStateList() != null && Session.getDefectStateList().size() > 0) {
@@ -328,6 +339,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
                         score = partScore;
                     }
                 } else {
+                    //If nothing is selected - score for the part is 1
                     score = GlobalConstants.DEFAULT_SCORE;
                 }
                 scoreText.setText(String.valueOf(score));

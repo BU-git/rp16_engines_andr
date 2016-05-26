@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * Utilities for JSON conversion.
+ */
 public class JSONHelper {
 
     public String readFromFile(Context context, String filename) {
