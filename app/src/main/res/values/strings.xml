@@ -5,7 +5,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_login">Log in</string>
-    <string name="error_invalid_email">This email s is invalid</string>
+    <string name="error_invalid_email">This email is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
@@ -116,13 +116,13 @@
     <string name="size">Size</string>
 
     <!--
-    <string-array name="Omvang">
+    <string-array.xml name="Omvang">
         <item>Incidenteel</item>
         <item>Plaatselijk</item>
         <item>Regelmatig</item>
         <item>Aanzienlijk</item>
         <item>Algemeen</item>
-    </string-array>
+    </string-array.xml>
     -->
 
     <string-array name="Size">
@@ -137,11 +137,11 @@
     <string name="intensity">Intensity</string>
 
     <!--
-    <string-array name="Intensiteit">
+    <string-array.xml name="Intensiteit">
         <item>Laag</item>
         <item>Midden</item>
         <item>Hoog</item>
-    </string-array>
+    </string-array.xml>
     -->
 
     <string-array name="Intensity">
@@ -157,7 +157,7 @@
     <string name="action">Action</string>
 
     <!--
-    <string-array name="Acties">
+    <string-array.xml name="Acties">
         <item>Gecontroleerd</item>
         <item>Vervangen</item>
         <item>Ververst</item>
@@ -167,7 +167,7 @@
         <item>Vernieuwd</item>
         <item>Afgesteld</item>
         <item>-</item>
-    </string-array>
+    </string-array.xml>
     -->
 
     <string-array name="Action">
@@ -268,4 +268,7 @@
     <string name="external_remarks">External remarks:</string>
     <string name="take">Take</string>
     <string name="delete">Delete</string>
+    <string name="application_log">Application log</string>
+    <string name="language">Language</string>
+    <string name="select_language">Choose language (App restart required)</string>
 </resources>

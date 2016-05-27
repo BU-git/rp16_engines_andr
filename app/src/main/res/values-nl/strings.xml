@@ -1,0 +1,236 @@
+<resources>
+    <string name="app_name">KVT Service</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Wachtwoord</string>
+    <string name="action_login">Log in</string>
+    <string name="error_invalid_email">Dit e-mail adres is niet juist</string>
+    <string name="error_invalid_password">Dit wachtwoord is te kort</string>
+    <string name="error_incorrect_password">Dit wachtwoord is niet correct</string>
+    <string name="error_field_required">Dit veld is verplicht</string>
+    <string name="permission_rationale">Toegang tot contacten is nodig voor het verzenden</string>
+    <string name="action_remember_password">Onthoud wachtwoord</string>
+    <string name="logout">Uitloggen</string>
+    <string name="request_new_password">Vraag nieuw wachtwoord aan</string>
+    <string name="forgot_password">Wachtwoord vergeten</string>
+    <string name="no_connection">Internet connectie is nodig</string>
+    <string name="service_engineer">Monteur:</string>
+    <string name="orders">Orders</string>
+    <string name="order_number">Order</string>
+
+    <string name="uploaded">Ge-upload</string>
+    <string name="complete">Compleet</string>
+    <string name="in_progress">Bezig</string>
+    <string name="not_started">Niet begonnen</string>
+
+    <string name="date">Datum</string>
+    <string name="installation">Installatie</string>
+    <string name="task">Taak</string>
+    <string name="address">Adres</string>
+    <string name="status">Status</string>
+    <string name="pdf">PDF</string>
+    <string name="order_data">Order gegevens</string>
+    <string name="order_date">Datum</string>
+    <string name="relation">Relatie</string>
+    <string name="reference">Referentie</string>
+    <string name="town">Stad</string>
+    <string name="contact_person">Contact persoon</string>
+    <string name="telephone">Telefoon</string>
+    <string name="place_2">Place 2</string>
+    <string name="employee">Medewerker</string>
+    <string name="running_hours">Draaiuren</string>
+    <string name="instructions">Instructies</string>
+    <string name="accept">Accepteren</string>
+    <string name="accepted">Geaccepteerd</string>
+    <string name="start">Start</string>
+
+    <string name="pdf_report">PDF Rapport</string>
+    <string name="pdf_report_preview">PDF Rapport preview</string>
+    <string name="send_pdf">Stuur in e-mail</string>
+    <string name="accept_instructions">Accepteer alstublieft de instructies om te starten</string>
+    <string name="job_description">Taak omschrijving</string>
+    <string name="open_quotation">Open bon</string>
+    <string name="instructions_followed">Instructies gevolgd</string>
+    <string name="lmra_executed">LMRA uitgevoerd</string>
+    <string name="register_dangerous_situation">Registreer gevaarlijke situatie</string>
+    <string name="next">Volgende</string>
+    <string name="search_hint">Order nummer</string>
+
+    <!-- String related to LMRA -->
+    <string name="button_delete">Verwijder deze LMRA</string>
+    <string name="lmra_button_add">Voeg situatie toe</string>
+    <string name="lmra_text_sample">Tekst voorbeeld</string>
+    <string name="lmra_hint_title">Naam</string>
+    <string name="lmra_hint_description">Beschrijving van de gevaarlijke situatie</string>
+    <string name="create">Maak</string>
+    <string name="cancel">Annuleer</string>
+    <string name="lmra_save">Opslaan</string>
+
+    <!--Titles -->
+    <string name="lmra_title">LMRA</string>
+    <string name="new_lmra_template">Nieuwe gevaarlijke situatie</string>
+    <string name="edit_lmra_template">Bewerk gevaarlijke situatie</string>
+    <string name="generating_pdf_document">PDF document:</string>
+    <string name="generating_pdf_preview_document">PDF document (voorbeeldweergave):</string>
+    <string name="open_file_for_preview">Open bestand voor voorbeeldweergave..</string>
+    <string name="component_defects">Gebreken van componenten</string>
+    <string name="measurements">Metingen</string>
+    <string name="job_rules">Taak regels</string>
+    <string name="save">Opslaan</string>
+
+    <string name="text_service_engineer">Service monteur</string>
+    <string name="text_client">Klant</string>
+    <string name="text_name">Naam:</string>
+    <string name="signatures">Handtekeningen</string>
+    <string name="clear">Herstel handtekening</string>
+    <string name="confirm">Bevestig</string>
+    <string name="saved">Opgeslagen</string>
+    <string name="done">Klaar</string>
+    <string name="fuel_added">Brandstof bijvullen</string>
+    <string name="water_separators_drained">Waterafscheiders aftappen</string>
+    <string name="leave_installation">Laat installatie stand-by/operationeel achter</string>
+    <string name="customer_material">UMateriaal van klant gebruikt</string>
+    <string name="material_from_bus">Materiaal uit bus gebruikt</string>
+    <string name="repair_advice">Reparatie / vervangings advies</string>
+
+    <!-- Defects -->
+    <string name="problem_part">Onderdeel</string>
+    <string name="problem_element">Element</string>
+    <string name="problem_name">Gebrek</string>
+    <string name="problem_scope">Omvang</string>
+    <string name="problem_intensity">Intensiteit</string>
+    <string name="problem_action">Actie</string>
+    <string name="problem_resolved">Gebrek opgelost</string>
+    <string name="problem_condition">Conditie</string>
+    <string name="title_component_list">Componenten</string>
+    <string name="title_component_detail">Component Detail</string>
+
+    <!-- Defects -->
+    <string name="defects_next">Volgende</string>
+    <string name="score_text">Score</string>
+
+    <!-- Default template string arrays -->
+    <string name="size">Omvang</string>
+
+    <string-array name="Size">
+        <item>Incidenteel</item>
+        <item>Plaatselijk</item>
+        <item>Regelmatig</item>
+        <item>Aanzienlijk</item>
+        <item>Algemeen</item>
+    </string-array>
+
+    <string name="intensity">Intensiteit</string>
+
+    <string-array name="Intensity">
+        <item>Laag</item>
+        <item>Midden</item>
+        <item>Hoog</item>
+    </string-array>
+
+    <string name="solved">Opgelost</string>
+
+    <string name="action">Acties</string>
+
+    <string-array name="Action">
+        <item>Gecontroleerd</item>
+        <item>Vervangen</item>
+        <item>Ververst</item>
+        <item>Gerevideerd</item>
+        <item>Gereinigd</item>
+        <item>Gedemonteerd</item>
+        <item>Vernieuwd</item>
+        <item>Afgesteld</item>
+        <item>-</item>
+    </string-array>
+
+
+    <string-array name="MeasurementsHeader">
+        <item>Motor: Compressie test</item>
+        <item>Motor: Smeerolie</item>
+        <item>Motor: Koelmiddel</item>
+        <item>Installatie: Omgeving</item>
+        <item>Installatie: Proefdraaien belast</item>
+        <item>Installatie: Proefdraaien onbelast</item>
+        <item>Uitlaatsysteem: Uitlaatgassen</item>
+        <item>Draaiuren</item>
+    </string-array>
+
+    <string-array name="MeasurementsItemName">
+        <item>Druk</item>
+        <item>Druk</item>
+        <item>Temperatuur</item>
+        <item>Type</item>
+        <item>Fabrikaat</item>
+        <item>Temperatuur</item>
+        <item>Zuurgraad</item>
+        <item>Vorstbescherming</item>
+        <item>Temperatuur</item>
+        <item>Voltage generator</item>
+        <item>Ampere Fase 1</item>
+        <item>Ampere Fase 2</item>
+        <item>Ampere Fase 3</item>
+        <item>Vermogen(testen)</item>
+        <item>Frequentie belast</item>
+        <item>Frequentie onbelast</item>
+        <item>Temperatuur</item>
+        <item>Druk</item>
+        <item>Draaiuren</item>
+    </string-array>
+
+    <string-array name="MeasurementsItemUnit">
+        <item>bar</item>
+        <item>bar</item>
+        <item>\u00B0C</item>
+        <item> </item>
+        <item> </item>
+        <item>\u00B0C</item>
+        <item>pH</item>
+        <item>\u00B0C</item>
+        <item>\u00B0C</item>
+        <item>Volt</item>
+        <item>Ampere</item>
+        <item>Ampere</item>
+        <item>Ampere</item>
+        <item>kW</item>
+        <item>Hz</item>
+        <item>Hz</item>
+        <item>\u00B0C</item>
+        <item>Mbar</item>
+        <item>Uren</item>
+    </string-array>
+
+
+    <!-- EMail fields -->
+    <string name="forget_password_subject">Wachtwoord vergeten E-mail</string>
+    <string name="forget_password_body">Uw wachtwoord is: $Wachtwoord</string>
+    <string name="success_email_toast">Het bericht is verstuurtd</string>
+    <string name="error_email_toast">Fout tijdens het versturen</string>
+    <string name="this_order_is_complete">Deze order is compleet.</string>
+    <string name="process_order_page_hint">Volg alstublieft de instructies en voer de LMRA uit</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+
+    <!--EMail dialog-->
+    <string name="email_dialog_title">Stuur email naar:</string>
+    <string name="preparations">Voorbereidingen</string>
+
+    <string name="finish_report">Voltooi service rapport</string>
+    <string name="sign_report">Teken rappport</string>
+    <string name="show_report">Laat rapport zien</string>
+    <string name="remaining_work">Overig werk</string>
+    <string name="make_lmra_photo">Maak foto van LMRA</string>
+    <string name="component">Component</string>
+    <string name="number">Nummer</string>
+    <string name="mark">Merk</string>
+    <string name="sort">Soort</string>
+    <string name="serial_number">Serie nummer</string>
+    <string name="internal_remarks">Interne notitie:</string>
+    <string name="external_remarks">Externe notitie:</string>
+    <string name="take">Neem</string>
+    <string name="delete">Verwijder</string>
+    <string name="application_log">Application log</string>
+    <string name="language">Taal</string>
+    <string name="select_language">Kies een taal (App herstart vereist)</string>
+</resources>

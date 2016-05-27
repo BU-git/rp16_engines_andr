@@ -3,6 +3,7 @@ package com.bionic.kvt.serviceapp;
 import android.app.Application;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
+import com.bionic.kvt.serviceapp.helpers.LocaleHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.google.gson.JsonObject;
@@ -46,6 +47,9 @@ public class Session extends Application {
     // Store defect state for current order
     private List<DefectState> defectStateList;
 
+    // Application preferences
+    private String appLanguage;
+
     private ConnectionServiceAPI connectionServiceAPI;
     private File currentAppInternalPrivateDir;
     private File currentAppExternalPrivateDir;
@@ -65,6 +69,8 @@ public class Session extends Application {
     public void onCreate() {
         super.onCreate();
         currentUserSession = this;
+        appLanguage = LocaleHelper.getLanguage(this);
+        LocaleHelper.onCreate(this, GlobalConstants.APP_LANGUAGE_DEFAULT);
 
         partMap = new LinkedHashMap<>();
         defectStateList = new ArrayList<>();
@@ -174,5 +180,14 @@ public class Session extends Application {
     public static List<DefectState> getDefectStateList() {
         return currentUserSession.defectStateList;
     }
+
+    public static String getAppLanguage() {
+        return currentUserSession.appLanguage;
+    }
+
+    public static void setAppLanguage(final String appLanguage) {
+        currentUserSession.appLanguage = appLanguage;
+    }
+
 
 }

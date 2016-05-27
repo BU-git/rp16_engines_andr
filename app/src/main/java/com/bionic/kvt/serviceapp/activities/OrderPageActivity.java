@@ -1,9 +1,13 @@
 package com.bionic.kvt.serviceapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -11,15 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.CheckBox;
 import android.widget.SearchView;
-import android.widget.TextView;
 
+import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
+import com.bionic.kvt.serviceapp.helpers.LocaleHelper;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.AppLogItem;
@@ -29,6 +35,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -253,6 +260,29 @@ public class OrderPageActivity extends BaseActivity implements
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
+
+            case R.id.show_settings:
+                final CharSequence languageList[] = new CharSequence[] {"English", "Dutch"};
+                final AlertDialog.Builder langDialogBuilder = new AlertDialog.Builder(this);
+                langDialogBuilder.setTitle(getText(R.string.select_language));
+                langDialogBuilder.setItems(languageList, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 1){
+                            Session.setAppLanguage(GlobalConstants.APP_LANGUAGE_NL);
+                            LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_NL);
+                        }
+                        else{
+                            Session.setAppLanguage(GlobalConstants.APP_LANGUAGE_DEFAULT);
+                            LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_DEFAULT);
+                        }
+
+                    }
+                });
+                langDialogBuilder.show();
+
+                break;
+
             case R.id.show_log:
                 intent = new Intent(getApplicationContext(), LogActivity.class);
                 startActivity(intent);
@@ -260,7 +290,6 @@ public class OrderPageActivity extends BaseActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     protected void onResume() {
