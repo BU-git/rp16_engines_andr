@@ -115,7 +115,11 @@ public class BackgroundService extends IntentService {
 
         AppLog.serviceI(currentTask + "Request successful. Get " + orderBriefListResponse.body().size() + " brief orders.");
 
-        final List<Long> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(orderBriefListResponse.body());
+        final List<OrderBrief> serverOrderBriefList = orderBriefListResponse.body();
+
+        DbUtils.removeOrdersNotOnServer(Session.getEngineerEmail(), serverOrderBriefList);
+
+        final List<Long> ordersToBeUpdated = DbUtils.getOrdersToBeUpdated(serverOrderBriefList);
 
         if (ordersToBeUpdated.isEmpty()) {
             AppLog.serviceI(currentTask + "Nothing to update.");

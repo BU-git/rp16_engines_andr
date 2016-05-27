@@ -194,6 +194,34 @@ public class DbUtils {
         return ordersToBeUpdated;
     }
 
+    public static void removeOrdersNotOnServer(final String user, final List<OrderBrief> serverOrderBriefList) {
+        AppLog.serviceI("Removing local orders that are not on server.");
+
+        List<Long> orderNumbersOnServer = new ArrayList<>();
+        List<Long> orderToBeDeleted = new ArrayList<>();
+        for (OrderBrief orderBrief : serverOrderBriefList) {
+            orderNumbersOnServer.add(orderBrief.getNumber());
+        }
+
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            RealmResults<Order> ordersInDB = realm.where(Order.class)
+                    .equalTo("employeeEmail", user)
+                    .findAll();
+
+
+            for (Order orderInDB : ordersInDB) {
+                if (!orderNumbersOnServer.contains(orderInDB.getNumber())) {
+                    // Can not delete here because RealmResults<Order> will be updated automatically
+                    orderToBeDeleted.add(orderInDB.getNumber());
+                }
+            }
+        }
+
+        for (Long orderNumber : orderToBeDeleted) {
+            removeOrderFromDB(orderNumber);
+        }
+    }
+
     public static List<Long> getOrdersToBePrepared() {
         AppLog.serviceI("Looking for orders to be uploaded.");
 
@@ -244,7 +272,7 @@ public class DbUtils {
     }
 
     public static void removeOrderDir(final long orderNumber) {
-        AppLog.serviceI("Removing order folder: " + orderNumber);
+        AppLog.serviceI(false, orderNumber, "Removing order folder.");
         Utils.deleteRecursive(Utils.getOrderDir(orderNumber));
 
     }

@@ -92,9 +92,6 @@ public class OrderPageActivity extends BaseActivity implements
     private RealmChangeListener<RealmResults<AppLogItem>> logListener;
     private RealmResults<AppLogItem> logsWithNotification;
 
-    @BindView(R.id.order_update_status)
-    TextView orderUpdateStatusText;
-
     @BindView(R.id.order_page_search_view)
     SearchView searchView;
 
