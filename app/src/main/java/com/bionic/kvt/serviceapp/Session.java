@@ -22,6 +22,10 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_DB_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_DEFAULT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LOG_DB_NAME;
+
 /**
  * Singleton for Application initialisation and store user session data.
  */
@@ -76,7 +80,7 @@ public class Session extends Application {
         super.onCreate();
         currentUserSession = this;
         appLanguage = LocaleHelper.getLanguage(this);
-        LocaleHelper.onCreate(this, GlobalConstants.APP_LANGUAGE_DEFAULT);
+        LocaleHelper.onCreate(this, APP_LANGUAGE_DEFAULT);
 
         defectStateList = new ArrayList<>();
 
@@ -87,7 +91,7 @@ public class Session extends Application {
         connectionServiceAPI = retrofit.create(ConnectionServiceAPI.class);
 
         RealmConfiguration config = new RealmConfiguration.Builder(this)
-                .name(BuildConfig.DB_NAME)
+                .name(APP_DB_NAME)
                 .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -95,7 +99,7 @@ public class Session extends Application {
 
         // Realm config for log DB
         logConfig = new RealmConfiguration.Builder(this)
-                .name("kvtLog.realm")
+                .name(APP_LOG_DB_NAME)
                 .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();

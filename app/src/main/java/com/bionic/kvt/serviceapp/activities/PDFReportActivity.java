@@ -18,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.db.DbUtils;
@@ -49,6 +48,7 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_PASSWORD;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 
 /**
@@ -252,7 +252,7 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
                 final PdfReader pdfReader = new PdfReader(pdfReportPreviewFile.toString());
                 final PdfStamper pdfStamper = new PdfStamper(pdfReader, new FileOutputStream(pdfReportFile));
                 pdfStamper.setEncryption(null,
-                        BuildConfig.PDF_PASSWORD.getBytes(),
+                        PDF_PASSWORD.getBytes(),
                         PdfWriter.ALLOW_PRINTING,
                         PdfWriter.STANDARD_ENCRYPTION_128);
                 final Font font = new Font(Font.HELVETICA, 11, Font.NORMAL);

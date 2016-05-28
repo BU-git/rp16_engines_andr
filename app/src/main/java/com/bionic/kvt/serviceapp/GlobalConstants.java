@@ -69,7 +69,10 @@ public interface GlobalConstants {
 
     int ORDER_OVERVIEW_COLUMN_COUNT = 7;
 
-    double DRAWING_VIEW_PROPORTION = 2.6;
+    double SIGNATURE_VIEW_PROPORTION = 2.6;
+
+    String APP_DB_NAME = "kvt_orders.realm";
+    String APP_LOG_DB_NAME = "kvt_log.realm";
 
     String COMPONENTS_EN_JSON = "components_en.json";
     String COMPONENTS_NL_JSON = "components_nl.json";
@@ -77,8 +80,8 @@ public interface GlobalConstants {
     String PDF_TEMPLATE_FILENAME_EN = "pdfTemplate_en.pdf";
     String PDF_REPORT_FILE_NAME = "Report_";
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
+    String PDF_PASSWORD = "R+#+KSio2L[!FphG*R%w&Z;<6)5?0/|z8";
     String LMRA_PHOTO_FILE_NAME = "LMRAPhoto_";
-
     String LMRA_XML_FILE_NAME = "ReportLMRA_";
     String DEFAULT_XML_FILE_NAME = "ReportDefault_";
     String CUSTOM_XML_FILE_NAME = "ReportCustom_";

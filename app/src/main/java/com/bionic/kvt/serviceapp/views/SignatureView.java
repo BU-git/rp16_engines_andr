@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.DRAWING_VIEW_PROPORTION;
+import static com.bionic.kvt.serviceapp.GlobalConstants.SIGNATURE_VIEW_PROPORTION;
 
 public class SignatureView extends View {
 
@@ -47,7 +47,7 @@ public class SignatureView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         final int width = MeasureSpec.getSize(widthMeasureSpec);
-        final int height = (int) (width / DRAWING_VIEW_PROPORTION);
+        final int height = (int) (width / SIGNATURE_VIEW_PROPORTION);
 
         if (width > 0) {
             setMeasuredDimension(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
