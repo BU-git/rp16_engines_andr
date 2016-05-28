@@ -1,6 +1,7 @@
 package com.bionic.kvt.serviceapp;
 
 import android.app.Application;
+import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
 import com.bionic.kvt.serviceapp.helpers.LocaleHelper;
@@ -44,6 +45,11 @@ public class Session extends Application {
     // and depend on current Application language.
     private static Map<String, LinkedHashMap<String, JsonObject>> partMap;
 
+    // Map for Default XML generation.
+    // Generated once in runtime in {@link BackgroundService}
+    // If Application language set to English it point to partMap.
+    private static Map<String, LinkedHashMap<String, JsonObject>> partMapForXML;
+
     // Store defect state for current order
     private List<DefectState> defectStateList;
 
@@ -72,7 +78,6 @@ public class Session extends Application {
         appLanguage = LocaleHelper.getLanguage(this);
         LocaleHelper.onCreate(this, GlobalConstants.APP_LANGUAGE_DEFAULT);
 
-        partMap = new LinkedHashMap<>();
         defectStateList = new ArrayList<>();
 
         currentAppInternalPrivateDir = new File(getFilesDir(), "orders");
@@ -121,12 +126,22 @@ public class Session extends Application {
         currentUserSession.byteArrayClientSignature = null;
     }
 
+    @Nullable
     public static Map<String, LinkedHashMap<String, JsonObject>> getPartMap() {
         return partMap;
     }
 
     public static void setPartMap(Map<String, LinkedHashMap<String, JsonObject>> partMap) {
         Session.partMap = partMap;
+    }
+
+    @Nullable
+    public static Map<String, LinkedHashMap<String, JsonObject>> getPartMapForXML() {
+        return partMapForXML;
+    }
+
+    public static void setPartMapForXML(Map<String, LinkedHashMap<String, JsonObject>> partMapForXML) {
+        Session.partMapForXML = partMapForXML;
     }
 
     public static String getEngineerName() {
@@ -184,10 +199,5 @@ public class Session extends Application {
     public static String getAppLanguage() {
         return currentUserSession.appLanguage;
     }
-
-    public static void setAppLanguage(final String appLanguage) {
-        currentUserSession.appLanguage = appLanguage;
-    }
-
 
 }

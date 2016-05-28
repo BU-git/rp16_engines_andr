@@ -23,7 +23,10 @@ import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.BackgroundService;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -37,6 +40,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -266,6 +270,39 @@ public class Utils {
         }
     }
 
+    @Nullable
+    public static Map<String, LinkedHashMap<String, JsonObject>> generatePartMapForAsset(final String jsonAsset) {
+        final JsonParser jsonParser = new JsonParser();
+        final Map<String, LinkedHashMap<String, JsonObject>> partMap = new LinkedHashMap<>();
+
+        try {
+            JsonElement parentElement = jsonParser.parse(jsonAsset);
+            JsonArray parentArray = parentElement.getAsJsonArray();
+            for (int k = 0; k < parentArray.size(); k++) {
+                JsonObject secondObject = parentArray.get(k).getAsJsonObject();
+                Set<Map.Entry<String, JsonElement>> entrySet = secondObject.entrySet();
+                for (Map.Entry<String, JsonElement> entry : entrySet) {
+                    JsonArray thirdArray = entry.getValue().getAsJsonArray();
+                    LinkedHashMap<String, JsonObject> elementMap = new LinkedHashMap<>();
+                    for (int j = 0; j < thirdArray.size(); j++) {
+                        JsonObject thirdObject = thirdArray.get(j).getAsJsonObject();
+                        Set<Map.Entry<String, JsonElement>> entrySetSecond = thirdObject.entrySet();
+                        for (Map.Entry<String, JsonElement> entrySecond : entrySetSecond) {
+                            elementMap.put(entrySecond.getKey(), entrySecond.getValue().getAsJsonObject());
+                        }
+                    }
+                    partMap.put(entry.getKey(), elementMap);
+                }
+            }
+
+            return partMap;
+        } catch (Exception e) {
+            AppLog.serviceE(true, -1, "Error generating map: " + e.toString());
+
+            return null;
+        }
+    }
+
     public static boolean zipXMLReportFiles(final String[] XMLFiles, final String zipFile) {
         try (ZipOutputStream zipOutputStream =
                      new ZipOutputStream(
@@ -324,7 +361,7 @@ public class Utils {
                         return;
                     }
 
-                    AppLog.serviceI("Update server order status successful.");
+                    AppLog.serviceI(false, orderNumber, "Update server order status successful.");
                 }
 
                 @Override
@@ -334,7 +371,6 @@ public class Utils {
             });
         }
     }
-
 
     public static ServerRequestResult getUserFromServer(final String email) {
         final Call<User> userRequest = Session.getServiceConnection().getUser(email);

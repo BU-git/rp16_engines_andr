@@ -22,6 +22,7 @@ import org.xmlpull.v1.XmlSerializer;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class XMLGenerator {
             if (allLMRAItemsInDb.size() == 0) return null;
             final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] LMRA data.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. LMRA data.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -100,7 +101,13 @@ public class XMLGenerator {
 
     @Nullable
     public static String getXMLFromDefaultTemplate(final long orderNumber) {
-        AppLog.serviceI("Generating XML from Order [" + orderNumber + "] Default template.");
+        AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Default template.");
+
+        final Map<String, LinkedHashMap<String, JsonObject>> partMap = Session.getPartMapForXML();
+        if (partMap == null || partMap.size() == 0) {
+            AppLog.serviceE(true, -1, "Error generating XML: Part Map is empty.");
+            return null;
+        }
 
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
@@ -116,10 +123,10 @@ public class XMLGenerator {
             serializer.endTag("", "Order");
 
             serializer.startTag("", "Parts");
-            for (String part : Session.getPartMap().keySet()) {
+            for (String part : partMap.keySet()) {
                 serializer.startTag("", "Part");
                 serializer.attribute("", "Name", part);
-                Set<Map.Entry<String, JsonObject>> entrySet = Session.getPartMap().get(part).entrySet();
+                Set<Map.Entry<String, JsonObject>> entrySet = partMap.get(part).entrySet();
                 //top level
                 for (Map.Entry<String, JsonObject> element : entrySet) {
                     serializer.startTag("", "Element");
@@ -199,7 +206,7 @@ public class XMLGenerator {
                     realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) return null;
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] custom template.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Custom template.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -272,7 +279,7 @@ public class XMLGenerator {
 
             final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] measurements.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Measurements.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -390,7 +397,7 @@ public class XMLGenerator {
                     realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst();
             if (orderReportJobRules == null) return null;
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "] job rules.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Job rules.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();

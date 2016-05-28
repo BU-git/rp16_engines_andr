@@ -2,10 +2,8 @@ package com.bionic.kvt.serviceapp.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
 import android.widget.SearchView;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
@@ -35,7 +32,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
@@ -262,18 +258,15 @@ public class OrderPageActivity extends BaseActivity implements
                 break;
 
             case R.id.show_settings:
-                final CharSequence languageList[] = new CharSequence[] {"English", "Dutch"};
+                final CharSequence languageList[] = new CharSequence[]{"English", "Dutch"};
                 final AlertDialog.Builder langDialogBuilder = new AlertDialog.Builder(this);
                 langDialogBuilder.setTitle(getText(R.string.select_language));
                 langDialogBuilder.setItems(languageList, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (which == 1){
-                            Session.setAppLanguage(GlobalConstants.APP_LANGUAGE_NL);
+                        if (which == 1) {
                             LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_NL);
-                        }
-                        else{
-                            Session.setAppLanguage(GlobalConstants.APP_LANGUAGE_DEFAULT);
+                        } else {
                             LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_DEFAULT);
                         }
 

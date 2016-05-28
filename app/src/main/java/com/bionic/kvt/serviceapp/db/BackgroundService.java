@@ -4,7 +4,6 @@ package com.bionic.kvt.serviceapp.db;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.bionic.kvt.serviceapp.BuildConfig;
 import com.bionic.kvt.serviceapp.GlobalConstants.ServiceMessage;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.CustomTemplate;
@@ -12,17 +11,10 @@ import com.bionic.kvt.serviceapp.api.OrderBrief;
 import com.bionic.kvt.serviceapp.helpers.JSONHelper;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -33,6 +25,9 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_NL;
+import static com.bionic.kvt.serviceapp.GlobalConstants.COMPONENTS_EN_JSON;
+import static com.bionic.kvt.serviceapp.GlobalConstants.COMPONENTS_NL_JSON;
 import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.DEFAULT_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
@@ -206,8 +201,20 @@ public class BackgroundService extends IntentService {
                 final OrderSynchronisation orderSync = new OrderSynchronisation();
                 orderSync.setNumber(orderNumber);
 
-//                generatePartMap();
+                // Preparing PartMapForXML if it not done yet
+                if (Session.getPartMapForXML() == null || Session.getPartMapForXML().size() == 0) {
+                    if (APP_LANGUAGE_NL.equals(Session.getAppLanguage())) { // App lang is not English
+                        String jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_EN_JSON);
+                        if (jsonAsset.isEmpty()) {
+                            AppLog.serviceE(true, -1, currentTask + "Error generating map: No JSON found.");
+                            return;
+                        }
 
+                        Session.setPartMapForXML(Utils.generatePartMapForAsset(jsonAsset));
+                    } else {
+                        Session.setPartMapForXML(Session.getPartMap());
+                    }
+                }
 
                 // Setting zipFileWithXMLs
                 orderSync.setOrderLMRAXMLReportFile(DbUtils.generateXMLReport(orderNumber, LMRA_XML));
@@ -398,48 +405,25 @@ public class BackgroundService extends IntentService {
     private void generatePartMap() {
         AppLog.serviceI(currentTask + "Service started.");
 
-        if (Session.getPartMap().size() != 0) {
+        if (Session.getPartMap() != null && Session.getPartMap().size() > 0) {
             AppLog.serviceI(currentTask + "Map already generated.");
             return;
         }
 
-        final String jsonComponent = new JSONHelper().readFromFile(getApplicationContext(), BuildConfig.COMPONENTS_JSON);
+        String jsonAsset;
+        if (APP_LANGUAGE_NL.equals(Session.getAppLanguage())) {
+            jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_NL_JSON);
+        } else {
+            jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_EN_JSON);
+        }
 
-        if (jsonComponent.isEmpty()) {
-            AppLog.serviceE(true, -1, currentTask + "Error generating map: Empty JSON.");
+        if (jsonAsset.isEmpty()) {
+            AppLog.serviceE(true, -1, currentTask + "Error generating map: No JSON found.");
             return;
         }
 
-        final JsonParser jsonParser = new JsonParser();
-        final Map<String, LinkedHashMap<String, JsonObject>> partMap = Session.getPartMap();
-        partMap.clear();
+        Session.setPartMap(Utils.generatePartMapForAsset(jsonAsset));
 
-        try {
-            JsonElement parentElement = jsonParser.parse(jsonComponent);
-            JsonArray parentArray = parentElement.getAsJsonArray();
-            for (int k = 0; k < parentArray.size(); k++) {
-                JsonObject secondObject = parentArray.get(k).getAsJsonObject();
-                Set<Map.Entry<String, JsonElement>> entrySet = secondObject.entrySet();
-                for (Map.Entry<String, JsonElement> entry : entrySet) {
-                    JsonArray thirdArray = entry.getValue().getAsJsonArray();
-                    LinkedHashMap<String, JsonObject> elementMap = new LinkedHashMap<>();
-                    for (int j = 0; j < thirdArray.size(); j++) {
-                        JsonObject thirdObject = thirdArray.get(j).getAsJsonObject();
-                        Set<Map.Entry<String, JsonElement>> entrySetSecond = thirdObject.entrySet();
-                        for (Map.Entry<String, JsonElement> entrySecond : entrySetSecond) {
-                            elementMap.put(entrySecond.getKey(), entrySecond.getValue().getAsJsonObject());
-                        }
-                    }
-                    partMap.put(entry.getKey(), elementMap);
-                }
-            }
-        } catch (Exception e) {
-            AppLog.serviceE(true, -1, currentTask + "Error generating map: " + e.toString());
-        }
-
-        Session.setPartMap(partMap);
         AppLog.serviceI(currentTask + "Map generated.");
-
     }
-
 }

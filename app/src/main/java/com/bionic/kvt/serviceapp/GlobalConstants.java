@@ -71,6 +71,9 @@ public interface GlobalConstants {
 
     double DRAWING_VIEW_PROPORTION = 2.6;
 
+    String COMPONENTS_EN_JSON = "components_en.json";
+    String COMPONENTS_NL_JSON = "components_nl.json";
+
     String PDF_TEMPLATE_FILENAME_EN = "pdfTemplate_en.pdf";
     String PDF_REPORT_FILE_NAME = "Report_";
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
