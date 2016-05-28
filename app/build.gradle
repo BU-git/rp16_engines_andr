@@ -49,5 +49,6 @@ dependencies {
     compile 'com.sun.mail:android-activation:1.5.5'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     testCompile 'junit:junit:4.12'
 }

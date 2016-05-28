@@ -14,6 +14,7 @@ import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.LMRAAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
+import com.bionic.kvt.serviceapp.db.LMRAItem;
 import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.AppLog;
@@ -50,8 +51,8 @@ public class LMRAActivity extends BaseActivity {
     @BindView(R.id.activity_lmra_list)
     ListView listViewLMRA;
 
-    public static List<LMRAModel> lmraList = new ArrayList<>();
-    public static LMRAAdapter lmraAdapter;
+    public static List<LMRAModel> lmraList;
+    public LMRAAdapter lmraAdapter;
 
     /**
      * Need for onActivityResult
@@ -61,6 +62,11 @@ public class LMRAActivity extends BaseActivity {
      * Need for onActivityResult
      */
     public static File currentLMRAProtoFile;
+
+    private Realm monitorRealm;
+    private RealmChangeListener<RealmResults<LMRAItem>> lmraItemListener;
+    private RealmResults<LMRAItem> lmraItemsInDB;
+
 
     // App Log monitor
     private Realm monitorLogRealm = Session.getLogRealm();
@@ -105,9 +111,26 @@ public class LMRAActivity extends BaseActivity {
 
         Utils.requestWritePermissionsIfNeeded(this);
 
+        lmraList = new ArrayList<>();
         DbUtils.updateLMRAList(lmraList);
         lmraAdapter = new LMRAAdapter(this, lmraList);
         listViewLMRA.setAdapter(lmraAdapter);
+
+        // Creating LMRA callback
+        monitorRealm = Realm.getDefaultInstance();
+        lmraItemListener = new RealmChangeListener<RealmResults<LMRAItem>>() {
+            @Override
+            public void onChange(RealmResults<LMRAItem> lmraItems) {
+                DbUtils.updateLMRAList(lmraList);
+                lmraAdapter.notifyDataSetChanged();
+            }
+        };
+
+        lmraItemsInDB = monitorRealm.where(LMRAItem.class)
+                .equalTo("number", Session.getCurrentOrder())
+                .findAll();
+
+        lmraItemsInDB.addChangeListener(lmraItemListener);
     }
 
     //Add + as a menu button
@@ -169,7 +192,10 @@ public class LMRAActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        lmraItemsInDB.removeChangeListener(lmraItemListener);
+        monitorRealm.close();
         AppLog.removeListener(monitorLogRealm, logsWithNotification, logListener);
+        lmraList = null;
     }
 
     @Override

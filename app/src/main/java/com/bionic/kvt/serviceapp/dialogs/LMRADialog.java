@@ -28,10 +28,6 @@ public class LMRADialog extends AppCompatDialogFragment {
     public LMRADialog() {
     }
 
-    public boolean isEdit() {
-        return isEdit;
-    }
-
     public void setEdit(boolean edit) {
         isEdit = edit;
     }
@@ -115,13 +111,10 @@ public class LMRADialog extends AppCompatDialogFragment {
                         DbUtils.updateLMRAInDB(LMRAActivity.currentLMRAID,
                                 mLmraNameView.getText().toString(),
                                 mLmraDescriptionView.getText().toString());
-                        DbUtils.updateLMRAList(LMRAActivity.lmraList);
-                        LMRAActivity.lmraAdapter.notifyDataSetChanged();
                         LMRAActivity.currentLMRAID = 0;
                     } else { // Creating new
-                        DbUtils.createNewLMRAInDB(mLmraNameView.getText().toString(), mLmraDescriptionView.getText().toString());
-                        DbUtils.updateLMRAList(LMRAActivity.lmraList);
-                        LMRAActivity.lmraAdapter.notifyDataSetChanged();
+                        DbUtils.createNewLMRAInDB(mLmraNameView.getText().toString(),
+                                mLmraDescriptionView.getText().toString());
                     }
 
                     dialog.dismiss();
