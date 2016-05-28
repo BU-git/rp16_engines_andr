@@ -61,12 +61,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/clear" />
 
-            <ToggleButton
-                android:id="@+id/button_confirm_engineer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/confirm"
-                android:textOn="@string/saved" />
         </LinearLayout>
 
         <TextView
@@ -115,12 +109,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/clear" />
 
-            <ToggleButton
-                android:id="@+id/button_confirm_client"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/confirm"
-                android:textOn="@string/saved" />
         </LinearLayout>
 
     </LinearLayout>
@@ -139,7 +127,6 @@
             android:id="@+id/button_complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
             android:text="@string/show_report" />
     </LinearLayout>
 

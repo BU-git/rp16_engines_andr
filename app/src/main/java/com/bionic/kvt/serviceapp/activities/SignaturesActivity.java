@@ -7,8 +7,6 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
@@ -46,12 +44,6 @@ public class SignaturesActivity extends BaseActivity {
 
     @BindView(R.id.button_complete)
     Button buttonComplete;
-
-    @BindView(R.id.button_confirm_engineer)
-    ToggleButton buttonConfirmEngineer;
-
-    @BindView(R.id.button_confirm_client)
-    ToggleButton buttonConfirmClient;
 
     @BindView(R.id.signature_engineer_name)
     EditText engineerName;
@@ -100,19 +92,41 @@ public class SignaturesActivity extends BaseActivity {
     @OnClick(R.id.button_clear_engineer)
     public void onClearEngineerClick(View v) {
         engineerDrawingView.clear();
-        buttonConfirmEngineer.setChecked(false);
-        buttonComplete.setEnabled(false);
     }
 
     @OnClick(R.id.button_clear_client)
     public void onClearClientClick(View v) {
         clientDrawingView.clear();
-        buttonConfirmClient.setChecked(false);
-        buttonComplete.setEnabled(false);
     }
 
     @OnClick(R.id.button_complete)
     public void onCompleteClick(View v) {
+        if (engineerDrawingView.isEmpty()) {
+            AppLog.W(this, getText(R.string.no_engineer_signature).toString());
+            return;
+        }
+
+        if (clientDrawingView.isEmpty()) {
+            AppLog.W(this, getText(R.string.no_client_signature).toString());
+            return;
+        }
+
+        // Saving Engineers signature
+        engineerDrawingView.setDrawingCacheEnabled(true);
+        Bitmap signatureBitmap = engineerDrawingView.getDrawingCache();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        Session.setByteArrayEngineerSignature(byteArrayOutputStream.toByteArray());
+        engineerDrawingView.destroyDrawingCache();
+
+        // Saving Client signature
+        clientDrawingView.setDrawingCacheEnabled(true);
+        signatureBitmap = clientDrawingView.getDrawingCache();
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        Session.setByteArrayClientSignature(byteArrayOutputStream.toByteArray());
+        clientDrawingView.destroyDrawingCache();
+
         final File pdfReportFile = Utils.getPDFReportFileName(Session.getCurrentOrder(), false);
         if (pdfReportFile.exists()) pdfReportFile.delete();
 
@@ -120,52 +134,6 @@ public class SignaturesActivity extends BaseActivity {
         intent.putExtra("ENGINEER_NAME", engineerName.getText().toString());
         intent.putExtra("CLIENT_NAME", clientName.getText().toString());
         startActivity(intent);
-    }
-
-    @OnClick(R.id.button_confirm_engineer)
-    public void onConfirmEngineerClick(View v) {
-        if (engineerDrawingView.isEmpty()) {
-            Toast.makeText(this, "Please, draw signature.", Toast.LENGTH_LONG).show();
-            buttonConfirmEngineer.setChecked(false);
-            return;
-        }
-
-        engineerDrawingView.setDrawingCacheEnabled(true);
-        final Bitmap signatureBitmap = engineerDrawingView.getDrawingCache();
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        Session.setByteArrayEngineerSignature(byteArrayOutputStream.toByteArray());
-        engineerDrawingView.destroyDrawingCache();
-
-        buttonConfirmEngineer.setChecked(true);
-        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
-    }
-
-    @OnClick(R.id.button_confirm_client)
-    public void onConfirmClientClick(View v) {
-        if (clientDrawingView.isEmpty()) {
-            Toast.makeText(this, "Please, draw signature.", Toast.LENGTH_LONG).show();
-            buttonConfirmClient.setChecked(false);
-            return;
-        }
-
-        clientDrawingView.setDrawingCacheEnabled(true);
-        final Bitmap signatureBitmap = clientDrawingView.getDrawingCache();
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        signatureBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        Session.setByteArrayClientSignature(byteArrayOutputStream.toByteArray());
-        clientDrawingView.destroyDrawingCache();
-
-        buttonConfirmClient.setChecked(true);
-        buttonComplete.setEnabled(buttonConfirmEngineer.isChecked() && buttonConfirmClient.isChecked());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        buttonConfirmEngineer.setChecked(false);
-        buttonConfirmClient.setChecked(false);
-        buttonComplete.setEnabled(false);
     }
 
 }

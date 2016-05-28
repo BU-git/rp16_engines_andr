@@ -313,7 +313,10 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
         Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
 
+        // Cleaning
         if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
+        Session.setByteArrayClientSignature(null);
+        Session.setByteArrayEngineerSignature(null);
 
         final Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

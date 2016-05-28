@@ -233,4 +233,8 @@
     <string name="application_log">Application log</string>
     <string name="language">Language</string>
     <string name="select_language">Choose language (App restart required)</string>
+    <string name="no_engineer_signature">Please, draw Engineer signature</string>
+    <string name="no_client_signature">Please, draw Client signature</string>
+
+
 </resources>
