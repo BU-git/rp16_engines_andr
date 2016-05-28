@@ -9,7 +9,6 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="action_remember_password">Remember password</string>
     <string name="logout">Log out</string>
     <string name="request_new_password">Request new password</string>
@@ -37,7 +36,6 @@
     <string name="town">Town</string>
     <string name="contact_person">Contact person</string>
     <string name="telephone">Telephone</string>
-    <string name="place_2">Place 2</string>
     <string name="employee">Employee</string>
     <string name="running_hours">Running hours</string>
     <string name="instructions">Instructions</string>
@@ -49,8 +47,6 @@
     <string name="pdf_report_preview">PDF Report preview</string>
     <string name="send_pdf">Send in e-mail</string>
     <string name="accept_instructions">Please, accept instructions to start.</string>
-    <string name="job_description">Job description</string>
-    <string name="open_quotation">Open Quotation</string>
     <string name="instructions_followed">Instructions followed</string>
     <string name="lmra_executed">LMRA executed</string>
     <string name="register_dangerous_situation">Register dangerous situation</string>
@@ -60,7 +56,6 @@
     <!-- String related to LMRA -->
     <string name="button_delete">Delete this LMRA</string>
     <string name="lmra_button_add">Add Item</string>
-    <string name="lmra_text_sample">Text Sample</string>
     <string name="lmra_hint_title">Name</string>
     <string name="lmra_hint_description">Description of the dangerous situation</string>
     <string name="create">Create</string>
@@ -74,7 +69,6 @@
     <string name="edit_lmra_template">Edit Dangerous Situation</string>
     <string name="generating_pdf_document">PDF document:</string>
     <string name="generating_pdf_preview_document">PDF document (preview):</string>
-    <string name="open_file_for_preview">Open file for preview.</string>
     <string name="component_defects">Component defects</string>
     <string name="measurements">Measurements</string>
     <string name="job_rules">Job rules</string>
@@ -84,9 +78,6 @@
     <string name="text_client">Client</string>
     <string name="text_name">Name:</string>
     <string name="signatures">Signatures</string>
-    <string name="confirm">Confirm</string>
-    <string name="saved">Saved</string>
-    <string name="done">Done</string>
     <string name="fuel_added">Fuel added</string>
     <string name="water_separators_drained">Water separators drained</string>
     <string name="leave_installation">Leave installation stand-by/operational</string>
@@ -203,8 +194,6 @@
 
 
     <!-- EMail fields -->
-    <string name="forget_password_subject">Password Retrieval Email</string>
-    <string name="forget_password_body">Your password is: $password</string>
     <string name="success_email_toast">The message was sent</string>
     <string name="error_email_toast">Error while message sent</string>
     <string name="this_order_is_complete">This order is complete.</string>
@@ -220,7 +209,6 @@
     <string name="sign_report">Sign report</string>
     <string name="show_report">Show report</string>
     <string name="remaining_work">Remaining work</string>
-    <string name="make_lmra_photo">Make LMRA photo</string>
     <string name="component">Component</string>
     <string name="number">Number</string>
     <string name="mark">Mark</string>

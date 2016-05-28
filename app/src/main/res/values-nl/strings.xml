@@ -9,7 +9,6 @@
     <string name="error_invalid_password">Dit wachtwoord is te kort</string>
     <string name="error_incorrect_password">Dit wachtwoord is niet correct</string>
     <string name="error_field_required">Dit veld is verplicht</string>
-    <string name="permission_rationale">Toegang tot contacten is nodig voor het verzenden</string>
     <string name="action_remember_password">Onthoud wachtwoord</string>
     <string name="logout">Uitloggen</string>
     <string name="request_new_password">Vraag nieuw wachtwoord aan</string>
@@ -37,7 +36,6 @@
     <string name="town">Stad</string>
     <string name="contact_person">Contact persoon</string>
     <string name="telephone">Telefoon</string>
-    <string name="place_2">Place 2</string>
     <string name="employee">Medewerker</string>
     <string name="running_hours">Draaiuren</string>
     <string name="instructions">Instructies</string>
@@ -49,8 +47,6 @@
     <string name="pdf_report_preview">PDF Rapport preview</string>
     <string name="send_pdf">Stuur in e-mail</string>
     <string name="accept_instructions">Accepteer alstublieft de instructies om te starten</string>
-    <string name="job_description">Taak omschrijving</string>
-    <string name="open_quotation">Open bon</string>
     <string name="instructions_followed">Instructies gevolgd</string>
     <string name="lmra_executed">LMRA uitgevoerd</string>
     <string name="register_dangerous_situation">Registreer gevaarlijke situatie</string>
@@ -60,7 +56,6 @@
     <!-- String related to LMRA -->
     <string name="button_delete">Verwijder deze LMRA</string>
     <string name="lmra_button_add">Voeg situatie toe</string>
-    <string name="lmra_text_sample">Tekst voorbeeld</string>
     <string name="lmra_hint_title">Naam</string>
     <string name="lmra_hint_description">Beschrijving van de gevaarlijke situatie</string>
     <string name="create">Maak</string>
@@ -73,7 +68,6 @@
     <string name="edit_lmra_template">Bewerk gevaarlijke situatie</string>
     <string name="generating_pdf_document">PDF document:</string>
     <string name="generating_pdf_preview_document">PDF document (voorbeeldweergave):</string>
-    <string name="open_file_for_preview">Open bestand voor voorbeeldweergave..</string>
     <string name="component_defects">Gebreken van componenten</string>
     <string name="measurements">Metingen</string>
     <string name="job_rules">Taak regels</string>
@@ -84,9 +78,6 @@
     <string name="text_name">Naam:</string>
     <string name="signatures">Handtekeningen</string>
     <string name="clear">Herstel handtekening</string>
-    <string name="confirm">Bevestig</string>
-    <string name="saved">Opgeslagen</string>
-    <string name="done">Klaar</string>
     <string name="fuel_added">Brandstof bijvullen</string>
     <string name="water_separators_drained">Waterafscheiders aftappen</string>
     <string name="leave_installation">Laat installatie stand-by/operationeel achter</string>
@@ -203,8 +194,6 @@
 
 
     <!-- EMail fields -->
-    <string name="forget_password_subject">Wachtwoord vergeten E-mail</string>
-    <string name="forget_password_body">Uw wachtwoord is: $Wachtwoord</string>
     <string name="success_email_toast">Het bericht is verstuurtd</string>
     <string name="error_email_toast">Fout tijdens het versturen</string>
     <string name="this_order_is_complete">Deze order is compleet.</string>
@@ -220,7 +209,6 @@
     <string name="sign_report">Teken rappport</string>
     <string name="show_report">Laat rapport zien</string>
     <string name="remaining_work">Overig werk</string>
-    <string name="make_lmra_photo">Maak foto van LMRA</string>
     <string name="component">Component</string>
     <string name="number">Nummer</string>
     <string name="mark">Merk</string>
