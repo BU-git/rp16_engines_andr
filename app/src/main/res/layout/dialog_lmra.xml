@@ -14,6 +14,7 @@
         android:layout_marginTop="16dp"
         android:focusable="true"
         android:hint="@string/lmra_hint_title"
+        android:singleLine="true"
         android:textAppearance="?android:textAppearanceMedium" />
 
     <EditText

@@ -22,7 +22,7 @@ public class JSONHelper {
                 InputStreamReader jsonInputStreamReader = new InputStreamReader(jsonInputStream);
                 BufferedReader jsonBufferedReader = new BufferedReader(jsonInputStreamReader);
                 StringBuilder jsonStringBuilder = new StringBuilder();
-                String jsonString = "";
+                String jsonString;
                 while ((jsonString = jsonBufferedReader.readLine()) != null) {
                     jsonStringBuilder.append(jsonString);
                 }

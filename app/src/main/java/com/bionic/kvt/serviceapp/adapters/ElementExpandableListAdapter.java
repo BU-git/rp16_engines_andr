@@ -281,7 +281,7 @@ public class ElementExpandableListAdapter extends BaseExpandableListAdapter {
             }
         } else {
             //Stub. We do not expect to be here
-            LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
+            //LinearLayout someLayout = (LinearLayout) elementLayout.findViewById(groupClickedPosition);
         }
         return convertView;
     }

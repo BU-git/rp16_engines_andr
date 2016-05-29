@@ -1,14 +1,10 @@
 package com.bionic.kvt.serviceapp;
 
-import android.util.Log;
-
-import org.junit.Test;
 import com.bionic.kvt.serviceapp.helpers.CalculationHelper;
 
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
 /**
  * Test to verify the matrix calculations
@@ -18,7 +14,6 @@ public class CalculationTest {
 
     @Test
     public void validateConditionArray(){
-        String[] conditionArray = {"E", "S", "G"};
 
         assertArrayEquals( CalculationHelper.INSTANCE.getConditionArray("E", 0), new Integer[]{1, 1, 2, 3, 4});
         assertArrayEquals( CalculationHelper.INSTANCE.getConditionArray("E", 1), new Integer[]{1, 2, 3, 4, 5});

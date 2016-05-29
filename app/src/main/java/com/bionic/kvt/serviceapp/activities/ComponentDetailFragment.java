@@ -66,8 +66,6 @@ public class ComponentDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        final LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-
         final View rootView = inflater.inflate(R.layout.component_detail, container, false);
         rootView.setNestedScrollingEnabled(true);
         rootView.setNestedScrollingEnabled(true);
