@@ -36,7 +36,10 @@ public class Order extends RealmObject {
     private Date lastServerChangeDate;
     private Date lastAndroidChangeDate;
     private long customTemplateID;
+
+    @GlobalConstants.OrderStatus
     private int orderStatus;
+    private boolean ifOrderStatusSyncWithServer;
 
     // Order processing fields
     private Date maintenanceStartTime;
@@ -166,12 +169,21 @@ public class Order extends RealmObject {
         this.lastAndroidChangeDate = lastAndroidChangeDate;
     }
 
-    public  @GlobalConstants.OrderStatus  int getOrderStatus() {
+    @GlobalConstants.OrderStatus
+    public int getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus( @GlobalConstants.OrderStatus int orderStatus) {
+    public void setOrderStatus(@GlobalConstants.OrderStatus int orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public boolean isIfOrderStatusSyncWithServer() {
+        return ifOrderStatusSyncWithServer;
+    }
+
+    public void setIfOrderStatusSyncWithServer(boolean ifOrderStatusSyncWithServer) {
+        this.ifOrderStatusSyncWithServer = ifOrderStatusSyncWithServer;
     }
 
     public String getEmployeeEmail() {

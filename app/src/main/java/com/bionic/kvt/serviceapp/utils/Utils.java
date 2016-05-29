@@ -335,43 +335,6 @@ public class Utils {
         return true;
     }
 
-    public static void updateOrderStatusOnServer(final long orderNumber) {
-        try (final Realm realm = Realm.getDefaultInstance()) {
-            final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
-
-            if (order == null) {
-                AppLog.serviceE(true, orderNumber, "Updating order status on server: No such order!");
-                return;
-            }
-
-            final String email = order.getEmployeeEmail();
-            final long lastAndroidChangeDate = order.getLastAndroidChangeDate().getTime();
-            final int orderStatus = order.getOrderStatus();
-
-            final Call<ResponseBody> updateOrderRequest =
-                    Session.getServiceConnection().updateOrder(orderNumber, email, lastAndroidChangeDate, orderStatus);
-
-            AppLog.serviceI(false, orderNumber, "Updating server order status: " + updateOrderRequest.request());
-
-            updateOrderRequest.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (!response.isSuccessful()) {
-                        AppLog.serviceE(true, orderNumber, "Update server order status fail: " + response.code());
-                        return;
-                    }
-
-                    AppLog.serviceI(false, orderNumber, "Update server order status successful.");
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    AppLog.serviceE(true, orderNumber, "Update server order status fail: " + t.toString());
-                }
-            });
-        }
-    }
-
     public static ServerRequestResult getUserFromServer(final String email) {
         final Call<User> userRequest = Session.getServiceConnection().getUser(email);
         AppLog.serviceI("Connecting to server: " + userRequest.request());

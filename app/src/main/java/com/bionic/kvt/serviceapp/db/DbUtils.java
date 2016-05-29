@@ -222,25 +222,6 @@ public class DbUtils {
         }
     }
 
-    public static List<Long> getOrdersToBePrepared() {
-        AppLog.serviceI("Looking for orders to be uploaded.");
-
-        final List<Long> ordersToBeUploaded = new ArrayList<>();
-        try (final Realm realm = Realm.getDefaultInstance()) {
-
-            final RealmResults<Order> completeOrdersInDb = realm.where(Order.class)
-                    .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
-                    .findAll();
-
-            for (Order order : completeOrdersInDb) {
-                ordersToBeUploaded.add(order.getNumber());
-            }
-
-        }
-        AppLog.serviceI("Found " + ordersToBeUploaded.size() + " orders to be uploaded.");
-        return ordersToBeUploaded;
-    }
-
     private static boolean isOrderNewerOnServer(final Order orderInDb, final OrderBrief orderBrief) {
         if (orderInDb.getImportDate()
                 .compareTo(new Date(orderBrief.getImportDate())) != 0)
@@ -384,6 +365,7 @@ public class DbUtils {
             newOrder.setLastAndroidChangeDate(new Date(serverOrder.getLastAndroidChangeDate()));
             newOrder.setCustomTemplateID(serverOrder.getCustomTemplateID());
             newOrder.setOrderStatus(serverOrder.getOrderStatus());
+            newOrder.setIfOrderStatusSyncWithServer(true);
 
             newOrder.setMaintenanceStartTime(new Date(0));
             newOrder.setMaintenanceEndTime(new Date(0));
@@ -557,7 +539,7 @@ public class DbUtils {
             DefectState newDefectState;
 
             for (com.bionic.kvt.serviceapp.models.DefectState defectState : defectStateList) {
-                AppLog.serviceI("Saving defect state: "
+                AppLog.serviceI(false, Session.getCurrentOrder(), "Saving defect state: "
                         + defectState.getPart() + ">"
                         + defectState.getElement() + ">"
                         + defectState.getProblem());
@@ -599,7 +581,7 @@ public class DbUtils {
     }
 
     public static void removeDefectStateListFromDB() {
-        AppLog.serviceI("Removing defect states from DB.");
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Removing defect states from DB.");
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
@@ -698,6 +680,7 @@ public class DbUtils {
             if (order.getOrderStatus() != status) {
                 order.setOrderStatus(status);
                 order.setLastAndroidChangeDate(new Date());
+                order.setIfOrderStatusSyncWithServer(false);
             }
             realm.commitTransaction();
         }
@@ -718,7 +701,7 @@ public class DbUtils {
     }
 
     public static void setOrderReportJobRules(final OrderReportJobRules jobRules) {
-        AppLog.serviceI("Saving Job Rules");
+        AppLog.serviceI(false, jobRules.getNumber(), "Saving Job Rules");
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();
@@ -733,7 +716,7 @@ public class DbUtils {
     }
 
     public static void setOrderReportMeasurements(final OrderReportMeasurements measurements) {
-        AppLog.serviceI("Saving Measurements");
+        AppLog.serviceI(false, measurements.getNumber(), "Saving Measurements");
 
         try (final Realm realm = Realm.getDefaultInstance()) {
             realm.beginTransaction();

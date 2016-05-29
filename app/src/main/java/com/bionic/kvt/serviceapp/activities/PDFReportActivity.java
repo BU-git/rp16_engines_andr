@@ -50,6 +50,8 @@ import io.realm.RealmResults;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_PASSWORD;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS_STATUSES;
+import static com.bionic.kvt.serviceapp.utils.Utils.runBackgroundServiceIntent;
 
 /**
  * An activity for final PDF Report preview.<br>
@@ -311,14 +313,14 @@ public class PDFReportActivity extends BaseActivity implements LoaderManager.Loa
     @OnClick(R.id.pdf_button_complete_order)
     public void onDoneClick(View v) {
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_COMPLETE);
-        Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
+        runBackgroundServiceIntent(this, UPDATE_ORDERS_STATUSES);
 
         // Cleaning
         if (pdfReportPreviewFile != null) pdfReportPreviewFile.delete();
         Session.setByteArrayClientSignature(null);
         Session.setByteArrayEngineerSignature(null);
 
-        final Intent intent = new Intent(PDFReportActivity.this, OrderPageActivity.class);
+        final Intent intent = new Intent(this, OrderPageActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

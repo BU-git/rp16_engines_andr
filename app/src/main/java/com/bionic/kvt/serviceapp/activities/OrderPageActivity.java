@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.SearchView;
 
-import com.bionic.kvt.serviceapp.GlobalConstants;
 import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
@@ -36,15 +35,17 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_DEFAULT;
+import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_NL;
 import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE_UPLOADED;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS_STATUSES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 import static com.bionic.kvt.serviceapp.utils.Utils.runBackgroundServiceIntent;
-import static com.bionic.kvt.serviceapp.utils.Utils.updateOrderStatusOnServer;
 
 /**
  * An activity for overview all orders for current user.<br>
@@ -75,7 +76,7 @@ public class OrderPageActivity extends BaseActivity implements
         OrderAdapter.OnOrderLineClickListener,
         OrderAdapter.OnPDFButtonClickListener {
 
-    private static final long UPDATE_PERIOD = 60_000; // 60 sec
+    private static final long UPDATE_PERIOD = 30_000; // 30 sec
     private List<OrderOverview> orderOverviewList = new ArrayList<>();
     private OrderAdapter ordersAdapter;
     private final Handler updateHandler = new Handler();
@@ -164,7 +165,7 @@ public class OrderPageActivity extends BaseActivity implements
         ordersRecyclerView.setLayoutManager(ordersLayoutManager);
 
         // Showing all orders
-        ordersAdapter = new OrderAdapter(getApplicationContext(), orderOverviewList);
+        ordersAdapter = new OrderAdapter(this, orderOverviewList);
         ordersAdapter.setOnOrderLineClickListener(this, this);
         ordersRecyclerView.setAdapter(ordersAdapter);
 
@@ -185,8 +186,9 @@ public class OrderPageActivity extends BaseActivity implements
         ordersCompleteListener = new RealmChangeListener<RealmResults<Order>>() {
             @Override
             public void onChange(RealmResults<Order> orders) {
-                if (orders.size() > 0)
+                if (orders.size() > 0) {
                     runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
+                }
             }
         };
 
@@ -214,9 +216,10 @@ public class OrderPageActivity extends BaseActivity implements
             @Override
             public void onChange(RealmResults<OrderSynchronisation> orders) {
                 for (OrderSynchronisation order : orders) {
-                    DbUtils.setOrderStatus(order.getNumber(), ORDER_STATUS_COMPLETE_UPLOADED);
-                    updateOrderStatusOnServer(order.getNumber());
+                    if (DbUtils.getOrderStatus(order.getNumber()) < ORDER_STATUS_COMPLETE_UPLOADED)
+                        DbUtils.setOrderStatus(order.getNumber(), ORDER_STATUS_COMPLETE_UPLOADED);
                 }
+                runBackgroundServiceIntent(OrderPageActivity.this, UPDATE_ORDERS_STATUSES);
             }
         };
 
@@ -224,17 +227,16 @@ public class OrderPageActivity extends BaseActivity implements
                 .equalTo("isSyncComplete", true).findAll();
         ordersSynchroniseCompleteInDB.addChangeListener(ordersSynchronisationCompleteListener);
 
-
         runBackgroundServiceIntent(OrderPageActivity.this, GENERATE_PART_MAP);
-        runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
-        runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
     }
 
     private Runnable orderUpdateTask = new Runnable() {
         @Override
         public void run() {
             runBackgroundServiceIntent(OrderPageActivity.this, UPDATE_ORDERS);
+            runBackgroundServiceIntent(OrderPageActivity.this, UPDATE_ORDERS_STATUSES);
             updateHandler.postDelayed(orderUpdateTask, UPDATE_PERIOD);
+            uploadDataWithDelay();
         }
     };
 
@@ -265,9 +267,9 @@ public class OrderPageActivity extends BaseActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (which == 1) {
-                            LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_NL);
+                            LocaleHelper.setLocale(OrderPageActivity.this, APP_LANGUAGE_NL);
                         } else {
-                            LocaleHelper.setLocale(OrderPageActivity.this, GlobalConstants.APP_LANGUAGE_DEFAULT);
+                            LocaleHelper.setLocale(OrderPageActivity.this, APP_LANGUAGE_DEFAULT);
                         }
 
                     }
@@ -288,10 +290,9 @@ public class OrderPageActivity extends BaseActivity implements
     protected void onResume() {
         super.onResume();
         Session.clearCurrentOrder();
+        ordersInDB.addChangeListener(orderUpdateListener);
         updateHandler.post(orderUpdateTask);
         updateOrderAdapter();
-
-        ordersInDB.addChangeListener(orderUpdateListener);
     }
 
     @Override
@@ -350,7 +351,30 @@ public class OrderPageActivity extends BaseActivity implements
 
     private void updateOrderAdapter() {
         DbUtils.updateOrderOverviewList(orderOverviewList);
-        ordersAdapter.setOrdersDataSet(orderOverviewList);
         ordersAdapter.notifyDataSetChanged();
     }
+
+    private void uploadDataWithDelay() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                try (final Realm realm = Realm.getDefaultInstance()) {
+                    if (realm.where(Order.class)
+                            .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
+                            .findAll()
+                            .size() > 0)
+                        runBackgroundServiceIntent(OrderPageActivity.this, PREPARE_FILES);
+
+                    if (realm.where(OrderSynchronisation.class)
+                            .equalTo("isReadyForSync", true)
+                            .equalTo("isSyncComplete", false)
+                            .equalTo("isError", false)
+                            .findAll()
+                            .size() > 0)
+                        runBackgroundServiceIntent(OrderPageActivity.this, UPLOAD_FILES);
+                }
+            }
+        }, 5000);
+    }
+
 }

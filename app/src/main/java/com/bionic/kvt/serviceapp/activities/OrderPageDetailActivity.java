@@ -29,6 +29,8 @@ import io.realm.RealmList;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_MAINTENANCE_START_TIME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_IN_PROGRESS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS_STATUSES;
+import static com.bionic.kvt.serviceapp.utils.Utils.runBackgroundServiceIntent;
 
 /**
  * An activity for detail order information.<br>
@@ -115,7 +117,7 @@ public class OrderPageDetailActivity extends BaseActivity {
             }, 3000);
             return;
         }
-        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderPageActivity.class.getSimpleName());
+        AppLog.serviceI(false, Session.getCurrentOrder(), "Create activity: " + OrderPageDetailActivity.class.getSimpleName());
 
         final Realm realm = Realm.getDefaultInstance();
         final Order currentOrder =
@@ -163,9 +165,9 @@ public class OrderPageDetailActivity extends BaseActivity {
     public void onStartClick(View v) {
         DbUtils.setOrderMaintenanceTime(Session.getCurrentOrder(), ORDER_MAINTENANCE_START_TIME, new Date());
         DbUtils.setOrderStatus(Session.getCurrentOrder(), ORDER_STATUS_IN_PROGRESS);
-        Utils.updateOrderStatusOnServer(Session.getCurrentOrder());
+        runBackgroundServiceIntent(this, UPDATE_ORDERS_STATUSES);
 
-        final Intent intent = new Intent(getApplicationContext(), OrderWorkActivity.class);
+        final Intent intent = new Intent(this, OrderWorkActivity.class);
         startActivity(intent);
     }
 

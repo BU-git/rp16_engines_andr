@@ -14,6 +14,7 @@ import com.bionic.kvt.serviceapp.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -34,9 +35,11 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.JOB_RULES_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_XML;
 import static com.bionic.kvt.serviceapp.GlobalConstants.MEASUREMENTS_XML;
+import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PREPARE_FILES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.REPORTS_XML_ZIP_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS;
+import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_ORDERS_STATUSES;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPLOAD_FILES;
 
@@ -72,6 +75,10 @@ public class BackgroundService extends IntentService {
             case GENERATE_PART_MAP:
                 currentTask = "SERVICE [GENERATE PART MAP]: ";
                 generatePartMap();
+                break;
+            case UPDATE_ORDERS_STATUSES:
+                currentTask = "SERVICE [UPDATE ORDER STATUS]: ";
+                updateOrderStatusOnServer();
                 break;
         }
     }
@@ -178,10 +185,22 @@ public class BackgroundService extends IntentService {
 
     private void prepareOrderFilesToUpload() {
         AppLog.serviceI(currentTask + "Service started.");
-        final List<Long> orderNumberToPrepare = DbUtils.getOrdersToBePrepared();
-        try (final Realm realm = Realm.getDefaultInstance()) {
 
-            for (Long orderNumber : orderNumberToPrepare) {
+        AppLog.serviceI(currentTask + "Looking for orders to be prepared.");
+
+        final List<Long> orderNumbersToPrepare = new ArrayList<>();
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<Order> completeOrdersInDb = realm.where(Order.class)
+                    .equalTo("orderStatus", ORDER_STATUS_COMPLETE)
+                    .findAll();
+
+            for (Order order : completeOrdersInDb) {
+                orderNumbersToPrepare.add(order.getNumber());
+            }
+
+            AppLog.serviceI(currentTask + "Found " + orderNumbersToPrepare.size() + " orders to be prepared.");
+
+            for (Long orderNumber : orderNumbersToPrepare) {
                 AppLog.serviceI(currentTask + "Preparing files to upload for order: " + orderNumber);
 
                 OrderSynchronisation currentOrderSync =
@@ -312,6 +331,12 @@ public class BackgroundService extends IntentService {
 
     private void uploadOrderFiles() {
         AppLog.serviceI(currentTask + "Service started.");
+
+        if (!Utils.isNetworkConnected(getApplicationContext())) {
+            AppLog.serviceI(true, -1, currentTask + "No connection to network. Canceling upload.");
+            return;
+        }
+
         boolean uploadResult;
 
         try (final Realm realm = Realm.getDefaultInstance()) {
@@ -425,5 +450,55 @@ public class BackgroundService extends IntentService {
         Session.setPartMap(Utils.generatePartMapForAsset(jsonAsset));
 
         AppLog.serviceI(currentTask + "Map generated.");
+    }
+
+    private void updateOrderStatusOnServer() {
+        AppLog.serviceI(currentTask + "Service started.");
+
+        if (!Utils.isNetworkConnected(getApplicationContext())) {
+            AppLog.serviceI(true, -1, currentTask + "No connection to network. Canceling update.");
+            return;
+        }
+
+        try (final Realm realm = Realm.getDefaultInstance()) {
+            final RealmResults<Order> orderList = realm.where(Order.class)
+                    .equalTo("employeeEmail", Session.getEngineerEmail())
+                    .equalTo("ifOrderStatusSyncWithServer", false)
+                    .findAll();
+
+            if (orderList.size() == 0) {
+                AppLog.serviceI(currentTask + "No orders need to be update.");
+                return;
+            }
+            for (Order order : orderList) {
+                final long orderNumber = order.getNumber();
+                final String email = order.getEmployeeEmail();
+                final long lastAndroidChangeDate = order.getLastAndroidChangeDate().getTime();
+                final int orderStatus = order.getOrderStatus();
+
+                final Call<ResponseBody> updateOrderRequest =
+                        Session.getServiceConnection().updateOrder(orderNumber, email, lastAndroidChangeDate, orderStatus);
+
+                AppLog.serviceI(false, orderNumber, currentTask + "Updating server order status: " + updateOrderRequest.request());
+
+                final Response<ResponseBody> updateOrderResponse;
+                try {
+                    updateOrderResponse = updateOrderRequest.execute();
+                } catch (IOException e) {
+                    AppLog.serviceE(true, orderNumber, currentTask + "Update server order status fail: " + e.toString());
+                    continue;
+                }
+
+                if (!updateOrderResponse.isSuccessful()) {
+                    AppLog.serviceE(true, orderNumber, currentTask + "Update server order status fail: " + updateOrderResponse.code());
+                    continue;
+                }
+
+                realm.beginTransaction();
+                order.setIfOrderStatusSyncWithServer(true);
+                realm.commitTransaction();
+                AppLog.serviceI(false, orderNumber, currentTask + "Update server order status successful.");
+            }
+        }
     }
 }

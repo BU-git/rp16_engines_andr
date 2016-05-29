@@ -40,7 +40,7 @@ public class XMLGenerator {
             if (allLMRAItemsInDb.size() == 0) return null;
             final RealmResults<LMRAItem> allLMRAItemsInDbSorted = allLMRAItemsInDb.sort("lmraId");
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. LMRA data.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: LMRA data.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -101,7 +101,7 @@ public class XMLGenerator {
 
     @Nullable
     public static String getXMLFromDefaultTemplate(final long orderNumber) {
-        AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Default template.");
+        AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: Default template.");
 
         final Map<String, LinkedHashMap<String, JsonObject>> partMap = Session.getPartMapForXML();
         if (partMap == null || partMap.size() == 0) {
@@ -206,7 +206,7 @@ public class XMLGenerator {
                     realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
             if (customTemplate == null) return null;
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Custom template.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: Custom template.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -279,7 +279,7 @@ public class XMLGenerator {
 
             final Order order = realm.where(Order.class).equalTo("number", orderNumber).findFirst();
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Measurements.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: Measurements.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -397,7 +397,7 @@ public class XMLGenerator {
                     realm.where(OrderReportJobRules.class).equalTo("number", orderNumber).findFirst();
             if (orderReportJobRules == null) return null;
 
-            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]. Job rules.");
+            AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: Job rules.");
 
             XmlSerializer serializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
