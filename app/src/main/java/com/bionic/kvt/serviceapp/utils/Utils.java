@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
@@ -11,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,11 +20,11 @@ import android.support.v4.content.ContextCompat;
 import android.widget.ImageView;
 
 import com.bionic.kvt.serviceapp.GlobalConstants;
+import com.bionic.kvt.serviceapp.R;
 import com.bionic.kvt.serviceapp.Session;
 import com.bionic.kvt.serviceapp.api.User;
 import com.bionic.kvt.serviceapp.db.BackgroundService;
 import com.bionic.kvt.serviceapp.db.DbUtils;
-import com.bionic.kvt.serviceapp.db.Order;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -47,10 +49,8 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import io.realm.Realm;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -66,6 +66,30 @@ public class Utils {
     private final static SimpleDateFormat dateAndTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.GERMANY);
     private final static SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss", Locale.GERMANY);
     private static final String TAG = Utils.class.getName();
+
+    public static String getPreferredLanguage(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString(context.getString(R.string.pref_lang_key),
+                context.getString(R.string.pref_lang_english));
+    }
+
+    public static boolean isCurrentLangEnglish(final Context context) {
+        return context.getString(R.string.pref_lang_english).equals(Session.getAppLanguage());
+    }
+
+    public static boolean isCurrentLangDutch(final Context context) {
+        return context.getString(R.string.pref_lang_dutch).equals(Session.getAppLanguage());
+    }
+
+    public static void updateResources(final Context context) {
+        Locale locale;
+        if (getPreferredLanguage(context).equals(context.getString(R.string.pref_lang_dutch)))
+            locale = new Locale("nl");
+        else locale = new Locale("");
+
+        Locale.setDefault(locale);
+        context.getResources().getConfiguration().setLocale(locale);
+    }
 
     public static String nullStringToEmpty(@Nullable final String inString) {
         return (inString == null) ? "" : inString.trim();

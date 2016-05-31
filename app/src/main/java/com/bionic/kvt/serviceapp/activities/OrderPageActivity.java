@@ -1,11 +1,9 @@
 package com.bionic.kvt.serviceapp.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -21,7 +19,6 @@ import com.bionic.kvt.serviceapp.adapters.OrderAdapter;
 import com.bionic.kvt.serviceapp.db.DbUtils;
 import com.bionic.kvt.serviceapp.db.Order;
 import com.bionic.kvt.serviceapp.db.OrderSynchronisation;
-import com.bionic.kvt.serviceapp.helpers.LocaleHelper;
 import com.bionic.kvt.serviceapp.models.OrderOverview;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.AppLogItem;
@@ -35,8 +32,6 @@ import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_DEFAULT;
-import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_NL;
 import static com.bionic.kvt.serviceapp.GlobalConstants.GENERATE_PART_MAP;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_OVERVIEW_COLUMN_COUNT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.ORDER_STATUS_COMPLETE;
@@ -253,33 +248,20 @@ public class OrderPageActivity extends BaseActivity implements
         Intent intent;
         switch (id) {
             case R.id.log_out:
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent = new Intent(this, LoginActivity.class);
                 Session.clearSession();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
 
             case R.id.show_settings:
-                final CharSequence languageList[] = new CharSequence[]{"English", "Dutch"};
-                final AlertDialog.Builder langDialogBuilder = new AlertDialog.Builder(this);
-                langDialogBuilder.setTitle(getText(R.string.select_language));
-                langDialogBuilder.setItems(languageList, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 1) {
-                            LocaleHelper.setLocale(OrderPageActivity.this, APP_LANGUAGE_NL);
-                        } else {
-                            LocaleHelper.setLocale(OrderPageActivity.this, APP_LANGUAGE_DEFAULT);
-                        }
-
-                    }
-                });
-                langDialogBuilder.show();
-
+                intent = new Intent(this, SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 break;
 
             case R.id.show_log:
-                intent = new Intent(getApplicationContext(), LogActivity.class);
+                intent = new Intent(this, LogActivity.class);
                 startActivity(intent);
                 break;
         }

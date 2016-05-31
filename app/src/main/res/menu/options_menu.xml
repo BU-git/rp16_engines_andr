@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/show_settings"
-        android:title="@string/language" />
+        android:title="@string/settings" />
 
     <item
         android:id="@+id/show_log"

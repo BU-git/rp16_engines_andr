@@ -26,7 +26,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_NL;
 import static com.bionic.kvt.serviceapp.GlobalConstants.COMPONENTS_EN_JSON;
 import static com.bionic.kvt.serviceapp.GlobalConstants.COMPONENTS_NL_JSON;
 import static com.bionic.kvt.serviceapp.GlobalConstants.CUSTOM_XML;
@@ -222,7 +221,7 @@ public class BackgroundService extends IntentService {
 
                 // Preparing PartMapForXML if it not done yet
                 if (Session.getPartMapForXML() == null || Session.getPartMapForXML().size() == 0) {
-                    if (APP_LANGUAGE_NL.equals(Session.getAppLanguage())) { // App lang is not English
+                    if (!Utils.isCurrentLangEnglish(getApplicationContext())) { // App lang is not English
                         String jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_EN_JSON);
                         if (jsonAsset.isEmpty()) {
                             AppLog.serviceE(true, -1, currentTask + "Error generating map: No JSON found.");
@@ -436,7 +435,7 @@ public class BackgroundService extends IntentService {
         }
 
         String jsonAsset;
-        if (APP_LANGUAGE_NL.equals(Session.getAppLanguage())) {
+        if (Utils.isCurrentLangDutch(getApplicationContext())) {
             jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_NL_JSON);
         } else {
             jsonAsset = new JSONHelper().readFromFile(getApplicationContext(), COMPONENTS_EN_JSON);

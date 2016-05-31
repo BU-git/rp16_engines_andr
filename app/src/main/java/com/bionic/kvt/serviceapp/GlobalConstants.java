@@ -9,9 +9,6 @@ import java.lang.annotation.RetentionPolicy;
  * Interface for all application global constants
  */
 public interface GlobalConstants {
-    String APP_LANGUAGE_DEFAULT = "";
-    String APP_LANGUAGE_NL = "nl";
-
     @IntDef({ORDER_STATUS_NOT_FOUND, ORDER_STATUS_NOT_STARTED, ORDER_STATUS_IN_PROGRESS, ORDER_STATUS_COMPLETE, ORDER_STATUS_COMPLETE_UPLOADED})
     @Retention(RetentionPolicy.SOURCE)
     @interface OrderStatus {

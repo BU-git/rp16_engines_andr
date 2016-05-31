@@ -4,9 +4,9 @@ import android.app.Application;
 import android.support.annotation.Nullable;
 
 import com.bionic.kvt.serviceapp.api.ConnectionServiceAPI;
-import com.bionic.kvt.serviceapp.helpers.LocaleHelper;
 import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.AppLog;
+import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
 import com.squareup.leakcanary.LeakCanary;
 
@@ -24,7 +24,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.bionic.kvt.serviceapp.GlobalConstants.APP_DB_NAME;
-import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LANGUAGE_DEFAULT;
 import static com.bionic.kvt.serviceapp.GlobalConstants.APP_LOG_DB_NAME;
 
 /**
@@ -83,8 +82,8 @@ public class Session extends Application {
         LeakCanary.install(this);
 
         currentUserSession = this;
-        appLanguage = LocaleHelper.getLanguage(this);
-        LocaleHelper.onCreate(this, APP_LANGUAGE_DEFAULT);
+        appLanguage = Utils.getPreferredLanguage(this);
+        Utils.updateResources(this);
 
         defectStateList = new ArrayList<>();
 

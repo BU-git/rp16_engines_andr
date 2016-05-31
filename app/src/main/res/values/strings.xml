@@ -220,9 +220,17 @@
     <string name="delete">Delete</string>
     <string name="application_log">Application log</string>
     <string name="language">Language</string>
-    <string name="select_language">Choose language (App restart required)</string>
     <string name="no_engineer_signature">Please, draw Engineer signature</string>
     <string name="no_client_signature">Please, draw Client signature</string>
+    <string name="settings">Settings</string>
 
+    <!-- Key name for Language preference in SharedPreferences [CHAR LIMIT=NONE] -->
+    <string name="pref_lang_key" translatable="false">language</string>
+
+    <!-- Value in SharedPreferences for Language English option [CHAR LIMIT=NONE] -->
+    <string name="pref_lang_english" translatable="false">English</string>
+
+    <!-- Value in SharedPreferences for Language Dutch option [CHAR LIMIT=NONE] -->
+    <string name="pref_lang_dutch" translatable="false">Dutch</string>
 
 </resources>
