@@ -223,12 +223,14 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
 
             String pdfScore = String.valueOf(currentOrder.getScore());
 
-            String remainingWork = "No";
+            String remainingWork = getContext().getText(R.string.no).toString();
             String externalRemarksText = "";
             final OrderReportJobRules currentJobRules = realm.where(OrderReportJobRules.class)
                     .equalTo("number", orderNumber).findFirst();
             if (currentJobRules != null) {
-                remainingWork = currentJobRules.isRemainingWork() ? "Yes" : "No";
+                remainingWork = currentJobRules.isRemainingWork() ?
+                        getContext().getText(R.string.yes).toString() :
+                        getContext().getText(R.string.no).toString();
                 externalRemarksText = currentJobRules.getExternalRemarksText();
             }
 
@@ -250,7 +252,7 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                         font
                 );
 
-                int x = 140;
+                int x = 150;
                 int y = 515;
                 columnText.setSimpleColumn(orderText1, x, y, x + 200, y + 150, 21.8f, Element.ALIGN_LEFT);
                 columnText.go();
@@ -289,7 +291,8 @@ public class PDFReportPreviewActivity extends BaseActivity implements LoaderMana
                 columnText2.go();
 
                 Phrase orderText6 = new Phrase(pdfMaintenanceStartTime, font);
-                x = 183;
+                if (Utils.isCurrentLangDutch(getContext())) x = 150;
+                else x = 183;
                 y = 441;
                 ColumnText columnText3 = new ColumnText(contentByte);
                 columnText3.setSimpleColumn(orderText6, x, y, x + 400, y + 25, 21.8f, Element.ALIGN_LEFT);

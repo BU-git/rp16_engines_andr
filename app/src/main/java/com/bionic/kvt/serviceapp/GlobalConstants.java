@@ -76,6 +76,7 @@ public interface GlobalConstants {
     String COMPONENTS_NL_JSON = "components_nl.json";
 
     String PDF_TEMPLATE_FILENAME_EN = "pdfTemplate_en.pdf";
+    String PDF_TEMPLATE_FILENAME_NL = "pdfTemplate_nl.pdf";
     String PDF_REPORT_FILE_NAME = "Report_";
     String PDF_REPORT_PREVIEW_FILE_NAME = "Report_preview_";
     String PDF_PASSWORD = "R+#+KSio2L[!FphG*R%w&Z;<6)5?0/|z8";

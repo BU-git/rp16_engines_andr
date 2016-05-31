@@ -58,6 +58,7 @@ import static com.bionic.kvt.serviceapp.GlobalConstants.LMRA_PHOTO_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_REPORT_PREVIEW_FILE_NAME;
 import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_EN;
+import static com.bionic.kvt.serviceapp.GlobalConstants.PDF_TEMPLATE_FILENAME_NL;
 import static com.bionic.kvt.serviceapp.GlobalConstants.UPDATE_SERVICE_MSG;
 
 public class Utils {
@@ -164,14 +165,19 @@ public class Utils {
         return null; //Directory is not exist and fail to create
     }
 
-    //TODO IMPLEMENT LANGUAGE SUPPORT
     @Nullable
     public static File getPDFTemplateFile(final Context context) {
-        final File pdfTemplate = new File(Session.getCurrentAppDir(), PDF_TEMPLATE_FILENAME_EN);
+        String pdfTemplateFileName;
+        if (Utils.isCurrentLangDutch(context)) {
+            pdfTemplateFileName = PDF_TEMPLATE_FILENAME_NL;
+        } else {
+            pdfTemplateFileName = PDF_TEMPLATE_FILENAME_EN;
+        }
+        final File pdfTemplate = new File(Session.getCurrentAppDir(), pdfTemplateFileName);
 
         if (pdfTemplate.exists()) return pdfTemplate;
 
-        try (InputStream inputStream = context.getAssets().open(PDF_TEMPLATE_FILENAME_EN);
+        try (InputStream inputStream = context.getAssets().open(pdfTemplateFileName);
              FileOutputStream outputStream = new FileOutputStream(pdfTemplate)) {
 
             byte[] buf = new byte[1024];
