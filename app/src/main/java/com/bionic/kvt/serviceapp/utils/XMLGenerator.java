@@ -203,7 +203,7 @@ public class XMLGenerator {
     public static String getXMLFromCustomTemplate(final long orderNumber) {
         try (final Realm realm = Realm.getDefaultInstance()) {
             final CustomTemplate customTemplate =
-                    realm.where(CustomTemplate.class).equalTo("number", Session.getCurrentOrder()).findFirst();
+                    realm.where(CustomTemplate.class).equalTo("number", orderNumber).findFirst();
             if (customTemplate == null) return null;
 
             AppLog.serviceI("Generating XML from Order [" + orderNumber + "]: Custom template.");
