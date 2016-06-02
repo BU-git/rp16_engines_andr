@@ -24,15 +24,27 @@ android {
         buildConfigField('String', 'EMAIL_PASSWORD', '"Bionic2016"')
         buildConfigField('String', 'BACK_OFFICE_HOST', '"http://128.0.169.5:9990/"')
     }
+
     buildTypes {
         release {
             minifyEnabled false
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'armeabi-v7a'
+            universalApk true
+        }
+    }
+
     aaptOptions {
-        useNewCruncher false
+        cruncherEnabled = false
     }
 
     compileOptions {
@@ -54,6 +66,5 @@ dependencies {
     compile 'com.sun.mail:android-activation:1.5.5'
     compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     testCompile 'junit:junit:4.12'
 }

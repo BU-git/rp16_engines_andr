@@ -8,7 +8,6 @@ import com.bionic.kvt.serviceapp.models.DefectState;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
 import com.google.gson.JsonObject;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,8 +77,6 @@ public class Session extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        LeakCanary.install(this);
 
         currentUserSession = this;
         appLanguage = Utils.getPreferredLanguage(this);
