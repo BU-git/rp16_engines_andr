@@ -61,7 +61,8 @@
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
     <string name="lmra_save">Save</string>
-    <!--<string name="error_lmra_name">LMRA name is required</string>-->
+    <string name="lmra_no_photos">0 of 0</string>
+    <string name="lmra_of_photos">of</string>
 
     <!--Titles -->
     <string name="lmra_title">LMRA</string>

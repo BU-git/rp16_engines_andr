@@ -61,6 +61,8 @@
     <string name="create">Maak</string>
     <string name="cancel">Annuleer</string>
     <string name="lmra_save">Opslaan</string>
+    <string name="lmra_of_photos">van</string>
+    <string name="lmra_no_photos">0 van 0</string>
 
     <!--Titles -->
     <string name="lmra_title">LMRA</string>
@@ -223,4 +225,5 @@
     <string name="no_engineer_signature">Alsjeblieft, trek Monteur handtekening</string>
     <string name="no_client_signature">Alsjeblieft, trek Klant handtekening</string>
     <string name="settings">Instellingen</string>
+
 </resources>

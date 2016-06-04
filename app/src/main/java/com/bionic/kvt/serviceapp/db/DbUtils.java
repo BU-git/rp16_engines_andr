@@ -152,7 +152,7 @@ public class DbUtils {
                         realm.where(LMRAPhoto.class)
                                 .equalTo("number", Session.getCurrentOrder())
                                 .equalTo("lmraId", lmraItem.getLmraId())
-                                .findAll();
+                                .findAllSorted("lmraPhotoFile");
 
                 if (listLMRAPhotosInBD.size() > 0) {
                     listLMRAPhotos = new ArrayList<>();

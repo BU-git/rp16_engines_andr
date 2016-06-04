@@ -279,15 +279,15 @@ public class Utils {
 
     @Nullable
     public static File createImageFile(final long orderNumber) {
-        final String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_";
         final File appExternalPrivateDir = getAppExternalPrivateDir();
         if (appExternalPrivateDir == null) return null;
-        try {
-            return File.createTempFile(imageFileName, ".jpg", appExternalPrivateDir);
-        } catch (IOException e) {
-            AppLog.serviceE(true, orderNumber, "Error on creating LMRA file: " + e.toString());
-            return null;
+        String imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_" + System.currentTimeMillis() + ".jpg";
+        File newFile = new File(appExternalPrivateDir, imageFileName);
+        while (newFile.exists()) {
+            imageFileName = LMRA_PHOTO_FILE_NAME + orderNumber + "_" + System.currentTimeMillis() + ".jpg";
+            newFile = new File(appExternalPrivateDir, imageFileName);
         }
+        return newFile;
     }
 
     public static void copyFile(final File srcFile, final File destFile) {
