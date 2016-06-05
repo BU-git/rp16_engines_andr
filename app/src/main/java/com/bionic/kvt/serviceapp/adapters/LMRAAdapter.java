@@ -25,7 +25,7 @@ import com.bionic.kvt.serviceapp.dialogs.LMRADialog;
 import com.bionic.kvt.serviceapp.models.LMRAModel;
 import com.bionic.kvt.serviceapp.utils.AppLog;
 import com.bionic.kvt.serviceapp.utils.Utils;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.List;
@@ -225,9 +225,9 @@ public class LMRAAdapter extends ArrayAdapter<LMRAModel> {
                 return;
             }
 
-            Picasso.with(lmraImageView.getContext())
+            Glide.with(lmraImageView.getContext())
                     .load(Uri.fromFile(listLMRAPhotos.get(currentPhotoPosition)))
-                    .resize(200, 200)
+                    .override(200, 200)
                     .centerCrop()
                     .into(lmraImageView);
 
