@@ -399,7 +399,6 @@
 
         <Button
             android:id="@+id/job_rules_save_button"
-            style="?android:attr/imageButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save" />
